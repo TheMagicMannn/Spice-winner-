@@ -6,8 +6,8 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_URL": "@SUPABASE_URL",
     "SUPABASE_SERVICE_KEY": "@supabase_service_key",
-    "API_KEY": "@api_key"
+    "API_KEY": "@API_KEY"
   }
 }
