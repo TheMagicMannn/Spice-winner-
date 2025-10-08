@@ -6,8 +6,8 @@
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "env": {
-    "SUPABASE_URL": "@SUPABASE_URL",
-    "SUPABASE_SERVICE_KEY": "@supabase_service_key",
-    "API_KEY": "@API_KEY"
+    "SUPABASE_URL": "https://cbefwjwqworwfctadogk.supabase.co",
+    "SUPABASE_SERVICE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNiZWZ3andxd29yd2ZjdGFkb2drIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1OTg5MjU5OSwiZXhwIjoyMDc1NDY4NTk5fQ.sRL39NOqupKoxhzf-ZBsEbfvaAAqVhCZ_KB66-NRUNU",
+    "API_KEY": "AIzaSyA167gPjzz4L0D0FDFygfbLWTUkK9eyE38"
   }
 }
