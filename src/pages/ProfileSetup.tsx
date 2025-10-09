@@ -162,19 +162,48 @@ export const ProfileSetupPage: React.FC = () => {
     setFormData(prev => ({ ...prev, [field]: newValues }));
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length + photoFiles.length > 10) {
-        setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
-        return;
-    }
-    setPhotoFiles(prev => ([...prev, ...files]));
-    setValidationErrors(prev => ({ ...prev, photos: '' }));
-  };
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = Array.from(e.target.files || []);
+  if (files.length + photoFiles.length > 10) {
+    setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
+    return;
+  }
 
-  const removePhoto = (index: number) => {
-    setPhotoFiles(prev => prev.filter((_, i) => i !== index));
-  };
+  // Upload each file to Supabase and get its public URL
+  const uploadedFiles: string[] = [];
+
+  for (const file of files) {
+    const fileName = `${Date.now()}_${file.name}`;
+    const filePath = `profile-photos/${userId}/${fileName}`;
+
+    // 1️⃣ Upload
+    const { error: uploadError } = await supabase.storage
+      .from('profile-photos')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      console.error('Failed to upload photo', uploadError);
+      setValidationErrors(prev => ({ ...prev, photos: 'Failed to upload one or more photos' }));
+      continue; // skip this file, continue with others
+    }
+
+    // 2️⃣ Get public URL
+    const { data: publicUrlData, error: urlError } = supabase.storage
+      .from('profile-photos')
+      .getPublicUrl(filePath);
+
+    if (urlError) {
+      console.error('Failed to get public URL', urlError);
+      continue;
+    }
+
+    uploadedFiles.push(publicUrlData.publicUrl);
+  }
+
+  // 3️⃣ Update state with uploaded files
+  setPhotoFiles(prev => ([...prev, ...uploadedFiles]));
+  setValidationErrors(prev => ({ ...prev, photos: '' }));
+};
 
   // <<< FIX: More defensive submit with clearer error reporting + attach userId if present
   const handleSubmit = async () => {
