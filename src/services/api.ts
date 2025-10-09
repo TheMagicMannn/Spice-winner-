@@ -67,7 +67,7 @@ export const apiGetSignedUploadUrl = async (fileName: string, token: string) => 
     console.error('Signed URL error:', error.message, error);
     throw error;
   }
-  return { signedUrl: data.signedUrl, publicUrl: `https://your-supabase-project-id.supabase.co/storage/v1/object/public/profile-photos/public/${fileName}` };
+  return { signedUrl: data.signedUrl, publicUrl: `https://cbefwjwqworwfctadogk.supabase.co/storage/v1/object/public/profile-photos/public/${fileName}` };
 };
 
 export const apiUploadPhotoWithSignedUrl = async (signedUrl: string, file: File) => {
