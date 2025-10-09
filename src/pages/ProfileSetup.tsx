@@ -19,9 +19,7 @@ const SEEKING_OPTIONS = ['👫 Couple', '🙎‍♂️ Man', '🙍‍♀️ Woma
 const SEEKING_RELATIONSHIP_TYPE_OPTIONS = ['Casual NSA', 'FWB', 'Play Partners', 'Voyeur', 'Swingers Party Friends', 'Poly Relationship', 'Long-term', 'Short-term', 'Sugar Daddy/Baby'];
 const EXPERIENCE_LEVEL_OPTIONS = ['New', 'Beginner', 'Moderate', 'Advanced'];
 
-
 // --- HELPER COMPONENTS ---
-
 const CheckboxGrid = ({ title, options, selected, onToggle, max, error }: { title: string; options: string[]; selected: string[]; onToggle: (option: string) => void; max: number, error?: string }) => (
   <div className="space-y-2">
     <Label>{title} (Max {max})</Label>
@@ -70,16 +68,16 @@ const Select = ({ label, value, onChange, options, placeholder, required, name }
 );
 
 // --- MAIN COMPONENT ---
-
 export const ProfileSetupPage: React.FC = () => {
   const { user } = useAuth();
   const { completeProfileSetup, uploadPhoto } = useProfile();
-  
+
   const [step, setStep] = useState(0);
   const [accountType, setAccountType] = useState<'individual' | 'couple' | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // --- DEFAULT SAFE INITIAL STATE TO AVOID undefined ---- (<<< FIX: avoids runtime undefined)
   const [formData, setFormData] = useState<Partial<Profile>>({
     displayName: '',
     location: '',
@@ -114,27 +112,33 @@ export const ProfileSetupPage: React.FC = () => {
     },
     membershipTier: 'basic',
   });
-  
+
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
+    const { name, value, type } = e.target as HTMLInputElement;
     let finalValue: any = value;
-    if (type === 'number') finalValue = parseInt(value, 10);
+    if (type === 'number') finalValue = parseInt(value as string, 10);
     setFormData(prev => ({ ...prev, [name]: finalValue }));
   };
-  
+
   const handlePartnerChange = (partner: 'partner1' | 'partner2', e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    const fieldMapping = {
+    const { name, value, type } = e.target as HTMLInputElement;
+    const fieldMapping: any = {
         partner1: { displayName: 'displayName', gender: 'gender', sexuality: 'orientation', age: 'age' },
         partner2: { displayName: 'displayName2', gender: 'gender2', sexuality: 'orientation2', age: 'age2' },
     };
-    const key = fieldMapping[partner][name as keyof typeof fieldMapping.partner1] as keyof Profile;
+    // ensure mapping exists for this input name
+    const mapped = fieldMapping[partner]?.[name];
+    if (!mapped) {
+      // unknown partner field — fallback to setting raw name (defensive)
+      setFormData(prev => ({ ...prev, [name]: type === 'number' ? parseInt(String(value), 10) : value }));
+      return;
+    }
     let finalValue: any = value;
-    if (type === 'number') finalValue = parseInt(value, 10);
-    setFormData(prev => ({ ...prev, [key]: finalValue }));
+    if (type === 'number') finalValue = parseInt(value as string, 10);
+    setFormData(prev => ({ ...prev, [mapped]: finalValue }));
   };
 
   const handleToggle = (field: keyof Profile, value: string, max?: number) => {
@@ -152,47 +156,117 @@ export const ProfileSetupPage: React.FC = () => {
     setValidationErrors(prev => ({ ...prev, [field]: '' }));
     setFormData(prev => ({ ...prev, [field]: newValues }));
   };
-  
+
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length + photoFiles.length > 10) {
         setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
         return;
     }
-    setPhotoFiles([...photoFiles, ...files]);
+    setPhotoFiles(prev => ([...prev, ...files]));
     setValidationErrors(prev => ({ ...prev, photos: '' }));
   };
 
   const removePhoto = (index: number) => {
-    setPhotoFiles(photoFiles.filter((_, i) => i !== index));
+    setPhotoFiles(prev => prev.filter((_, i) => i !== index));
   };
-  
+
+  // <<< FIX: More defensive submit with clearer error reporting + attach userId if present
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
     try {
+        // Guard: account type must be set
+        if (!accountType) throw new Error('Account type not selected');
+
+        // Basic validation
+        if (!formData.displayName || !formData.location) {
+          throw new Error('Please fill out display name and location');
+        }
+        if (!formData.gender || !formData.orientation) {
+          throw new Error('Please select gender and sexuality');
+        }
+
         if (photoFiles.length < 2) {
             throw new Error('Please upload at least 2 photos');
         }
+
+        // Upload photos one-by-one and collect urls. Provide better error context.
         const photoUrls: string[] = [];
-        for (const file of photoFiles) {
-            const { data, error } = await uploadPhoto(file);
-            if (error || !data) throw new Error(error || 'Failed to upload photo.');
-            if (data.publicUrl) photoUrls.push(data.publicUrl);
+        for (let i = 0; i < photoFiles.length; i++) {
+            const file = photoFiles[i];
+            try {
+                const res = await uploadPhoto(file);
+                // res could be { data, error } or something else depending on your hook - handle both.
+                if (!res) throw new Error('uploadPhoto returned empty response');
+                // prefer res.data.publicUrl but support variations:
+                const publicUrl = res?.data?.publicUrl || res?.publicUrl || res?.data?.url || null;
+                const uploadError = res?.error || res?.message || null;
+                if (uploadError) throw new Error(String(uploadError));
+                if (!publicUrl) throw new Error('uploadPhoto did not return a public URL');
+                photoUrls.push(publicUrl);
+            } catch (fileErr: any) {
+                console.error('Photo upload failed for file', file.name, fileErr);
+                throw new Error(`Failed to upload photo "${file.name}": ${fileErr?.message || String(fileErr)}`);
+            }
         }
-        
-        const finalProfileData: Profile = {
-            ...formData,
-            accountType: accountType!,
-            age: Number(formData.age),
-            age2: Number(formData.age2),
+
+        // Ensure matchPreferences exists
+        const safeMatchPreferences = {
+          ageRange: formData.matchPreferences?.ageRange || [21, 55],
+          genders: formData.matchPreferences?.genders || [],
+          sexualities: formData.matchPreferences?.sexualities || [],
+          searchingFor: formData.matchPreferences?.searchingFor || [],
+          distance: typeof formData.matchPreferences?.distance === 'number' ? formData.matchPreferences!.distance : 50,
+          vipOnly: !!formData.matchPreferences?.vipOnly,
+          verifiedOnly: !!formData.matchPreferences?.verifiedOnly,
+          experienceLevels: formData.matchPreferences?.experienceLevels || [],
+        };
+
+        // Build final profile payload in a deterministic shape
+        const finalProfileData: Profile & { userId?: string } = {
+            // cast only safe fields — prevents runtime undefined from being sent
+            displayName: String(formData.displayName || ''),
+            displayName2: String(formData.displayName2 || ''),
+            location: String(formData.location || ''),
+            age: Number(formData.age || 18),
+            age2: Number(formData.age2 || 18),
+            bio: String(formData.bio || ''),
             photos: photoUrls,
-        } as Profile;
+            relationshipStatus: String(formData.relationshipStatus || ''),
+            seeking: formData.seeking || [],
+            seekingRelationshipType: formData.seekingRelationshipType || [],
+            lifestyleExperience: String(formData.lifestyleExperience || 'New'),
+            interests: formData.interests || [],
+            kinks: formData.kinks || [],
+            softLimits: formData.softLimits || [],
+            hardLimits: formData.hardLimits || [],
+            safetyPractices: String(formData.safetyPractices || ''),
+            rules: String(formData.rules || ''),
+            gender: String(formData.gender || ''),
+            gender2: String(formData.gender2 || ''),
+            orientation: String(formData.orientation || ''),
+            orientation2: String(formData.orientation2 || ''),
+            matchPreferences: safeMatchPreferences,
+            membershipTier: String(formData.membershipTier || 'basic'),
+            accountType: accountType,
+        } as Profile & { userId?: string };
 
-        const { error: setupError } = await completeProfileSetup(finalProfileData);
-        if (setupError) throw new Error(String(setupError));
+        // attach user id if available (many backends expect this)
+        if (user?.id) (finalProfileData as any).userId = user.id;
 
+        // Call the hook to persist. Provide clearer error message if it fails.
+        const response = await completeProfileSetup(finalProfileData);
+        // Response shape may vary; handle common shapes
+        const setupError = response?.error || response?.message || null;
+        if (setupError) {
+          console.error('completeProfileSetup error:', setupError, response);
+          throw new Error(String(setupError));
+        }
+
+        // Optionally you could route or show success (not included — preserve existing routing)
     } catch (err: any) {
+        console.error('Profile submit failed:', err);
         setError(err.message || 'Failed to create profile');
     } finally {
         setLoading(false);
@@ -205,16 +279,16 @@ export const ProfileSetupPage: React.FC = () => {
   const canProceed = useMemo(() => {
     if (accountType === 'individual') {
         switch (step) {
-            case 1: return formData.displayName && formData.location && formData.gender && formData.orientation && formData.age! >= 18 && formData.relationshipStatus;
-            case 2: return photoFiles.length >= 2 && formData.bio && formData.bio.length >= 69 && formData.bio.length <= 1000;
+            case 1: return Boolean(formData.displayName && formData.location && formData.gender && formData.orientation && Number(formData.age) >= 18 && formData.relationshipStatus);
+            case 2: return photoFiles.length >= 2 && Boolean(formData.bio) && (String(formData.bio).length >= 69 && String(formData.bio).length <= 1000);
             case 3: return true; // Preferences are optional
             default: return false;
         }
     }
     if (accountType === 'couple') {
         switch (step) {
-            case 1: return formData.displayName && formData.displayName2 && formData.location && formData.gender && formData.gender2 && formData.orientation && formData.orientation2 && formData.age! >= 18 && formData.age2! >= 18 && formData.relationshipStatus;
-            case 2: return photoFiles.length >= 2 && formData.bio && formData.bio.length >= 69 && formData.bio.length <= 1000;
+            case 1: return Boolean(formData.displayName && formData.displayName2 && formData.location && formData.gender && formData.gender2 && formData.orientation && formData.orientation2 && Number(formData.age) >= 18 && Number(formData.age2) >= 18 && formData.relationshipStatus);
+            case 2: return photoFiles.length >= 2 && Boolean(formData.bio) && (String(formData.bio).length >= 69 && String(formData.bio).length <= 1000);
             case 3: return true;
             default: return false;
         }
@@ -234,12 +308,12 @@ export const ProfileSetupPage: React.FC = () => {
                 <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName} onChange={handleInputChange} required /></div>
                 <div className="space-y-2"><Label>Location (City, State)</Label><Input name="location" value={formData.location} onChange={handleInputChange} required /></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select label="Gender" name="gender" value={formData.gender!} onChange={handleInputChange} options={GENDER_OPTIONS} placeholder="Select..." required />
-                    <Select label="Sexuality" name="orientation" value={formData.orientation!} onChange={handleInputChange} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
+                    <Select label="Gender" name="gender" value={String(formData.gender || '')} onChange={handleInputChange} options={GENDER_OPTIONS} placeholder="Select..." required />
+                    <Select label="Sexuality" name="orientation" value={String(formData.orientation || '')} onChange={handleInputChange} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2"><Label>Age (18-99)</Label><Input name="age" type="number" min="18" max="99" value={formData.age} onChange={handleInputChange} required /></div>
-                    <Select label="Current Relationship Status" name="relationshipStatus" value={formData.relationshipStatus!} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
+                    <Select label="Current Relationship Status" name="relationshipStatus" value={String(formData.relationshipStatus || '')} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
                 </div>
               </>
             ) : (
@@ -250,8 +324,8 @@ export const ProfileSetupPage: React.FC = () => {
                     <div className="space-y-4">
                         <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName} onChange={(e) => handlePartnerChange('partner1', e)} required /></div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                             <Select label="Gender" name="gender" value={formData.gender!} onChange={(e) => handlePartnerChange('partner1', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
-                             <Select label="Sexuality" name="sexuality" value={formData.orientation!} onChange={(e) => handlePartnerChange('partner1', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
+                             <Select label="Gender" name="gender" value={String(formData.gender || '')} onChange={(e) => handlePartnerChange('partner1', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
+                             <Select label="Sexuality" name="sexuality" value={String(formData.orientation || '')} onChange={(e) => handlePartnerChange('partner1', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
                             <div className="space-y-2"><Label>Age</Label><Input name="age" type="number" min="18" max="99" value={formData.age} onChange={(e) => handlePartnerChange('partner1', e)} required /></div>
                         </div>
                     </div>
@@ -261,23 +335,23 @@ export const ProfileSetupPage: React.FC = () => {
                     <div className="space-y-4">
                         <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName2} onChange={(e) => handlePartnerChange('partner2', e)} required /></div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                             <Select label="Gender" name="gender" value={formData.gender2!} onChange={(e) => handlePartnerChange('partner2', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
-                             <Select label="Sexuality" name="sexuality" value={formData.orientation2!} onChange={(e) => handlePartnerChange('partner2', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
+                             <Select label="Gender" name="gender" value={String(formData.gender2 || '')} onChange={(e) => handlePartnerChange('partner2', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
+                             <Select label="Sexuality" name="sexuality" value={String(formData.orientation2 || '')} onChange={(e) => handlePartnerChange('partner2', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
                             <div className="space-y-2"><Label>Age</Label><Input name="age" type="number" min="18" max="99" value={formData.age2} onChange={(e) => handlePartnerChange('partner2', e)} required /></div>
                         </div>
                     </div>
                 </div>
-                <Select label="Current Relationship Status" name="relationshipStatus" value={formData.relationshipStatus!} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
+                <Select label="Current Relationship Status" name="relationshipStatus" value={String(formData.relationshipStatus || '')} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
              </>
             )}
-             <TagMultiSelect title="Seeking" options={SEEKING_OPTIONS} selected={formData.seeking!} onToggle={(val) => handleToggle('seeking', val)} />
-             <TagMultiSelect title="Seeking Relationship Type" options={SEEKING_RELATIONSHIP_TYPE_OPTIONS} selected={formData.seekingRelationshipType!} onToggle={(val) => handleToggle('seekingRelationshipType', val)} />
-             <Select label="Lifestyle Experience Level" name="lifestyleExperience" value={formData.lifestyleExperience!} onChange={handleInputChange} options={EXPERIENCE_LEVEL_OPTIONS} />
+             <TagMultiSelect title="Seeking" options={SEEKING_OPTIONS} selected={formData.seeking || []} onToggle={(val) => handleToggle('seeking', val)} />
+             <TagMultiSelect title="Seeking Relationship Type" options={SEEKING_RELATIONSHIP_TYPE_OPTIONS} selected={formData.seekingRelationshipType || []} onToggle={(val) => handleToggle('seekingRelationshipType', val)} />
+             <Select label="Lifestyle Experience Level" name="lifestyleExperience" value={String(formData.lifestyleExperience || 'New')} onChange={handleInputChange} options={EXPERIENCE_LEVEL_OPTIONS} />
             <Button onClick={nextStep} disabled={!canProceed}>Next &rarr;</Button>
           </div>
         );
       case 2: // About You
-        const bioLength = formData.bio?.length || 0;
+        const bioLength = String(formData.bio || '').length;
         return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-white mb-4 text-center">Build Your Profile</h2>
@@ -297,10 +371,10 @@ export const ProfileSetupPage: React.FC = () => {
               <Textarea id="bio" name="bio" value={formData.bio} onChange={handleInputChange} rows={5} minLength={69} maxLength={1000} required />
               <p className={`text-sm mt-1 ${bioLength < 69 || bioLength > 1000 ? 'text-red-400' : 'text-text-secondary'}`}>{bioLength} / 1000</p>
             </div>
-            <CheckboxGrid title={isIndividual ? "My Kinks/Fetishes" : "Our Kinks/Fetishes"} options={KINKS_OPTIONS} selected={formData.kinks!} onToggle={(val) => handleToggle('kinks', val, 10)} max={10} error={validationErrors.kinks} />
-            <CheckboxGrid title="Seeking Matches With These Interests" options={INTERESTS_OPTIONS} selected={formData.interests!} onToggle={(val) => handleToggle('interests', val, 10)} max={10} error={validationErrors.interests} />
-            <CheckboxGrid title={isIndividual ? "My Soft Limits" : "Our Soft Limits"} options={LIMITS_OPTIONS} selected={formData.softLimits!} onToggle={(val) => handleToggle('softLimits', val, 10)} max={10} error={validationErrors.softLimits} />
-            <CheckboxGrid title={isIndividual ? "My Hard Limits" : "Our Hard Limits"} options={LIMITS_OPTIONS} selected={formData.hardLimits!} onToggle={(val) => handleToggle('hardLimits', val, 10)} max={10} error={validationErrors.hardLimits} />
+            <CheckboxGrid title={isIndividual ? "My Kinks/Fetishes" : "Our Kinks/Fetishes"} options={KINKS_OPTIONS} selected={formData.kinks || []} onToggle={(val) => handleToggle('kinks', val, 10)} max={10} error={validationErrors.kinks} />
+            <CheckboxGrid title="Seeking Matches With These Interests" options={INTERESTS_OPTIONS} selected={formData.interests || []} onToggle={(val) => handleToggle('interests', val, 10)} max={10} error={validationErrors.interests} />
+            <CheckboxGrid title={isIndividual ? "My Soft Limits" : "Our Soft Limits"} options={LIMITS_OPTIONS} selected={formData.softLimits || []} onToggle={(val) => handleToggle('softLimits', val, 10)} max={10} error={validationErrors.softLimits} />
+            <CheckboxGrid title={isIndividual ? "My Hard Limits" : "Our Hard Limits"} options={LIMITS_OPTIONS} selected={formData.hardLimits || []} onToggle={(val) => handleToggle('hardLimits', val, 10)} max={10} error={validationErrors.hardLimits} />
             <div className="space-y-2"><Label>{isIndividual ? "My Safety/Health Practices" : "Our Safety/Health Practices"}</Label><Textarea name="safetyPractices" value={formData.safetyPractices} onChange={handleInputChange} rows={3} /></div>
             <div className="space-y-2"><Label>{isIndividual ? "My Rules (Optional)" : "Our Rules (Optional)"}</Label><Textarea name="rules" value={formData.rules} onChange={handleInputChange} rows={3} /></div>
             <div className="flex gap-4"><Button onClick={prevStep} variant="outline" className="flex-1">Back</Button><Button onClick={nextStep} disabled={!canProceed} className="flex-1">Next &rarr;</Button></div>
@@ -329,7 +403,7 @@ export const ProfileSetupPage: React.FC = () => {
             <TagMultiSelect title="Searching For" options={['Individual', 'Couple', 'Both']} selected={formData.matchPreferences!.searchingFor} onToggle={(val) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, searchingFor: p.matchPreferences!.searchingFor.includes(val) ? p.matchPreferences!.searchingFor.filter(v=>v!==val) : [...p.matchPreferences!.searchingFor, val]}}))} />
             <Slider label="Distance Preference" min={0} max={200} unit=" miles" value={formData.matchPreferences!.distance} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, distance: Number(e.target.value)}}))} />
             <TagMultiSelect title="Experience Level Preference" options={EXPERIENCE_LEVEL_OPTIONS} selected={formData.matchPreferences!.experienceLevels} onToggle={(val) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, experienceLevels: p.matchPreferences!.experienceLevels.includes(val) ? p.matchPreferences!.experienceLevels.filter(v=>v!==val) : [...p.matchPreferences!.experienceLevels, val]}}))} />
-            
+
             <div className="flex justify-between items-center bg-black/50 p-3 rounded-lg"><Label className='mb-0'>Verified Profiles Only</Label><input type="checkbox" className="toggle" checked={formData.matchPreferences!.verifiedOnly} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, verifiedOnly: e.target.checked}}))} /></div>
 
             <div className="flex gap-4"><Button onClick={prevStep} variant="outline" className="flex-1">Back</Button><Button onClick={nextStep} className="flex-1">Continue &rarr;</Button></div>
@@ -374,7 +448,7 @@ export const ProfileSetupPage: React.FC = () => {
     if (step === 0) return 0;
     return (step / 4) * 100;
   }, [step]);
-  
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-base-100">
       <style>{`
@@ -425,11 +499,11 @@ export const ProfileSetupPage: React.FC = () => {
       <div className="absolute inset-0 bg-black/80" />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-3xl mx-auto p-8 bg-black/70 rounded-2xl border-2 border-brand-primary/60 shadow-lg shadow-brand-primary/20 backdrop-blur-sm animate-fade-in">
-          
+
           <div className="text-center mb-6">
             <h1 className="text-4xl font-bold" style={{ background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 20px rgba(255, 20, 147, 0.5)' }}>SPICE</h1>
           </div>
-          
+
           {step > 0 && (
             <div className="mb-8">
                 <div className="w-full bg-base-300 rounded-full h-2.5">
