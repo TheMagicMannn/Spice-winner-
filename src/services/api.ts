@@ -1,5 +1,39 @@
 import { supabase } from './supabase';
-import { Profile } from '../types';
+import { Profile, User } from '../types';
+
+export const apiLogin = async (email: string, password: string) => {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      console.error('Login error:', error.message, error);
+      return { user: null, error: error.message };
+    }
+    return { user: data.user, error: null };
+  } catch (error: any) {
+    console.error('API login error:', error.message, error.stack);
+    return { user: null, error: error.message || 'Failed to login' };
+  }
+};
+
+export const apiSignUp = async (email: string, password: string) => {
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) {
+      console.error('Sign-up error:', error.message, error);
+      return { user: null, error: error.message };
+    }
+    return { user: data.user, error: null };
+  } catch (error: any) {
+    console.error('API sign-up error:', error.message, error.stack);
+    return { user: null, error: error.message || 'Failed to sign up' };
+  }
+};
 
 export const apiUpdateProfile = async (profileData: Profile, token: string) => {
   try {
