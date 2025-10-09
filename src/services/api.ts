@@ -1,84 +1,86 @@
-import { supabase } from './supabase';
-import { Profile, User } from '../types';
+import { Profile } from '../types';
 
-export const apiLogin = async (email: string, password: string) => {
-  try {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      console.error('Login error:', error.message, error);
-      return { user: null, error: error.message };
-    }
-    return { user: data.user, error: null };
-  } catch (error: any) {
-    console.error('API login error:', error.message, error.stack);
-    return { user: null, error: error.message || 'Failed to login' };
+const API_BASE_URL = '/api';
+
+// Helper function to handle API requests
+async function fetchApi(endpoint: string, options: RequestInit = {}) {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+  
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'An unknown error occurred');
   }
+  
+  if (response.status === 204) {
+    return null;
+  }
+
+  return response.json();
+}
+
+// Auth API
+export const apiSignUp = (email: string, password: string, name: string, age: string) => {
+  return fetchApi('/auth/signup', {
+    method: 'POST',
+    body: JSON.stringify({ email, password, data: { display_name: name, age: parseInt(age, 10) } }),
+  });
 };
 
-export const apiSignUp = async (email: string, password: string) => {
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) {
-      console.error('Sign-up error:', error.message, error);
-      return { user: null, error: error.message };
-    }
-    return { user: data.user, error: null };
-  } catch (error: any) {
-    console.error('API sign-up error:', error.message, error.stack);
-    return { user: null, error: error.message || 'Failed to sign up' };
-  }
+export const apiLogin = (email: string, password: string) => {
+  return fetchApi('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email, password }),
+  });
 };
 
-export const apiUpdateProfile = async (profileData: Profile, token: string) => {
-  try {
-    const { data, error } = await supabase
-      .from('profiles')
-      .upsert(
-        { ...profileData, updated_at: new Date().toISOString() },
-        { onConflict: 'user_id' }
-      )
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Supabase upsert error:', error.message, error);
-      return { error: error.message };
-    }
-
-    return { data, error: null };
-  } catch (error: any) {
-    console.error('API update profile error:', error.message, error.stack);
-    return { error: error.message || 'Failed to update profile' };
-  }
+// Profile API
+export const apiUpdateProfile = (profileData: Profile, token: string) => {
+  return fetchApi('/profile', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(profileData),
+  });
 };
 
-export const apiGetSignedUploadUrl = async (fileName: string, token: string) => {
-  const { data, error } = await supabase.storage
-    .from('profile-photos')
-    .createSignedUploadUrl(`public/${fileName}`);
-
-  if (error) {
-    console.error('Signed URL error:', error.message, error);
-    throw error;
-  }
-  return { signedUrl: data.signedUrl, publicUrl: `https://cbefwjwqworwfctadogk.supabase.co/storage/v1/object/public/profile-photos/public/${fileName}` };
+// Storage API
+export const apiGetSignedUploadUrl = (fileName: string, token: string): Promise<{ signedUrl: string; publicUrl: string; }> => {
+  return fetchApi('/storage/upload-url', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ fileName }),
+  });
 };
 
 export const apiUploadPhotoWithSignedUrl = async (signedUrl: string, file: File) => {
   const response = await fetch(signedUrl, {
     method: 'PUT',
+    headers: { 
+        'Content-Type': file.type
+    },
     body: file,
-    headers: { 'Content-Type': file.type },
   });
+
   if (!response.ok) {
-    const error = new Error('Failed to upload photo to signed URL');
-    console.error(error.message, response.statusText);
-    throw error;
+    const errorText = await response.text();
+    throw new Error(`Failed to upload file: ${errorText}`);
   }
+  return response;
+};
+
+
+// AI API
+export const apiGenerateBio = (interests: string[], token: string): Promise<{ bio: string }> => {
+  return fetchApi('/ai/generate-bio', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ interests }),
+  });
 };
