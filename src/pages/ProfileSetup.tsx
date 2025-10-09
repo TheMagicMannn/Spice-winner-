@@ -78,7 +78,6 @@ export const ProfileSetupPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<Partial<Profile>>({
-    user_id: '',
     displayName: '',
     location: '',
     age: 18,
@@ -119,7 +118,7 @@ export const ProfileSetupPage: React.FC = () => {
   // Fetch existing profile data
   useEffect(() => {
     const fetchProfile = async () => {
-      if (user) {
+      if (user?.id) {
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
@@ -128,7 +127,6 @@ export const ProfileSetupPage: React.FC = () => {
         if (data) {
           setFormData(data);
           setAccountType(data.accountType);
-          // Note: Photos are not fetched as File objects; they remain as URLs in formData.photos
         }
         if (error) console.error('Error fetching profile:', error.message, error);
       }
@@ -191,9 +189,10 @@ export const ProfileSetupPage: React.FC = () => {
     try {
       if (!accountType) throw new Error('Account type not selected');
       if (photoFiles.length < 2) throw new Error('Please upload at least 2 photos');
+      if (!user?.id) throw new Error('User not authenticated');
 
       // Upload photos
-      const photoUrls: string[] = formData.photos || []; // Preserve existing photo URLs
+      const photoUrls: string[] = formData.photos || [];
       for (const file of photoFiles) {
         const { data, error } = await uploadPhoto(file);
         if (error || !data?.publicUrl) {
@@ -206,8 +205,8 @@ export const ProfileSetupPage: React.FC = () => {
       // Prepare final profile data
       const finalProfileData: Profile = {
         ...formData,
-        user_id: user?.id || '',
-        accountType: accountType!,
+        user_id: user.id,
+        accountType: accountType,
         age: Number(formData.age) || 18,
         age2: accountType === 'couple' ? Number(formData.age2) || 18 : undefined,
         photos: photoUrls,
