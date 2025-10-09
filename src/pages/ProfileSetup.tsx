@@ -7,7 +7,6 @@ import { Textarea } from '../components/Textarea';
 import { Label } from '../components/Label';
 import { Spinner } from '../components/Spinner';
 import { Profile } from '../types';
-import { supabase } from '../services/supabase';
 
 // --- DATA CONSTANTS ---
 const KINKS_OPTIONS = ['BDSM', 'Roleplay', 'Voyeurism', 'Exhibitionism', 'Swinging', 'Group Play', 'Tantric Sex', 'Food Play', 'Dominance', 'Submission', 'Bondage', 'Impact Play', 'Sensory Deprivation', 'Age Play', 'Cuckolding', 'Foot Fetish', 'Leather/Latex', 'Uniforms', 'Medical Play', 'Pet Play', 'Praise', 'Degradation', 'Watersports', 'Anal Play', 'Public Play'];
@@ -20,7 +19,9 @@ const SEEKING_OPTIONS = ['👫 Couple', '🙎‍♂️ Man', '🙍‍♀️ Woma
 const SEEKING_RELATIONSHIP_TYPE_OPTIONS = ['Casual NSA', 'FWB', 'Play Partners', 'Voyeur', 'Swingers Party Friends', 'Poly Relationship', 'Long-term', 'Short-term', 'Sugar Daddy/Baby'];
 const EXPERIENCE_LEVEL_OPTIONS = ['New', 'Beginner', 'Moderate', 'Advanced'];
 
+
 // --- HELPER COMPONENTS ---
+
 const CheckboxGrid = ({ title, options, selected, onToggle, max, error }: { title: string; options: string[]; selected: string[]; onToggle: (option: string) => void; max: number, error?: string }) => (
   <div className="space-y-2">
     <Label>{title} (Max {max})</Label>
@@ -36,13 +37,13 @@ const CheckboxGrid = ({ title, options, selected, onToggle, max, error }: { titl
 );
 
 const Slider = ({ label, value, onChange, min, max, unit }: { label: string; value: number; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; min: number; max: number; unit: string; }) => (
-  <div className='space-y-2'>
-    <div className="flex justify-between items-center">
-      <Label className='mb-0'>{label}</Label>
-      <span className="text-brand-secondary font-semibold">{value}{unit}</span>
+    <div className='space-y-2'>
+        <div className="flex justify-between items-center">
+            <Label className='mb-0'>{label}</Label>
+            <span className="text-brand-secondary font-semibold">{value}{unit}</span>
+        </div>
+        <input type="range" min={min} max={max} value={value} onChange={onChange} className="w-full h-2 bg-base-300 rounded-lg appearance-none cursor-pointer range-thumb" />
     </div>
-    <input type="range" min={min} max={max} value={value} onChange={onChange} className="w-full h-2 bg-base-300 rounded-lg appearance-none cursor-pointer range-thumb" />
-  </div>
 );
 
 const TagMultiSelect = ({ title, options, selected, onToggle, error }: { title: string; options: string[]; selected: string[]; onToggle: (option: string) => void; error?: string }) => (
@@ -57,17 +58,19 @@ const TagMultiSelect = ({ title, options, selected, onToggle, error }: { title: 
   </div>
 );
 
+// FIX: Added `name` prop to the Select component to pass it to the underlying select element, which is required by the `onChange` handlers.
 const Select = ({ label, value, onChange, options, placeholder, required, name }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; options: string[], placeholder?: string, required?: boolean, name?: string }) => (
-  <div className="space-y-2">
-    <Label>{label}</Label>
-    <select value={value} onChange={onChange} name={name} required={required} className="w-full bg-black/50 border border-brand-primary/50 text-white rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-colors">
-      {placeholder && <option value="" disabled>{placeholder}</option>}
-      {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-    </select>
-  </div>
+    <div className="space-y-2">
+        <Label>{label}</Label>
+        <select value={value} onChange={onChange} name={name} required={required} className="w-full bg-black/50 border border-brand-primary/50 text-white rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-colors">
+            {placeholder && <option value="" disabled>{placeholder}</option>}
+            {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+        </select>
+    </div>
 );
 
 // --- MAIN COMPONENT ---
+
 export const ProfileSetupPage: React.FC = () => {
   const { user } = useAuth();
   const { completeProfileSetup, uploadPhoto } = useProfile();
@@ -100,39 +103,20 @@ export const ProfileSetupPage: React.FC = () => {
     orientation2: '',
     age2: 18,
     matchPreferences: {
-      ageRange: [21, 55],
-      genders: [],
-      sexualities: [],
-      searchingFor: [],
-      distance: 50,
-      vipOnly: false,
-      verifiedOnly: true,
-      experienceLevels: [],
+        ageRange: [21, 55],
+        genders: [],
+        sexualities: [],
+        searchingFor: [],
+        distance: 50,
+        vipOnly: false,
+        verifiedOnly: true,
+        experienceLevels: [],
     },
     membershipTier: 'basic',
   });
   
   const [photoFiles, setPhotoFiles] = useState<File[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
-
-  // Fetch existing profile data
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (user?.id) {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .single();
-        if (data) {
-          setFormData(data);
-          setAccountType(data.accountType);
-        }
-        if (error) console.error('Error fetching profile:', error.message, error);
-      }
-    };
-    fetchProfile();
-  }, [user]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
@@ -144,8 +128,8 @@ export const ProfileSetupPage: React.FC = () => {
   const handlePartnerChange = (partner: 'partner1' | 'partner2', e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     const fieldMapping = {
-      partner1: { displayName: 'displayName', gender: 'gender', sexuality: 'orientation', age: 'age' },
-      partner2: { displayName: 'displayName2', gender: 'gender2', sexuality: 'orientation2', age: 'age2' },
+        partner1: { displayName: 'displayName', gender: 'gender', sexuality: 'orientation', age: 'age' },
+        partner2: { displayName: 'displayName2', gender: 'gender2', sexuality: 'orientation2', age: 'age2' },
     };
     const key = fieldMapping[partner][name as keyof typeof fieldMapping.partner1] as keyof Profile;
     let finalValue: any = value;
@@ -157,13 +141,13 @@ export const ProfileSetupPage: React.FC = () => {
     const currentValues = (formData[field] as string[] || []);
     let newValues;
     if (currentValues.includes(value)) {
-      newValues = currentValues.filter(item => item !== value);
+        newValues = currentValues.filter(item => item !== value);
     } else {
-      if (max && currentValues.length >= max) {
-        setValidationErrors(prev => ({ ...prev, [field]: `You can select a maximum of ${max} options.` }));
-        return;
-      }
-      newValues = [...currentValues, value];
+        if (max && currentValues.length >= max) {
+            setValidationErrors(prev => ({ ...prev, [field]: `You can select a maximum of ${max} options.` }));
+            return;
+        }
+        newValues = [...currentValues, value];
     }
     setValidationErrors(prev => ({ ...prev, [field]: '' }));
     setFormData(prev => ({ ...prev, [field]: newValues }));
@@ -172,8 +156,8 @@ export const ProfileSetupPage: React.FC = () => {
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length + photoFiles.length > 10) {
-      setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
-      return;
+        setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
+        return;
     }
     setPhotoFiles([...photoFiles, ...files]);
     setValidationErrors(prev => ({ ...prev, photos: '' }));
@@ -187,55 +171,31 @@ export const ProfileSetupPage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      if (!accountType) throw new Error('Account type not selected');
-      if (photoFiles.length < 2) throw new Error('Please upload at least 2 photos');
-      if (!user?.id) throw new Error('User not authenticated');
-
-      // Upload photos
-      const photoUrls: string[] = formData.photos || [];
-      for (const file of photoFiles) {
-        const { data, error } = await uploadPhoto(file);
-        if (error || !data?.publicUrl) {
-          console.error('Photo upload failed:', error, 'File:', file.name);
-          throw new Error(error || 'Failed to upload photo');
+        if (photoFiles.length < 2) {
+            throw new Error('Please upload at least 2 photos');
         }
-        photoUrls.push(data.publicUrl);
-      }
-      
-      // Prepare final profile data
-      const finalProfileData: Profile = {
-        ...formData,
-        user_id: user.id,
-        accountType: accountType,
-        age: Number(formData.age) || 18,
-        age2: accountType === 'couple' ? Number(formData.age2) || 18 : undefined,
-        photos: photoUrls,
-        displayName2: accountType === 'couple' ? formData.displayName2 : undefined,
-        gender2: accountType === 'couple' ? formData.gender2 : undefined,
-        orientation2: accountType === 'couple' ? formData.orientation2 : undefined,
-      } as Profile;
+        const photoUrls: string[] = [];
+        for (const file of photoFiles) {
+            const { data, error } = await uploadPhoto(file);
+            if (error || !data) throw new Error(error || 'Failed to upload photo.');
+            if (data.publicUrl) photoUrls.push(data.publicUrl);
+        }
+        
+        const finalProfileData: Profile = {
+            ...formData,
+            accountType: accountType!,
+            age: Number(formData.age),
+            age2: Number(formData.age2),
+            photos: photoUrls,
+        } as Profile;
 
-      // Validate required fields
-      if (!finalProfileData.user_id) throw new Error('User ID is missing');
-      if (!finalProfileData.displayName) throw new Error('Display name is required');
-      if (!finalProfileData.location) throw new Error('Location is required');
-      if (!finalProfileData.gender) throw new Error('Gender is required');
-      if (!finalProfileData.orientation) throw new Error('Sexuality is required');
-      if (!finalProfileData.relationshipStatus) throw new Error('Relationship status is required');
-      if (accountType === 'couple' && (!finalProfileData.displayName2 || !finalProfileData.gender2 || !finalProfileData.orientation2)) {
-        throw new Error('Partner 2 details are required for couples account');
-      }
+        const { error: setupError } = await completeProfileSetup(finalProfileData);
+        if (setupError) throw new Error(String(setupError));
 
-      // Save profile
-      const { error: setupError } = await completeProfileSetup(finalProfileData);
-      if (setupError) throw new Error(setupError);
-
-      console.log('Profile saved successfully:', finalProfileData);
     } catch (err: any) {
-      console.error('Profile submission error:', err.message, err.stack);
-      setError(err.message || 'Failed to create profile');
+        setError(err.message || 'Failed to create profile');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -244,20 +204,20 @@ export const ProfileSetupPage: React.FC = () => {
 
   const canProceed = useMemo(() => {
     if (accountType === 'individual') {
-      switch (step) {
-        case 1: return formData.displayName && formData.location && formData.gender && formData.orientation && formData.age! >= 18 && formData.relationshipStatus;
-        case 2: return photoFiles.length >= 2 && formData.bio && formData.bio.length >= 69 && formData.bio.length <= 1000;
-        case 3: return true; // Preferences are optional
-        default: return false;
-      }
+        switch (step) {
+            case 1: return formData.displayName && formData.location && formData.gender && formData.orientation && formData.age! >= 18 && formData.relationshipStatus;
+            case 2: return photoFiles.length >= 2 && formData.bio && formData.bio.length >= 69 && formData.bio.length <= 1000;
+            case 3: return true; // Preferences are optional
+            default: return false;
+        }
     }
     if (accountType === 'couple') {
-      switch (step) {
-        case 1: return formData.displayName && formData.displayName2 && formData.location && formData.gender && formData.gender2 && formData.orientation && formData.orientation2 && formData.age! >= 18 && formData.age2! >= 18 && formData.relationshipStatus;
-        case 2: return photoFiles.length >= 2 && formData.bio && formData.bio.length >= 69 && formData.bio.length <= 1000;
-        case 3: return true;
-        default: return false;
-      }
+        switch (step) {
+            case 1: return formData.displayName && formData.displayName2 && formData.location && formData.gender && formData.gender2 && formData.orientation && formData.orientation2 && formData.age! >= 18 && formData.age2! >= 18 && formData.relationshipStatus;
+            case 2: return photoFiles.length >= 2 && formData.bio && formData.bio.length >= 69 && formData.bio.length <= 1000;
+            case 3: return true;
+            default: return false;
+        }
     }
     return false;
   }, [step, formData, photoFiles, accountType]);
@@ -274,45 +234,45 @@ export const ProfileSetupPage: React.FC = () => {
                 <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName} onChange={handleInputChange} required /></div>
                 <div className="space-y-2"><Label>Location (City, State)</Label><Input name="location" value={formData.location} onChange={handleInputChange} required /></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Select label="Gender" name="gender" value={formData.gender!} onChange={handleInputChange} options={GENDER_OPTIONS} placeholder="Select..." required />
-                  <Select label="Sexuality" name="orientation" value={formData.orientation!} onChange={handleInputChange} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
+                    <Select label="Gender" name="gender" value={formData.gender!} onChange={handleInputChange} options={GENDER_OPTIONS} placeholder="Select..." required />
+                    <Select label="Sexuality" name="orientation" value={formData.orientation!} onChange={handleInputChange} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2"><Label>Age (18-99)</Label><Input name="age" type="number" min="18" max="99" value={formData.age} onChange={handleInputChange} required /></div>
-                  <Select label="Current Relationship Status" name="relationshipStatus" value={formData.relationshipStatus!} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
+                    <div className="space-y-2"><Label>Age (18-99)</Label><Input name="age" type="number" min="18" max="99" value={formData.age} onChange={handleInputChange} required /></div>
+                    <Select label="Current Relationship Status" name="relationshipStatus" value={formData.relationshipStatus!} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
                 </div>
               </>
             ) : (
-              <>
+             <>
                 <div className="space-y-2"><Label>Location (City, State)</Label><Input name="location" value={formData.location} onChange={handleInputChange} required /></div>
                 <div className="p-4 border border-brand-primary/30 rounded-lg">
-                  <h3 className="font-semibold text-lg text-brand-secondary mb-2">Partner 1</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName} onChange={(e) => handlePartnerChange('partner1', e)} required /></div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Select label="Gender" name="gender" value={formData.gender!} onChange={(e) => handlePartnerChange('partner1', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
-                      <Select label="Sexuality" name="sexuality" value={formData.orientation!} onChange={(e) => handlePartnerChange('partner1', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
-                      <div className="space-y-2"><Label>Age</Label><Input name="age" type="number" min="18" max="99" value={formData.age} onChange={(e) => handlePartnerChange('partner1', e)} required /></div>
+                    <h3 className="font-semibold text-lg text-brand-secondary mb-2">Partner 1</h3>
+                    <div className="space-y-4">
+                        <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName} onChange={(e) => handlePartnerChange('partner1', e)} required /></div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                             <Select label="Gender" name="gender" value={formData.gender!} onChange={(e) => handlePartnerChange('partner1', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
+                             <Select label="Sexuality" name="sexuality" value={formData.orientation!} onChange={(e) => handlePartnerChange('partner1', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
+                            <div className="space-y-2"><Label>Age</Label><Input name="age" type="number" min="18" max="99" value={formData.age} onChange={(e) => handlePartnerChange('partner1', e)} required /></div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-                <div className="p-4 border border-brand-primary/30 rounded-lg">
-                  <h3 className="font-semibold text-lg text-brand-secondary mb-2">Partner 2</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName2} onChange={(e) => handlePartnerChange('partner2', e)} required /></div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Select label="Gender" name="gender" value={formData.gender2!} onChange={(e) => handlePartnerChange('partner2', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
-                      <Select label="Sexuality" name="sexuality" value={formData.orientation2!} onChange={(e) => handlePartnerChange('partner2', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
-                      <div className="space-y-2"><Label>Age</Label><Input name="age" type="number" min="18" max="99" value={formData.age2} onChange={(e) => handlePartnerChange('partner2', e)} required /></div>
+                 <div className="p-4 border border-brand-primary/30 rounded-lg">
+                    <h3 className="font-semibold text-lg text-brand-secondary mb-2">Partner 2</h3>
+                    <div className="space-y-4">
+                        <div className="space-y-2"><Label>Display Name</Label><Input name="displayName" value={formData.displayName2} onChange={(e) => handlePartnerChange('partner2', e)} required /></div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                             <Select label="Gender" name="gender" value={formData.gender2!} onChange={(e) => handlePartnerChange('partner2', e)} options={GENDER_OPTIONS} placeholder="Select..." required />
+                             <Select label="Sexuality" name="sexuality" value={formData.orientation2!} onChange={(e) => handlePartnerChange('partner2', e)} options={SEXUALITY_OPTIONS} placeholder="Select..." required />
+                            <div className="space-y-2"><Label>Age</Label><Input name="age" type="number" min="18" max="99" value={formData.age2} onChange={(e) => handlePartnerChange('partner2', e)} required /></div>
+                        </div>
                     </div>
-                  </div>
                 </div>
                 <Select label="Current Relationship Status" name="relationshipStatus" value={formData.relationshipStatus!} onChange={handleInputChange} options={RELATIONSHIP_STATUS_OPTIONS} placeholder="Select..." required />
-              </>
+             </>
             )}
-            <TagMultiSelect title="Seeking" options={SEEKING_OPTIONS} selected={formData.seeking!} onToggle={(val) => handleToggle('seeking', val)} />
-            <TagMultiSelect title="Seeking Relationship Type" options={SEEKING_RELATIONSHIP_TYPE_OPTIONS} selected={formData.seekingRelationshipType!} onToggle={(val) => handleToggle('seekingRelationshipType', val)} />
-            <Select label="Lifestyle Experience Level" name="lifestyleExperience" value={formData.lifestyleExperience!} onChange={handleInputChange} options={EXPERIENCE_LEVEL_OPTIONS} />
+             <TagMultiSelect title="Seeking" options={SEEKING_OPTIONS} selected={formData.seeking!} onToggle={(val) => handleToggle('seeking', val)} />
+             <TagMultiSelect title="Seeking Relationship Type" options={SEEKING_RELATIONSHIP_TYPE_OPTIONS} selected={formData.seekingRelationshipType!} onToggle={(val) => handleToggle('seekingRelationshipType', val)} />
+             <Select label="Lifestyle Experience Level" name="lifestyleExperience" value={formData.lifestyleExperience!} onChange={handleInputChange} options={EXPERIENCE_LEVEL_OPTIONS} />
             <Button onClick={nextStep} disabled={!canProceed}>Next &rarr;</Button>
           </div>
         );
@@ -321,7 +281,7 @@ export const ProfileSetupPage: React.FC = () => {
         return (
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-white mb-4 text-center">Build Your Profile</h2>
-            {/* Photo Upload */}
+             {/* Photo Upload */}
             <div>
               <Label>Upload Profile Photos (Min 2, Max 10)</Label>
               {validationErrors.photos && <p className="text-red-400 text-sm">{validationErrors.photos}</p>}
@@ -330,7 +290,7 @@ export const ProfileSetupPage: React.FC = () => {
                 {photoFiles.length < 10 && (<label className="aspect-square border-2 border-dashed border-brand-primary/50 rounded-lg flex items-center justify-center cursor-pointer hover:border-brand-primary transition-colors"><input type="file" accept="image/*" multiple onChange={handlePhotoUpload} className="hidden" /><span className="text-brand-primary text-4xl">+</span></label>)}
               </div>
             </div>
-            {/* Bio */}
+             {/* Bio */}
             <div>
               <Label htmlFor="bio">Bio (69-1000 characters)</Label>
               <p className="text-xs text-text-secondary mb-2">Show your personality—your vibe attracts your tribe.</p>
@@ -351,25 +311,27 @@ export const ProfileSetupPage: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-white mb-4 text-center">Fine-tune Your Match Preferences</h2>
             <div className='space-y-2'>
-              <div className="flex justify-between items-center">
-                <Label className='mb-0'>Preferred Age Range</Label>
-                <span className="text-brand-secondary font-semibold">{formData.matchPreferences!.ageRange[0]} - {formData.matchPreferences!.ageRange[1]}</span>
-              </div>
-              <div className='flex gap-4 items-center'>
-                <span>Min:</span>
-                <input type="range" min={18} max={99} value={formData.matchPreferences!.ageRange[0]} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, ageRange: [Number(e.target.value), Math.max(Number(e.target.value), p.matchPreferences!.ageRange[1])]}}))} className="w-full h-2 bg-base-300 rounded-lg appearance-none cursor-pointer range-thumb" />
-              </div>
-              <div className='flex gap-4 items-center'>
-                <span>Max:</span>
-                <input type="range" min={18} max={99} value={formData.matchPreferences!.ageRange[1]} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, ageRange: [Math.min(Number(e.target.value), p.matchPreferences!.ageRange[0]), Number(e.target.value)]}}))} className="w-full h-2 bg-base-300 rounded-lg appearance-none cursor-pointer range-thumb" />
-              </div>
+                <div className="flex justify-between items-center">
+                    <Label className='mb-0'>Preferred Age Range</Label>
+                    <span className="text-brand-secondary font-semibold">{formData.matchPreferences!.ageRange[0]} - {formData.matchPreferences!.ageRange[1]}</span>
+                </div>
+                <div className='flex gap-4 items-center'>
+                    <span>Min:</span>
+                    <input type="range" min={18} max={99} value={formData.matchPreferences!.ageRange[0]} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, ageRange: [Number(e.target.value), Math.max(Number(e.target.value), p.matchPreferences!.ageRange[1])]}}))} className="w-full h-2 bg-base-300 rounded-lg appearance-none cursor-pointer range-thumb" />
+                </div>
+                 <div className='flex gap-4 items-center'>
+                    <span>Max:</span>
+                    <input type="range" min={18} max={99} value={formData.matchPreferences!.ageRange[1]} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, ageRange: [Math.min(Number(e.target.value), p.matchPreferences!.ageRange[0]), Number(e.target.value)]}}))} className="w-full h-2 bg-base-300 rounded-lg appearance-none cursor-pointer range-thumb" />
+                </div>
             </div>
             <TagMultiSelect title="Preferred Genders" options={GENDER_OPTIONS} selected={formData.matchPreferences!.genders} onToggle={(val) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, genders: p.matchPreferences!.genders.includes(val) ? p.matchPreferences!.genders.filter(v=>v!==val) : [...p.matchPreferences!.genders, val]}}))} />
             <TagMultiSelect title="Preferred Sexualities" options={SEXUALITY_OPTIONS} selected={formData.matchPreferences!.sexualities} onToggle={(val) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, sexualities: p.matchPreferences!.sexualities.includes(val) ? p.matchPreferences!.sexualities.filter(v=>v!==val) : [...p.matchPreferences!.sexualities, val]}}))} />
             <TagMultiSelect title="Searching For" options={['Individual', 'Couple', 'Both']} selected={formData.matchPreferences!.searchingFor} onToggle={(val) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, searchingFor: p.matchPreferences!.searchingFor.includes(val) ? p.matchPreferences!.searchingFor.filter(v=>v!==val) : [...p.matchPreferences!.searchingFor, val]}}))} />
             <Slider label="Distance Preference" min={0} max={200} unit=" miles" value={formData.matchPreferences!.distance} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, distance: Number(e.target.value)}}))} />
             <TagMultiSelect title="Experience Level Preference" options={EXPERIENCE_LEVEL_OPTIONS} selected={formData.matchPreferences!.experienceLevels} onToggle={(val) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, experienceLevels: p.matchPreferences!.experienceLevels.includes(val) ? p.matchPreferences!.experienceLevels.filter(v=>v!==val) : [...p.matchPreferences!.experienceLevels, val]}}))} />
+            
             <div className="flex justify-between items-center bg-black/50 p-3 rounded-lg"><Label className='mb-0'>Verified Profiles Only</Label><input type="checkbox" className="toggle" checked={formData.matchPreferences!.verifiedOnly} onChange={(e) => setFormData(p => ({...p, matchPreferences: {...p.matchPreferences!, verifiedOnly: e.target.checked}}))} /></div>
+
             <div className="flex gap-4"><Button onClick={prevStep} variant="outline" className="flex-1">Back</Button><Button onClick={nextStep} className="flex-1">Continue &rarr;</Button></div>
           </div>
         );
@@ -378,26 +340,26 @@ export const ProfileSetupPage: React.FC = () => {
           <div className="space-y-6">
             <h2 className="text-2xl font-bold text-white mb-4 text-center">Choose Your Membership</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className={`p-6 rounded-lg border-2 ${formData.membershipTier === 'basic' ? 'border-brand-primary' : 'border-base-300'}`}>
-                <h3 className="text-xl font-bold">Freemium - Basic</h3>
-                <ul className="list-disc list-inside my-4 space-y-2 text-text-secondary">
-                  <li>✔ Basic features</li>
-                  <li className="line-through">✖ Limited visibility</li>
-                  <li className="line-through">✖ No priority matching</li>
-                </ul>
-                <Button onClick={() => setFormData(p => ({...p, membershipTier: 'basic'}))} variant={formData.membershipTier === 'basic' ? 'primary' : 'outline'} className="w-full">Stay Basic</Button>
-              </div>
-              <div className={`p-6 rounded-lg border-2 ${formData.membershipTier === 'vip' ? 'border-brand-primary' : 'border-base-300'}`}>
-                <h3 className="text-xl font-bold text-brand-secondary">🌟 VIP Membership</h3>
-                <ul className="list-disc list-inside my-4 space-y-2 text-text-primary">
-                  <li>🌟 All features unlocked</li>
-                  <li>🔍 Priority match visibility</li>
-                  <li>💬 Unlimited messages</li>
-                  <li>💖 Access to VIP-only events</li>
-                </ul>
-                <p className="text-center font-bold text-2xl my-4">$24.99 / month</p>
-                <Button onClick={() => setFormData(p => ({...p, membershipTier: 'vip'}))} variant={formData.membershipTier === 'vip' ? 'primary' : 'outline'} className="w-full">Upgrade to VIP</Button>
-              </div>
+                <div className={`p-6 rounded-lg border-2 ${formData.membershipTier === 'basic' ? 'border-brand-primary' : 'border-base-300'}`}>
+                    <h3 className="text-xl font-bold">Freemium - Basic</h3>
+                    <ul className="list-disc list-inside my-4 space-y-2 text-text-secondary">
+                        <li>✔ Basic features</li>
+                        <li className="line-through">✖ Limited visibility</li>
+                        <li className="line-through">✖ No priority matching</li>
+                    </ul>
+                    <Button onClick={() => setFormData(p => ({...p, membershipTier: 'basic'}))} variant={formData.membershipTier === 'basic' ? 'primary' : 'outline'} className="w-full">Stay Basic</Button>
+                </div>
+                 <div className={`p-6 rounded-lg border-2 ${formData.membershipTier === 'vip' ? 'border-brand-primary' : 'border-base-300'}`}>
+                    <h3 className="text-xl font-bold text-brand-secondary">🌟 VIP Membership</h3>
+                    <ul className="list-disc list-inside my-4 space-y-2 text-text-primary">
+                        <li>🌟 All features unlocked</li>
+                        <li>🔍 Priority match visibility</li>
+                        <li>💬 Unlimited messages</li>
+                        <li>💖 Access to VIP-only events</li>
+                    </ul>
+                    <p className="text-center font-bold text-2xl my-4">$24.99 / month</p>
+                    <Button onClick={() => setFormData(p => ({...p, membershipTier: 'vip'}))} variant={formData.membershipTier === 'vip' ? 'primary' : 'outline'} className="w-full">Upgrade to VIP</Button>
+                </div>
             </div>
             <p className="text-center text-text-secondary text-sm">You can upgrade anytime in Settings.</p>
             {error && <p className="text-red-400 text-sm text-center py-2">{error}</p>}
@@ -463,37 +425,39 @@ export const ProfileSetupPage: React.FC = () => {
       <div className="absolute inset-0 bg-black/80" />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-3xl mx-auto p-8 bg-black/70 rounded-2xl border-2 border-brand-primary/60 shadow-lg shadow-brand-primary/20 backdrop-blur-sm animate-fade-in">
+          
           <div className="text-center mb-6">
             <h1 className="text-4xl font-bold" style={{ background: 'linear-gradient(135deg, #ff1493, #ff69b4, #ff91a4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 20px rgba(255, 20, 147, 0.5)' }}>SPICE</h1>
           </div>
           
           {step > 0 && (
             <div className="mb-8">
-              <div className="w-full bg-base-300 rounded-full h-2.5">
-                <div className="bg-brand-primary h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.5s ease-in-out' }}></div>
-              </div>
+                <div className="w-full bg-base-300 rounded-full h-2.5">
+                    <div className="bg-brand-primary h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.5s ease-in-out' }}></div>
+                </div>
             </div>
           )}
 
           {step === 0 && (
             <div className="space-y-8 animate-fade-in text-center">
-              <h2 className="text-3xl font-bold text-white">Let’s Get You Started!</h2>
-              <p className="text-text-secondary">Where open-minded connections begin.</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button onClick={() => setAccountType('individual')} className={`p-8 rounded-lg border-2 transition-all ${accountType === 'individual' ? 'border-brand-primary bg-brand-primary/10' : 'border-base-300 hover:border-brand-primary/50'}`}>
-                  <span className="text-5xl">🧍</span>
-                  <h3 className="text-xl font-bold mt-4">Individual Account</h3>
-                </button>
-                <button onClick={() => setAccountType('couple')} className={`p-8 rounded-lg border-2 transition-all ${accountType === 'couple' ? 'border-brand-primary bg-brand-primary/10' : 'border-base-300 hover:border-brand-primary/50'}`}>
-                  <span className="text-5xl">👩‍❤️‍👨</span>
-                  <h3 className="text-xl font-bold mt-4">Couples Account</h3>
-                </button>
-              </div>
-              <Button onClick={nextStep} disabled={!accountType}>Continue &rarr;</Button>
+                <h2 className="text-3xl font-bold text-white">Let’s Get You Started!</h2>
+                <p className="text-text-secondary">Where open-minded connections begin.</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <button onClick={() => setAccountType('individual')} className={`p-8 rounded-lg border-2 transition-all ${accountType === 'individual' ? 'border-brand-primary bg-brand-primary/10' : 'border-base-300 hover:border-brand-primary/50'}`}>
+                        <span className="text-5xl">🧍</span>
+                        <h3 className="text-xl font-bold mt-4">Individual Account</h3>
+                    </button>
+                    <button onClick={() => setAccountType('couple')} className={`p-8 rounded-lg border-2 transition-all ${accountType === 'couple' ? 'border-brand-primary bg-brand-primary/10' : 'border-base-300 hover:border-brand-primary/50'}`}>
+                        <span className="text-5xl">👩‍❤️‍👨</span>
+                        <h3 className="text-xl font-bold mt-4">Couples Account</h3>
+                    </button>
+                </div>
+                <Button onClick={nextStep} disabled={!accountType}>Continue &rarr;</Button>
             </div>
           )}
 
           {step > 0 && <div className="animate-fade-in">{renderStepContent()}</div>}
+
         </div>
       </div>
     </div>
