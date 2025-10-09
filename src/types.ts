@@ -1,3 +1,10 @@
+export interface User {
+  id: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Profile {
   user_id: string;
   accountType: 'individual' | 'couple';
