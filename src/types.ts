@@ -1,43 +1,56 @@
-export interface User {
-  id: string;
-  email: string;
-  created_at: string;
-  updated_at: string;
+import { User as SupabaseUser } from '@supabase/supabase-js';
+
+// Defines the structure for user's matching criteria
+export interface MatchPreferences {
+  ageRange: [number, number];
+  genders: string[];
+  sexualities: string[];
+  searchingFor: string[];
+  distance: number;
+  vipOnly: boolean;
+  verifiedOnly: boolean;
+  experienceLevels: string[];
 }
 
+// Main Profile structure, accommodating both individual and couple accounts
 export interface Profile {
-  user_id: string;
   accountType: 'individual' | 'couple';
+  
+  // --- Core Info (Individual & Couple) ---
   displayName: string;
   location: string;
   age: number;
-  bio?: string;
   photos: string[];
+  bio: string;
   relationshipStatus: string;
-  seeking: string[];
-  seekingRelationshipType: string[];
+  seeking: string[]; // e.g., Men, Women, Couples
+  seekingRelationshipType: string[]; // e.g., Casual NSA, FWB
   lifestyleExperience: string;
-  interests: string[];
+  
+  // --- Detailed Info (Individual & Couple) ---
+  interests: string[]; // Seeking matches with these interests
   kinks: string[];
   softLimits: string[];
   hardLimits: string[];
-  safetyPractices?: string;
-  rules?: string;
-  gender: string;
-  orientation: string;
+  safetyPractices: string;
+  rules: string;
+  
+  // --- Individual-Specific Info ---
+  gender?: string;
+  orientation?: string; // Renamed from 'sexuality' for clarity
+
+  // --- Couple-Specific Info ---
   displayName2?: string;
   gender2?: string;
   orientation2?: string;
   age2?: number;
-  matchPreferences: {
-    ageRange: [number, number];
-    genders: string[];
-    sexualities: string[];
-    searchingFor: string[];
-    distance: number;
-    vipOnly: boolean;
-    verifiedOnly: boolean;
-    experienceLevels: string[];
-  };
-  membershipTier: 'basic' | 'vip';
+
+  // --- App-Specific Data ---
+  matchPreferences?: MatchPreferences;
+  membershipTier?: 'basic' | 'vip';
 }
+
+
+export type User = SupabaseUser & {
+  profile: Profile | null;
+};
