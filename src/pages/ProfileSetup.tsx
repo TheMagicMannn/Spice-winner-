@@ -9,12 +9,17 @@ import { Spinner } from '../components/Spinner';
 import { Profile } from '../types';
 
 // --- DATA CONSTANTS ---
-const KINKS_OPTIONS = ['BDSM', 'Roleplay', 'Voyeurism', 'Exhibitionism', 'Swinging', 'Group Play', 'Tantric Sex', 'Food Play', 'Dominance', 'Submission', 'Bondage', 'Impact Play', 'Sensory Deprivation', 'Age Play', 'Cuckolding', 'Foot Fetish', 'Leather/Latex', 'Uniforms', 'Medical Play', 'Pet Play', 'Praise', 'Degradation', 'Watersports', 'Anal Play', 'Public Play'];
-const INTERESTS_OPTIONS = ['Live Music', 'Wine Tasting', 'Craft Beer', 'Hiking', 'Art Galleries', 'Dancing', 'Travel', 'Fine Dining', 'Fitness/Gym', 'Yoga/Meditation', 'Photography', 'Gaming', 'Boating', 'Movies', 'Theater', 'Cooking', 'Rooftop Bars', 'Speakeasies', 'Cigars', 'Whiskey', 'Fashion', 'Charity Events', 'Sports', 'Reading', 'Beach Clubs'];
-const LIMITS_OPTIONS = ['Scat', 'Blood Play', 'Illegal Activities', 'Permanent Marks', 'Breath Play', 'Findom', 'Needles', 'Vomit', 'Hard Insults', 'Public Humiliation', 'Animals', 'Underage', 'Non-Consensual', 'Weapon Play', 'Fire Play', 'Edge Play', 'Race Play', 'Intercourse', 'Oral Sex', 'No Condoms', 'Overnights', 'Intoxication', 'Face Slapping', 'Choking', 'Gagging'];
-const GENDER_OPTIONS = ['Male', 'Female', 'Non-binary', 'Transgender Male', 'Transgender Female', 'Genderqueer', 'Other'];
-const SEXUALITY_OPTIONS = ['Straight', 'Bisexual', 'Gay', 'Pansexual', 'Queer', 'Asexual', 'Other'];
-const RELATIONSHIP_STATUS_OPTIONS = ['Single', 'Married', 'Divorced', 'Widowed', 'In a Relationship', 'Open Relationship', 'It\'s Complicated'];
+const KINKS_OPTIONS: string[] = ['BDSM', 'Roleplay', 'Voyeurism', 'Exhibitionism', 'Swinging', 'Group Play', 'Tantric Sex', 'Food Play', 'Dominance', 'Submission', 'Bondage', 'Impact Play', 'Sensory Deprivation', 'Age Play', 'Cuckolding', 'Foot Fetish', 'Leather/Latex', 'Uniforms', 'Medical Play', 'Pet Play', 'Praise', 'Degradation', 'Watersports', 'Anal Play', 'Public Play'];
+
+const INTERESTS_OPTIONS: string[] = ['Live Music', 'Wine Tasting', 'Craft Beer', 'Hiking', 'Art Galleries', 'Dancing', 'Travel', 'Fine Dining', 'Fitness/Gym', 'Yoga/Meditation', 'Photography', 'Gaming', 'Boating', 'Movies', 'Theater', 'Cooking', 'Rooftop Bars', 'Speakeasies', 'Cigars', 'Whiskey', 'Fashion', 'Charity Events', 'Sports', 'Reading', 'Beach Clubs'];
+
+const LIMITS_OPTIONS: string[] = ['Scat', 'Blood Play', 'Illegal Activities', 'Permanent Marks', 'Breath Play', 'Findom', 'Needles', 'Vomit', 'Hard Insults', 'Public Humiliation', 'Animals', 'Underage', 'Non-Consensual', 'Weapon Play', 'Fire Play', 'Edge Play', 'Race Play', 'Intercourse', 'Oral Sex', 'No Condoms', 'Overnights', 'Intoxication', 'Face Slapping', 'Choking', 'Gagging'];
+
+const GENDER_OPTIONS: string[] = ['Male', 'Female', 'Non-binary', 'Transgender Male', 'Transgender Female', 'Genderqueer', 'Other'];
+
+const SEXUALITY_OPTIONS: string[] = ['Straight', 'Bisexual', 'Gay', 'Pansexual', 'Queer', 'Asexual', 'Other'];
+
+const RELATIONSHIP_STATUS_OPTIONS: string[] = ['Single', 'Married', 'Divorced', 'Widowed', 'In a Relationship', 'Open Relationship', 'It\'s Complicated'];
 const SEEKING_OPTIONS = ['👫 Couple', '🙎‍♂️ Man', '🙍‍♀️ Woman', '👤 Other'];
 const SEEKING_RELATIONSHIP_TYPE_OPTIONS = ['Casual NSA', 'FWB', 'Play Partners', 'Voyeur', 'Swingers Party Friends', 'Poly Relationship', 'Long-term', 'Short-term', 'Sugar Daddy/Baby'];
 const EXPERIENCE_LEVEL_OPTIONS = ['New', 'Beginner', 'Moderate', 'Advanced'];
@@ -417,7 +422,12 @@ photoUrls.push(publicUrl);
                         <li className="line-through">✖ Limited visibility</li>
                         <li className="line-through">✖ No priority matching</li>
                     </ul>
-                    <Button onClick={() => setFormData(p => ({...p, membershipTier: 'basic'}))} variant={formData.membershipTier === 'basic' ? 'primary' : 'outline'} className="w-full">Stay Basic</Button>
+                    <Button 
+  onClick={() => setFormData(p => ({...p, membershipTier: 'basic'}))} 
+  variant={formData.membershipTier === 'basic' ? 'primary' : 'outline'}
+>
+  Stay Basic
+</Button>
                 </div>
                  <div className={`p-6 rounded-lg border-2 ${formData.membershipTier === 'vip' ? 'border-brand-primary' : 'border-base-300'}`}>
                     <h3 className="text-xl font-bold text-brand-secondary">🌟 VIP Membership</h3>
@@ -428,7 +438,12 @@ photoUrls.push(publicUrl);
                         <li>💖 Access to VIP-only events</li>
                     </ul>
                     <p className="text-center font-bold text-2xl my-4">$24.99 / month</p>
-                    <Button onClick={() => setFormData(p => ({...p, membershipTier: 'vip'}))} variant={formData.membershipTier === 'vip' ? 'primary' : 'outline'} className="w-full">Upgrade to VIP</Button>
+                    <Button 
+  onClick={() => setFormData(p => ({...p, membershipTier: 'vip'}))} 
+  variant={formData.membershipTier === 'vip' ? 'primary' : 'outline'}
+>
+  Upgrade to VIP
+</Button>
                 </div>
             </div>
             <p className="text-center text-text-secondary text-sm">You can upgrade anytime in Settings.</p>
