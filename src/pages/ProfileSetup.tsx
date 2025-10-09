@@ -168,37 +168,120 @@ export const ProfileSetupPage: React.FC = () => {
   };
   
   const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-        if (photoFiles.length < 2) {
-            throw new Error('Please upload at least 2 photos');
-        }
-        const photoUrls: string[] = [];
-        for (const file of photoFiles) {
-            const { data, error } = await uploadPhoto(file);
-            if (error || !data) throw new Error(error || 'Failed to upload photo.');
-            if (data.publicUrl) photoUrls.push(data.publicUrl);
-        }
-        
-        const finalProfileData: Profile = {
-            ...formData,
-            accountType: accountType!,
-            age: Number(formData.age),
-            age2: Number(formData.age2),
-            photos: photoUrls,
-        } as Profile;
+  setLoading(true);
+  setError(null);
 
-        const { error: setupError } = await completeProfileSetup(finalProfileData);
-        if (setupError) throw new Error(String(setupError));
+  try {
+    // 🔹 1. Ensure user is authenticated
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) throw new Error('You must be logged in to complete your profile.');
 
-    } catch (err: any) {
-        setError(err.message || 'Failed to create profile');
-    } finally {
-        setLoading(false);
+    // 🔹 2. Enforce minimum profile requirements
+    if (photoFiles.length < 2) {
+      throw new Error('Please upload at least 2 photos before completing your profile.');
     }
-  };
 
+    // ============================================================
+    // 3️⃣ Upload photos to Supabase Storage
+    // ============================================================
+    const uploadedUrls: string[] = [];
+
+    for (const file of photoFiles) {
+      const fileExt = file.name.split('.').pop();
+      const filePath = `profiles/${user.id}/${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('profile_media')
+        .upload(filePath, file, { upsert: false });
+
+      if (uploadError) throw new Error(`Photo upload failed: ${uploadError.message}`);
+
+      const { data: publicUrlData } = supabase.storage
+        .from('profile_media')
+        .getPublicUrl(filePath);
+
+      if (publicUrlData?.publicUrl) uploadedUrls.push(publicUrlData.publicUrl);
+    }
+
+    // ============================================================
+    // 4️⃣ Prepare profile payload
+    // ============================================================
+    const payload = {
+      display_name: formData.displayName?.trim() || null,
+      display_name2: formData.displayName2?.trim() || null,
+      gender: formData.gender || null,
+      gender2: formData.gender2 || null,
+      orientation: formData.orientation || null,
+      orientation2: formData.orientation2 || null,
+      age: formData.age ? Number(formData.age) : null,
+      age2: formData.age2 ? Number(formData.age2) : null,
+      location: formData.location?.trim() || null,
+      relationship_status: formData.relationshipStatus || null,
+      seeking: formData.seeking || [],
+      seeking_relationship_type: formData.seekingRelationshipType || [],
+      lifestyle_experience: formData.lifestyleExperience || null,
+      kinks: formData.kinks || [],
+      interests: formData.interests || [],
+      soft_limits: formData.softLimits || [],
+      hard_limits: formData.hardLimits || [],
+      safety_practices: formData.safetyPractices || null,
+      rules: formData.rules || null,
+      bio: formData.bio || null,
+      photos: uploadedUrls,
+      membership_tier: formData.membershipTier || 'basic',
+      profile_type: accountType === 'couple' ? 'couple' : 'individual',
+      match_preferences: formData.matchPreferences || {},
+      vip: formData.membershipTier === 'vip',
+      updated_at: new Date().toISOString(),
+    };
+
+    // ============================================================
+    // 5️⃣ Upsert profile data
+    // ============================================================
+    const { data: existingProfile, error: checkError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    if (checkError) throw checkError;
+
+    if (existingProfile) {
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update(payload)
+        .eq('id', user.id);
+      if (updateError) throw updateError;
+    } else {
+      const { error: insertError } = await supabase
+        .from('profiles')
+        .insert({ id: user.id, ...payload });
+      if (insertError) throw insertError;
+    }
+
+    // ============================================================
+    // 6️⃣ Insert audit log (optional but strongly recommended)
+    // ============================================================
+    const { error: logError } = await supabase.from('audit_logs').insert({
+      user_id: user.id,
+      action: 'complete_profile',
+      description: `${payload.profile_type} profile setup completed.`,
+    });
+    if (logError) console.warn('Audit log failed:', logError.message);
+
+    // ============================================================
+    // 7️⃣ Final success
+    // ============================================================
+    alert('🎉 Profile completed successfully!');
+    // Optionally redirect: navigate('/dashboard') or setStep(step + 1);
+
+  } catch (err: any) {
+    console.error('[Profile Setup Error]', err);
+    setError(err.message || 'Failed to complete profile setup.');
+  } finally {
+    setLoading(false);
+  }
+};
   const nextStep = () => setStep(s => s + 1);
   const prevStep = () => setStep(s => s - 1);
 
