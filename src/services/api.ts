@@ -1,86 +1,50 @@
+import { supabase } from './supabase';
 import { Profile } from '../types';
 
-const API_BASE_URL = '/api';
+export const apiUpdateProfile = async (profileData: Profile, token: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('profiles')
+      .upsert(
+        { ...profileData, updated_at: new Date().toISOString() },
+        { onConflict: 'user_id' }
+      )
+      .select()
+      .single();
 
-// Helper function to handle API requests
-async function fetchApi(endpoint: string, options: RequestInit = {}) {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
-  
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...options,
-    headers,
-  });
+    if (error) {
+      console.error('Supabase upsert error:', error.message, error);
+      return { error: error.message };
+    }
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'An unknown error occurred');
+    return { data, error: null };
+  } catch (error: any) {
+    console.error('API update profile error:', error.message, error.stack);
+    return { error: error.message || 'Failed to update profile' };
   }
-  
-  if (response.status === 204) {
-    return null;
+};
+
+export const apiGetSignedUploadUrl = async (fileName: string, token: string) => {
+  const { data, error } = await supabase.storage
+    .from('profile-photos')
+    .createSignedUploadUrl(`public/${fileName}`);
+
+  if (error) {
+    console.error('Signed URL error:', error.message, error);
+    throw error;
   }
-
-  return response.json();
-}
-
-// Auth API
-export const apiSignUp = (email: string, password: string, name: string, age: string) => {
-  return fetchApi('/auth/signup', {
-    method: 'POST',
-    body: JSON.stringify({ email, password, data: { display_name: name, age: parseInt(age, 10) } }),
-  });
-};
-
-export const apiLogin = (email: string, password: string) => {
-  return fetchApi('/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
-};
-
-// Profile API
-export const apiUpdateProfile = (profileData: Profile, token: string) => {
-  return fetchApi('/profile', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: JSON.stringify(profileData),
-  });
-};
-
-// Storage API
-export const apiGetSignedUploadUrl = (fileName: string, token: string): Promise<{ signedUrl: string; publicUrl: string; }> => {
-  return fetchApi('/storage/upload-url', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ fileName }),
-  });
+  return { signedUrl: data.signedUrl, publicUrl: `https://your-supabase-project-id.supabase.co/storage/v1/object/public/profile-photos/public/${fileName}` };
 };
 
 export const apiUploadPhotoWithSignedUrl = async (signedUrl: string, file: File) => {
   const response = await fetch(signedUrl, {
     method: 'PUT',
-    headers: { 
-        'Content-Type': file.type
-    },
     body: file,
+    headers: { 'Content-Type': file.type },
   });
-
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to upload file: ${errorText}`);
+    const error = new Error('Failed to upload photo to signed URL');
+    console.error(error.message, response.statusText);
+    throw error;
   }
-  return response;
-};
-
-
-// AI API
-export const apiGenerateBio = (interests: string[], token: string): Promise<{ bio: string }> => {
-  return fetchApi('/ai/generate-bio', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ interests }),
-  });
 };
