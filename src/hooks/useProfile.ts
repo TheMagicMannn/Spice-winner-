@@ -1,55 +1,70 @@
 import { useAuth } from './useAuth';
 import { supabase } from '../services/supabase';
 import { Profile } from '../types';
-import { apiGetSignedUploadUrl, apiUploadPhotoWithSignedUrl } from '../services/api';
 
 export const useProfile = () => {
   const { user, updateProfile } = useAuth();
 
+  // --- Upload Photo ---
   const uploadPhoto = async (file: File) => {
     if (!user) return { data: null, error: 'User not authenticated' };
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      if (!token) throw new Error('No session token found');
+      // Create a Supabase storage path
+      const filePath = `${user.id}/${Date.now()}_${file.name}`;
+      const { data, error } = await supabase.storage
+        .from('profile-photos') // Make sure bucket exists
+        .upload(filePath, file, { upsert: true });
 
-      const { signedUrl, publicUrl } = await apiGetSignedUploadUrl(file.name, token);
-      await apiUploadPhotoWithSignedUrl(signedUrl, file);
+      if (error) throw error;
 
-      return { data: { publicUrl }, error: null };
+      const { data: publicUrlData } = supabase.storage
+        .from('profile-photos')
+        .getPublicUrl(filePath);
+
+      return { data: { publicUrl: publicUrlData.publicUrl }, error: null };
     } catch (error: any) {
       console.error('Upload error:', error);
       return { data: null, error: error.message };
     }
   };
 
+  // --- Complete or Update Profile ---
   const completeProfileSetup = async (profileData: Profile) => {
-    if (!user) {
-      const error = 'User not authenticated';
-      console.error(error);
-      return { error };
-    }
+    if (!user) return { error: 'User not authenticated' };
 
     try {
-      // Save directly to Supabase
-      const { error: supabaseError } = await supabase
+      // Prepare full profile object
+      const payload: Partial<Profile> = {
+        ...profileData,
+        photos: profileData.photos || [], // array of URLs
+        kinks: profileData.kinks || [],
+        softLimits: profileData.softLimits || [],
+        hardLimits: profileData.hardLimits || [],
+        seeking: profileData.seeking || [],
+        seekingRelationshipType: profileData.seekingRelationshipType || [],
+        matchPreferences: profileData.matchPreferences || {},
+        updated_at: new Date().toISOString(),
+      };
+
+      const { data, error } = await supabase
         .from('profiles')
         .upsert(
           {
             id: user.id,
-            ...profileData,
-            updated_at: new Date().toISOString(),
+            ...payload,
           },
           { onConflict: 'id' }
         );
 
-      if (supabaseError) throw supabaseError;
+      if (error) throw error;
 
-      updateProfile(profileData); // Update global state
+      // Update global auth/profile state
+      updateProfile(payload as Profile);
+
       return { error: null };
     } catch (error: any) {
-      console.error('Failed to save profile:', error);
+      console.error('Profile save error:', error);
       return { error: error.message };
     }
   };
