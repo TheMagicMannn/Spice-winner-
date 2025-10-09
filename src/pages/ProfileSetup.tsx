@@ -197,14 +197,12 @@ export const ProfileSetupPage: React.FC = () => {
             const file = photoFiles[i];
             try {
                 const res = await uploadPhoto(file);
-                // res could be { data, error } or something else depending on your hook - handle both.
-                if (!res) throw new Error('uploadPhoto returned empty response');
-                // prefer res.data.publicUrl but support variations:
-                const publicUrl = res?.data?.publicUrl || res?.publicUrl || res?.data?.url || null;
-                const uploadError = res?.error || res?.message || null;
-                if (uploadError) throw new Error(String(uploadError));
-                if (!publicUrl) throw new Error('uploadPhoto did not return a public URL');
-                photoUrls.push(publicUrl);
+         // res type: { data: { publicUrl: string } | null, error: string | null }
+if (!res) throw new Error('Upload failed');
+if (res.error) throw new Error(res.error);
+if (!res.data?.publicUrl) throw new Error('No URL returned');
+const publicUrl = res.data.publicUrl;
+photoUrls.push(publicUrl);
             } catch (fileErr: any) {
                 console.error('Photo upload failed for file', file.name, fileErr);
                 throw new Error(`Failed to upload photo "${file.name}": ${fileErr?.message || String(fileErr)}`);
@@ -258,11 +256,9 @@ export const ProfileSetupPage: React.FC = () => {
         // Call the hook to persist. Provide clearer error message if it fails.
         const response = await completeProfileSetup(finalProfileData);
         // Response shape may vary; handle common shapes
-        const setupError = response?.error || response?.message || null;
-        if (setupError) {
-          console.error('completeProfileSetup error:', setupError, response);
-          throw new Error(String(setupError));
-        }
+        if (response.error) {
+  throw new Error(response.error);
+}
 
         // Optionally you could route or show success (not included — preserve existing routing)
     } catch (err: any) {
