@@ -162,46 +162,50 @@ export const ProfileSetupPage: React.FC = () => {
     setFormData(prev => ({ ...prev, [field]: newValues }));
   };
 
-  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
   const files = Array.from(e.target.files || []);
   if (files.length + photoFiles.length > 10) {
     setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
     return;
   }
 
-  // Upload each file to Supabase and get its public URL
+  const user = supabase.auth.getUser ? (await supabase.auth.getUser()).data.user : null;
+  if (!user) {
+    setValidationErrors(prev => ({ ...prev, photos: 'You must be logged in to upload photos' }));
+    return;
+  }
+
   const uploadedFiles: string[] = [];
 
   for (const file of files) {
-    const fileName = `${Date.now()}_${file.name}`;
-    const filePath = `profile-photos/${userId}/${fileName}`;
+    const filePath = `${user.id}/${Date.now()}_${file.name}`;
 
-    // 1️⃣ Upload
+    // 1️⃣ Upload the file first
     const { error: uploadError } = await supabase.storage
       .from('profile-photos')
-      .upload(filePath, file);
+      .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
-      console.error('Failed to upload photo', uploadError);
-      setValidationErrors(prev => ({ ...prev, photos: 'Failed to upload one or more photos' }));
-      continue; // skip this file, continue with others
+      console.error('Upload failed:', uploadError);
+      setValidationErrors(prev => ({ ...prev, photos: 'Failed to upload file' }));
+      return;
     }
 
-    // 2️⃣ Get public URL
-    const { data: publicUrlData, error: urlError } = supabase.storage
+    // 2️⃣ Get a signed URL *after* upload
+    const { data: signedUrlData, error: urlError } = await supabase.storage
       .from('profile-photos')
-      .getPublicUrl(filePath);
+      .createSignedUrl(filePath, 60 * 60); // 1 hour
 
     if (urlError) {
-      console.error('Failed to get public URL', urlError);
-      continue;
+      console.error('URL signing failed:', urlError);
+      setValidationErrors(prev => ({ ...prev, photos: 'Failed to create photo URL' }));
+      return;
     }
 
-    uploadedFiles.push(publicUrlData.publicUrl);
+    uploadedFiles.push(signedUrlData.signedUrl);
   }
 
-  // 3️⃣ Update state with uploaded files
-  setPhotoFiles(prev => ([...prev, ...uploadedFiles]));
+  setPhotoFiles(prev => [...prev, ...uploadedFiles]);
   setValidationErrors(prev => ({ ...prev, photos: '' }));
 };
 
