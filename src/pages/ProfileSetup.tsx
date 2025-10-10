@@ -171,46 +171,39 @@ const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     return;
   }
 
-  const user = supabase.auth.getUser ? (await supabase.auth.getUser()).data.user : null;
-  if (!user) {
-    setValidationErrors(prev => ({ ...prev, photos: 'You must be logged in to upload photos' }));
-    return;
-  }
-
-  const uploadedFiles: string[] = [];
+  const uploadedFiles: File[] = [];
 
   for (const file of files) {
-    const filePath = `${user.id}/${Date.now()}_${file.name}`;
+    const filePath = `profile-photos/${user?.id}/${Date.now()}_${file.name}`;
 
-    // 1️⃣ Upload the file first
+    // Upload file to Supabase Storage
     const { error: uploadError } = await supabase.storage
       .from('profile-photos')
       .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
-      console.error('Upload failed:', uploadError);
-      setValidationErrors(prev => ({ ...prev, photos: 'Failed to upload file' }));
+      console.error('Photo upload error:', uploadError);
+      setValidationErrors(prev => ({ ...prev, photos: 'Failed to upload photo' }));
       return;
     }
 
-    // 2️⃣ Get a signed URL *after* upload
-    const { data: signedUrlData, error: urlError } = await supabase.storage
+    // Get the public URL
+    const { data: publicUrlData } = supabase.storage
       .from('profile-photos')
-      .createSignedUrl(filePath, 60 * 60); // 1 hour
+      .getPublicUrl(filePath);
 
-    if (urlError) {
-      console.error('URL signing failed:', urlError);
-      setValidationErrors(prev => ({ ...prev, photos: 'Failed to create photo URL' }));
+    if (!publicUrlData?.publicUrl) {
+      setValidationErrors(prev => ({ ...prev, photos: 'Failed to get uploaded photo URL' }));
       return;
     }
 
-    uploadedFiles.push(signedUrlData.signedUrl);
+    // ✅ Store the public URL string in state (not File object)
+    uploadedFiles.push(file);
+    setPhotoFiles(prev => [...prev, publicUrlData.publicUrl]);
   }
 
-  setPhotoFiles(prev => [...prev, ...uploadedFiles]);
   setValidationErrors(prev => ({ ...prev, photos: '' }));
 };
-
   // <<< FIX: More defensive submit with clearer error reporting + attach userId if present
   const handleSubmit = async () => {
     setLoading(true);
