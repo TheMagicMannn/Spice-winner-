@@ -7,6 +7,8 @@ import { Textarea } from '../components/Textarea';
 import { Label } from '../components/Label';
 import { Spinner } from '../components/Spinner';
 import { Profile } from '../types';
+import { supabase } from '../services/supabase';
+
 
 // --- DATA CONSTANTS ---
 const KINKS_OPTIONS: string[] = ['BDSM', 'Roleplay', 'Voyeurism', 'Exhibitionism', 'Swinging', 'Group Play', 'Tantric Sex', 'Food Play', 'Dominance', 'Submission', 'Bondage', 'Impact Play', 'Sensory Deprivation', 'Age Play', 'Cuckolding', 'Foot Fetish', 'Leather/Latex', 'Uniforms', 'Medical Play', 'Pet Play', 'Praise', 'Degradation', 'Watersports', 'Anal Play', 'Public Play'];
