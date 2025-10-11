@@ -120,7 +120,9 @@ export const ProfileSetupPage: React.FC = () => {
     membershipTier: 'basic',
   });
 
-  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  
+  const [photoFiles, setPhotoFiles] = useState<(File | string)[]>([]);
+const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
