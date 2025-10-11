@@ -17,6 +17,7 @@ export interface Profile {
   accountType: 'individual' | 'couple';
   
   // --- Core Info (Individual & Couple) ---
+  id?: string;
   displayName: string;
   location: string;
   age: number;
