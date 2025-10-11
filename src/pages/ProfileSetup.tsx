@@ -166,87 +166,67 @@ const [photoUrls, setPhotoUrls] = useState<string[]>([]);
     setFormData(prev => ({ ...prev, [field]: newValues }));
   };
 
-const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+// --- State ---
+const [photoFiles, setPhotoFiles] = useState<File[]>([]); // raw File objects
+const [photoUrls, setPhotoUrls] = useState<string[]>([]); // uploaded URLs
+
+// --- Upload handler ---
+const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   const files = Array.from(e.target.files || []);
   if (files.length + photoFiles.length > 10) {
     setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
     return;
   }
 
-  const uploadedFiles: File[] = [];
-
-  for (const file of files) {
-    const filePath = `profile-photos/${user?.id}/${Date.now()}_${file.name}`;
-
-    // Upload file to Supabase Storage
-    const { error: uploadError } = await supabase.storage
-      .from('profile-photos')
-      .upload(filePath, file, { upsert: true });
-
-    if (uploadError) {
-      console.error('Photo upload error:', uploadError);
-      setValidationErrors(prev => ({ ...prev, photos: 'Failed to upload photo' }));
-      return;
-    }
-
-    // Get the public URL
-    const { data: publicUrlData } = supabase.storage
-      .from('profile-photos')
-      .getPublicUrl(filePath);
-
-    if (!publicUrlData?.publicUrl) {
-      setValidationErrors(prev => ({ ...prev, photos: 'Failed to get uploaded photo URL' }));
-      return;
-    }
-
-    // ✅ Store the public URL string in state (not File object)
-    uploadedFiles.push(file);
-    setPhotoFiles(prev => [...prev, publicUrlData.publicUrl]);
-  }
-
+  // Append new files to the array
+  setPhotoFiles(prev => [...prev, ...files]);
   setValidationErrors(prev => ({ ...prev, photos: '' }));
 };
 
-  const removePhoto = (index: number) => {
+// --- Remove handler ---
+const removePhoto = (index: number) => {
   setPhotoFiles(prev => prev.filter((_, i) => i !== index));
+  setPhotoUrls(prev => prev.filter((_, i) => i !== index)); // keep URLs in sync
 };
-  // <<< FIX: More defensive submit with clearer error reporting + attach userId if present
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-        // Guard: account type must be set
-        if (!accountType) throw new Error('Account type not selected');
 
-        // Basic validation
-        if (!formData.displayName || !formData.location) {
-          throw new Error('Please fill out display name and location');
-        }
-        if (!formData.gender || !formData.orientation) {
-          throw new Error('Please select gender and sexuality');
-        }
+// --- Submission snippet (use uploaded URLs) ---
+const handleSubmit = async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    const uploadedUrls: string[] = [];
 
-        if (photoFiles.length < 2) {
-            throw new Error('Please upload at least 2 photos');
-        }
+    for (const file of photoFiles) {
+      const filePath = `${user?.id}/${Date.now()}_${file.name}`;
 
-        // Upload photos one-by-one and collect urls. Provide better error context.
-        const photoUrls: string[] = [];
-        for (let i = 0; i < photoFiles.length; i++) {
-            const file = photoFiles[i];
-            try {
-                const res = await uploadPhoto(file);
-         // res type: { data: { publicUrl: string } | null, error: string | null }
-if (!res) throw new Error('Upload failed');
-if (res.error) throw new Error(res.error);
-if (!res.data?.publicUrl) throw new Error('No URL returned');
-const publicUrl = res.data.publicUrl;
-photoUrls.push(publicUrl);
-            } catch (fileErr: any) {
-                console.error('Photo upload failed for file', file.name, fileErr);
-                throw new Error(`Failed to upload photo "${file.name}": ${fileErr?.message || String(fileErr)}`);
-            }
-        }
+      // Upload to Supabase
+      const { error: uploadError } = await supabase.storage
+        .from('profile-photos')
+        .upload(filePath, file, { upsert: true });
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('profile-photos')
+        .getPublicUrl(filePath);
+      if (!publicUrlData?.publicUrl) throw new Error('Failed to get uploaded photo URL');
+
+      uploadedUrls.push(publicUrlData.publicUrl);
+    }
+
+    setPhotoUrls(uploadedUrls);
+
+    // Use uploadedUrls in your profile submission:
+    const finalProfileData = { ...formData, photos: uploadedUrls };
+    await completeProfileSetup(finalProfileData);
+
+  } catch (err: any) {
+    console.error(err);
+    setError('Photo upload failed');
+  } finally {
+    setLoading(false);
+  }
+};
 
         // Ensure matchPreferences exists
         const safeMatchPreferences = {
