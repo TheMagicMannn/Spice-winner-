@@ -1,3 +1,4 @@
+// src/pages/ProfileSetup.tsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { useProfile } from '../hooks/useProfile';
 import { useAuth } from '../hooks/useAuth';
@@ -8,6 +9,7 @@ import { Label } from '../components/Label';
 import { Spinner } from '../components/Spinner';
 import { Profile } from '../types';
 import { supabase } from '../services/supabase';
+
 
 // --- DATA CONSTANTS ---
 const KINKS_OPTIONS: string[] = ['BDSM', 'Roleplay', 'Voyeurism', 'Exhibitionism', 'Swinging', 'Group Play', 'Tantric Sex', 'Food Play', 'Dominance', 'Submission', 'Bondage', 'Impact Play', 'Sensory Deprivation', 'Age Play', 'Cuckolding', 'Foot Fetish', 'Leather/Latex', 'Uniforms', 'Medical Play', 'Pet Play', 'Praise', 'Degradation', 'Watersports', 'Anal Play', 'Public Play'];
@@ -62,6 +64,7 @@ const TagMultiSelect = ({ title, options, selected, onToggle, error }: { title: 
   </div>
 );
 
+// FIX: Added `name` prop to the Select component to pass it to the underlying select element, which is required by the `onChange` handlers.
 const Select = ({ label, value, onChange, options, placeholder, required, name }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void; options: string[], placeholder?: string, required?: boolean, name?: string }) => (
     <div className="space-y-2">
         <Label>{label}</Label>
@@ -82,6 +85,7 @@ export const ProfileSetupPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // --- DEFAULT SAFE INITIAL STATE TO AVOID undefined ---- (<<< FIX: avoids runtime undefined)
   const [formData, setFormData] = useState<Partial<Profile>>({
     displayName: '',
     location: '',
@@ -117,16 +121,14 @@ export const ProfileSetupPage: React.FC = () => {
     membershipTier: 'basic',
   });
 
-  // --- PHOTO STATE ---
-  // --- PHOTO STATE ---
-const [photoFiles, setPhotoFiles] = useState<File[]>([]);
-const [photoUrls, setPhotoUrls] = useState<string[]>([]);
-const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
-  // --- INPUT HANDLERS ---
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
-    const finalValue = type === 'number' ? parseInt(value as string, 10) : value;
+    let finalValue: any = value;
+    if (type === 'number') finalValue = parseInt(value as string, 10);
     setFormData(prev => ({ ...prev, [name]: finalValue }));
   };
 
@@ -136,10 +138,16 @@ const [validationErrors, setValidationErrors] = useState<{ [key: string]: string
         partner1: { displayName: 'displayName', gender: 'gender', sexuality: 'orientation', age: 'age' },
         partner2: { displayName: 'displayName2', gender: 'gender2', sexuality: 'orientation2', age: 'age2' },
     };
+    // ensure mapping exists for this input name
     const mapped = fieldMapping[partner]?.[name];
-    const finalValue = type === 'number' ? parseInt(value as string, 10) : value;
-    if (mapped) setFormData(prev => ({ ...prev, [mapped]: finalValue }));
-    else setFormData(prev => ({ ...prev, [name]: finalValue }));
+    if (!mapped) {
+      // unknown partner field — fallback to setting raw name (defensive)
+      setFormData(prev => ({ ...prev, [name]: type === 'number' ? parseInt(String(value), 10) : value }));
+      return;
+    }
+    let finalValue: any = value;
+    if (type === 'number') finalValue = parseInt(value as string, 10);
+    setFormData(prev => ({ ...prev, [mapped]: finalValue }));
   };
 
   const handleToggle = (field: keyof Profile, value: string, max?: number) => {
@@ -158,51 +166,133 @@ const [validationErrors, setValidationErrors] = useState<{ [key: string]: string
     setFormData(prev => ({ ...prev, [field]: newValues }));
   };
 
-  // --- PHOTO UPLOAD ---// --- PHOTO UPLOAD ---
+// --- State ---
+// photoFiles & photoUrls already declared above
+
+// --- Upload handler ---
 const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   const files = Array.from(e.target.files || []);
   if (files.length + photoFiles.length > 10) {
     setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
     return;
   }
+
+  // Append new files to the array
   setPhotoFiles(prev => [...prev, ...files]);
   setValidationErrors(prev => ({ ...prev, photos: '' }));
 };
 
+// --- Remove handler ---
 const removePhoto = (index: number) => {
   setPhotoFiles(prev => prev.filter((_, i) => i !== index));
-  setPhotoUrls(prev => prev.filter((_, i) => i !== index));
+  setPhotoUrls(prev => prev.filter((_, i) => i !== index)); // keep URLs in sync
 };
 
-// --- SUBMIT ---
+// --- Submission snippet (use uploaded URLs) ---
 const handleSubmit = async () => {
   setLoading(true);
   setError(null);
   try {
+    // Guard: account type must be set
+    if (!accountType) throw new Error('Account type not selected');
+
+    // Basic validation
+    if (!formData.displayName || !formData.location) {
+      throw new Error('Please fill out display name and location');
+    }
+    if (!formData.gender || !formData.orientation) {
+      throw new Error('Please select gender and sexuality');
+    }
+
+    if (photoFiles.length < 2) {
+        throw new Error('Please upload at least 2 photos');
+    }
+
     const uploadedUrls: string[] = [];
+
     for (const file of photoFiles) {
       const filePath = `${user?.id}/${Date.now()}_${file.name}`;
+
+      // Upload to Supabase
       const { error: uploadError } = await supabase.storage
         .from('profile-photos')
         .upload(filePath, file, { upsert: true });
       if (uploadError) throw uploadError;
-      const { data } = supabase.storage.from('profile-photos').getPublicUrl(filePath);
-      uploadedUrls.push(data.publicUrl);
+
+      // Get public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('profile-photos')
+        .getPublicUrl(filePath);
+      if (!publicUrlData?.publicUrl) throw new Error('Failed to get uploaded photo URL');
+
+      uploadedUrls.push(publicUrlData.publicUrl);
     }
-    await completeProfileSetup({ ...formData, photos: uploadedUrls });
+
+    setPhotoUrls(uploadedUrls);
+
+    // Ensure matchPreferences exists
+    const safeMatchPreferences = {
+      ageRange: formData.matchPreferences?.ageRange || [21, 55],
+      genders: formData.matchPreferences?.genders || [],
+      sexualities: formData.matchPreferences?.sexualities || [],
+      searchingFor: formData.matchPreferences?.searchingFor || [],
+      distance: typeof formData.matchPreferences?.distance === 'number' ? formData.matchPreferences!.distance : 50,
+      vipOnly: !!formData.matchPreferences?.vipOnly,
+      verifiedOnly: !!formData.matchPreferences?.verifiedOnly,
+      experienceLevels: formData.matchPreferences?.experienceLevels || [],
+    };
+
+    // Build final profile payload in a deterministic shape
+    const finalProfileData: Profile & { userId?: string } = {
+        // cast only safe fields — prevents runtime undefined from being sent
+        displayName: String(formData.displayName || ''),
+        displayName2: String(formData.displayName2 || ''),
+        location: String(formData.location || ''),
+        age: Number(formData.age || 18),
+        age2: Number(formData.age2 || 18),
+        bio: String(formData.bio || ''),
+        photos: uploadedUrls,
+        relationshipStatus: String(formData.relationshipStatus || ''),
+        seeking: formData.seeking || [],
+        seekingRelationshipType: formData.seekingRelationshipType || [],
+        lifestyleExperience: String(formData.lifestyleExperience || 'New'),
+        interests: formData.interests || [],
+        kinks: formData.kinks || [],
+        softLimits: formData.softLimits || [],
+        hardLimits: formData.hardLimits || [],
+        safetyPractices: String(formData.safetyPractices || ''),
+        rules: String(formData.rules || ''),
+        gender: String(formData.gender || ''),
+        gender2: String(formData.gender2 || ''),
+        orientation: String(formData.orientation || ''),
+        orientation2: String(formData.orientation2 || ''),
+        matchPreferences: safeMatchPreferences,
+        membershipTier: String(formData.membershipTier || 'basic'),
+        // *** only change here: cast to non-null union so TS accepts assignment to Profile.accountType ***
+        accountType: accountType as 'individual' | 'couple',
+    } as Profile & { userId?: string };
+
+    // attach user id if available (many backends expect this)
+    if (user?.id) (finalProfileData as any).userId = user.id;
+
+    // Call the hook to persist. Provide clearer error message if it fails.
+    const response = await completeProfileSetup(finalProfileData);
+    // Response shape may vary; handle common shapes
+    if (response.error) {
+      throw new Error(response.error);
+    }
+
+    // success path - you can route or show a message here
   } catch (err: any) {
-    setError(err.message);
+    console.error('Profile submit failed:', err);
+    setError(err.message || 'Failed to create profile');
   } finally {
     setLoading(false);
   }
 };
 
-  // --- STEP HANDLERS ---
   const nextStep = () => setStep(s => s + 1);
   const prevStep = () => setStep(s => s - 1);
-
-  // ... Remaining step rendering logic unchanged
-  // Use photoFiles for previews and uploadedUrls for submissi
 
   const canProceed = useMemo(() => {
     if (accountType === 'individual') {
