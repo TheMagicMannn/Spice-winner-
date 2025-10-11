@@ -159,86 +159,43 @@ const [validationErrors, setValidationErrors] = useState<{ [key: string]: string
   };
 
   // --- PHOTO UPLOAD ---// --- PHOTO UPLOAD ---
-const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   const files = Array.from(e.target.files || []);
   if (files.length + photoFiles.length > 10) {
     setValidationErrors(prev => ({ ...prev, photos: 'You can upload a maximum of 10 photos' }));
     return;
   }
-  setValidationErrors(prev => ({ ...prev, photos: '' }));
-
-  const uploadedUrls: string[] = [];
-
-  for (const file of files) {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${user?.id}/${Date.now()}.${fileExt}`;
-    
-    // Upload using Supabase client
-    const { data, error: uploadError } = await supabase.storage
-      .from('profile-photos')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: true,
-        contentType: file.type,
-      });
-
-    if (uploadError) {
-      console.error('Upload error:', uploadError.message);
-      setValidationErrors(prev => ({ ...prev, photos: uploadError.message }));
-      continue;
-    }
-
-    const { data: publicUrlData } = supabase.storage
-      .from('profile-photos')
-      .getPublicUrl(fileName);
-
-    if (publicUrlData) uploadedUrls.push(publicUrlData.publicUrl);
-  }
-
   setPhotoFiles(prev => [...prev, ...files]);
-  setPhotoUrls(prev => [...prev, ...uploadedUrls]);
+  setValidationErrors(prev => ({ ...prev, photos: '' }));
 };
-  // --- SUBMIT ---
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const uploadedUrls: string[] = [];
 
-      for (const file of photoFiles) {
-        const filePath = `${user?.id}/${Date.now()}_${file.name}`;
+const removePhoto = (index: number) => {
+  setPhotoFiles(prev => prev.filter((_, i) => i !== index));
+  setPhotoUrls(prev => prev.filter((_, i) => i !== index));
+};
 
-        const { error: uploadError } = await supabase.storage
-          .from('profile-photos')
-          .upload(filePath, file, { upsert: true });
-        if (uploadError) throw uploadError;
-
-        const { data: publicUrlData } = supabase.storage
-          .from('profile-photos')
-          .getPublicUrl(filePath);
-        if (!publicUrlData?.publicUrl) throw new Error('Failed to get uploaded photo URL');
-
-        uploadedUrls.push(publicUrlData.publicUrl);
-      }
-
-      setPhotoUrls(uploadedUrls);
-
-      const finalProfileData: Profile & { userId?: string } = {
-        ...formData,
-        photos: uploadedUrls,
-        accountType,
-        userId: user?.id,
-      } as Profile & { userId?: string };
-
-      await completeProfileSetup(finalProfileData);
-
-    } catch (err: any) {
-      console.error(err);
-      setError('Photo upload failed');
-    } finally {
-      setLoading(false);
+// --- SUBMIT ---
+const handleSubmit = async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    const uploadedUrls: string[] = [];
+    for (const file of photoFiles) {
+      const filePath = `${user?.id}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from('profile-photos')
+        .upload(filePath, file, { upsert: true });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from('profile-photos').getPublicUrl(filePath);
+      uploadedUrls.push(data.publicUrl);
     }
-  };
+    await completeProfileSetup({ ...formData, photos: uploadedUrls });
+  } catch (err: any) {
+    setError(err.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // --- STEP HANDLERS ---
   const nextStep = () => setStep(s => s + 1);
