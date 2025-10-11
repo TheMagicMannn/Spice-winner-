@@ -204,6 +204,10 @@ const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 
   setValidationErrors(prev => ({ ...prev, photos: '' }));
 };
+
+  const removePhoto = (index: number) => {
+  setPhotoFiles(prev => prev.filter((_, i) => i !== index));
+};
   // <<< FIX: More defensive submit with clearer error reporting + attach userId if present
   const handleSubmit = async () => {
     setLoading(true);
