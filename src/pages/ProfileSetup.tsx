@@ -87,6 +87,7 @@ export const ProfileSetupPage: React.FC = () => {
 
   // --- DEFAULT SAFE INITIAL STATE TO AVOID undefined ---- (<<< FIX: avoids runtime undefined)
   const [formData, setFormData] = useState<Partial<Profile>>({
+    accountType: accountType || 'individual', // 
     displayName: '',
     location: '',
     age: 18,
@@ -109,7 +110,7 @@ export const ProfileSetupPage: React.FC = () => {
     orientation2: '',
     age2: 18,
     matchPreferences: {
-        ageRange: [21, 55],
+        ageRange: [18, 55],
         genders: [],
         sexualities: [],
         searchingFor: [],
@@ -269,7 +270,7 @@ const handleSubmit = async () => {
         matchPreferences: safeMatchPreferences,
         membershipTier: String(formData.membershipTier || 'basic'),
         // *** only change here: cast to non-null union so TS accepts assignment to Profile.accountType ***
-        accountType: accountType as 'individual' | 'couple',
+        accountType: accountType || 'individual', // 
     } as Profile & { userId?: string };
 
     // attach user id if available (many backends expect this)
