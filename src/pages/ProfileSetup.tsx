@@ -118,10 +118,10 @@ export const ProfileSetupPage: React.FC = () => {
   });
 
   // --- PHOTO STATE ---
-  const [photoFiles, setPhotoFiles] = useState<File[]>([]); // raw File objects
-  const [photoUrls, setPhotoUrls] = useState<string[]>([]); // uploaded URLs
-
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  // --- PHOTO STATE ---
+const [photoFiles, setPhotoFiles] = useState<File[]>([]);
+const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
   // --- INPUT HANDLERS ---
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
