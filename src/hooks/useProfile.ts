@@ -25,6 +25,9 @@ const toSnakeCase = (obj: any): any => {
   };
 
   for (const [key, value] of Object.entries(obj)) {
+    // Skip undefined values and empty strings for enum fields to avoid database errors
+    if (value === undefined) continue;
+    
     const dbKey = fieldMapping[key] || key;
     snakeCaseObj[dbKey] = value;
   }
@@ -96,6 +99,7 @@ export const useProfile = () => {
       const dbData = toSnakeCase({
         id: user.id,
         ...profileData,
+        profile_completed: true, // Mark profile as complete
         updated_at: new Date().toISOString(),
       });
 
