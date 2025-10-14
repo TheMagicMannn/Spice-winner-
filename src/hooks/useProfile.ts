@@ -3,6 +3,67 @@ import { supabase } from '../services/supabase';
 import { Profile } from '../types';
 import { apiGetSignedUploadUrl, apiUploadPhotoWithSignedUrl } from '../services/api';
 
+// Helper function to convert camelCase to snake_case for database fields
+const toSnakeCase = (obj: any): any => {
+  const snakeCaseObj: any = {};
+  
+  const fieldMapping: Record<string, string> = {
+    accountType: 'account_type',
+    displayName: 'display_name',
+    displayName2: 'display_name2',
+    relationshipStatus: 'relationship_status',
+    lifestyleExperience: 'lifestyle_experience',
+    seekingRelationshipType: 'seeking_relationship_type',
+    softLimits: 'soft_limits',
+    hardLimits: 'hard_limits',
+    safetyPractices: 'safety_practices',
+    matchPreferences: 'match_preferences',
+    membershipTier: 'membership_tier',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  };
+
+  for (const [key, value] of Object.entries(obj)) {
+    // Skip undefined and null values to avoid database errors
+    if (value === undefined || value === null) continue;
+    
+    const dbKey = fieldMapping[key] || key;
+    snakeCaseObj[dbKey] = value;
+  }
+
+  return snakeCaseObj;
+};
+
+// Helper function to convert snake_case to camelCase when reading from database
+export const toCamelCase = (obj: any): any => {
+  if (!obj) return obj;
+  
+  const camelCaseObj: any = {};
+  
+  const fieldMapping: Record<string, string> = {
+    account_type: 'accountType',
+    display_name: 'displayName',
+    display_name2: 'displayName2',
+    relationship_status: 'relationshipStatus',
+    lifestyle_experience: 'lifestyleExperience',
+    seeking_relationship_type: 'seekingRelationshipType',
+    soft_limits: 'softLimits',
+    hard_limits: 'hardLimits',
+    safety_practices: 'safetyPractices',
+    match_preferences: 'matchPreferences',
+    membership_tier: 'membershipTier',
+    created_at: 'createdAt',
+    updated_at: 'updatedAt',
+  };
+
+  for (const [key, value] of Object.entries(obj)) {
+    const camelKey = fieldMapping[key] || key;
+    camelCaseObj[camelKey] = value;
+  }
+
+  return camelCaseObj;
+};
+
 export const useProfile = () => {
   const { user, updateProfile } = useAuth();
 
@@ -32,17 +93,19 @@ export const useProfile = () => {
     }
 
     try {
+      // Convert camelCase to snake_case for database
+      const dbData = toSnakeCase({
+        id: user.id,
+        ...profileData,
+        profile_completed: true, // Mark profile as complete
+        updated_at: new Date().toISOString(),
+      });
+
       // Save directly to Supabase
+      // Note: When id is the primary key, onConflict is not needed and can cause 400 errors
       const { error: supabaseError } = await supabase
         .from('profiles')
-        .upsert(
-          {
-            id: user.id,
-            ...profileData,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'id' }
-        );
+        .upsert(dbData);
 
       if (supabaseError) throw supabaseError;
 

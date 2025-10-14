@@ -3,6 +3,7 @@ import { User, Profile } from '../types';
 import { supabase } from '../services/supabase';
 import { Session } from '@supabase/supabase-js';
 import { apiLogin, apiSignUp } from '../services/api';
+import { toCamelCase } from './useProfile';
 
 interface AuthContextType {
   user: User | null;
@@ -34,7 +35,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           console.error("Error fetching profile:", error);
           setUser({ ...session.user, profile: null });
         } else {
-          setUser({ ...session.user, profile: profile as Profile });
+          // Convert snake_case from database to camelCase for TypeScript
+          const camelCaseProfile = profile ? toCamelCase(profile) as Profile : null;
+          setUser({ ...session.user, profile: camelCaseProfile });
         }
       } else {
         setUser(null);
