@@ -33,16 +33,14 @@ export const useProfile = () => {
 
     try {
       // Save directly to Supabase
+      // Note: When id is the primary key, onConflict is not needed and can cause 400 errors
       const { error: supabaseError } = await supabase
         .from('profiles')
-        .upsert(
-          {
-            id: user.id,
-            ...profileData,
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'id' }
-        );
+        .upsert({
+          id: user.id,
+          ...profileData,
+          updated_at: new Date().toISOString(),
+        });
 
       if (supabaseError) throw supabaseError;
 
