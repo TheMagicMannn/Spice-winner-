@@ -1,10 +1,14 @@
 // src/types.ts
 import { User as SupabaseUser } from '@supabase/supabase-js';
 
+/**
+ * Match Preferences Interface (Frontend Format - camelCase)
+ * Note: When saving to database, 'sexualities' is transformed to 'orientations'
+ */
 export interface MatchPreferences {
   ageRange: [number, number];
   genders: string[];
-  sexualities: string[];       // used in your form
+  sexualities: string[];       // Frontend field - maps to 'orientations' in DB
   searchingFor: string[];      // 'Individual' | 'Couple' | 'Both' values from UI
   distance: number;
   vipOnly: boolean;
