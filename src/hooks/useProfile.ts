@@ -2,6 +2,7 @@ import { useAuth } from './useAuth';
 import { supabase } from '../services/supabase';
 import { Profile } from '../types';
 import { apiGetSignedUploadUrl, apiUploadPhotoWithSignedUrl } from '../services/api';
+import { profileToDatabase, profileFromDatabase, validateProfileForDatabase } from '../utils/transformers';
 
 export const useProfile = () => {
   const { user, updateProfile } = useAuth();
@@ -32,27 +33,69 @@ export const useProfile = () => {
     }
 
     try {
-      // Save directly to Supabase
+      console.log('🔄 Transforming profile data for database...');
+      
+      // Transform camelCase frontend data to snake_case database format
+      const dbProfileData = profileToDatabase(profileData);
+      
+      // Validate the transformed data
+      const validation = validateProfileForDatabase(dbProfileData);
+      if (!validation.valid) {
+        console.error('❌ Validation errors:', validation.errors);
+        throw new Error(`Validation failed: ${validation.errors.join(', ')}`);
+      }
+      
+      console.log('✅ Profile data validation passed');
+      console.log('📤 Sending to database:', dbProfileData);
+      
+      // Save to Supabase with snake_case fields
       const { error: supabaseError } = await supabase
         .from('profiles')
         .upsert(
           {
             id: user.id,
-            ...profileData,
+            ...dbProfileData,
+            profile_completed: true,  // Mark profile as completed
             updated_at: new Date().toISOString(),
           },
           { onConflict: 'id' }
         );
 
-      if (supabaseError) throw supabaseError;
+      if (supabaseError) {
+        console.error('❌ Supabase error:', supabaseError);
+        throw supabaseError;
+      }
+      
+      console.log('✅ Profile saved successfully to database');
 
-      updateProfile(profileData); // Update global state
+      updateProfile(profileData); // Update global state with original camelCase data
       return { error: null };
     } catch (error: any) {
-      console.error('Failed to save profile:', error);
+      console.error('❌ Failed to save profile:', error);
       return { error: error.message };
     }
   };
 
-  return { uploadPhoto, completeProfileSetup };
+  /**
+   * Fetch profile from database and transform to frontend format
+   */
+  const getProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+      
+      // Transform snake_case database data to camelCase frontend format
+      return { data: profileFromDatabase(data), error: null };
+    } catch (error: any) {
+      console.error('Failed to fetch profile:', error);
+      return { data: null, error: error.message };
+    }
+  };
+
+  return { uploadPhoto, completeProfileSetup, getProfile };
 };
