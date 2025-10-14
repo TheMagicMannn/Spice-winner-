@@ -53,7 +53,6 @@ export interface Profile {
 
   // DB-related optional meta (commonly present in profiles table)
   id?: string;
-  user_id?: string;
   created_at?: string;
   updated_at?: string;
 }

@@ -19,7 +19,6 @@ const toSnakeCase = (obj: any): any => {
     safetyPractices: 'safety_practices',
     matchPreferences: 'match_preferences',
     membershipTier: 'membership_tier',
-    userId: 'user_id',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
   };
@@ -53,7 +52,6 @@ export const toCamelCase = (obj: any): any => {
     safety_practices: 'safetyPractices',
     match_preferences: 'matchPreferences',
     membership_tier: 'membershipTier',
-    user_id: 'userId',
     created_at: 'createdAt',
     updated_at: 'updatedAt',
   };

@@ -244,7 +244,7 @@ const handleSubmit = async () => {
     };
 
     // Build final profile payload in a deterministic shape
-    const finalProfileData: Profile & { userId?: string } = {
+    const finalProfileData: Profile = {
         // cast only safe fields — prevents runtime undefined from being sent
         displayName: formData.displayName || '',
         displayName2: accountType === 'couple' ? (formData.displayName2 || '') : undefined,
@@ -271,10 +271,7 @@ const handleSubmit = async () => {
         matchPreferences: safeMatchPreferences,
         membershipTier: formData.membershipTier || 'basic',
         accountType: accountType || 'individual',
-    } as Profile & { userId?: string };
-
-    // attach user id if available (many backends expect this)
-    if (user?.id) (finalProfileData as any).userId = user.id;
+    };
 
     // Call the hook to persist. Provide clearer error message if it fails.
     const response = await completeProfileSetup(finalProfileData);
