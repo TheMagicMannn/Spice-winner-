@@ -16,6 +16,11 @@ export interface MatchPreferences {
   experienceLevels: string[];
 }
 
+/**
+ * Profile Interface (Frontend Format - camelCase)
+ * Note: All fields are automatically transformed to snake_case when saving to database
+ * Example: displayName -> display_name, matchPreferences -> match_preferences
+ */
 export interface Profile {
   // account type (your UI uses 'individual' | 'couple')
   accountType?: 'individual' | 'couple';
@@ -49,7 +54,7 @@ export interface Profile {
   // identity fields
   gender?: string;
   gender2?: string;
-  orientation?: string;   // in your code you used 'orientation' for sexuality
+  orientation?: string;   // sexuality field
   orientation2?: string;
 
   // matching preferences
@@ -57,9 +62,15 @@ export interface Profile {
 
   // DB-related optional meta (commonly present in profiles table)
   id?: string;
-  user_id?: string;
-  created_at?: string;
-  updated_at?: string;
+  userId?: string;  // Maps to user_id in database
+  createdAt?: string;  // Maps to created_at in database
+  updatedAt?: string;  // Maps to updated_at in database
+  
+  // Profile status flags
+  isVerified?: boolean;
+  isActive?: boolean;
+  profileCompleted?: boolean;
+  lastActiveAt?: string;
 }
 
 // optional User type if you want to extend Supabase user with profile
