@@ -24,8 +24,8 @@ const toSnakeCase = (obj: any): any => {
   };
 
   for (const [key, value] of Object.entries(obj)) {
-    // Skip undefined values and empty strings for enum fields to avoid database errors
-    if (value === undefined) continue;
+    // Skip undefined and null values to avoid database errors
+    if (value === undefined || value === null) continue;
     
     const dbKey = fieldMapping[key] || key;
     snakeCaseObj[dbKey] = value;

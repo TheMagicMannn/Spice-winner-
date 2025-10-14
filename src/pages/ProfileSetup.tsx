@@ -87,7 +87,7 @@ export const ProfileSetupPage: React.FC = () => {
 
   // --- DEFAULT SAFE INITIAL STATE TO AVOID undefined ---- (<<< FIX: avoids runtime undefined)
   const [formData, setFormData] = useState<Partial<Profile>>({
-    accountType: accountType || 'individual', // 
+    accountType: 'individual', // Default to individual, will be set based on user selection 
     displayName: '',
     location: '',
     age: 18,
@@ -195,7 +195,12 @@ const handleSubmit = async () => {
   setError(null);
   try {
     // Guard: account type must be set
-    if (!accountType) throw new Error('Account type not selected');
+    if (!accountType) {
+      throw new Error('Account type not selected');
+    }
+
+    // Ensure accountType has a valid value
+    const validAccountType: 'individual' | 'couple' = accountType === 'couple' ? 'couple' : 'individual';
 
     // Basic validation
     if (!formData.displayName || !formData.location) {
@@ -247,10 +252,10 @@ const handleSubmit = async () => {
     const finalProfileData: Profile = {
         // cast only safe fields — prevents runtime undefined from being sent
         displayName: formData.displayName || '',
-        displayName2: accountType === 'couple' ? (formData.displayName2 || '') : undefined,
+        displayName2: validAccountType === 'couple' ? (formData.displayName2 || '') : undefined,
         location: formData.location || '',
         age: Number(formData.age) || 18,
-        age2: accountType === 'couple' ? (Number(formData.age2) || 18) : undefined,
+        age2: validAccountType === 'couple' ? (Number(formData.age2) || 18) : undefined,
         bio: formData.bio || '',
         photos: uploadedUrls,
         // ENUM fields: only include if they have valid values (not empty strings)
@@ -265,12 +270,12 @@ const handleSubmit = async () => {
         safetyPractices: formData.safetyPractices || '',
         rules: formData.rules || '',
         gender: formData.gender || undefined,
-        gender2: accountType === 'couple' ? formData.gender2 : undefined,
+        gender2: validAccountType === 'couple' ? formData.gender2 : undefined,
         orientation: formData.orientation || undefined,
-        orientation2: accountType === 'couple' ? formData.orientation2 : undefined,
+        orientation2: validAccountType === 'couple' ? formData.orientation2 : undefined,
         matchPreferences: safeMatchPreferences,
         membershipTier: formData.membershipTier || 'basic',
-        accountType: accountType || 'individual',
+        accountType: validAccountType,
     };
 
     // Call the hook to persist. Provide clearer error message if it fails.
