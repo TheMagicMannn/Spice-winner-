@@ -63,12 +63,11 @@ export function profileToDatabase(profile: Partial<Profile>): any {
   // Fix matchPreferences field name mismatch: sexualities -> orientations
   if (dbProfile.matchPreferences) {
     const { sexualities, ...rest } = dbProfile.matchPreferences;
+    // Create a new object with orientations instead of sexualities
     dbProfile.matchPreferences = {
       ...rest,
       orientations: sexualities || [],
-    };
-    // Remove the sexualities field
-    delete (dbProfile.matchPreferences as any).sexualities;
+    } as any;
   }
 
   // Convert all keys to snake_case
