@@ -2,6 +2,53 @@
 
 ## Common Errors and Solutions
 
+### ❌ Error: "The string did not match the expected pattern" (Login/Signup)
+
+**Problem:** Authentication is failing with a pattern mismatch error.
+
+**Root Cause:** The frontend was trying to use API routes that returned data in an incompatible format.
+
+**Solution:** ✅ **FIXED** - Now using direct Supabase client authentication
+
+The app now uses `supabase.auth.signInWithPassword()` and `supabase.auth.signUp()` directly instead of going through API routes.
+
+**If you still see this error:**
+1. Check `/app/src/config.ts` has valid Supabase URL and anon key
+2. Verify Supabase project is active
+3. Check browser console for detailed error messages
+
+---
+
+### ❌ Error: "auth missing" (Reset Password)
+
+**Problem:** Password reset fails with "auth missing" error.
+
+**Root Cause:** User is trying to reset password without an active session from the email link.
+
+**Solution:** ✅ **FIXED** - Added session validation before password update
+
+```typescript
+const updateUserPassword = async (password: string) => {
+  // Now checks if user has active session from reset link
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session) {
+    throw new Error('No active session. Please use the password reset link from your email.');
+  }
+  // ... update password
+};
+```
+
+**If you still see this error:**
+1. Make sure you clicked the reset link from your email
+2. The link should redirect you to `#/reset-password` with auth tokens
+3. Try requesting a new reset link
+4. Check if the link expired (links expire after 1 hour)
+
+---
+
+## Common Errors and Solutions
+
 ### ❌ Error: "Could not find the 'user_id' column of 'profiles' in the schema cache"
 
 **Problem:** The code is trying to reference a `user_id` column in the profiles table, but the schema uses `id` instead.
