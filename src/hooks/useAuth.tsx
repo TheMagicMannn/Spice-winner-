@@ -57,21 +57,40 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
+  // ✅ Direct Supabase auth - no API middleman
   const login = async (email: string, pass: string) => {
     try {
-      const { session } = await apiLogin(email, pass);
-      await supabase.auth.setSession({ access_token: session.access_token, refresh_token: session.refresh_token });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password: pass,
+      });
+      
+      if (error) throw error;
       return { error: null };
     } catch (error: any) {
+      console.error('Login error:', error);
       return { error };
     }
   };
   
+  // ✅ Direct Supabase auth - no API middleman
   const signUp = async (email: string, pass: string, name: string, age: string) => {
     try {
-      await apiSignUp(email, pass, name, age);
+      const { data, error} = await supabase.auth.signUp({
+        email,
+        password: pass,
+        options: {
+          data: {
+            display_name: name,
+            age: parseInt(age, 10),
+          },
+        },
+      });
+      
+      if (error) throw error;
       return { error: null };
     } catch (error: any) {
+      console.error('Signup error:', error);
       return { error };
     }
   };
