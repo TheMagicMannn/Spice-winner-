@@ -108,13 +108,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
   
-  const sendPasswordResetEmail = (email: string) => {
-    const redirectUrl = `${window.location.origin}/#/reset-password`;
-    return supabase.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl });
+  const sendPasswordResetEmail = async (email: string) => {
+    try {
+      // Use hash routing for password reset
+      const redirectUrl = `${window.location.origin}${window.location.pathname}#/reset-password`;
+      const { error } = await supabase.auth.resetPasswordForEmail(email, { 
+        redirectTo: redirectUrl 
+      });
+      
+      if (error) throw error;
+      return { error: null };
+    } catch (error: any) {
+      console.error('Password reset email error:', error);
+      return { error };
+    }
   };
 
-  const updateUserPassword = (password: string) => {
-    return supabase.auth.updateUser({ password });
+  const updateUserPassword = async (password: string) => {
+    try {
+      // Check if user is authenticated (they should be from the reset link)
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('No active session. Please use the password reset link from your email.');
+      }
+
+      const { error } = await supabase.auth.updateUser({ password });
+      
+      if (error) throw error;
+      return { error: null };
+    } catch (error: any) {
+      console.error('Update password error:', error);
+      return { error };
+    }
   };
 
   const value = {
