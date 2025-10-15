@@ -60,9 +60,8 @@ export interface Profile {
   // matching preferences
   matchPreferences?: MatchPreferences;
 
-  // DB-related optional meta (commonly present in profiles table)
-  id?: string;
-  userId?: string;  // Maps to user_id in database
+  // DB-related optional meta (from profiles table)
+  id?: string;  // User's UUID (same as auth.users.id)
   createdAt?: string;  // Maps to created_at in database
   updatedAt?: string;  // Maps to updated_at in database
   
