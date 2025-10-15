@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS profiles CASCADE;
 -- Frontend transformation layer converts camelCase → snake_case
 
 CREATE TABLE profiles (
-    -- Primary identification
+    -- Primary identification (same as auth.users.id, NOT a separate user_id column)
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
     
     -- Account type and membership
