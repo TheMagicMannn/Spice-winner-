@@ -122,7 +122,12 @@ CREATE TABLE profiles (
     last_active_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Add comment explaining the transformation
+-- Add comments explaining important schema details
+COMMENT ON COLUMN profiles.id IS 
+'Primary key - references auth.users(id). 
+IMPORTANT: This is the user ID, not a separate user_id column. 
+Frontend code should use this directly, not look for user_id.';
+
 COMMENT ON COLUMN profiles.match_preferences IS 
 'JSONB object containing match preferences. 
 NOTE: Frontend uses "sexualities" field but DB stores as "orientations". 
