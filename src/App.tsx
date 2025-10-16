@@ -12,6 +12,46 @@ import { Header } from './components/Header';
 import { Spinner } from './components/Spinner';
 import { ToastProvider } from './hooks/useToast';
 import { Toaster } from './components/Toaster';
+import { Profile } from './types';
+
+/**
+ * Comprehensive profile completion validation
+ * Checks all required fields for both individual and couple accounts
+ */
+const isProfileComplete = (profile: Profile | null, accountType?: string): boolean => {
+  if (!profile) return false;
+  
+  // Base requirements for all account types
+  const baseRequirements = [
+    profile.displayName && profile.displayName.trim().length > 0,
+    profile.location && profile.location.trim().length > 0,
+    profile.age && profile.age >= 18,
+    profile.gender && profile.gender.trim().length > 0,
+    profile.orientation && profile.orientation.trim().length > 0,
+    profile.relationshipStatus && profile.relationshipStatus.trim().length > 0,
+    profile.bio && profile.bio.trim().length >= 69,
+    profile.photos && profile.photos.length >= 2
+  ];
+  
+  // Check if all base requirements are met
+  const baseComplete = baseRequirements.every(Boolean);
+  
+  if (!baseComplete) return false;
+  
+  // Additional requirements for couple accounts
+  if (accountType === 'couple' || profile.accountType === 'couple') {
+    const coupleRequirements = [
+      profile.displayName2 && profile.displayName2.trim().length > 0,
+      profile.age2 && profile.age2 >= 18,
+      profile.gender2 && profile.gender2.trim().length > 0,
+      profile.orientation2 && profile.orientation2.trim().length > 0
+    ];
+    
+    return coupleRequirements.every(Boolean);
+  }
+  
+  return true;
+};
 
 const AppContent: React.FC = () => {
   const { user, isLoading } = useAuth();
@@ -29,37 +69,13 @@ const AppContent: React.FC = () => {
       </div>
     );
   }
-  const isProfileComplete = (profile: Profile | null, accountType: string): boolean => {
-  if (!profile) return false;
-  
-  const baseRequirements = [
-    profile.displayName,
-    profile.location,
-    profile.age && profile.age >= 18,
-    profile.gender,
-    profile.orientation,
-    profile.relationshipStatus,
-    profile.bio && profile.bio.length >= 69,
-    profile.photos && profile.photos.length >= 2
-  ];
-  
-  if (accountType === 'couple') {
-    const coupleRequirements = [
-      profile.displayName2,
-      profile.age2 && profile.age2 >= 18,
-      profile.gender2,
-      profile.orientation2
-    ];
-    return [...baseRequirements, ...coupleRequirements].every(Boolean);
-  }
-  
-  return baseRequirements.every(Boolean);
-};
   
   // Authenticated User Flow
   if (user) {
-    // If profile exists but is incomplete, force setup.
-    if (!user.profile || !user.profile.displayName || !user.profile.photos || user.profile.photos.length === 0) {
+    // Comprehensive profile completion check
+    const profileComplete = isProfileComplete(user.profile, user.profile?.accountType);
+    
+    if (!profileComplete) {
       return (
          <Routes>
           <Route path="/profile-setup" element={<ProfileSetupPage />} />
