@@ -29,6 +29,32 @@ const AppContent: React.FC = () => {
       </div>
     );
   }
+  const isProfileComplete = (profile: Profile | null, accountType: string): boolean => {
+  if (!profile) return false;
+  
+  const baseRequirements = [
+    profile.displayName,
+    profile.location,
+    profile.age && profile.age >= 18,
+    profile.gender,
+    profile.orientation,
+    profile.relationshipStatus,
+    profile.bio && profile.bio.length >= 69,
+    profile.photos && profile.photos.length >= 2
+  ];
+  
+  if (accountType === 'couple') {
+    const coupleRequirements = [
+      profile.displayName2,
+      profile.age2 && profile.age2 >= 18,
+      profile.gender2,
+      profile.orientation2
+    ];
+    return [...baseRequirements, ...coupleRequirements].every(Boolean);
+  }
+  
+  return baseRequirements.every(Boolean);
+};
   
   // Authenticated User Flow
   if (user) {
