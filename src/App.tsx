@@ -18,7 +18,7 @@ import { Profile } from './types';
  * Comprehensive profile completion validation
  * Checks all required fields for both individual and couple accounts
  */
-const isProfileComplete = (profile: Profile | null, accountType?: string): boolean => {
+const isProfileComplete = (profile: Profile | null | undefined, accountType?: string): boolean => {
   if (!profile) return false;
   
   // Base requirements for all account types
