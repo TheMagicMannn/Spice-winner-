@@ -47,9 +47,9 @@ function UserDetailModal({ user, isOpen, onClose }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white max-w-md">
+      <DialogContent className="bg-black border-pink-500/30 text-white max-w-md animate-fade-in">
         <DialogHeader>
-          <DialogTitle className="text-pink-400 text-xl flex items-center space-x-2">
+          <DialogTitle className={`text-pink-400 text-xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
             <span>{user.name}</span>
             {user.isVerified && <Shield className="h-5 w-5 text-blue-400" />}
             {user.isPremium && <Crown className="h-5 w-5 text-yellow-400" />}
@@ -60,29 +60,33 @@ function UserDetailModal({ user, isOpen, onClose }: {
         </DialogHeader>
 
         <div className="space-y-4">
-          <img
-            src={user.profileImage}
-            alt={user.name}
-            className="w-full h-64 object-cover rounded-lg"
-          />
+          <div className="relative">
+            <img
+              src={user.profileImage}
+              alt={user.name}
+              className="w-full h-64 object-cover rounded-lg"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg" />
+          </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-white/60" />
+                <MapPin className="h-4 w-4 text-pink-400" />
                 <span className="text-white/80">{user.location}</span>
               </div>
-              <Badge className={user.lastActive === 'Online now' ? 'bg-green-500' : 'bg-orange-500'}>
+              <Badge className={user.lastActive === 'Online now' ? spiceTheme.components.badge.online : 'bg-orange-500'}>
                 {user.lastActive}
               </Badge>
             </div>
           </div>
 
           <div className="flex space-x-3 pt-4">
-            <Button className="flex-1 bg-pink-600 hover:bg-pink-700 text-white">
+            <Button className={`flex-1 ${spiceTheme.components.button.gradient}`}>
+              <MessageSquare className="h-4 w-4 mr-2" />
               Send Message
             </Button>
-            <Button variant="outline" className="border-pink-500/50 text-pink-400 hover:bg-pink-500/10">
+            <Button className={`${spiceTheme.components.button.secondary} px-4`}>
               <Heart className="h-4 w-4" />
             </Button>
           </div>
