@@ -94,13 +94,18 @@ const AppContent: React.FC = () => {
     
     return (
       <>
-        <Header />
-        <main>
+        <main className="pb-16">
           <Routes>
+            <Route path="/community" element={<CommunityPage />} />
+            <Route path="/browse" element={<BrowsePage />} />
+            <Route path="/matches" element={<MatchesPage />} />
+            <Route path="/messages" element={<MessagesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="*" element={<Navigate to="/dashboard" />} />
+            <Route path="*" element={<Navigate to="/community" />} />
           </Routes>
         </main>
+        <BottomNav />
       </>
     );
   }
