@@ -1,6 +1,5 @@
 import React from 'react';
 import { spiceTheme } from '../styles/theme';
-import backgroundImage from '../images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png';
 
 // Logo component with Hero styling
 export const SpiceLogo: React.FC<{ 
