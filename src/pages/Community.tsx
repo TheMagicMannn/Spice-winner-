@@ -149,18 +149,18 @@ export const CommunityPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-black flex flex-col pb-20">
+    <SpiceBackground className="min-h-screen flex flex-col pb-20">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 p-4 flex-shrink-0">
-        <h1 className="text-2xl font-bold text-white mb-1">Community</h1>
-        <p className="text-white/70 text-sm">Connect with verified members in your area</p>
+      <div className={spiceTheme.components.header}>
+        <h1 className={`text-2xl ${spiceTheme.components.text.title} mb-1`}>Community</h1>
+        <p className={spiceTheme.components.text.subtitle}>Connect with verified members in your area</p>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-4 space-y-8">
 
         {/* Users Online Section */}
-        <section>
+        <section className="animate-fade-in">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5 text-pink-400" />
@@ -172,40 +172,66 @@ export const CommunityPage: React.FC = () => {
           </div>
 
           <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide">
-            {mockOnlineUsers.map((user) => (
-              <UserCard key={user.id} user={user} onClick={() => handleUserClick(user)} />
+            {mockOnlineUsers.map((user, index) => (
+              <div 
+                key={user.id} 
+                className="animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <UserCard user={user} onClick={() => handleUserClick(user)} />
+              </div>
             ))}
           </div>
         </section>
 
         {/* Events Section */}
-        <section>
+        <section className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Calendar className="h-5 w-5 text-pink-400" />
               <h2 className="text-lg font-semibold text-white">Upcoming Events</h2>
             </div>
+            <Button
+              variant="ghost"
+              className="text-pink-400 hover:bg-pink-500/10 p-2"
+            >
+              <span className="text-sm">View All</span>
+              <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
           </div>
 
-          <div className="text-center py-8 text-white/60">
-            <Calendar className="h-12 w-12 text-white/30 mx-auto mb-2" />
-            <p>Events feature coming soon</p>
-          </div>
+          <Card className={`${spiceTheme.components.card} p-6`}>
+            <div className="text-center py-8 text-white/60">
+              <Calendar className="h-12 w-12 text-pink-400/50 mx-auto mb-4" />
+              <h3 className="text-white font-medium mb-2">Exclusive Events Coming Soon</h3>
+              <p className="text-sm">VIP members get early access to lifestyle events</p>
+            </div>
+          </Card>
         </section>
 
         {/* ISO Posts Section */}
-        <section>
+        <section className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <MessageSquare className="h-5 w-5 text-pink-400" />
               <h2 className="text-lg font-semibold text-white">ISO Posts</h2>
             </div>
+            <Button
+              variant="ghost"
+              className="text-pink-400 hover:bg-pink-500/10 p-2"
+            >
+              <span className="text-sm">View All</span>
+              <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
           </div>
 
-          <div className="text-center py-8 text-white/60">
-            <MessageSquare className="h-12 w-12 text-white/30 mx-auto mb-2" />
-            <p>ISO posts feature coming soon</p>
-          </div>
+          <Card className={`${spiceTheme.components.card} p-6`}>
+            <div className="text-center py-8 text-white/60">
+              <MessageSquare className="h-12 w-12 text-pink-400/50 mx-auto mb-4" />
+              <h3 className="text-white font-medium mb-2">In Search Of (ISO) Posts</h3>
+              <p className="text-sm">Share what you're looking for with the community</p>
+            </div>
+          </Card>
         </section>
 
       </div>
@@ -217,16 +243,8 @@ export const CommunityPage: React.FC = () => {
         onClose={() => setShowUserDetail(false)}
       />
 
-      {/* Custom scrollbar styles */}
-      <style>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
-    </div>
+      {/* Theme Styles */}
+      <style>{themeStyles}</style>
+    </SpiceBackground>
   );
 };
