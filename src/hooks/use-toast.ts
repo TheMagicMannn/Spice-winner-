@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 
 // Simple toast interface compatible with uploaded pages
 export interface Toast {
@@ -26,7 +26,11 @@ export const useToast = () => {
   return context;
 };
 
-export const ToastContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+interface ToastContextProviderProps {
+  children: ReactNode;
+}
+
+export const ToastContextProvider: React.FC<ToastContextProviderProps> = ({ children }) => {
   const toast = ({ title, description, variant, duration }: Toast) => {
     // Simple alert implementation for now
     console.log('[Toast]', { title, description, variant, duration });
