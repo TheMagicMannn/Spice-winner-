@@ -35,32 +35,32 @@ export const spiceTheme = {
   // Common component styles
   components: {
     // Header style consistent across pages
-    header: `sticky top-0 z-40 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 p-4 flex-shrink-0`,
+    header: 'sticky top-0 z-40 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 p-4 flex-shrink-0',
     
     // Card styles with Hero theme
-    card: `bg-black/50 border-pink-500/30 hover:border-pink-500/60 transition-all duration-300`,
+    card: 'bg-black/50 border-pink-500/30 hover:border-pink-500/60 transition-all duration-300',
     
     // Button styles matching Hero.tsx AnimatedButton
     button: {
-      primary: `bg-gray-900 text-white font-bold rounded-full border-2 border-pink-500/50 transition-all duration-300 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 animate-glow`,
-      secondary: `border-pink-500/50 text-pink-400 hover:bg-pink-500/10 transition-all duration-300`,
-      gradient: `bg-pink-600 hover:bg-pink-700 text-white transition-all duration-300`
+      primary: 'bg-gray-900 text-white font-bold rounded-full border-2 border-pink-500/50 transition-all duration-300 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 animate-glow',
+      secondary: 'border-pink-500/50 text-pink-400 hover:bg-pink-500/10 transition-all duration-300',
+      gradient: 'bg-pink-600 hover:bg-pink-700 text-white transition-all duration-300'
     },
 
     // Text styles with gradients  
     text: {
-      logo: `font-bold transition-transform duration-1500 ease-in-out`,
-      gradient: `bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent`,
-      title: `text-white font-bold`,
-      subtitle: `text-white/70`
+      logo: 'font-bold transition-transform duration-1500 ease-in-out',
+      gradient: 'bg-gradient-to-r from-pink-400 to-pink-600 bg-clip-text text-transparent',
+      title: 'text-white font-bold',
+      subtitle: 'text-white/70'
     },
 
     // Badge styles
     badge: {
-      verified: `bg-blue-500/90 text-white border-0`,
-      premium: `bg-yellow-500/90 text-black border-0`,
-      online: `bg-green-500/90 text-white border-0`,
-      pink: `bg-pink-500/20 text-pink-400 border-pink-500/50`
+      verified: 'bg-blue-500/90 text-white border-0',
+      premium: 'bg-yellow-500/90 text-black border-0',
+      online: 'bg-green-500/90 text-white border-0',
+      pink: 'bg-pink-500/20 text-pink-400 border-pink-500/50'
     }
   }
 };
