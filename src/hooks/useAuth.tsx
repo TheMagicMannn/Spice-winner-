@@ -34,7 +34,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           console.error("Error fetching profile:", error);
           setUser({ ...session.user, profile: null });
         } else {
-          setUser({ ...session.user, profile: profile as Profile });
+          // Transform database snake_case to frontend camelCase
+          const transformedProfile = profile ? profileFromDatabase(profile) : null;
+          setUser({ ...session.user, profile: transformedProfile });
         }
       } else {
         setUser(null);
