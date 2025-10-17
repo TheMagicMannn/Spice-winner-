@@ -8,10 +8,18 @@ import { ForgotPasswordPage } from './pages/ForgotPassword';
 import { ResetPasswordPage } from './pages/ResetPassword';
 import { DashboardPage } from './pages/Dashboard';
 import { HeroPage } from './pages/Hero';
+import { CommunityPage } from './pages/Community';
+import { BrowsePage } from './pages/Browse';
+import { MatchesPage } from './pages/Matches';
+import { MessagesPage } from './pages/Messages';
+import { ProfilePage } from './pages/Profile';
 import { Header } from './components/Header';
+import { BottomNav } from './components/BottomNav';
 import { Spinner } from './components/Spinner';
 import { ToastProvider } from './hooks/useToast';
+import { ToastContextProvider } from './hooks/use-toast';
 import { Toaster } from './components/Toaster';
+import { QueryClientProvider } from './lib/queryClient';
 import { Profile } from './types';
 
 /**
