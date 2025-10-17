@@ -26,7 +26,8 @@ import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
 import { EditProfileModal } from '@/components/EditProfileModal';
 import { ProfileService } from '@/services/profileService';
-import { SpiceBackground, SpiceButton, spiceTheme, themeStyles } from '@/styles/theme';
+import { SpiceBackground, SpiceButton } from '@/components/SpiceComponents';
+import { spiceTheme, themeStyles } from '@/styles/theme';
 import { Profile } from '@/types';
 
 export const ProfilePage: React.FC = () => {
