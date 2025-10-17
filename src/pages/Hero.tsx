@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import backgroundImage from '../images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png';
 
 const headlineWords = [
   'Start',
@@ -56,12 +57,11 @@ export const HeroPage: React.FC = () => {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-base-100">
-      {/* Background Image/Gradient */}
+      {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          // Using a gradient as a fallback for the missing image
-          background: 'radial-gradient(ellipse at center, rgba(255,20,147,0.15) 0%, rgba(16,16,16,1) 70%)',
+          backgroundImage: `url(${backgroundImage})`,
           filter: 'blur(2px)',
           transform: 'scale(1.1)',
         }}

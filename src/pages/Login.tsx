@@ -6,6 +6,7 @@ import { Label } from '../components/Label';
 import { Checkbox } from '../components/Checkbox';
 import { useToast } from '../hooks/useToast';
 import { Spinner } from '../components/Spinner';
+import backgroundImage from '../images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png';
 
 const MailIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>;
 const LockIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-secondary"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>;
@@ -42,7 +43,7 @@ export const LoginPage: React.FC = () => {
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(255,20,147,0.15) 0%, rgba(16,16,16,1) 70%)',
+          backgroundImage: `url(${backgroundImage})`,
           filter: 'blur(2px)',
           transform: 'scale(1.1)',
         }}
