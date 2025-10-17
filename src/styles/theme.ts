@@ -28,8 +28,8 @@ export const spiceTheme = {
     pulse: 'animate-pulse'
   },
 
-  // Background image
-  backgroundImage,
+  // Background image path
+  backgroundImage: '/src/images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png',
 
   // Common component styles
   components: {
