@@ -46,6 +46,12 @@ const SEEKING_OPTIONS = [
   'Non-binary', 'Everyone'
 ];
 
+const RELATIONSHIP_TYPE_OPTIONS = [
+  'Casual Dating', 'Serious Relationship', 'Friends with Benefits',
+  'Hookups', 'Long-term', 'Short-term', 'Play Partners',
+  'Friendship First', 'Open to Anything'
+];
+
 const INTERESTS_OPTIONS = [
   'Live Music', 'Wine Tasting', 'Craft Beer', 'Hiking', 'Art Galleries',
   'Dancing', 'Travel', 'Fine Dining', 'Fitness/Gym', 'Yoga/Meditation',
@@ -417,9 +423,30 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
               </Select>
             </div>
 
-            {/* Seeking */}
+            {/* Seeking Relationship Type */}
             <div className="space-y-2">
-              <Label className="text-white">Seeking</Label>
+              <Label className="text-white">Seeking Relationship Type</Label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {RELATIONSHIP_TYPE_OPTIONS.map(option => (
+                  <div key={option} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`relationship-type-${option}`}
+                      checked={(editedProfile.seekingRelationshipType || []).includes(option)}
+                      onCheckedChange={(checked) => 
+                        handleArrayFieldChange('seekingRelationshipType', option, !!checked)
+                      }
+                    />
+                    <Label htmlFor={`relationship-type-${option}`} className="text-sm text-white">
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Seeking (Demographics) */}
+            <div className="space-y-2">
+              <Label className="text-white">Seeking (Demographics)</Label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {SEEKING_OPTIONS.map(option => (
                   <div key={option} className="flex items-center space-x-2">
