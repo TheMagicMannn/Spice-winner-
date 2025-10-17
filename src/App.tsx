@@ -9,6 +9,8 @@ import { ResetPasswordPage } from './pages/ResetPassword';
 import { DashboardPage } from './pages/Dashboard';
 import { HeroPage } from './pages/Hero';
 import { CommunityPage } from './pages/Community';
+import { EventsPage } from './pages/Events';
+import { ISOPage } from './pages/ISOPage';
 import { BrowsePage } from './pages/Browse';
 import { MatchesPage } from './pages/Matches';
 import { MessagesPage } from './pages/Messages';
