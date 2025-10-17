@@ -127,12 +127,16 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <ToastProvider>
-        <HashRouter>
-          <AppContent />
-          <Toaster />
-        </HashRouter>
-      </ToastProvider>
+      <QueryClientProvider>
+        <ToastProvider>
+          <ToastContextProvider>
+            <HashRouter>
+              <AppContent />
+              <Toaster />
+            </HashRouter>
+          </ToastContextProvider>
+        </ToastProvider>
+      </QueryClientProvider>
     </AuthProvider>
   );
 };
