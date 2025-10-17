@@ -523,7 +523,7 @@ const handleSubmit = async () => {
           transform: translateX(18px);
         }
       `}</style>
-      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ background: 'radial-gradient(ellipse at center, rgba(255,20,147,0.15) 0%, rgba(16,16,16,1) 70%)', filter: 'blur(2px)', transform: 'scale(1.1)' }} />
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${backgroundImage})`, filter: 'blur(2px)', transform: 'scale(1.1)' }} />
       <div className="absolute inset-0 bg-black/80" />
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         <div className="w-full max-w-3xl mx-auto p-8 bg-black/70 rounded-2xl border-2 border-brand-primary/60 shadow-lg shadow-brand-primary/20 backdrop-blur-sm animate-fade-in">
