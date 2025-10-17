@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Heart, X, MapPin, Users, Crown, Shield } from 'lucide-react';
+import { SpiceBackground } from '@/components/SpiceComponents';
+import { spiceTheme, themeStyles } from '@/styles/theme';
 
 const mockProfiles = [
   {
