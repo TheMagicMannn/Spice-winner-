@@ -92,7 +92,7 @@ export const SpiceBackground: React.FC<{
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url(${backgroundImage})`,
+            backgroundImage: `url(${spiceTheme.backgroundImage})`,
             filter: 'blur(2px)',
             transform: 'scale(1.1)',
           }}
