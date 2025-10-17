@@ -18,7 +18,8 @@ import {
   Eye,
   Search,
   AlertTriangle,
-  Zap
+  Zap,
+  FileText
 } from 'lucide-react';
 import { spiceTheme } from '../styles/theme';
 
@@ -426,6 +427,19 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
               <h4 className="text-white font-medium mb-2">Safety Practices:</h4>
               <p className="text-white/80 leading-relaxed bg-green-500/10 border border-green-500/30 rounded-lg p-3">
                 {profile.safetyPractices}
+              </p>
+            </div>
+          )}
+
+          {/* Rules & Boundaries */}
+          {profile.rules && (
+            <div>
+              <h4 className="text-white font-medium mb-2 flex items-center">
+                <FileText className="h-4 w-4 mr-2 text-orange-400" />
+                Rules & Boundaries:
+              </h4>
+              <p className="text-white/80 leading-relaxed bg-orange-500/10 border border-orange-500/30 rounded-lg p-3">
+                {profile.rules}
               </p>
             </div>
           )}
