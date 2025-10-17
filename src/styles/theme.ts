@@ -1,5 +1,4 @@
 // Shared theme system based on Hero.tsx design
-import backgroundImage from '../images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png';
 
 export const spiceTheme = {
   // Color palette from Hero.tsx
