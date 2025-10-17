@@ -95,7 +95,7 @@ function UserDetailModal({ user, isOpen, onClose }: {
 function UserCard({ user, onClick }: { user: OnlineUser; onClick: () => void }) {
   return (
     <Card
-      className="bg-black/50 border-pink-500/30 p-4 hover:border-pink-500/60 transition-all duration-300 min-w-[200px] cursor-pointer"
+      className={`${spiceTheme.components.card} p-4 min-w-[200px] cursor-pointer hover:scale-105 transform transition-all duration-300 animate-glow`}
       onClick={onClick}
       data-testid={`user-card-${user.id}`}
     >
@@ -106,15 +106,15 @@ function UserCard({ user, onClick }: { user: OnlineUser; onClick: () => void }) 
           className="w-full h-32 object-cover rounded-lg mb-3"
         />
         {user.isVerified && (
-          <Badge className="absolute top-2 right-2 bg-blue-500/90 text-white border-0 text-xs">
-            ✓
+          <Badge className={`absolute top-2 right-2 ${spiceTheme.components.badge.verified} text-xs p-1`}>
+            <Shield className="h-3 w-3" />
           </Badge>
         )}
         {user.isPremium && (
-          <Star className="absolute top-2 left-2 h-4 w-4 text-yellow-400 fill-current" />
+          <Crown className="absolute top-2 left-2 h-4 w-4 text-yellow-400 fill-current" />
         )}
         <div className="absolute bottom-2 left-2">
-          <Badge className={user.lastActive === 'Online now' ? 'bg-green-500' : 'bg-orange-500'}>
+          <Badge className={user.lastActive === 'Online now' ? spiceTheme.components.badge.online : 'bg-orange-500'}>
             {user.lastActive === 'Online now' ? '● Online' : user.lastActive}
           </Badge>
         </div>
@@ -122,7 +122,7 @@ function UserCard({ user, onClick }: { user: OnlineUser; onClick: () => void }) 
 
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-white text-sm">{user.name}</h3>
+          <h3 className={`font-semibold ${spiceTheme.components.text.gradient} text-sm`}>{user.name}</h3>
           <span className="text-white/60 text-xs">{user.age}</span>
         </div>
 
@@ -131,7 +131,7 @@ function UserCard({ user, onClick }: { user: OnlineUser; onClick: () => void }) 
           <span>{user.distance}</span>
         </div>
 
-        <Badge variant="outline" className="text-xs border-pink-500/50 text-pink-400">
+        <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
           {user.accountType}
         </Badge>
       </div>
