@@ -224,6 +224,7 @@ export const CommunityPage: React.FC = () => {
             <Button
               variant="ghost"
               className="text-pink-400 hover:bg-pink-500/10 p-2"
+              onClick={() => window.location.hash = '/iso'}
             >
               <span className="text-sm">View All</span>
               <ArrowRight className="h-4 w-4 ml-1" />
