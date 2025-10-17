@@ -71,14 +71,14 @@ export const BrowsePage: React.FC = () => {
   }
 
   return (
-    <div className="max-w-md mx-auto min-h-screen bg-gradient-to-b from-gray-900 via-black to-black pb-20">
+    <SpiceBackground className="max-w-md mx-auto min-h-screen pb-20">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 p-4">
+      <div className={spiceTheme.components.header}>
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-white" data-testid="text-browse-title">
+          <h1 className={`text-xl ${spiceTheme.components.text.title}`} data-testid="text-browse-title">
             Discover
           </h1>
-          <Badge variant="outline" className="border-pink-500/50 text-pink-400">
+          <Badge className={`${spiceTheme.components.badge.pink} animate-pulse`}>
             {currentIndex + 1} of {profiles.length}
           </Badge>
         </div>
@@ -86,7 +86,10 @@ export const BrowsePage: React.FC = () => {
 
       {/* Profile Card */}
       <div className="p-4">
-        <Card className="bg-card/50 border-pink-500/20 overflow-hidden" data-testid={`card-profile-${currentProfile.id}`}>
+        <Card 
+          className={`${spiceTheme.components.card} overflow-hidden animate-fade-in`} 
+          data-testid={`card-profile-${currentProfile.id}`}
+        >
           <div className="relative">
             <img
               src={currentProfile.photos[0]}
@@ -94,16 +97,19 @@ export const BrowsePage: React.FC = () => {
               className="w-full h-96 object-cover"
             />
 
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
             {/* Profile badges */}
             <div className="absolute top-4 right-4 flex gap-2">
               {currentProfile.verificationStatus === 'verified' && (
-                <Badge className="bg-blue-500/90 text-white border-0">
+                <Badge className={`${spiceTheme.components.badge.verified} animate-glow`}>
                   <Shield className="h-3 w-3 mr-1" />
                   Verified
                 </Badge>
               )}
               {currentProfile.membershipType === 'premium' && (
-                <Badge className="bg-yellow-500/90 text-black border-0">
+                <Badge className={`${spiceTheme.components.badge.premium} animate-glow`}>
                   <Crown className="h-3 w-3 mr-1" />
                   Premium
                 </Badge>
@@ -113,7 +119,7 @@ export const BrowsePage: React.FC = () => {
             {/* Distance badge */}
             {currentProfile.distance && (
               <div className="absolute bottom-4 left-4">
-                <Badge className="bg-black/70 text-white border-0">
+                <Badge className="bg-black/70 text-white border-0 backdrop-blur-sm">
                   <MapPin className="h-3 w-3 mr-1" />
                   {currentProfile.distance}km away
                 </Badge>
@@ -123,12 +129,12 @@ export const BrowsePage: React.FC = () => {
 
           <CardContent className="p-6 space-y-4">
             <div>
-              <h2 className="text-xl font-bold text-white" data-testid={`text-profile-name-${currentProfile.id}`}>
+              <h2 className={`text-xl font-bold ${spiceTheme.components.text.gradient}`} data-testid={`text-profile-name-${currentProfile.id}`}>
                 {currentProfile.displayName}
               </h2>
               <div className="flex items-center gap-2 text-white/60">
                 <span>{currentProfile.age || 'Age not specified'}</span>
-                <Badge variant="outline" className="border-pink-500/50 text-pink-400">
+                <Badge className={spiceTheme.components.badge.pink}>
                   {currentProfile.accountType}
                 </Badge>
               </div>
@@ -137,7 +143,7 @@ export const BrowsePage: React.FC = () => {
             {/* Location */}
             {(currentProfile.city || currentProfile.state) && (
               <div className="flex items-center text-white/60">
-                <MapPin className="h-4 w-4 mr-2" />
+                <MapPin className="h-4 w-4 mr-2 text-pink-400" />
                 <span>
                   {[currentProfile.city, currentProfile.state].filter(Boolean).join(', ')}
                 </span>
@@ -146,7 +152,7 @@ export const BrowsePage: React.FC = () => {
 
             {/* Bio */}
             {currentProfile.bio && (
-              <p className="text-white/80" data-testid={`text-profile-bio-${currentProfile.id}`}>
+              <p className="text-white/80 leading-relaxed" data-testid={`text-profile-bio-${currentProfile.id}`}>
                 {currentProfile.bio}
               </p>
             )}
@@ -154,7 +160,7 @@ export const BrowsePage: React.FC = () => {
             {/* Stats */}
             <div className="flex items-center gap-4 text-sm text-white/60">
               <div className="flex items-center">
-                <Users className="h-4 w-4 mr-1" />
+                <Users className="h-4 w-4 mr-1 text-pink-400" />
                 <span>{currentProfile.photos.length} photos</span>
               </div>
             </div>
@@ -163,26 +169,26 @@ export const BrowsePage: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex justify-center gap-6 mt-6">
-          <Button
-            variant="outline"
-            size="lg"
+          <button
             onClick={handlePass}
-            className="h-16 w-16 rounded-full border-red-500/50 text-red-400 hover:bg-red-500/10"
+            className="h-16 w-16 rounded-full border-2 border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all duration-300 animate-glow flex items-center justify-center"
             data-testid="button-pass-profile"
           >
             <X className="h-6 w-6" />
-          </Button>
+          </button>
 
-          <Button
-            size="lg"
+          <button
             onClick={handleLike}
-            className="h-16 w-16 rounded-full bg-pink-600 hover:bg-pink-700 text-white"
+            className={`h-16 w-16 rounded-full ${spiceTheme.components.button.gradient} transition-all duration-300 animate-glow flex items-center justify-center hover:scale-110 transform`}
             data-testid="button-like-profile"
           >
             <Heart className="h-6 w-6" />
-          </Button>
+          </button>
         </div>
       </div>
-    </div>
+
+      {/* Theme Styles */}
+      <style>{themeStyles}</style>
+    </SpiceBackground>
   );
 };
