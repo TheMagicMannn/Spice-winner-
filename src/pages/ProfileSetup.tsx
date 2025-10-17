@@ -9,6 +9,7 @@ import { Label } from '../components/Label';
 import { Spinner } from '../components/Spinner';
 import { Profile } from '../types';
 import { supabase } from '../services/supabase';
+import backgroundImage from '../images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png';
 
 
 // --- DATA CONSTANTS ---
