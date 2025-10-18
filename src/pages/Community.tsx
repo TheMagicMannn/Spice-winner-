@@ -61,35 +61,35 @@ function UserDetailModal({ user, isOpen, onClose }: {
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-6 px-1">
           <div className="relative">
             <img
               src={user.profileImage}
               alt={user.name}
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full h-80 sm:h-64 object-cover rounded-lg"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg" />
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-pink-400" />
-                <span className="text-white/80">{user.location}</span>
+                <MapPin className="h-5 w-5 text-pink-400" />
+                <span className="text-white/80 text-base">{user.location}</span>
               </div>
-              <Badge className={user.lastActive === 'Online now' ? spiceTheme.components.badge.online : 'bg-orange-500'}>
+              <Badge className={`${user.lastActive === 'Online now' ? spiceTheme.components.badge.online : 'bg-orange-500'} text-sm px-3 py-1`}>
                 {user.lastActive}
               </Badge>
             </div>
           </div>
 
           <div className="flex space-x-3 pt-4">
-            <Button className={`flex-1 ${spiceTheme.components.button.gradient}`}>
-              <MessageSquare className="h-4 w-4 mr-2" />
+            <Button className={`flex-1 ${spiceTheme.components.button.gradient} text-base py-6`}>
+              <MessageSquare className="h-5 w-5 mr-2" />
               Send Message
             </Button>
-            <Button className={`${spiceTheme.components.button.secondary} px-4`}>
-              <Heart className="h-4 w-4" />
+            <Button className={`${spiceTheme.components.button.secondary} px-6 py-6`}>
+              <Heart className="h-5 w-5" />
             </Button>
           </div>
         </div>
