@@ -47,6 +47,33 @@ export const mockISOPosts: ISOPost[] = [
     tags: ['Couples', 'Travel', 'Social', 'Experienced'],
     likes: 24,
     responses: 12,
+    likedBy: [
+      { id: 'u1', name: 'Mike & Sarah', image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=100', isVerified: true, accountType: 'Couple' },
+      { id: 'u2', name: 'Emma', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', isVerified: true, accountType: 'Single' },
+      { id: 'u3', name: 'Jessica & Tom', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100', isVerified: true, accountType: 'Couple' },
+      { id: 'u4', name: 'Rachel', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100', isVerified: true, accountType: 'Single' },
+      { id: 'u5', name: 'Chris & Dana', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', isVerified: false, accountType: 'Couple' },
+    ],
+    comments: [
+      { 
+        id: 'c1', 
+        user: { id: 'u2', name: 'Emma', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', isVerified: true, accountType: 'Single' },
+        content: 'This sounds amazing! Would love to connect and see if we vibe. The Hamptons in summer is incredible! 🌊',
+        postedAt: '1 hour ago'
+      },
+      { 
+        id: 'c2', 
+        user: { id: 'u1', name: 'Mike & Sarah', image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=100', isVerified: true, accountType: 'Couple' },
+        content: 'We\'ve been looking for something exactly like this! We\'re experienced and in that age range. Sent you a DM!',
+        postedAt: '45 mins ago'
+      },
+      { 
+        id: 'c3', 
+        user: { id: 'u3', name: 'Jessica & Tom', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100', isVerified: true, accountType: 'Couple' },
+        content: 'Love wine tasting! What dates are you thinking?',
+        postedAt: '30 mins ago'
+      },
+    ],
   },
   {
     id: '2',
@@ -62,6 +89,25 @@ export const mockISOPosts: ISOPost[] = [
     tags: ['Singles', 'New', 'Social', 'Couples'],
     likes: 18,
     responses: 8,
+    likedBy: [
+      { id: 'u1', name: 'Mike & Sarah', image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=100', isVerified: true, accountType: 'Couple' },
+      { id: 'u3', name: 'Jessica & Tom', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100', isVerified: true, accountType: 'Couple' },
+      { id: 'u6', name: 'Alex & Jordan', image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100', isVerified: true, accountType: 'Couple' },
+    ],
+    comments: [
+      { 
+        id: 'c4', 
+        user: { id: 'u1', name: 'Mike & Sarah', image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=100', isVerified: true, accountType: 'Couple' },
+        content: 'Hi Emma! We love meeting new people and would be happy to start with dinner or coffee. We go to art galleries too!',
+        postedAt: '3 hours ago'
+      },
+      { 
+        id: 'c5', 
+        user: { id: 'u3', name: 'Jessica & Tom', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100', isVerified: true, accountType: 'Couple' },
+        content: 'We really appreciate your approach of starting with social meetups. That\'s exactly how we prefer to connect too!',
+        postedAt: '2 hours ago'
+      },
+    ],
   },
   {
     id: '3',
