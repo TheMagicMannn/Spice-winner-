@@ -40,6 +40,16 @@ export const mockEvents: Event[] = [
     price: 75,
     description: 'Join us for an exclusive evening of sophisticated connections at one of Manhattan\'s premier rooftop venues. Experience breathtaking city views, premium cocktails, and an intimate atmosphere perfect for making meaningful connections.',
     category: 'Social Mixer',
+    attendeeList: [
+      { id: 'u1', name: 'Alex & Jordan', image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100', isVerified: true, accountType: 'Couple', age: 29, location: 'Manhattan, NY' },
+      { id: 'u2', name: 'Emma', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', isVerified: true, accountType: 'Single', age: 27, location: 'Brooklyn, NY' },
+      { id: 'u3', name: 'Mike & Sarah', image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=100', isVerified: true, accountType: 'Couple', age: 32, location: 'Queens, NY' },
+      { id: 'u4', name: 'Jessica & Tom', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100', isVerified: true, accountType: 'Couple', age: 30, location: 'Long Island, NY' },
+      { id: 'u5', name: 'Rachel', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100', isVerified: true, accountType: 'Single', age: 26, location: 'Brooklyn, NY' },
+      { id: 'u6', name: 'Chris & Dana', image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100', isVerified: false, accountType: 'Couple', age: 34, location: 'Manhattan, NY' },
+      { id: 'u7', name: 'Olivia', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', isVerified: true, accountType: 'Single', age: 28, location: 'Brooklyn, NY' },
+      { id: 'u8', name: 'James & Lisa', image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100', isVerified: true, accountType: 'Couple', age: 35, location: 'Manhattan, NY' },
+    ],
   },
   {
     id: '2',
@@ -54,6 +64,13 @@ export const mockEvents: Event[] = [
     price: 50,
     description: 'An intimate dinner experience featuring fine wines and gourmet cuisine in a private setting. Our sommelier will guide you through a curated wine tasting paired with artisanal dishes.',
     category: 'Dining',
+    attendeeList: [
+      { id: 'u2', name: 'Emma', image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100', isVerified: true, accountType: 'Single', age: 27, location: 'Brooklyn, NY' },
+      { id: 'u3', name: 'Mike & Sarah', image: 'https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?w=100', isVerified: true, accountType: 'Couple', age: 32, location: 'Queens, NY' },
+      { id: 'u4', name: 'Jessica & Tom', image: 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100', isVerified: true, accountType: 'Couple', age: 30, location: 'Long Island, NY' },
+      { id: 'u5', name: 'Rachel', image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100', isVerified: true, accountType: 'Single', age: 26, location: 'Brooklyn, NY' },
+      { id: 'u7', name: 'Olivia', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100', isVerified: true, accountType: 'Single', age: 28, location: 'Brooklyn, NY' },
+    ],
   },
   {
     id: '3',
