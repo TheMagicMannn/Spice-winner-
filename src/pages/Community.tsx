@@ -72,51 +72,53 @@ function UserDetailModal({ user, isOpen, onClose }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white w-full h-full max-w-full max-h-full m-0 rounded-none sm:max-w-2xl sm:h-auto sm:rounded-lg animate-fade-in overflow-y-auto">
-        <DialogHeader className="sticky top-0 bg-black/95 z-10 pb-4">
-          <DialogTitle className={`text-pink-400 text-2xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
-            <span>{user.name}</span>
-            {user.isVerified && <Shield className="h-6 w-6 text-blue-400" />}
-            {user.isPremium && <Crown className="h-6 w-6 text-yellow-400" />}
-          </DialogTitle>
-          <DialogDescription className="text-white/70 text-base">
-            {user.accountType} profile • {user.age} years old
-          </DialogDescription>
-        </DialogHeader>
+      <FullScreenDialogContent>
+        <div className="p-6 pb-20">
+          <DialogHeader className="mb-6">
+            <DialogTitle className={`text-pink-400 text-3xl flex items-center space-x-3 ${spiceTheme.components.text.gradient}`}>
+              <span>{user.name}</span>
+              {user.isVerified && <Shield className="h-7 w-7 text-blue-400" />}
+              {user.isPremium && <Crown className="h-7 w-7 text-yellow-400" />}
+            </DialogTitle>
+            <DialogDescription className="text-white/70 text-lg mt-2">
+              {user.accountType} profile • {user.age} years old
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-6 px-1">
-          <div className="relative">
-            <img
-              src={user.profileImage}
-              alt={user.name}
-              className="w-full h-80 sm:h-64 object-cover rounded-lg"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg" />
-          </div>
+          <div className="space-y-6">
+            <div className="relative">
+              <img
+                src={user.profileImage}
+                alt={user.name}
+                className="w-full h-96 object-cover rounded-lg"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-lg" />
+            </div>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-5 w-5 text-pink-400" />
-                <span className="text-white/80 text-base">{user.location}</span>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between bg-white/5 p-4 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <MapPin className="h-6 w-6 text-pink-400" />
+                  <span className="text-white/80 text-lg">{user.location}</span>
+                </div>
+                <Badge className={`${user.lastActive === 'Online now' ? spiceTheme.components.badge.online : 'bg-orange-500'} text-base px-4 py-2`}>
+                  {user.lastActive}
+                </Badge>
               </div>
-              <Badge className={`${user.lastActive === 'Online now' ? spiceTheme.components.badge.online : 'bg-orange-500'} text-sm px-3 py-1`}>
-                {user.lastActive}
-              </Badge>
+            </div>
+
+            <div className="flex space-x-3">
+              <Button className={`flex-1 ${spiceTheme.components.button.gradient} text-lg py-7`}>
+                <MessageSquare className="h-6 w-6 mr-2" />
+                Send Message
+              </Button>
+              <Button className={`${spiceTheme.components.button.secondary} px-7 py-7`}>
+                <Heart className="h-6 w-6" />
+              </Button>
             </div>
           </div>
-
-          <div className="flex space-x-3 pt-4">
-            <Button className={`flex-1 ${spiceTheme.components.button.gradient} text-base py-6`}>
-              <MessageSquare className="h-5 w-5 mr-2" />
-              Send Message
-            </Button>
-            <Button className={`${spiceTheme.components.button.secondary} px-6 py-6`}>
-              <Heart className="h-5 w-5" />
-            </Button>
-          </div>
         </div>
-      </DialogContent>
+      </FullScreenDialogContent>
     </Dialog>
   );
 }
