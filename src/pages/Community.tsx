@@ -7,8 +7,8 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Users, Calendar, MessageSquare, MapPin, Heart, Star, Shield, Crown, ArrowRight, Clock, X } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
-import { mockEvents, Event } from '@/data/mockEvents';
-import { mockISOPosts, ISOPost } from '@/data/mockISOPosts';
+import { mockEvents, Event, User as EventUser } from '@/data/mockEvents';
+import { mockISOPosts, ISOPost, User as ISOUser } from '@/data/mockISOPosts';
 
 // Mock data - will be replaced with real API calls
 const mockOnlineUsers = [
