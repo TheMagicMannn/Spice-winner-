@@ -509,13 +509,17 @@ export const CommunityPage: React.FC = () => {
             </Button>
           </div>
 
-          <Card className={`${spiceTheme.components.card} p-6`}>
-            <div className="text-center py-8 text-white/60">
-              <Calendar className="h-12 w-12 text-pink-400/50 mx-auto mb-4" />
-              <h3 className="text-white font-medium mb-2">Exclusive Events Coming Soon</h3>
-              <p className="text-sm">VIP members get early access to lifestyle events</p>
-            </div>
-          </Card>
+          <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+            {mockEvents.slice(0, 4).map((event, index) => (
+              <div 
+                key={event.id} 
+                className="animate-fade-in snap-start"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <EventPreviewCard event={event} onClick={() => handleEventClick(event)} />
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* ISO Posts Section */}
