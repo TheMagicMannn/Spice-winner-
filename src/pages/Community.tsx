@@ -385,46 +385,46 @@ function ISOPostDetailModal({ post, isOpen, onClose }: { post: ISOPost | null; i
           </div>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-6 px-1">
           <div>
-            <h3 className="text-white font-bold text-xl mb-3">{post.title}</h3>
-            <p className="text-white/80 leading-relaxed">{post.content}</p>
+            <h3 className="text-white font-bold text-2xl sm:text-3xl mb-4">{post.title}</h3>
+            <p className="text-white/80 leading-relaxed text-base">{post.content}</p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {post.tags.map((tag) => (
               <Badge
                 key={tag}
-                className="bg-pink-500/10 text-pink-300 border-pink-500/30"
+                className="bg-pink-500/10 text-pink-300 border-pink-500/30 text-sm px-3 py-1"
               >
                 {tag}
               </Badge>
             ))}
           </div>
 
-          <div className="flex items-center text-white/70 p-3 bg-white/5 rounded-lg">
-            <MapPin className="h-5 w-5 mr-2 text-pink-400" />
-            <span>{post.location}</span>
+          <div className="flex items-center text-white/70 p-4 bg-white/5 rounded-lg">
+            <MapPin className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
+            <span className="text-base">{post.location}</span>
           </div>
 
           <div className="flex items-center justify-between pt-4 border-t border-white/10">
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-8">
               <button
                 onClick={() => setIsLiked(!isLiked)}
                 className="flex items-center space-x-2 text-white/60 hover:text-pink-400 transition-colors"
               >
-                <Heart className={`h-5 w-5 ${isLiked ? 'fill-pink-400 text-pink-400' : ''}`} />
-                <span className="font-semibold">{post.likes + (isLiked ? 1 : 0)}</span>
+                <Heart className={`h-6 w-6 ${isLiked ? 'fill-pink-400 text-pink-400' : ''}`} />
+                <span className="font-semibold text-base">{post.likes + (isLiked ? 1 : 0)}</span>
               </button>
               <div className="flex items-center space-x-2 text-white/60">
-                <MessageSquare className="h-5 w-5" />
-                <span className="font-semibold">{post.responses} responses</span>
+                <MessageSquare className="h-6 w-6" />
+                <span className="font-semibold text-base">{post.responses} responses</span>
               </div>
             </div>
           </div>
 
-          <Button className={`w-full ${spiceTheme.components.button.gradient} text-lg py-6`}>
-            <MessageSquare className="h-5 w-5 mr-2" />
+          <Button className={`w-full ${spiceTheme.components.button.gradient} text-xl py-8`}>
+            <MessageSquare className="h-6 w-6 mr-2" />
             Send Response
           </Button>
         </div>
