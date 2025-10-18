@@ -539,22 +539,38 @@ export const CommunityPage: React.FC = () => {
             </Button>
           </div>
 
-          <Card className={`${spiceTheme.components.card} p-6`}>
-            <div className="text-center py-8 text-white/60">
-              <MessageSquare className="h-12 w-12 text-pink-400/50 mx-auto mb-4" />
-              <h3 className="text-white font-medium mb-2">In Search Of (ISO) Posts</h3>
-              <p className="text-sm">Share what you're looking for with the community</p>
-            </div>
-          </Card>
+          <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
+            {mockISOPosts.slice(0, 4).map((post, index) => (
+              <div 
+                key={post.id} 
+                className="animate-fade-in snap-start"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <ISOPostPreviewCard post={post} onClick={() => handleISOPostClick(post)} />
+              </div>
+            ))}
+          </div>
         </section>
 
       </div>
 
-      {/* User Detail Modal */}
+      {/* Modals */}
       <UserDetailModal
         user={selectedUser}
         isOpen={showUserDetail}
         onClose={() => setShowUserDetail(false)}
+      />
+
+      <EventDetailModal
+        event={selectedEvent}
+        isOpen={showEventDetail}
+        onClose={() => setShowEventDetail(false)}
+      />
+
+      <ISOPostDetailModal
+        post={selectedISOPost}
+        isOpen={showISOPostDetail}
+        onClose={() => setShowISOPostDetail(false)}
       />
 
       {/* Theme Styles */}
