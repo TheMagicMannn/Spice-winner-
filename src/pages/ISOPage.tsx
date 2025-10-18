@@ -9,7 +9,7 @@ import { spiceTheme, themeStyles } from '@/styles/theme';
 import { mockISOPosts, ISOPost } from '@/data/mockISOPosts';
 
 interface ISOPostCardProps {
-  post: typeof mockISOPosts[0];
+  post: ISOPost;
 }
 
 function ISOPostCard({ post }: ISOPostCardProps) {
