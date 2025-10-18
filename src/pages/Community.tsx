@@ -49,14 +49,14 @@ function UserDetailModal({ user, isOpen, onClose }: {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white max-w-md animate-fade-in">
-        <DialogHeader>
-          <DialogTitle className={`text-pink-400 text-xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
+      <DialogContent className="bg-black border-pink-500/30 text-white w-full h-full max-w-full max-h-full m-0 rounded-none sm:max-w-2xl sm:h-auto sm:rounded-lg animate-fade-in overflow-y-auto">
+        <DialogHeader className="sticky top-0 bg-black/95 z-10 pb-4">
+          <DialogTitle className={`text-pink-400 text-2xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
             <span>{user.name}</span>
-            {user.isVerified && <Shield className="h-5 w-5 text-blue-400" />}
-            {user.isPremium && <Crown className="h-5 w-5 text-yellow-400" />}
+            {user.isVerified && <Shield className="h-6 w-6 text-blue-400" />}
+            {user.isPremium && <Crown className="h-6 w-6 text-yellow-400" />}
           </DialogTitle>
-          <DialogDescription className="text-white/70">
+          <DialogDescription className="text-white/70 text-base">
             {user.accountType} profile • {user.age} years old
           </DialogDescription>
         </DialogHeader>
