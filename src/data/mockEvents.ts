@@ -1,4 +1,15 @@
 // Shared mock events data
+export interface User {
+  id: string;
+  name: string;
+  image: string;
+  isVerified: boolean;
+  accountType: 'Single' | 'Couple';
+  age?: number;
+  location?: string;
+  bio?: string;
+}
+
 export interface Event {
   id: string;
   title: string;
@@ -12,6 +23,7 @@ export interface Event {
   price: number;
   description: string;
   category: string;
+  attendeeList?: User[];
 }
 
 export const mockEvents: Event[] = [
