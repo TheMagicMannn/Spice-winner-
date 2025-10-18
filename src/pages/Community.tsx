@@ -218,72 +218,72 @@ function EventDetailModal({ event, isOpen, onClose }: { event: Event | null; isO
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-6 px-1">
           <div className="relative">
             <img
               src={event.image}
               alt={event.title}
-              className="w-full h-64 object-cover rounded-lg"
+              className="w-full h-80 sm:h-72 object-cover rounded-lg"
             />
             {event.isVipOnly && (
-              <Badge className="absolute top-3 right-3 bg-yellow-500/90 text-black font-semibold">
+              <Badge className="absolute top-3 right-3 bg-yellow-500/90 text-black font-semibold text-sm px-3 py-2">
                 <Crown className="h-4 w-4 mr-1" />
                 VIP Only Event
               </Badge>
             )}
           </div>
 
-          <p className="text-white/80 leading-relaxed">{event.description}</p>
+          <p className="text-white/80 leading-relaxed text-base">{event.description}</p>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="space-y-4">
               <div className="flex items-center text-white/80">
-                <Calendar className="h-5 w-5 mr-3 text-pink-400" />
+                <Calendar className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
                 <div>
-                  <div className="text-xs text-white/60">Date</div>
-                  <div className="font-semibold">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+                  <div className="text-sm text-white/60">Date</div>
+                  <div className="font-semibold text-base">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
                 </div>
               </div>
 
               <div className="flex items-center text-white/80">
-                <Clock className="h-5 w-5 mr-3 text-pink-400" />
+                <Clock className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
                 <div>
-                  <div className="text-xs text-white/60">Time</div>
-                  <div className="font-semibold">{event.time}</div>
+                  <div className="text-sm text-white/60">Time</div>
+                  <div className="font-semibold text-base">{event.time}</div>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center text-white/80">
-                <MapPin className="h-5 w-5 mr-3 text-pink-400" />
+                <MapPin className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
                 <div>
-                  <div className="text-xs text-white/60">Location</div>
-                  <div className="font-semibold">{event.location}</div>
+                  <div className="text-sm text-white/60">Location</div>
+                  <div className="font-semibold text-base">{event.location}</div>
                 </div>
               </div>
 
               <div className="flex items-center text-white/80">
-                <Users className="h-5 w-5 mr-3 text-pink-400" />
+                <Users className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
                 <div>
-                  <div className="text-xs text-white/60">Attendance</div>
-                  <div className="font-semibold">{event.attendees} / {event.maxCapacity}</div>
+                  <div className="text-sm text-white/60">Attendance</div>
+                  <div className="font-semibold text-base">{event.attendees} / {event.maxCapacity}</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-between p-4 bg-pink-500/10 rounded-lg border border-pink-500/30">
+          <div className="flex items-center justify-between p-6 bg-pink-500/10 rounded-lg border border-pink-500/30">
             <div>
-              <div className="text-sm text-white/60">Event Price</div>
-              <div className="text-3xl font-bold text-pink-400">${event.price}</div>
+              <div className="text-base text-white/60">Event Price</div>
+              <div className="text-4xl font-bold text-pink-400">${event.price}</div>
             </div>
-            <Badge className={isAlmostFull ? 'bg-orange-500/20 text-orange-400 border-orange-500/50' : 'bg-green-500/20 text-green-400 border-green-500/50'}>
+            <Badge className={`${isAlmostFull ? 'bg-orange-500/20 text-orange-400 border-orange-500/50' : 'bg-green-500/20 text-green-400 border-green-500/50'} text-sm px-3 py-2`}>
               {spotsLeft} spots left
             </Badge>
           </div>
 
-          <Button className={`w-full ${spiceTheme.components.button.gradient} text-lg py-6`}>
+          <Button className={`w-full ${spiceTheme.components.button.gradient} text-xl py-8`}>
             Reserve Your Spot
           </Button>
         </div>
