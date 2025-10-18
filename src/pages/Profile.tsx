@@ -366,7 +366,24 @@ export const ProfilePage: React.FC = () => {
       />
 
       {/* Theme Styles */}
-      <style>{themeStyles}</style>
+      <style>{`
+        ${themeStyles}
+        
+        .animate-glow-red {
+          animation: glowRed 2.4s ease-in-out infinite;
+        }
+        
+        @keyframes glowRed {
+          0%, 100% {
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+            border-color: rgba(239, 68, 68, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 16px rgba(239, 68, 68, 1);
+            border-color: rgba(239, 68, 68, 1);
+          }
+        }
+      `}</style>
     </SpiceBackground>
   );
 };
