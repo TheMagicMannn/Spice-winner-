@@ -356,28 +356,28 @@ function ISOPostDetailModal({ post, isOpen, onClose }: { post: ISOPost | null; i
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white max-w-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="bg-black border-pink-500/30 text-white w-full h-full max-w-full max-h-full m-0 rounded-none sm:max-w-3xl sm:h-auto sm:max-h-[90vh] sm:rounded-lg animate-fade-in overflow-y-auto">
+        <DialogHeader className="sticky top-0 bg-black/95 z-10 pb-4">
           <div className="flex items-start justify-between">
             <div className="flex items-center space-x-3">
               <div className="relative">
                 <img
                   src={post.authorImage}
                   alt={post.author}
-                  className="w-16 h-16 rounded-full object-cover"
+                  className="w-20 h-20 rounded-full object-cover"
                 />
                 {post.isVerified && (
                   <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
-                    <Shield className="h-4 w-4 text-white" />
+                    <Shield className="h-5 w-5 text-white" />
                   </div>
                 )}
               </div>
               <div>
-                <DialogTitle className={`text-pink-400 text-xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
+                <DialogTitle className={`text-pink-400 text-xl sm:text-2xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
                   <span>{post.author}</span>
-                  {post.isPremium && <Crown className="h-5 w-5 text-yellow-400 fill-current" />}
+                  {post.isPremium && <Crown className="h-6 w-6 text-yellow-400 fill-current" />}
                 </DialogTitle>
-                <DialogDescription className="text-white/70">
+                <DialogDescription className="text-white/70 text-base">
                   {post.accountType} • {post.postedAt}
                 </DialogDescription>
               </div>
