@@ -9,7 +9,7 @@ import { spiceTheme, themeStyles } from '@/styles/theme';
 import { mockEvents, Event } from '@/data/mockEvents';
 
 interface EventCardProps {
-  event: typeof mockEvents[0];
+  event: Event;
 }
 
 function EventCard({ event }: EventCardProps) {
