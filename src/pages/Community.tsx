@@ -296,7 +296,7 @@ function EventDetailModal({ event, isOpen, onClose }: { event: Event | null; isO
 function ISOPostPreviewCard({ post, onClick }: { post: ISOPost; onClick: () => void }) {
   return (
     <Card
-      className={`${spiceTheme.components.card} min-w-[280px] p-4 cursor-pointer hover:scale-105 hover:border-pink-500/50 transform transition-all duration-300`}
+      className={`${spiceTheme.components.card} min-w-[280px] p-4 cursor-pointer hover:scale-105 transform transition-all duration-300 animate-glow`}
       onClick={onClick}
       data-testid={`iso-preview-${post.id}`}
     >
