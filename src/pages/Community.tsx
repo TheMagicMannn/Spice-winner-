@@ -208,12 +208,12 @@ function EventDetailModal({ event, isOpen, onClose }: { event: Event | null; isO
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white max-w-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className={`text-pink-400 text-2xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
+      <DialogContent className="bg-black border-pink-500/30 text-white w-full h-full max-w-full max-h-full m-0 rounded-none sm:max-w-3xl sm:h-auto sm:max-h-[90vh] sm:rounded-lg animate-fade-in overflow-y-auto">
+        <DialogHeader className="sticky top-0 bg-black/95 z-10 pb-4">
+          <DialogTitle className={`text-pink-400 text-2xl sm:text-3xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
             <span>{event.title}</span>
           </DialogTitle>
-          <DialogDescription className="text-white/70">
+          <DialogDescription className="text-white/70 text-base">
             {event.category}
           </DialogDescription>
         </DialogHeader>
