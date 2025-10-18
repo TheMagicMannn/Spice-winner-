@@ -284,14 +284,6 @@ export const ProfilePage: React.FC = () => {
                   Edit Profile
                 </Button>
                 <Separator className="bg-pink-500/30" />
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-white hover:bg-pink-500/10"
-                >
-                  <Camera className="h-4 w-4 mr-3" />
-                  Manage Photos
-                </Button>
-                <Separator className="bg-pink-500/30" />
                 {!profileStats.isVerified && (
                   <>
                     <Button
