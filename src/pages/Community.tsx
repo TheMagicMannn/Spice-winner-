@@ -3,9 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Users, Calendar, MessageSquare, MapPin, Heart, Star, Shield, Crown, ArrowRight } from 'lucide-react';
+import { Users, Calendar, MessageSquare, MapPin, Heart, Star, Shield, Crown, ArrowRight, Clock } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
+import { mockEvents, Event } from '@/data/mockEvents';
+import { mockISOPosts, ISOPost } from '@/data/mockISOPosts';
 
 // Mock data - will be replaced with real API calls
 const mockOnlineUsers = [
