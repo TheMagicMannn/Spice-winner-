@@ -381,79 +381,79 @@ function ISOPostDetailModal({ post, isOpen, onClose }: { post: ISOPost | null; i
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white w-full h-full max-w-full max-h-full m-0 rounded-none sm:max-w-3xl sm:h-auto sm:max-h-[90vh] sm:rounded-lg animate-fade-in overflow-y-auto">
-        <DialogHeader className="sticky top-0 bg-black/95 z-10 pb-4">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-3">
+      <FullScreenDialogContent>
+        <div className="p-6 pb-20">
+          <DialogHeader className="mb-6">
+            <div className="flex items-start space-x-4">
               <div className="relative">
                 <img
                   src={post.authorImage}
                   alt={post.author}
-                  className="w-20 h-20 rounded-full object-cover"
+                  className="w-24 h-24 rounded-full object-cover"
                 />
                 {post.isVerified && (
-                  <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
-                    <Shield className="h-5 w-5 text-white" />
+                  <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-2">
+                    <Shield className="h-6 w-6 text-white" />
                   </div>
                 )}
               </div>
-              <div>
-                <DialogTitle className={`text-pink-400 text-xl sm:text-2xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
+              <div className="flex-1">
+                <DialogTitle className={`text-pink-400 text-2xl flex items-center space-x-3 ${spiceTheme.components.text.gradient}`}>
                   <span>{post.author}</span>
-                  {post.isPremium && <Crown className="h-6 w-6 text-yellow-400 fill-current" />}
+                  {post.isPremium && <Crown className="h-7 w-7 text-yellow-400 fill-current" />}
                 </DialogTitle>
-                <DialogDescription className="text-white/70 text-base">
+                <DialogDescription className="text-white/70 text-lg mt-2">
                   {post.accountType} • {post.postedAt}
                 </DialogDescription>
               </div>
             </div>
-          </div>
-        </DialogHeader>
+          </DialogHeader>
 
-        <div className="space-y-6 px-1">
-          <div>
-            <h3 className="text-white font-bold text-2xl sm:text-3xl mb-4">{post.title}</h3>
-            <p className="text-white/80 leading-relaxed text-base">{post.content}</p>
-          </div>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-white font-bold text-3xl mb-4">{post.title}</h3>
+              <p className="text-white/80 leading-relaxed text-lg">{post.content}</p>
+            </div>
 
-          <div className="flex flex-wrap gap-3">
-            {post.tags.map((tag) => (
-              <Badge
-                key={tag}
-                className="bg-pink-500/10 text-pink-300 border-pink-500/30 text-sm px-3 py-1"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
+            <div className="flex flex-wrap gap-3">
+              {post.tags.map((tag) => (
+                <Badge
+                  key={tag}
+                  className="bg-pink-500/10 text-pink-300 border-pink-500/30 text-base px-4 py-2"
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
 
-          <div className="flex items-center text-white/70 p-4 bg-white/5 rounded-lg">
-            <MapPin className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
-            <span className="text-base">{post.location}</span>
-          </div>
+            <div className="flex items-center text-white/70 p-5 bg-white/5 rounded-lg">
+              <MapPin className="h-7 w-7 mr-4 text-pink-400 flex-shrink-0" />
+              <span className="text-lg">{post.location}</span>
+            </div>
 
-          <div className="flex items-center justify-between pt-4 border-t border-white/10">
-            <div className="flex items-center space-x-8">
-              <button
-                onClick={() => setIsLiked(!isLiked)}
-                className="flex items-center space-x-2 text-white/60 hover:text-pink-400 transition-colors"
-              >
-                <Heart className={`h-6 w-6 ${isLiked ? 'fill-pink-400 text-pink-400' : ''}`} />
-                <span className="font-semibold text-base">{post.likes + (isLiked ? 1 : 0)}</span>
-              </button>
-              <div className="flex items-center space-x-2 text-white/60">
-                <MessageSquare className="h-6 w-6" />
-                <span className="font-semibold text-base">{post.responses} responses</span>
+            <div className="flex items-center justify-between py-6 border-t border-white/10">
+              <div className="flex items-center space-x-8">
+                <button
+                  onClick={() => setIsLiked(!isLiked)}
+                  className="flex items-center space-x-3 text-white/60 hover:text-pink-400 transition-colors"
+                >
+                  <Heart className={`h-7 w-7 ${isLiked ? 'fill-pink-400 text-pink-400' : ''}`} />
+                  <span className="font-semibold text-xl">{post.likes + (isLiked ? 1 : 0)}</span>
+                </button>
+                <div className="flex items-center space-x-3 text-white/60">
+                  <MessageSquare className="h-7 w-7" />
+                  <span className="font-semibold text-xl">{post.responses} responses</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <Button className={`w-full ${spiceTheme.components.button.gradient} text-xl py-8`}>
-            <MessageSquare className="h-6 w-6 mr-2" />
-            Send Response
-          </Button>
+            <Button className={`w-full ${spiceTheme.components.button.gradient} text-xl py-8`}>
+              <MessageSquare className="h-6 w-6 mr-2" />
+              Send Response
+            </Button>
+          </div>
         </div>
-      </DialogContent>
+      </FullScreenDialogContent>
     </Dialog>
   );
 }
