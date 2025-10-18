@@ -1,4 +1,19 @@
 // Shared mock ISO posts data
+export interface User {
+  id: string;
+  name: string;
+  image: string;
+  isVerified: boolean;
+  accountType: 'Single' | 'Couple';
+}
+
+export interface Comment {
+  id: string;
+  user: User;
+  content: string;
+  postedAt: string;
+}
+
 export interface ISOPost {
   id: string;
   author: string;
@@ -13,6 +28,8 @@ export interface ISOPost {
   tags: string[];
   likes: number;
   responses: number;
+  likedBy?: User[];
+  comments?: Comment[];
 }
 
 export const mockISOPosts: ISOPost[] = [
