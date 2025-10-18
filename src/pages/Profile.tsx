@@ -343,15 +343,14 @@ export const ProfilePage: React.FC = () => {
             </Card>
 
             {/* Sign Out Button with Hero Styling */}
-            <SpiceButton
+            <button
               onClick={handleLogout}
-              variant="secondary"
-              className="w-full !text-red-400 !border-red-500/30 hover:!bg-red-500/10 hover:!text-red-300"
+              className="w-full py-4 px-5 bg-gray-900 text-red-400 font-bold text-lg rounded-full border-2 border-red-500/50 transition-all duration-300 hover:border-red-500 hover:shadow-lg hover:shadow-red-500/50 flex items-center justify-center animate-glow-red"
               data-testid="button-logout"
             >
-              <LogOut className="h-4 w-4 mr-2" />
+              <LogOut className="h-5 w-5 mr-2" />
               Sign Out
-            </SpiceButton>
+            </button>
           </>
         )}
       </div>
