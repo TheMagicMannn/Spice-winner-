@@ -233,86 +233,86 @@ function EventDetailModal({ event, isOpen, onClose }: { event: Event | null; isO
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-black border-pink-500/30 text-white w-full h-full max-w-full max-h-full m-0 rounded-none sm:max-w-3xl sm:h-auto sm:max-h-[90vh] sm:rounded-lg animate-fade-in overflow-y-auto">
-        <DialogHeader className="sticky top-0 bg-black/95 z-10 pb-4">
-          <DialogTitle className={`text-pink-400 text-2xl sm:text-3xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
-            <span>{event.title}</span>
-          </DialogTitle>
-          <DialogDescription className="text-white/70 text-base">
-            {event.category}
-          </DialogDescription>
-        </DialogHeader>
+      <FullScreenDialogContent>
+        <div className="p-6 pb-20">
+          <DialogHeader className="mb-6">
+            <DialogTitle className={`text-pink-400 text-3xl flex items-center space-x-2 ${spiceTheme.components.text.gradient}`}>
+              <span>{event.title}</span>
+            </DialogTitle>
+            <DialogDescription className="text-white/70 text-lg mt-2">
+              {event.category}
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-6 px-1">
-          <div className="relative">
-            <img
-              src={event.image}
-              alt={event.title}
-              className="w-full h-80 sm:h-72 object-cover rounded-lg"
-            />
-            {event.isVipOnly && (
-              <Badge className="absolute top-3 right-3 bg-yellow-500/90 text-black font-semibold text-sm px-3 py-2">
-                <Crown className="h-4 w-4 mr-1" />
-                VIP Only Event
+          <div className="space-y-6">
+            <div className="relative">
+              <img
+                src={event.image}
+                alt={event.title}
+                className="w-full h-96 object-cover rounded-lg"
+              />
+              {event.isVipOnly && (
+                <Badge className="absolute top-4 right-4 bg-yellow-500/90 text-black font-semibold text-base px-4 py-2">
+                  <Crown className="h-5 w-5 mr-2" />
+                  VIP Only Event
+                </Badge>
+              )}
+            </div>
+
+            <p className="text-white/80 leading-relaxed text-lg">{event.description}</p>
+
+            <div className="grid grid-cols-1 gap-6">
+              <div className="space-y-4">
+                <div className="flex items-start bg-white/5 p-4 rounded-lg">
+                  <Calendar className="h-7 w-7 mr-4 text-pink-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <div className="text-base text-white/60 mb-1">Date</div>
+                    <div className="font-semibold text-lg text-white">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-start bg-white/5 p-4 rounded-lg">
+                  <Clock className="h-7 w-7 mr-4 text-pink-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <div className="text-base text-white/60 mb-1">Time</div>
+                    <div className="font-semibold text-lg text-white">{event.time}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-start bg-white/5 p-4 rounded-lg">
+                  <MapPin className="h-7 w-7 mr-4 text-pink-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <div className="text-base text-white/60 mb-1">Location</div>
+                    <div className="font-semibold text-lg text-white">{event.location}</div>
+                  </div>
+                </div>
+
+                <div className="flex items-start bg-white/5 p-4 rounded-lg">
+                  <Users className="h-7 w-7 mr-4 text-pink-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <div className="text-base text-white/60 mb-1">Attendance</div>
+                    <div className="font-semibold text-lg text-white">{event.attendees} / {event.maxCapacity}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between p-6 bg-pink-500/10 rounded-lg border-2 border-pink-500/30">
+              <div>
+                <div className="text-lg text-white/60 mb-1">Event Price</div>
+                <div className="text-5xl font-bold text-pink-400">${event.price}</div>
+              </div>
+              <Badge className={`${isAlmostFull ? 'bg-orange-500/20 text-orange-400 border-orange-500/50' : 'bg-green-500/20 text-green-400 border-green-500/50'} text-base px-4 py-2`}>
+                {spotsLeft} spots left
               </Badge>
-            )}
-          </div>
-
-          <p className="text-white/80 leading-relaxed text-base">{event.description}</p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center text-white/80">
-                <Calendar className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
-                <div>
-                  <div className="text-sm text-white/60">Date</div>
-                  <div className="font-semibold text-base">{new Date(event.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center text-white/80">
-                <Clock className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
-                <div>
-                  <div className="text-sm text-white/60">Time</div>
-                  <div className="font-semibold text-base">{event.time}</div>
-                </div>
-              </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center text-white/80">
-                <MapPin className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
-                <div>
-                  <div className="text-sm text-white/60">Location</div>
-                  <div className="font-semibold text-base">{event.location}</div>
-                </div>
-              </div>
-
-              <div className="flex items-center text-white/80">
-                <Users className="h-6 w-6 mr-3 text-pink-400 flex-shrink-0" />
-                <div>
-                  <div className="text-sm text-white/60">Attendance</div>
-                  <div className="font-semibold text-base">{event.attendees} / {event.maxCapacity}</div>
-                </div>
-              </div>
-            </div>
+            <Button className={`w-full ${spiceTheme.components.button.gradient} text-xl py-8`}>
+              Reserve Your Spot
+            </Button>
           </div>
-
-          <div className="flex items-center justify-between p-6 bg-pink-500/10 rounded-lg border border-pink-500/30">
-            <div>
-              <div className="text-base text-white/60">Event Price</div>
-              <div className="text-4xl font-bold text-pink-400">${event.price}</div>
-            </div>
-            <Badge className={`${isAlmostFull ? 'bg-orange-500/20 text-orange-400 border-orange-500/50' : 'bg-green-500/20 text-green-400 border-green-500/50'} text-sm px-3 py-2`}>
-              {spotsLeft} spots left
-            </Badge>
-          </div>
-
-          <Button className={`w-full ${spiceTheme.components.button.gradient} text-xl py-8`}>
-            Reserve Your Spot
-          </Button>
         </div>
-      </DialogContent>
+      </FullScreenDialogContent>
     </Dialog>
   );
 }
