@@ -129,21 +129,22 @@ export function profileToDatabase(profile: Partial<Profile>): any {
     cleanProfile[key] = value;
   });
 
-  // Fix matchPreferences field name mismatch: sexualities -> orientations
+  // Ensure matchPreferences is properly formatted with all required fields
   // Note: Keep the keys in camelCase since the database JSONB expects camelCase
   if (cleanProfile.matchPreferences) {
-    const { sexualities, ...rest } = cleanProfile.matchPreferences;
+    const prefs = cleanProfile.matchPreferences;
     
     // Create a properly formatted matchPreferences object with camelCase keys
+    // Database expects: ageRange, genders, sexualities, searchingFor, distance, vipOnly, verifiedOnly, experienceLevels
     const matchPrefs: any = {
-      ageRange: rest.ageRange || [18, 65],
-      genders: Array.isArray(rest.genders) ? rest.genders : [],
-      orientations: Array.isArray(sexualities) ? sexualities : [],
-      searchingFor: Array.isArray(rest.searchingFor) ? rest.searchingFor : [],
-      distance: typeof rest.distance === 'number' ? rest.distance : 50,
-      vipOnly: Boolean(rest.vipOnly),
-      verifiedOnly: Boolean(rest.verifiedOnly),
-      experienceLevels: Array.isArray(rest.experienceLevels) ? rest.experienceLevels : []
+      ageRange: Array.isArray(prefs.ageRange) && prefs.ageRange.length === 2 ? prefs.ageRange : [18, 65],
+      genders: Array.isArray(prefs.genders) ? prefs.genders : [],
+      sexualities: Array.isArray(prefs.sexualities) ? prefs.sexualities : [],
+      searchingFor: Array.isArray(prefs.searchingFor) ? prefs.searchingFor : [],
+      distance: typeof prefs.distance === 'number' ? prefs.distance : 50,
+      vipOnly: Boolean(prefs.vipOnly),
+      verifiedOnly: Boolean(prefs.verifiedOnly),
+      experienceLevels: Array.isArray(prefs.experienceLevels) ? prefs.experienceLevels : []
     };
 
     cleanProfile.matchPreferences = matchPrefs;
