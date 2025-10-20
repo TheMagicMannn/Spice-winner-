@@ -45,17 +45,27 @@ function keysToSnakeCase(obj: any, isJsonbField: boolean = false): any {
 
 /**
  * Recursively converts object keys from snake_case to camelCase
+ * Special handling: Preserves camelCase keys inside JSONB fields
  */
-function keysToCamelCase(obj: any): any {
+function keysToCamelCase(obj: any, isJsonField: boolean = false): any {
   if (obj === null || obj === undefined) return obj;
-  if (Array.isArray(obj)) return obj.map(keysToCamelCase);
+  if (Array.isArray(obj)) {
+    return obj.map(item => keysToCamelCase(item, isJsonField));
+  }
   if (typeof obj !== 'object') return obj;
 
   const result: any = {};
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const camelKey = toCamelCase(key);
-      result[camelKey] = keysToCamelCase(obj[key]);
+      // If we're already inside a JSON field, preserve the keys
+      if (isJsonField) {
+        result[key] = keysToCamelCase(obj[key], true);
+      } else {
+        const camelKey = toCamelCase(key);
+        // If this is match_preferences, mark it as a JSON field
+        const isNextJsonField = (key === 'match_preferences');
+        result[camelKey] = keysToCamelCase(obj[key], isNextJsonField);
+      }
     }
   }
   return result;
