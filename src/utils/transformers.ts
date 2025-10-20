@@ -19,17 +19,25 @@ function toCamelCase(str: string): string {
 
 /**
  * Recursively converts object keys from camelCase to snake_case
+ * Special handling: Does NOT convert keys inside JSONB fields (like match_preferences)
  */
-function keysToSnakeCase(obj: any): any {
+function keysToSnakeCase(obj: any, isJsonbField: boolean = false): any {
   if (obj === null || obj === undefined) return obj;
-  if (Array.isArray(obj)) return obj.map(keysToSnakeCase);
+  if (Array.isArray(obj)) return obj.map(item => keysToSnakeCase(item, isJsonbField));
   if (typeof obj !== 'object') return obj;
 
   const result: any = {};
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const snakeKey = toSnakeCase(key);
-      result[snakeKey] = keysToSnakeCase(obj[key]);
+      // If this is already inside a JSONB field, keep the keys as-is (don't convert)
+      if (isJsonbField) {
+        result[key] = keysToSnakeCase(obj[key], true);
+      } else {
+        const snakeKey = toSnakeCase(key);
+        // Mark match_preferences as a JSONB field so its contents aren't converted
+        const isNextLevelJsonb = snakeKey === 'match_preferences';
+        result[snakeKey] = keysToSnakeCase(obj[key], isNextLevelJsonb);
+      }
     }
   }
   return result;
