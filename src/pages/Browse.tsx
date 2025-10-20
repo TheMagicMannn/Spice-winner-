@@ -1,61 +1,98 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Heart, X, MapPin, Users, Crown, Shield } from 'lucide-react';
+import { Heart, X, MapPin, Users, Crown, Shield, Star, Sparkles, Loader2 } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
-
-const mockProfiles = [
-  {
-    id: '1',
-    displayName: 'Alex & Jordan',
-    age: 29,
-    accountType: 'couple',
-    city: 'New York',
-    state: 'NY',
-    bio: 'Adventurous couple looking for like-minded friends. We love travel, good food, and meaningful connections.',
-    photos: ['https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=600'],
-    distance: 2.5,
-    verificationStatus: 'verified',
-    membershipType: 'premium'
-  },
-  {
-    id: '2',
-    displayName: 'Emma',
-    age: 27,
-    accountType: 'individual',
-    city: 'Brooklyn',
-    state: 'NY',
-    bio: 'Love meeting new people and exploring the lifestyle. Looking for genuine connections and fun experiences.',
-    photos: ['https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'],
-    distance: 4.2,
-    verificationStatus: 'verified',
-    membershipType: 'basic'
-  },
-];
+import { useAuth } from '@/hooks/useAuth';
+import { MatchingService, MatchedProfile } from '@/services/matchingService';
+import { Spinner } from '@/components/Spinner';
 
 export const BrowsePage: React.FC = () => {
+  const { user } = useAuth();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [profiles] = useState(mockProfiles);
+  const [profiles, setProfiles] = useState<MatchedProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [swipeLoading, setSwipeLoading] = useState(false);
+  const [showMatchModal, setShowMatchModal] = useState(false);
+  const [matchedProfile, setMatchedProfile] = useState<MatchedProfile | null>(null);
 
   const currentProfile = profiles[currentIndex];
 
-  const handleLike = () => {
-    console.log('Liked:', currentProfile?.id);
-    handleNext();
+  // Load matched profiles on component mount
+  useEffect(() => {
+    loadProfiles();
+    // Optional: Update user's location for distance-based matching
+    if (user?.id) {
+      MatchingService.updateLocationFromBrowser(user.id);
+    }
+  }, [user?.id]);
+
+  const loadProfiles = async () => {
+    if (!user?.id) return;
+    
+    setLoading(true);
+    try {
+      const matchedProfiles = await MatchingService.getMatchedProfiles(user.id, 50, 0);
+      setProfiles(matchedProfiles);
+    } catch (error) {
+      console.error('Failed to load profiles:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handlePass = () => {
-    console.log('Passed:', currentProfile?.id);
-    handleNext();
+  const handleLike = async () => {
+    if (!user?.id || !currentProfile) return;
+    
+    setSwipeLoading(true);
+    try {
+      const result = await MatchingService.recordSwipe(
+        user.id,
+        currentProfile.id!,
+        'like'
+      );
+      
+      // Check if it's a match
+      if (result.isMatch) {
+        setMatchedProfile(currentProfile);
+        setShowMatchModal(true);
+      }
+      
+      handleNext();
+    } catch (error) {
+      console.error('Failed to record like:', error);
+    } finally {
+      setSwipeLoading(false);
+    }
+  };
+
+  const handlePass = async () => {
+    if (!user?.id || !currentProfile) return;
+    
+    setSwipeLoading(true);
+    try {
+      await MatchingService.recordSwipe(
+        user.id,
+        currentProfile.id!,
+        'pass'
+      );
+      
+      handleNext();
+    } catch (error) {
+      console.error('Failed to record pass:', error);
+    } finally {
+      setSwipeLoading(false);
+    }
   };
 
   const handleNext = () => {
     if (currentIndex < profiles.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setCurrentIndex(0); // Loop back or show "no more profiles"
+      // Try to load more profiles
+      loadProfiles();
     }
   };
 
