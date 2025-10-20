@@ -283,21 +283,56 @@ export const BrowsePage: React.FC = () => {
         <div className="flex justify-center gap-6 mt-6">
           <button
             onClick={handlePass}
-            className="h-16 w-16 rounded-full border-2 border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all duration-300 animate-glow flex items-center justify-center"
+            disabled={swipeLoading}
+            className="h-16 w-16 rounded-full border-2 border-red-500/50 text-red-400 hover:bg-red-500/10 hover:border-red-500 transition-all duration-300 animate-glow flex items-center justify-center disabled:opacity-50"
             data-testid="button-pass-profile"
           >
-            <X className="h-6 w-6" />
+            {swipeLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <X className="h-6 w-6" />}
           </button>
 
           <button
             onClick={handleLike}
-            className={`h-16 w-16 rounded-full ${spiceTheme.components.button.gradient} transition-all duration-300 animate-glow flex items-center justify-center hover:scale-110 transform`}
+            disabled={swipeLoading}
+            className={`h-16 w-16 rounded-full ${spiceTheme.components.button.gradient} transition-all duration-300 animate-glow flex items-center justify-center hover:scale-110 transform disabled:opacity-50`}
             data-testid="button-like-profile"
           >
-            <Heart className="h-6 w-6" />
+            {swipeLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : <Heart className="h-6 w-6" />}
           </button>
         </div>
       </div>
+
+      {/* Match Modal */}
+      {showMatchModal && matchedProfile && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+          <Card className="bg-gradient-to-b from-pink-900/50 to-black border-pink-500/50 max-w-md w-full">
+            <CardContent className="p-6 text-center">
+              <div className="text-6xl mb-4 animate-bounce">🎉</div>
+              <h2 className="text-3xl font-bold text-pink-400 mb-2">It's a Match!</h2>
+              <p className="text-white/80 mb-6">
+                You and {getDisplayName(matchedProfile)} liked each other!
+              </p>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setShowMatchModal(false)}
+                  variant="outline"
+                  className="flex-1 border-pink-500/50 text-white hover:bg-pink-500/10"
+                >
+                  Keep Browsing
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowMatchModal(false);
+                    // TODO: Navigate to messages
+                  }}
+                  className="flex-1 bg-pink-600 hover:bg-pink-700"
+                >
+                  Send Message
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       {/* Theme Styles */}
       <style>{themeStyles}</style>
