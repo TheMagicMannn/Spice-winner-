@@ -105,12 +105,15 @@ export const MatchPreferencesModal: React.FC<MatchPreferencesModalProps> = ({
   // Handle save
   const handleSave = async () => {
     setIsLoading(true);
+    setErrorMessage(null);
     try {
+      console.log('MatchPreferencesModal - Saving preferences:', preferences);
       await onSave(preferences);
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to save match preferences:', error);
-      // TODO: Show error toast
+      const errorMsg = error?.message || 'Failed to save match preferences. Please try again.';
+      setErrorMessage(errorMsg);
     } finally {
       setIsLoading(false);
     }
