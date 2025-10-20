@@ -33,17 +33,10 @@ function keysToSnakeCase(obj: any, isJsonbField: boolean = false): any {
       if (isJsonbField) {
         result[key] = keysToSnakeCase(obj[key], true);
       } else {
-        // Check BEFORE conversion if this key should be treated as JSONB
-        const isJsonbKey = key === 'matchPreferences';
         const snakeKey = toSnakeCase(key);
-        
-        // For JSONB fields, convert the key but preserve the content structure
-        if (isJsonbKey) {
-          // Keep the content as-is (camelCase keys preserved)
-          result[snakeKey] = obj[key];
-        } else {
-          result[snakeKey] = keysToSnakeCase(obj[key], false);
-        }
+        // Mark match_preferences as a JSONB field so its contents aren't converted
+        const isNextLevelJsonb = snakeKey === 'match_preferences';
+        result[snakeKey] = keysToSnakeCase(obj[key], isNextLevelJsonb);
       }
     }
   }
