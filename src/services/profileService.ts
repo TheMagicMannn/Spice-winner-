@@ -31,30 +31,55 @@ export class ProfileService {
    */
   static async updateProfile(userId: string, profileData: Profile): Promise<Profile> {
     try {
+      console.log('ProfileService.updateProfile - Starting update for user:', userId);
+      
       // Transform camelCase to snake_case for database
       const dbProfile = profileToDatabase(profileData);
       
-      // Remove id from update data
-      const { id, ...updateData } = dbProfile;
+      console.log('ProfileService.updateProfile - Transformed data:', {
+        keys: Object.keys(dbProfile),
+        matchPreferences: dbProfile.match_preferences
+      });
+      
+      // Remove fields that shouldn't be in updates
+      const { id, created_at, updated_at, last_active_at, ...updateData } = dbProfile;
+
+      // Prepare the update payload
+      const updatePayload = {
+        ...updateData,
+        updated_at: new Date().toISOString()
+      };
+
+      console.log('ProfileService.updateProfile - Sending update with fields:', Object.keys(updatePayload));
 
       const { data, error } = await supabase
         .from('profiles')
-        .update({
-          ...updateData,
-          updated_at: new Date().toISOString()
-        })
+        .update(updatePayload)
         .eq('id', userId)
         .select()
         .single();
 
       if (error) {
-        console.error('Error updating profile:', error);
-        throw error;
+        console.error('ProfileService.updateProfile - Supabase error:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+        
+        // Throw a more descriptive error
+        throw new Error(`Failed to update profile: ${error.message}${error.details ? ' - ' + error.details : ''}`);
       }
+
+      if (!data) {
+        throw new Error('No data returned from profile update');
+      }
+
+      console.log('ProfileService.updateProfile - Update successful');
 
       // Transform back to camelCase
       return profileFromDatabase(data);
-    } catch (error) {
+    } catch (error: any) {
       console.error('ProfileService.updateProfile error:', error);
       throw error;
     }
