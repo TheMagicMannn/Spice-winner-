@@ -38,6 +38,7 @@ export const ProfilePage: React.FC = () => {
   const [viewMode, setViewMode] = useState<'own' | 'preview'>('own');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [renderError, setRenderError] = useState<Error | null>(null);
 
   // Enhanced error boundary logging
   React.useEffect(() => {
@@ -50,6 +51,34 @@ export const ProfilePage: React.FC = () => {
       setError('Profile data is missing. Please try logging out and back in.');
     }
   }, [user]);
+
+  // Catch any render errors
+  if (renderError) {
+    console.error('ProfilePage - Render error:', renderError);
+    return (
+      <SpiceBackground className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4 p-8 max-w-md">
+          <div className="text-red-400 text-xl font-bold">Profile Page Error</div>
+          <div className="text-white text-sm">{renderError.message}</div>
+          <button
+            onClick={() => {
+              setRenderError(null);
+              window.location.reload();
+            }}
+            className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-full"
+          >
+            Reload Page
+          </button>
+          <button
+            onClick={logout}
+            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-full ml-2"
+          >
+            Sign Out
+          </button>
+        </div>
+      </SpiceBackground>
+    );
+  }
 
   if (!user || !user.profile) {
     console.log('ProfilePage - No user or profile, showing spinner/error');
@@ -74,6 +103,9 @@ export const ProfilePage: React.FC = () => {
 
   const { email, profile } = user;
   const { displayName, photos, bio, age, location } = profile;
+
+  // Safe access to potentially undefined values
+  try {
 
   // Get profile stats
   const profileStats = {
