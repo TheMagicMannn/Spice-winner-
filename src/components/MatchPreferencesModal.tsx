@@ -39,6 +39,7 @@ export const MatchPreferencesModal: React.FC<MatchPreferencesModalProps> = ({
 }) => {
   const [preferences, setPreferences] = useState<MatchPreferences>(currentPreferences);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Update preferences state when prop changes
   useEffect(() => {
