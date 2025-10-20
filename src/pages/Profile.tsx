@@ -102,20 +102,24 @@ export const ProfilePage: React.FC = () => {
   }
 
   const { email, profile } = user;
-  const { displayName, photos, bio, age, location } = profile;
+  
+  // Safe destructuring with defaults
+  const displayName = profile?.displayName || '';
+  const photos = profile?.photos || [];
+  const bio = profile?.bio || '';
+  const age = profile?.age;
+  const location = profile?.location || '';
 
-  // Safe access to potentially undefined values
-  try {
-
-  // Get profile stats
+  // Get profile stats with safe fallbacks
   const profileStats = {
-    photosCount: photos?.length || 0,
-    isVerified: profile.isVerified || false,
-    membershipTier: profile.membershipTier || 'basic',
+    photosCount: photos.length,
+    isVerified: profile?.isVerified || false,
+    membershipTier: profile?.membershipTier || 'basic',
     profileCompletion: calculateProfileCompletion(profile)
   };
 
-  function calculateProfileCompletion(profile: Profile): number {
+  function calculateProfileCompletion(profile: Profile | null | undefined): number {
+    if (!profile) return 0;
     const requiredFields = [
       profile.displayName,
       profile.age && profile.age >= 18,
