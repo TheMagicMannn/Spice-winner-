@@ -96,6 +96,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Update profile state when prop changes
   useEffect(() => {
