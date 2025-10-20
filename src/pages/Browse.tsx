@@ -150,9 +150,16 @@ export const BrowsePage: React.FC = () => {
           <h1 className={`text-xl ${spiceTheme.components.text.title}`} data-testid="text-browse-title">
             Discover
           </h1>
-          <Badge className={`${spiceTheme.components.badge.pink} animate-pulse`}>
-            {currentIndex + 1} of {profiles.length}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge className={`${spiceTheme.components.badge.pink} animate-pulse`}>
+              {currentIndex + 1} of {profiles.length}
+            </Badge>
+            {compatibilityInfo && (
+              <Badge className={`bg-black/70 ${compatibilityInfo.color} border-0`}>
+                {compatibilityInfo.emoji} {currentProfile.compatibilityScore}%
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
 
