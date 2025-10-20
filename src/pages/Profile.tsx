@@ -303,6 +303,16 @@ export const ProfilePage: React.FC = () => {
                   Edit Profile
                 </Button>
                 <Separator className="bg-pink-500/30" />
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsMatchPreferencesOpen(true)}
+                  className="w-full justify-start text-white hover:bg-pink-500/10"
+                  data-testid="match-preferences-action"
+                >
+                  <Settings className="h-4 w-4 mr-3" />
+                  Match Preferences
+                </Button>
+                <Separator className="bg-pink-500/30" />
                 {!profileStats.isVerified && (
                   <>
                     <Button
