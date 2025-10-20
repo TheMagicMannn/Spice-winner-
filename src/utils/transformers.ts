@@ -56,22 +56,94 @@ function keysToCamelCase(obj: any): any {
 /**
  * Transform frontend Profile to database format
  * Handles special cases like matchPreferences.sexualities -> orientations
+ * Filters out undefined/null values and ensures proper data types
  */
 export function profileToDatabase(profile: Partial<Profile>): any {
-  const dbProfile = { ...profile };
+  // Create a clean copy without undefined values
+  const cleanProfile: any = {};
+
+  // List of fields that should never be sent in updates
+  const excludeFields = ['id', 'createdAt', 'updatedAt', 'lastActiveAt'];
+
+  // Process each field
+  Object.keys(profile).forEach(key => {
+    const value = (profile as any)[key];
+    
+    // Skip excluded fields and undefined values
+    if (excludeFields.includes(key) || value === undefined) {
+      return;
+    }
+
+    // Handle null values - convert to appropriate defaults
+    if (value === null) {
+      // For arrays, use empty array
+      if (['photos', 'seeking', 'seekingRelationshipType', 'interests', 'kinks', 'softLimits', 'hardLimits'].includes(key)) {
+        cleanProfile[key] = [];
+      }
+      // For strings, skip null values (let DB handle defaults)
+      return;
+    }
+
+    // Handle array fields - ensure they're actual arrays
+    if (['photos', 'seeking', 'seekingRelationshipType', 'interests', 'kinks', 'softLimits', 'hardLimits'].includes(key)) {
+      cleanProfile[key] = Array.isArray(value) ? value : [];
+      return;
+    }
+
+    // Handle string fields - trim whitespace
+    if (typeof value === 'string') {
+      const trimmed = value.trim();
+      if (trimmed.length > 0) {
+        cleanProfile[key] = trimmed;
+      }
+      return;
+    }
+
+    // Handle numbers - ensure they're valid
+    if (typeof value === 'number' && !isNaN(value)) {
+      cleanProfile[key] = value;
+      return;
+    }
+
+    // Handle booleans
+    if (typeof value === 'boolean') {
+      cleanProfile[key] = value;
+      return;
+    }
+
+    // Handle matchPreferences specially
+    if (key === 'matchPreferences' && typeof value === 'object') {
+      cleanProfile[key] = value;
+      return;
+    }
+
+    // For any other object/value, include as-is
+    cleanProfile[key] = value;
+  });
 
   // Fix matchPreferences field name mismatch: sexualities -> orientations
-  if (dbProfile.matchPreferences) {
-    const { sexualities, ...rest } = dbProfile.matchPreferences;
-    // Create a new object with orientations instead of sexualities
-    dbProfile.matchPreferences = {
-      ...rest,
-      orientations: sexualities || [],
-    } as any;
+  if (cleanProfile.matchPreferences) {
+    const { sexualities, ...rest } = cleanProfile.matchPreferences;
+    
+    // Create a properly formatted matchPreferences object
+    const matchPrefs: any = {
+      ageRange: rest.ageRange || [18, 65],
+      genders: Array.isArray(rest.genders) ? rest.genders : [],
+      orientations: Array.isArray(sexualities) ? sexualities : [],
+      searchingFor: Array.isArray(rest.searchingFor) ? rest.searchingFor : [],
+      distance: typeof rest.distance === 'number' ? rest.distance : 50,
+      vipOnly: Boolean(rest.vipOnly),
+      verifiedOnly: Boolean(rest.verifiedOnly),
+      experienceLevels: Array.isArray(rest.experienceLevels) ? rest.experienceLevels : []
+    };
+
+    cleanProfile.matchPreferences = matchPrefs;
   }
 
   // Convert all keys to snake_case
-  return keysToSnakeCase(dbProfile);
+  const result = keysToSnakeCase(cleanProfile);
+  
+  return result;
 }
 
 /**
