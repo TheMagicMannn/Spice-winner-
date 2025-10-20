@@ -394,6 +394,23 @@ export const ProfilePage: React.FC = () => {
         onDeletePhoto={handleDeletePhoto}
       />
 
+      {/* Match Preferences Modal */}
+      <MatchPreferencesModal
+        isOpen={isMatchPreferencesOpen}
+        onClose={() => setIsMatchPreferencesOpen(false)}
+        currentPreferences={profile.matchPreferences || {
+          ageRange: [18, 55],
+          genders: [],
+          sexualities: [],
+          searchingFor: [],
+          distance: 50,
+          vipOnly: false,
+          verifiedOnly: true,
+          experienceLevels: []
+        }}
+        onSave={handleSaveMatchPreferences}
+      />
+
       {/* Theme Styles */}
       <style>{`
         ${themeStyles}
