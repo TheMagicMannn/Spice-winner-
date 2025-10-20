@@ -96,14 +96,49 @@ export const BrowsePage: React.FC = () => {
     }
   };
 
-  if (!currentProfile) {
+  // Get display name based on account type
+  const getDisplayName = (profile: MatchedProfile) => {
+    if (profile.accountType === 'couple' && profile.displayName2) {
+      return `${profile.displayName} & ${profile.displayName2}`;
+    }
+    return profile.displayName || 'Anonymous';
+  };
+
+  // Get compatibility level styling
+  const compatibilityInfo = currentProfile 
+    ? MatchingService.getCompatibilityLevel(currentProfile.compatibilityScore)
+    : null;
+
+  // Loading state
+  if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-black flex items-center justify-center pb-20">
+      <SpiceBackground className="min-h-screen flex items-center justify-center pb-20">
         <div className="text-center">
-          <h2 className="text-white text-xl mb-2">No more profiles</h2>
-          <p className="text-white/60">Check back later for new members!</p>
+          <Spinner />
+          <p className="text-white mt-4">Finding your perfect matches...</p>
         </div>
-      </div>
+      </SpiceBackground>
+    );
+  }
+
+  // No profiles state
+  if (!currentProfile || profiles.length === 0) {
+    return (
+      <SpiceBackground className="min-h-screen flex items-center justify-center pb-20">
+        <div className="text-center px-4">
+          <Sparkles className="h-16 w-16 text-pink-400 mx-auto mb-4" />
+          <h2 className="text-white text-2xl mb-2 font-bold">No More Profiles</h2>
+          <p className="text-white/60 mb-6">
+            We've shown you all available matches based on your preferences.
+          </p>
+          <Button 
+            onClick={loadProfiles}
+            className="bg-pink-600 hover:bg-pink-700"
+          >
+            Refresh Matches
+          </Button>
+        </div>
+      </SpiceBackground>
     );
   }
 
