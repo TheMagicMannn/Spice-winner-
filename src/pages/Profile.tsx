@@ -151,10 +151,13 @@ export const ProfilePage: React.FC = () => {
   const handleSaveProfile = async (updatedProfile: Profile) => {
     setIsLoading(true);
     try {
+      console.log('ProfilePage - Saving profile:', updatedProfile);
       const savedProfile = await ProfileService.updateProfile(user.id, updatedProfile);
       updateProfile(savedProfile);
+      console.log('ProfilePage - Profile saved successfully');
     } catch (error) {
-      console.error('Failed to save profile:', error);
+      console.error('ProfilePage - Failed to save profile:', error);
+      setError('Failed to save profile. Please try again.');
       throw error;
     } finally {
       setIsLoading(false);
@@ -164,14 +167,17 @@ export const ProfilePage: React.FC = () => {
   const handleSaveMatchPreferences = async (updatedPreferences: MatchPreferences) => {
     setIsLoading(true);
     try {
+      console.log('ProfilePage - Saving match preferences:', updatedPreferences);
       const updatedProfile = {
         ...profile,
         matchPreferences: updatedPreferences
       };
       const savedProfile = await ProfileService.updateProfile(user.id, updatedProfile);
       updateProfile(savedProfile);
+      console.log('ProfilePage - Match preferences saved successfully');
     } catch (error) {
-      console.error('Failed to save match preferences:', error);
+      console.error('ProfilePage - Failed to save match preferences:', error);
+      setError('Failed to save match preferences. Please try again.');
       throw error;
     } finally {
       setIsLoading(false);
