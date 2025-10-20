@@ -306,32 +306,41 @@ export const MatchPreferencesModal: React.FC<MatchPreferencesModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex justify-end gap-3 pt-6 border-t border-pink-500/30 mt-6">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={isLoading}
-            className="border-gray-500 text-gray-300 hover:bg-gray-800"
-            data-testid="cancel-button"
-          >
-            <X className="h-4 w-4 mr-2" />
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSave}
-            disabled={isLoading}
-            className="bg-pink-600 hover:bg-pink-700 text-white"
-            data-testid="save-preferences-button"
-          >
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <>
-                <Save className="h-4 w-4 mr-2" />
-                Save Preferences
-              </>
-            )}
-          </Button>
+        <div className="space-y-4 mt-6">
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4">
+              <p className="text-red-400 text-sm">{errorMessage}</p>
+            </div>
+          )}
+
+          <div className="flex justify-end gap-3 pt-6 border-t border-pink-500/30">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              disabled={isLoading}
+              className="border-gray-500 text-gray-300 hover:bg-gray-800"
+              data-testid="cancel-button"
+            >
+              <X className="h-4 w-4 mr-2" />
+              Cancel
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={isLoading}
+              className="bg-pink-600 hover:bg-pink-700 text-white"
+              data-testid="save-preferences-button"
+            >
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  <Save className="h-4 w-4 mr-2" />
+                  Save Preferences
+                </>
+              )}
+            </Button>
+          </div>
         </div>
 
         {/* Custom Styles for Range Sliders */}
