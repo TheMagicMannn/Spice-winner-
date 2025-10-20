@@ -99,6 +99,23 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  const handleSaveMatchPreferences = async (updatedPreferences: MatchPreferences) => {
+    setIsLoading(true);
+    try {
+      const updatedProfile = {
+        ...profile,
+        matchPreferences: updatedPreferences
+      };
+      const savedProfile = await ProfileService.updateProfile(user.id, updatedProfile);
+      updateProfile(savedProfile);
+    } catch (error) {
+      console.error('Failed to save match preferences:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleUploadPhoto = async (file: File): Promise<string> => {
     return await ProfileService.uploadPhoto(user.id, file);
   };
