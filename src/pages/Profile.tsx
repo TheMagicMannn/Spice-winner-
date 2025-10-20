@@ -37,11 +37,37 @@ export const ProfilePage: React.FC = () => {
   const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'own' | 'preview'>('own');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Enhanced error boundary logging
+  React.useEffect(() => {
+    console.log('ProfilePage - Mounted');
+    console.log('ProfilePage - User:', user);
+    console.log('ProfilePage - Profile:', user?.profile);
+    
+    if (user && !user.profile) {
+      console.error('ProfilePage - User exists but profile is null/undefined');
+      setError('Profile data is missing. Please try logging out and back in.');
+    }
+  }, [user]);
 
   if (!user || !user.profile) {
+    console.log('ProfilePage - No user or profile, showing spinner/error');
     return (
       <SpiceBackground className="min-h-screen flex items-center justify-center">
-        <Spinner />
+        {error ? (
+          <div className="text-center space-y-4 p-8">
+            <div className="text-red-400 text-xl">{error}</div>
+            <button
+              onClick={logout}
+              className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-full"
+            >
+              Sign Out & Try Again
+            </button>
+          </div>
+        ) : (
+          <Spinner />
+        )}
       </SpiceBackground>
     );
   }
