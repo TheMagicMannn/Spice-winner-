@@ -164,12 +164,15 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   // Handle save
   const handleSave = async () => {
     setIsLoading(true);
+    setErrorMessage(null);
     try {
+      console.log('EditProfileModal - Saving profile:', editedProfile);
       await onSave(editedProfile);
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Save failed:', error);
-      // TODO: Show error toast
+      const errorMsg = error?.message || 'Failed to save profile. Please try again.';
+      setErrorMessage(errorMsg);
     } finally {
       setIsLoading(false);
     }
