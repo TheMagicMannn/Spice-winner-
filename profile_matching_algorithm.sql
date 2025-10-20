@@ -578,30 +578,30 @@ CREATE INDEX IF NOT EXISTS idx_profiles_last_active
 -- 11. COMPLETION LOG
 -- =====================================================
 
-DO $$
+DO $$ 
 BEGIN
     RAISE NOTICE '=================================================';
     RAISE NOTICE 'Profile Matching Algorithm Installation Complete';
     RAISE NOTICE '=================================================';
     RAISE NOTICE 'Created:';
-    RAISE NOTICE '  ✓ swipe_actions table for tracking likes/passes';
-    RAISE NOTICE '  ✓ Location coordinates (latitude/longitude) in profiles';
-    RAISE NOTICE '  ✓ calculate_distance() - Haversine formula';
-    RAISE NOTICE '  ✓ calculate_compatibility_score() - 0-100 scoring';
-    RAISE NOTICE '  ✓ get_matched_profiles() - Main matching function';
-    RAISE NOTICE '  ✓ record_swipe_action() - Track user actions';
-    RAISE NOTICE '  ✓ RLS policies for swipe_actions';
-    RAISE NOTICE '  ✓ Performance indexes for fast queries';
-    RAISE NOTICE '  ✓ mutual_likes view for analytics';
+    RAISE NOTICE '  * swipe_actions table for tracking likes/passes';
+    RAISE NOTICE '  * Location coordinates (latitude/longitude) in profiles';
+    RAISE NOTICE '  * calculate_distance() - Haversine formula';
+    RAISE NOTICE '  * calculate_compatibility_score() - 0-100 scoring';
+    RAISE NOTICE '  * get_matched_profiles() - Main matching function';
+    RAISE NOTICE '  * record_swipe_action() - Track user actions';
+    RAISE NOTICE '  * RLS policies for swipe_actions';
+    RAISE NOTICE '  * Performance indexes for fast queries';
+    RAISE NOTICE '  * mutual_likes view for analytics';
     RAISE NOTICE '=================================================';
     RAISE NOTICE 'Matching Algorithm Features:';
-    RAISE NOTICE '  • Bidirectional compatibility scoring';
-    RAISE NOTICE '  • Age, gender, sexuality matching';
-    RAISE NOTICE '  • Distance-based filtering';
-    RAISE NOTICE '  • Experience level matching';
-    RAISE NOTICE '  • VIP and verified filters';
-    RAISE NOTICE '  • Automatic match creation on mutual likes';
-    RAISE NOTICE '  • Minimum 40% compatibility threshold';
+    RAISE NOTICE '  * Bidirectional compatibility scoring';
+    RAISE NOTICE '  * Age, gender, sexuality matching';
+    RAISE NOTICE '  * Distance-based filtering';
+    RAISE NOTICE '  * Experience level matching';
+    RAISE NOTICE '  * VIP and verified filters';
+    RAISE NOTICE '  * Automatic match creation on mutual likes';
+    RAISE NOTICE '  * Minimum 40%% compatibility threshold';
     RAISE NOTICE '=================================================';
     RAISE NOTICE 'Next Steps:';
     RAISE NOTICE '  1. Update profiles with location coordinates';
