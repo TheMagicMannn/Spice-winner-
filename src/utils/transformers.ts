@@ -130,10 +130,11 @@ export function profileToDatabase(profile: Partial<Profile>): any {
   });
 
   // Fix matchPreferences field name mismatch: sexualities -> orientations
+  // Note: Keep the keys in camelCase since the database JSONB expects camelCase
   if (cleanProfile.matchPreferences) {
     const { sexualities, ...rest } = cleanProfile.matchPreferences;
     
-    // Create a properly formatted matchPreferences object
+    // Create a properly formatted matchPreferences object with camelCase keys
     const matchPrefs: any = {
       ageRange: rest.ageRange || [18, 65],
       genders: Array.isArray(rest.genders) ? rest.genders : [],
@@ -148,7 +149,8 @@ export function profileToDatabase(profile: Partial<Profile>): any {
     cleanProfile.matchPreferences = matchPrefs;
   }
 
-  // Convert all keys to snake_case
+  // Convert top-level keys to snake_case
+  // IMPORTANT: The keysToSnakeCase function now preserves camelCase keys inside JSONB fields
   const result = keysToSnakeCase(cleanProfile);
   
   return result;
