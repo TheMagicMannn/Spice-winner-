@@ -656,38 +656,48 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
         </Tabs>
 
         {/* Footer Actions */}
-        <div className="flex justify-between items-center pt-6 border-t border-pink-500/30">
-          <div className="text-sm text-white/60">
-            {isFormValid() ? (
-              <span className="text-green-400">Profile is complete ✓</span>
-            ) : (
-              <span className="text-orange-400">Please complete all required fields</span>
-            )}
-          </div>
-          <div className="flex gap-3">
-            <Button
-              variant="outline"
-              onClick={onClose}
-              disabled={isLoading}
-              className="border-gray-500 text-gray-300 hover:bg-gray-800"
-            >
-              <X className="h-4 w-4 mr-2" />
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSave}
-              disabled={isLoading || !isFormValid()}
-              className="bg-pink-600 hover:bg-pink-700 text-white"
-            >
-              {isLoading ? (
-                <Spinner />
+        <div className="space-y-4">
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-4">
+              <p className="text-red-400 text-sm">{errorMessage}</p>
+            </div>
+          )}
+
+          <div className="flex justify-between items-center pt-6 border-t border-pink-500/30">
+            <div className="text-sm text-white/60">
+              {isFormValid() ? (
+                <span className="text-green-400">Profile is complete ✓</span>
               ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Profile
-                </>
+                <span className="text-orange-400">Please complete all required fields</span>
               )}
-            </Button>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={onClose}
+                disabled={isLoading}
+                className="border-gray-500 text-gray-300 hover:bg-gray-800"
+              >
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSave}
+                disabled={isLoading || !isFormValid()}
+                className="bg-pink-600 hover:bg-pink-700 text-white"
+                data-testid="save-profile-button"
+              >
+                {isLoading ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    <Save className="h-4 w-4 mr-2" />
+                    Save Profile
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>
