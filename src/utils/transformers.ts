@@ -159,17 +159,14 @@ export function profileToDatabase(profile: Partial<Profile>): any {
 
 /**
  * Transform database Profile to frontend format
- * Handles special cases like matchPreferences.orientations -> sexualities
+ * Note: match_preferences JSONB is already in camelCase in the database
  */
 export function profileFromDatabase(dbProfile: any): Profile {
-  // Convert all keys to camelCase first
+  // Convert top-level keys to camelCase
+  // Note: JSONB fields like match_preferences already have camelCase keys internally
   const profile = keysToCamelCase(dbProfile);
 
-  // Fix matchPreferences field name mismatch: orientations -> sexualities
-  if (profile.matchPreferences && profile.matchPreferences.orientations) {
-    profile.matchPreferences.sexualities = profile.matchPreferences.orientations;
-    delete profile.matchPreferences.orientations;
-  }
+  // No field name conversion needed - database already uses sexualities
 
   return profile as Profile;
 }
