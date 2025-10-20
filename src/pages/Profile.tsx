@@ -25,10 +25,11 @@ import {
 import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
 import { EditProfileModal } from '@/components/EditProfileModal';
+import { MatchPreferencesModal } from '@/components/MatchPreferencesModal';
 import { ProfileService } from '@/services/profileService';
 import { SpiceBackground, SpiceButton } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
-import { Profile } from '@/types';
+import { Profile, MatchPreferences } from '@/types';
 
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
