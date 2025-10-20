@@ -219,10 +219,13 @@ export const BrowsePage: React.FC = () => {
           <CardContent className="p-6 space-y-4">
             <div>
               <h2 className={`text-xl font-bold ${spiceTheme.components.text.gradient}`} data-testid={`text-profile-name-${currentProfile.id}`}>
-                {currentProfile.displayName}
+                {getDisplayName(currentProfile)}
               </h2>
               <div className="flex items-center gap-2 text-white/60">
                 <span>{currentProfile.age || 'Age not specified'}</span>
+                {currentProfile.age2 && currentProfile.accountType === 'couple' && (
+                  <span>& {currentProfile.age2}</span>
+                )}
                 <Badge className={spiceTheme.components.badge.pink}>
                   {currentProfile.accountType}
                 </Badge>
@@ -230,12 +233,10 @@ export const BrowsePage: React.FC = () => {
             </div>
 
             {/* Location */}
-            {(currentProfile.city || currentProfile.state) && (
+            {currentProfile.location && (
               <div className="flex items-center text-white/60">
                 <MapPin className="h-4 w-4 mr-2 text-pink-400" />
-                <span>
-                  {[currentProfile.city, currentProfile.state].filter(Boolean).join(', ')}
-                </span>
+                <span>{currentProfile.location}</span>
               </div>
             )}
 
@@ -246,12 +247,34 @@ export const BrowsePage: React.FC = () => {
               </p>
             )}
 
+            {/* Interests */}
+            {currentProfile.interests && currentProfile.interests.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {currentProfile.interests.slice(0, 5).map((interest, idx) => (
+                  <Badge key={idx} variant="outline" className="text-pink-400 border-pink-400/50">
+                    {interest}
+                  </Badge>
+                ))}
+                {currentProfile.interests.length > 5 && (
+                  <Badge variant="outline" className="text-white/60 border-white/30">
+                    +{currentProfile.interests.length - 5} more
+                  </Badge>
+                )}
+              </div>
+            )}
+
             {/* Stats */}
             <div className="flex items-center gap-4 text-sm text-white/60">
               <div className="flex items-center">
                 <Users className="h-4 w-4 mr-1 text-pink-400" />
-                <span>{currentProfile.photos.length} photos</span>
+                <span>{currentProfile.photos?.length || 0} photos</span>
               </div>
+              {currentProfile.lifestyleExperience && (
+                <div className="flex items-center">
+                  <Sparkles className="h-4 w-4 mr-1 text-pink-400" />
+                  <span>{currentProfile.lifestyleExperience}</span>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
