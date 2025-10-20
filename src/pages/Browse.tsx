@@ -171,8 +171,8 @@ export const BrowsePage: React.FC = () => {
         >
           <div className="relative">
             <img
-              src={currentProfile.photos[0]}
-              alt={currentProfile.displayName}
+              src={currentProfile.photos?.[0] || 'https://via.placeholder.com/600x800?text=No+Photo'}
+              alt={getDisplayName(currentProfile)}
               className="w-full h-96 object-cover"
             />
 
@@ -181,26 +181,36 @@ export const BrowsePage: React.FC = () => {
 
             {/* Profile badges */}
             <div className="absolute top-4 right-4 flex gap-2">
-              {currentProfile.verificationStatus === 'verified' && (
+              {currentProfile.isVerified && (
                 <Badge className={`${spiceTheme.components.badge.verified} animate-glow`}>
                   <Shield className="h-3 w-3 mr-1" />
                   Verified
                 </Badge>
               )}
-              {currentProfile.membershipType === 'premium' && (
+              {currentProfile.membershipTier === 'vip' && (
                 <Badge className={`${spiceTheme.components.badge.premium} animate-glow`}>
                   <Crown className="h-3 w-3 mr-1" />
-                  Premium
+                  VIP
                 </Badge>
               )}
             </div>
 
+            {/* Compatibility badge */}
+            {compatibilityInfo && (
+              <div className="absolute top-4 left-4">
+                <Badge className={`bg-black/70 backdrop-blur-sm ${compatibilityInfo.color} border-0 text-sm font-semibold`}>
+                  <Star className="h-3 w-3 mr-1" />
+                  {compatibilityInfo.label}
+                </Badge>
+              </div>
+            )}
+
             {/* Distance badge */}
-            {currentProfile.distance && (
+            {currentProfile.distanceMiles !== null && currentProfile.distanceMiles !== undefined && (
               <div className="absolute bottom-4 left-4">
                 <Badge className="bg-black/70 text-white border-0 backdrop-blur-sm">
                   <MapPin className="h-3 w-3 mr-1" />
-                  {currentProfile.distance}km away
+                  {MatchingService.formatDistance(currentProfile.distanceMiles)}
                 </Badge>
               </div>
             )}
