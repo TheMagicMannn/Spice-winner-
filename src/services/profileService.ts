@@ -32,13 +32,15 @@ export class ProfileService {
   static async updateProfile(userId: string, profileData: Profile): Promise<Profile> {
     try {
       console.log('ProfileService.updateProfile - Starting update for user:', userId);
+      console.log('ProfileService.updateProfile - Original matchPreferences:', profileData.matchPreferences);
       
       // Transform camelCase to snake_case for database
       const dbProfile = profileToDatabase(profileData);
       
       console.log('ProfileService.updateProfile - Transformed data:', {
         keys: Object.keys(dbProfile),
-        matchPreferences: dbProfile.match_preferences
+        matchPreferences: dbProfile.match_preferences,
+        matchPreferencesKeys: dbProfile.match_preferences ? Object.keys(dbProfile.match_preferences) : []
       });
       
       // Remove fields that shouldn't be in updates
@@ -51,6 +53,7 @@ export class ProfileService {
       };
 
       console.log('ProfileService.updateProfile - Sending update with fields:', Object.keys(updatePayload));
+      console.log('ProfileService.updateProfile - Final match_preferences structure:', updatePayload.match_preferences);
 
       const { data, error } = await supabase
         .from('profiles')
