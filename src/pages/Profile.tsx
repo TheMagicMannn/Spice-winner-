@@ -34,6 +34,7 @@ import { Profile, MatchPreferences } from '@/types';
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'own' | 'preview'>('own');
   const [isLoading, setIsLoading] = useState(false);
 
