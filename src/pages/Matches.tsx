@@ -50,7 +50,21 @@ export const MatchesPage: React.FC = () => {
     }
   };
 
-  const renderMatchCard = (match: any, type: 'match' | 'liked' | 'likes') => (
+  // Get display name based on account type
+  const getDisplayName = (profile: Profile) => {
+    if (profile.accountType === 'couple' && profile.displayName2) {
+      return `${profile.displayName} & ${profile.displayName2}`;
+    }
+    return profile.displayName || 'Anonymous';
+  };
+
+  // Handle message button click
+  const handleMessageClick = (profile: Profile) => {
+    // Navigate to messages page - in future, can pass profile ID to open specific conversation
+    navigate('/messages');
+  };
+
+  const renderMatchCard = (match: Profile, type: 'match' | 'liked' | 'likes') => (
     <Card
       key={match.id}
       className={`${spiceTheme.components.card} animate-fade-in hover:scale-105 transform transition-all duration-300`}
