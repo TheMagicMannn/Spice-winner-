@@ -33,10 +33,17 @@ function keysToSnakeCase(obj: any, isJsonbField: boolean = false): any {
       if (isJsonbField) {
         result[key] = keysToSnakeCase(obj[key], true);
       } else {
+        // Check BEFORE conversion if this key should be treated as JSONB
+        const isJsonbKey = key === 'matchPreferences';
         const snakeKey = toSnakeCase(key);
-        // Mark match_preferences as a JSONB field so its contents aren't converted
-        const isNextLevelJsonb = snakeKey === 'match_preferences';
-        result[snakeKey] = keysToSnakeCase(obj[key], isNextLevelJsonb);
+        
+        // For JSONB fields, convert the key but preserve the content structure
+        if (isJsonbKey) {
+          // Keep the content as-is (camelCase keys preserved)
+          result[snakeKey] = obj[key];
+        } else {
+          result[snakeKey] = keysToSnakeCase(obj[key], false);
+        }
       }
     }
   }
@@ -55,19 +62,33 @@ function keysToCamelCase(obj: any, isJsonField: boolean = false): any {
   if (typeof obj !== 'object') return obj;
 
   const result: any = {};
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      // If we're already inside a JSON field, preserve the keys
-      if (isJsonField) {
-        result[key] = keysToCamelCase(obj[key], true);
-      } else {
-        const camelKey = toCamelCase(key);
-        // If this is match_preferences, mark it as a JSON field
-        const isNextJsonField = (key === 'match_preferences');
-        result[camelKey] = keysToCamelCase(obj[key], isNextJsonField);
+  
+  try {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        // If we're already inside a JSON field, preserve the keys
+        if (isJsonField) {
+          result[key] = keysToCamelCase(obj[key], true);
+        } else {
+          const camelKey = toCamelCase(key);
+          // If this is match_preferences, mark it as a JSON field to preserve its internal structure
+          const isNextJsonField = (key === 'match_preferences');
+          
+          if (isNextJsonField) {
+            // For JSONB fields, preserve the content as-is (already in camelCase)
+            result[camelKey] = obj[key];
+          } else {
+            result[camelKey] = keysToCamelCase(obj[key], false);
+          }
+        }
       }
     }
+  } catch (error) {
+    console.error('keysToCamelCase - Error processing object:', error);
+    console.error('keysToCamelCase - Problematic object:', obj);
+    throw error;
   }
+  
   return result;
 }
 
@@ -172,13 +193,34 @@ export function profileToDatabase(profile: Partial<Profile>): any {
  * Note: match_preferences JSONB is already in camelCase in the database
  */
 export function profileFromDatabase(dbProfile: any): Profile {
-  // Convert top-level keys to camelCase
-  // Note: JSONB fields like match_preferences already have camelCase keys internally
-  const profile = keysToCamelCase(dbProfile);
+  try {
+    console.log('profileFromDatabase - Input:', {
+      hasProfile: !!dbProfile,
+      keys: dbProfile ? Object.keys(dbProfile) : [],
+      matchPreferences: dbProfile?.match_preferences
+    });
 
-  // No field name conversion needed - database already uses sexualities
+    if (!dbProfile) {
+      console.warn('profileFromDatabase - Received null/undefined profile');
+      return {} as Profile;
+    }
 
-  return profile as Profile;
+    // Convert top-level keys to camelCase
+    // Note: JSONB fields like match_preferences already have camelCase keys internally
+    const profile = keysToCamelCase(dbProfile);
+
+    console.log('profileFromDatabase - Output:', {
+      hasProfile: !!profile,
+      keys: profile ? Object.keys(profile) : [],
+      matchPreferences: profile?.matchPreferences
+    });
+
+    return profile as Profile;
+  } catch (error) {
+    console.error('profileFromDatabase - Error:', error);
+    console.error('profileFromDatabase - Input that caused error:', dbProfile);
+    throw error;
+  }
 }
 
 /**
