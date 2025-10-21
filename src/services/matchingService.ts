@@ -142,26 +142,37 @@ export class MatchingService {
    */
   static async getLikedProfiles(userId: string): Promise<Profile[]> {
     try {
-      const { data, error } = await supabase
+      // First get the swipe actions
+      const { data: swipes, error: swipeError } = await supabase
         .from('swipe_actions')
-        .select(`
-          target_user_id,
-          created_at,
-          profiles!swipe_actions_target_user_id_fkey (*)
-        `)
+        .select('target_user_id, created_at')
         .eq('user_id', userId)
         .eq('action', 'like')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching liked profiles:', error);
-        throw error;
+      if (swipeError) {
+        console.error('Error fetching liked swipes:', swipeError);
+        throw swipeError;
+      }
+
+      if (!swipes || swipes.length === 0) {
+        return [];
+      }
+
+      // Get the profile data for those users
+      const targetUserIds = swipes.map(s => s.target_user_id);
+      const { data: profilesData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', targetUserIds);
+
+      if (profileError) {
+        console.error('Error fetching liked profiles:', profileError);
+        throw profileError;
       }
 
       // Transform profiles from database format
-      return (data || [])
-        .filter(item => item.profiles)
-        .map(item => profileFromDatabase(item.profiles));
+      return (profilesData || []).map(profile => profileFromDatabase(profile));
     } catch (error) {
       console.error('MatchingService.getLikedProfiles error:', error);
       throw error;
