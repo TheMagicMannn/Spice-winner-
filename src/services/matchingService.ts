@@ -146,6 +146,7 @@ export class MatchingService {
         .from('swipe_actions')
         .select(`
           target_user_id,
+          created_at,
           profiles!swipe_actions_target_user_id_fkey (*)
         `)
         .eq('user_id', userId)
@@ -163,6 +164,78 @@ export class MatchingService {
         .map(item => profileFromDatabase(item.profiles));
     } catch (error) {
       console.error('MatchingService.getLikedProfiles error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get profiles who liked the current user (but not yet mutual matches)
+   */
+  static async getProfilesWhoLikeMe(userId: string): Promise<Profile[]> {
+    try {
+      const { data, error } = await supabase
+        .from('swipe_actions')
+        .select(`
+          user_id,
+          created_at,
+          profiles!swipe_actions_user_id_fkey (*)
+        `)
+        .eq('target_user_id', userId)
+        .eq('action', 'like')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching profiles who like me:', error);
+        throw error;
+      }
+
+      // Transform profiles from database format
+      return (data || [])
+        .filter(item => item.profiles)
+        .map(item => profileFromDatabase(item.profiles));
+    } catch (error) {
+      console.error('MatchingService.getProfilesWhoLikeMe error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get mutual matches (both users liked each other)
+   */
+  static async getMutualMatches(userId: string): Promise<Profile[]> {
+    try {
+      const { data, error } = await supabase
+        .from('matches')
+        .select(`
+          id,
+          user1_id,
+          user2_id,
+          matched_at,
+          profiles!matches_user1_id_fkey (*),
+          profiles_user2:profiles!matches_user2_id_fkey (*)
+        `)
+        .eq('status', 'matched')
+        .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
+        .order('matched_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching mutual matches:', error);
+        throw error;
+      }
+
+      // Extract the other user's profile from each match
+      return (data || [])
+        .map(match => {
+          // Determine which profile is the other user
+          const otherProfile = match.user1_id === userId 
+            ? match.profiles_user2 
+            : match.profiles;
+          
+          return otherProfile ? profileFromDatabase(otherProfile) : null;
+        })
+        .filter(profile => profile !== null) as Profile[];
+    } catch (error) {
+      console.error('MatchingService.getMutualMatches error:', error);
       throw error;
     }
   }
