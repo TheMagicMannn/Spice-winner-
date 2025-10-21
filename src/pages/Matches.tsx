@@ -139,6 +139,18 @@ export const MatchesPage: React.FC = () => {
     </div>
   );
 
+  // Loading state
+  if (loading) {
+    return (
+      <SpiceBackground className="min-h-screen flex items-center justify-center pb-20">
+        <div className="text-center">
+          <Spinner />
+          <p className="text-white mt-4">Loading your matches...</p>
+        </div>
+      </SpiceBackground>
+    );
+  }
+
   return (
     <SpiceBackground className="min-h-screen pb-20">
       {/* Header */}
