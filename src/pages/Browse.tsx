@@ -305,12 +305,14 @@ export const BrowsePage: React.FC = () => {
 
       {/* Match Modal */}
       {showMatchModal && matchedProfile && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" data-testid="match-modal">
           <Card className="bg-gradient-to-b from-pink-900/50 to-black border-pink-500/50 max-w-md w-full">
             <CardContent className="p-6 text-center">
               <div className="text-6xl mb-4 animate-bounce">🎉</div>
-              <h2 className="text-3xl font-bold text-pink-400 mb-2">It's a Match!</h2>
-              <p className="text-white/80 mb-6">
+              <h2 className="text-3xl font-bold text-pink-400 mb-2" data-testid="text-match-title">
+                It's a Match!
+              </h2>
+              <p className="text-white/80 mb-6" data-testid="text-match-description">
                 You and {getDisplayName(matchedProfile)} liked each other!
               </p>
               <div className="flex gap-3">
@@ -318,15 +320,18 @@ export const BrowsePage: React.FC = () => {
                   onClick={() => setShowMatchModal(false)}
                   variant="outline"
                   className="flex-1 border-pink-500/50 text-white hover:bg-pink-500/10"
+                  data-testid="button-keep-browsing"
                 >
                   Keep Browsing
                 </Button>
                 <Button
                   onClick={() => {
                     setShowMatchModal(false);
-                    // TODO: Navigate to messages
+                    // Navigate to messages page with matched user
+                    navigate('/messages', { state: { matchedUserId: matchedProfile.id } });
                   }}
                   className="flex-1 bg-pink-600 hover:bg-pink-700"
+                  data-testid="button-send-message"
                 >
                   Send Message
                 </Button>
