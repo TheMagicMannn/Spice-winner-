@@ -31,19 +31,35 @@ interface MatchPreferencesModalProps {
   onSave: (updatedPreferences: MatchPreferences) => Promise<void>;
 }
 
+// Helper function to ensure complete match preferences with defaults
+const ensureCompletePreferences = (prefs: MatchPreferences): MatchPreferences => {
+  return {
+    ageRange: prefs?.ageRange || [18, 55],
+    genders: prefs?.genders || [],
+    sexualities: prefs?.sexualities || [],
+    searchingFor: prefs?.searchingFor || [],
+    distance: prefs?.distance ?? 50,
+    vipOnly: prefs?.vipOnly ?? false,
+    verifiedOnly: prefs?.verifiedOnly ?? true,
+    experienceLevels: prefs?.experienceLevels || []
+  };
+};
+
 export const MatchPreferencesModal: React.FC<MatchPreferencesModalProps> = ({
   isOpen,
   onClose,
   currentPreferences,
   onSave
 }) => {
-  const [preferences, setPreferences] = useState<MatchPreferences>(currentPreferences);
+  const [preferences, setPreferences] = useState<MatchPreferences>(
+    ensureCompletePreferences(currentPreferences)
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Update preferences state when prop changes
   useEffect(() => {
-    setPreferences(currentPreferences);
+    setPreferences(ensureCompletePreferences(currentPreferences));
   }, [currentPreferences]);
 
   // Handle array field changes (genders, sexualities, etc.)
