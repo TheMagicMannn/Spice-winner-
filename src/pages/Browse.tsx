@@ -12,6 +12,7 @@ import { Spinner } from '@/components/Spinner';
 
 export const BrowsePage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [profiles, setProfiles] = useState<MatchedProfile[]>([]);
   const [loading, setLoading] = useState(true);
