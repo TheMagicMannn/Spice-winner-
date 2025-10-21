@@ -215,36 +215,41 @@ export class MatchingService {
    */
   static async getMutualMatches(userId: string): Promise<Profile[]> {
     try {
-      const { data, error } = await supabase
+      // First get the matches
+      const { data: matches, error: matchError } = await supabase
         .from('matches')
-        .select(`
-          id,
-          user1_id,
-          user2_id,
-          matched_at,
-          profiles!matches_user1_id_fkey (*),
-          profiles_user2:profiles!matches_user2_id_fkey (*)
-        `)
+        .select('id, user1_id, user2_id, matched_at')
         .eq('status', 'matched')
         .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
         .order('matched_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching mutual matches:', error);
-        throw error;
+      if (matchError) {
+        console.error('Error fetching matches:', matchError);
+        throw matchError;
       }
 
-      // Extract the other user's profile from each match
-      return (data || [])
-        .map(match => {
-          // Determine which profile is the other user
-          const otherProfile = match.user1_id === userId 
-            ? match.profiles_user2 
-            : match.profiles;
-          
-          return otherProfile ? profileFromDatabase(otherProfile) : null;
-        })
-        .filter(profile => profile !== null) as Profile[];
+      if (!matches || matches.length === 0) {
+        return [];
+      }
+
+      // Get the IDs of the other users in each match
+      const otherUserIds = matches.map(match => 
+        match.user1_id === userId ? match.user2_id : match.user1_id
+      );
+
+      // Fetch profiles for all matched users
+      const { data: profilesData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', otherUserIds);
+
+      if (profileError) {
+        console.error('Error fetching matched profiles:', profileError);
+        throw profileError;
+      }
+
+      // Transform profiles from database format
+      return (profilesData || []).map(profile => profileFromDatabase(profile));
     } catch (error) {
       console.error('MatchingService.getMutualMatches error:', error);
       throw error;
