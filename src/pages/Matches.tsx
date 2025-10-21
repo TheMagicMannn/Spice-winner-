@@ -74,8 +74,8 @@ export const MatchesPage: React.FC = () => {
         <div className="flex gap-4">
           {/* Profile Image */}
           <img
-            src={match.image}
-            alt={match.name}
+            src={match.photos?.[0] || 'https://via.placeholder.com/200x200?text=No+Photo'}
+            alt={getDisplayName(match)}
             className="w-20 h-20 rounded-lg object-cover"
           />
           
@@ -83,9 +83,13 @@ export const MatchesPage: React.FC = () => {
           <div className="flex-1">
             <div className="flex items-start justify-between mb-2">
               <div>
-                <h3 className={`font-semibold text-lg ${spiceTheme.components.text.gradient}`}>{match.name}</h3>
+                <h3 className={`font-semibold text-lg ${spiceTheme.components.text.gradient}`}>
+                  {getDisplayName(match)}
+                </h3>
                 <p className="text-white/60 text-sm">
-                  {match.age} • {match.location}
+                  {match.age || 'Age N/A'}
+                  {match.age2 && match.accountType === 'couple' && ` & ${match.age2}`}
+                  {match.location && ` • ${match.location}`}
                 </p>
               </div>
               <Badge className={
@@ -103,16 +107,15 @@ export const MatchesPage: React.FC = () => {
             </div>
             
             <p className="text-white/70 text-sm mb-3 line-clamp-2">
-              {match.bio}
+              {match.bio || 'No bio available'}
             </p>
             
             <div className="flex items-center justify-between">
-              <span className="text-white/50 text-xs">
-                {type === 'match' 
-                  ? `Matched ${match.matchedAt}` 
-                  : `Liked ${match.likedAt || match.matchedAt}`}
-              </span>
+              <Badge className="bg-transparent text-pink-400 border-pink-500/50">
+                {match.accountType}
+              </Badge>
               <Button
+                onClick={() => handleMessageClick(match)}
                 className={spiceTheme.components.button.gradient}
                 data-testid={`button-message-${match.id}`}
               >
