@@ -466,15 +466,15 @@ export const ProfilePage: React.FC = () => {
       <MatchPreferencesModal
         isOpen={isMatchPreferencesOpen}
         onClose={() => setIsMatchPreferencesOpen(false)}
-        currentPreferences={profile.matchPreferences || {
-          ageRange: [18, 55],
-          genders: [],
-          sexualities: [],
-          searchingFor: [],
-          distance: 50,
-          vipOnly: false,
-          verifiedOnly: true,
-          experienceLevels: []
+        currentPreferences={{
+          ageRange: profile.matchPreferences?.ageRange || [18, 55],
+          genders: profile.matchPreferences?.genders || [],
+          sexualities: profile.matchPreferences?.sexualities || [],
+          searchingFor: profile.matchPreferences?.searchingFor || [],
+          distance: profile.matchPreferences?.distance ?? 50,
+          vipOnly: profile.matchPreferences?.vipOnly ?? false,
+          verifiedOnly: profile.matchPreferences?.verifiedOnly ?? true,
+          experienceLevels: profile.matchPreferences?.experienceLevels || []
         }}
         onSave={handleSaveMatchPreferences}
       />
