@@ -173,26 +173,37 @@ export class MatchingService {
    */
   static async getProfilesWhoLikeMe(userId: string): Promise<Profile[]> {
     try {
-      const { data, error } = await supabase
+      // First get the user IDs who liked me
+      const { data: swipes, error: swipeError } = await supabase
         .from('swipe_actions')
-        .select(`
-          user_id,
-          created_at,
-          profiles!swipe_actions_user_id_fkey (*)
-        `)
+        .select('user_id, created_at')
         .eq('target_user_id', userId)
         .eq('action', 'like')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching profiles who like me:', error);
-        throw error;
+      if (swipeError) {
+        console.error('Error fetching who likes me swipes:', swipeError);
+        throw swipeError;
+      }
+
+      if (!swipes || swipes.length === 0) {
+        return [];
+      }
+
+      // Get the profile data for those users
+      const userIds = swipes.map(s => s.user_id);
+      const { data: profilesData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', userIds);
+
+      if (profileError) {
+        console.error('Error fetching profiles who like me:', profileError);
+        throw profileError;
       }
 
       // Transform profiles from database format
-      return (data || [])
-        .filter(item => item.profiles)
-        .map(item => profileFromDatabase(item.profiles));
+      return (profilesData || []).map(profile => profileFromDatabase(profile));
     } catch (error) {
       console.error('MatchingService.getProfilesWhoLikeMe error:', error);
       throw error;
