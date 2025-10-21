@@ -1,69 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Heart, MessageSquare, Users, Eye } from 'lucide-react';
+import { Heart, MessageSquare, Users, Eye, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
+import { useAuth } from '@/hooks/useAuth';
+import { MatchingService } from '@/services/matchingService';
+import { Profile } from '@/types';
+import { Spinner } from '@/components/Spinner';
 
 export const MatchesPage: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('matches');
+  const [loading, setLoading] = useState(true);
+  
+  // Real data from Supabase
+  const [mutualMatches, setMutualMatches] = useState<Profile[]>([]);
+  const [whoILike, setWhoILike] = useState<Profile[]>([]);
+  const [whoLikesMe, setWhoLikesMe] = useState<Profile[]>([]);
 
-  // Placeholder data
-  const mutualMatches = [
-    {
-      id: '1',
-      name: 'Sarah & Mike',
-      age: 32,
-      location: 'New York, NY',
-      image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400',
-      matchedAt: '2 days ago',
-      bio: 'Adventurous couple looking for like-minded people'
-    },
-    {
-      id: '2',
-      name: 'Jessica',
-      age: 28,
-      location: 'Brooklyn, NY',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-      matchedAt: '1 week ago',
-      bio: 'Love meeting new people and exploring the lifestyle'
-    },
-  ];
+  // Load data on component mount
+  useEffect(() => {
+    loadMatchesData();
+  }, [user?.id]);
 
-  const whoILike = [
-    {
-      id: '3',
-      name: 'Alex & Jordan',
-      age: 29,
-      location: 'Manhattan, NY',
-      image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400',
-      likedAt: '3 hours ago',
-      bio: 'Travel enthusiasts and wine lovers'
-    },
-  ];
-
-  const whoLikesMe = [
-    {
-      id: '4',
-      name: 'Emma',
-      age: 27,
-      location: 'Queens, NY',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-      likedAt: '1 day ago',
-      bio: 'Yoga instructor and lifestyle explorer'
-    },
-    {
-      id: '5',
-      name: 'Taylor & Sam',
-      age: 30,
-      location: 'Brooklyn, NY',
-      image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400',
-      likedAt: '2 days ago',
-      bio: 'Fitness enthusiasts seeking connections'
-    },
-  ];
+  const loadMatchesData = async () => {
+    if (!user?.id) return;
+    
+    setLoading(true);
+    try {
+      // Load all three types of data in parallel
+      const [mutual, liked, likesMe] = await Promise.all([
+        MatchingService.getMutualMatches(user.id),
+        MatchingService.getLikedProfiles(user.id),
+        MatchingService.getProfilesWhoLikeMe(user.id)
+      ]);
+      
+      setMutualMatches(mutual);
+      setWhoILike(liked);
+      setWhoLikesMe(likesMe);
+    } catch (error) {
+      console.error('Failed to load matches data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const renderMatchCard = (match: any, type: 'match' | 'liked' | 'likes') => (
     <Card
