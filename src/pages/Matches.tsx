@@ -62,9 +62,16 @@ export const MatchesPage: React.FC = () => {
   };
 
   // Handle message button click
-  const handleMessageClick = (profile: Profile) => {
+  const handleMessageClick = (profile: Profile, e: React.MouseEvent) => {
+    e.stopPropagation();
     // Navigate to messages page - in future, can pass profile ID to open specific conversation
     navigate('/messages');
+  };
+
+  // Handle profile card click to open detail modal
+  const handleProfileClick = (profile: Profile) => {
+    setSelectedProfile(profile);
+    setShowProfileDetail(true);
   };
 
   const renderMatchCard = (match: Profile, type: 'match' | 'liked' | 'likes') => (
