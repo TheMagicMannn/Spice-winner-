@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Heart, X, MapPin, Users, Crown, Shield, Star, Sparkles, Loader2 } from 'lucide-react';
+import { Heart, X, MapPin, Users, Crown, Shield, Star, Sparkles, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
 import { useAuth } from '@/hooks/useAuth';
 import { MatchingService, MatchedProfile } from '@/services/matchingService';
 import { Spinner } from '@/components/Spinner';
+import { ProfileDetailModal } from '@/components/ProfileDetailModal';
 
 export const BrowsePage: React.FC = () => {
   const { user } = useAuth();
