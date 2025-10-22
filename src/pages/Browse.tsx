@@ -20,6 +20,8 @@ export const BrowsePage: React.FC = () => {
   const [swipeLoading, setSwipeLoading] = useState(false);
   const [showMatchModal, setShowMatchModal] = useState(false);
   const [matchedProfile, setMatchedProfile] = useState<MatchedProfile | null>(null);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [showProfileDetail, setShowProfileDetail] = useState(false);
 
   const currentProfile = profiles[currentIndex];
 
