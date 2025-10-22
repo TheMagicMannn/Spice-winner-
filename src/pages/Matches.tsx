@@ -263,6 +263,21 @@ export const MatchesPage: React.FC = () => {
         </Tabs>
       </div>
 
+      {/* Profile Detail Modal */}
+      <ProfileDetailModal
+        profile={selectedProfile}
+        isOpen={showProfileDetail}
+        onClose={() => {
+          setShowProfileDetail(false);
+          setSelectedProfile(null);
+        }}
+        onMessage={() => {
+          setShowProfileDetail(false);
+          navigate('/messages');
+        }}
+        showActions={true}
+      />
+
       {/* Theme Styles */}
       <style>{themeStyles}</style>
     </SpiceBackground>
