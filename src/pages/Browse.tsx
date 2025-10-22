@@ -402,6 +402,17 @@ export const BrowsePage: React.FC = () => {
         </div>
       )}
 
+      {/* Profile Detail Modal */}
+      <ProfileDetailModal
+        profile={currentProfile}
+        isOpen={showProfileDetail}
+        onClose={() => setShowProfileDetail(false)}
+        onLike={handleLike}
+        showActions={true}
+        compatibilityScore={currentProfile?.compatibilityScore}
+        distanceMiles={currentProfile?.distanceMiles}
+      />
+
       {/* Theme Styles */}
       <style>{themeStyles}</style>
     </SpiceBackground>
