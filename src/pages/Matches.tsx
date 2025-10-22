@@ -18,6 +18,8 @@ export const MatchesPage: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('matches');
   const [loading, setLoading] = useState(true);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
+  const [showProfileDetail, setShowProfileDetail] = useState(false);
   
   // Real data from Supabase
   const [mutualMatches, setMutualMatches] = useState<Profile[]>([]);
