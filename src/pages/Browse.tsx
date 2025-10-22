@@ -186,15 +186,61 @@ export const BrowsePage: React.FC = () => {
           className={`${spiceTheme.components.card} overflow-hidden animate-fade-in`} 
           data-testid={`card-profile-${currentProfile.id}`}
         >
-          <div className="relative">
+          <div className="relative cursor-pointer" onClick={() => setShowProfileDetail(true)}>
             <img
-              src={currentProfile.photos?.[0] || 'https://via.placeholder.com/600x800?text=No+Photo'}
+              src={currentProfile.photos?.[currentPhotoIndex] || 'https://via.placeholder.com/600x800?text=No+Photo'}
               alt={getDisplayName(currentProfile)}
               className="w-full h-96 object-cover"
+              data-testid={`img-profile-photo-${currentPhotoIndex}`}
             />
 
+            {/* Photo Navigation - Only show if multiple photos */}
+            {currentProfile.photos && currentProfile.photos.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevPhoto();
+                  }}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 transition-all flex items-center justify-center z-10"
+                  data-testid="button-prev-photo-preview"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextPhoto();
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 transition-all flex items-center justify-center z-10"
+                  data-testid="button-next-photo-preview"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+
+                {/* Photo Dots Indicator */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                  {currentProfile.photos.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentPhotoIndex(index);
+                      }}
+                      className={`h-2 w-2 rounded-full transition-all ${
+                        index === currentPhotoIndex
+                          ? 'bg-pink-500 w-6'
+                          : 'bg-white/50 hover:bg-white/70'
+                      }`}
+                      data-testid={`button-photo-dot-${index}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+
             {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
 
             {/* Profile badges */}
             <div className="absolute top-4 right-4 flex gap-2">
@@ -224,7 +270,7 @@ export const BrowsePage: React.FC = () => {
 
             {/* Distance badge */}
             {currentProfile.distanceMiles !== null && currentProfile.distanceMiles !== undefined && (
-              <div className="absolute bottom-4 left-4">
+              <div className="absolute bottom-20 left-4">
                 <Badge className="bg-black/70 text-white border-0 backdrop-blur-sm">
                   <MapPin className="h-3 w-3 mr-1" />
                   {MatchingService.formatDistance(currentProfile.distanceMiles)}
