@@ -11,6 +11,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { MatchingService } from '@/services/matchingService';
 import { Profile } from '@/types';
 import { Spinner } from '@/components/Spinner';
+import { ProfileDetailModal } from '@/components/ProfileDetailModal';
 
 export const MatchesPage: React.FC = () => {
   const { user } = useAuth();
