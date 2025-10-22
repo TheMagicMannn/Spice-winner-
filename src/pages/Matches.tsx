@@ -77,8 +77,9 @@ export const MatchesPage: React.FC = () => {
   const renderMatchCard = (match: Profile, type: 'match' | 'liked' | 'likes') => (
     <Card
       key={match.id}
-      className={`${spiceTheme.components.card} animate-fade-in hover:scale-105 transform transition-all duration-300`}
+      className={`${spiceTheme.components.card} animate-fade-in hover:scale-105 transform transition-all duration-300 cursor-pointer`}
       data-testid={`match-card-${match.id}`}
+      onClick={() => handleProfileClick(match)}
     >
       <CardContent className="p-4">
         <div className="flex gap-4">
@@ -125,7 +126,7 @@ export const MatchesPage: React.FC = () => {
                 {match.accountType}
               </Badge>
               <Button
-                onClick={() => handleMessageClick(match)}
+                onClick={(e) => handleMessageClick(match, e)}
                 className={spiceTheme.components.button.gradient}
                 data-testid={`button-message-${match.id}`}
               >
