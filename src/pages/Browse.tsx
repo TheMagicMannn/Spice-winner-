@@ -99,6 +99,18 @@ export const BrowsePage: React.FC = () => {
       // Try to load more profiles
       loadProfiles();
     }
+    // Reset photo index when moving to next profile
+    setCurrentPhotoIndex(0);
+  };
+
+  const handlePrevPhoto = () => {
+    const photos = currentProfile?.photos || [];
+    setCurrentPhotoIndex((prev) => (prev > 0 ? prev - 1 : photos.length - 1));
+  };
+
+  const handleNextPhoto = () => {
+    const photos = currentProfile?.photos || [];
+    setCurrentPhotoIndex((prev) => (prev < photos.length - 1 ? prev + 1 : 0));
   };
 
   // Get display name based on account type
