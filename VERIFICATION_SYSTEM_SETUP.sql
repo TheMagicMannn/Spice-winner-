@@ -234,24 +234,12 @@ CREATE POLICY "Users can update their pending requests"
 -- Admins can view all verification requests
 CREATE POLICY "Admins can view all verification requests"
     ON verification_requests FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM profiles 
-            WHERE profiles.id = auth.uid() 
-            AND profiles.is_admin = true
-        )
-    );
+    USING (is_admin(auth.uid()));
 
 -- Admins can update any verification request
 CREATE POLICY "Admins can update verification requests"
     ON verification_requests FOR UPDATE
-    USING (
-        EXISTS (
-            SELECT 1 FROM profiles 
-            WHERE profiles.id = auth.uid() 
-            AND profiles.is_admin = true
-        )
-    );
+    USING (is_admin(auth.uid()));
 
 -- VERIFICATION HISTORY POLICIES
 
