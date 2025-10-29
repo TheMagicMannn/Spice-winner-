@@ -251,13 +251,7 @@ CREATE POLICY "Users can view their verification history"
 -- Admins can view all verification history
 CREATE POLICY "Admins can view all verification history"
     ON verification_history FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM profiles 
-            WHERE profiles.id = auth.uid() 
-            AND profiles.is_admin = true
-        )
-    );
+    USING (is_admin(auth.uid()));
 
 -- System can insert history records (via triggers)
 CREATE POLICY "System can insert verification history"
