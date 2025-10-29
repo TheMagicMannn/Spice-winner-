@@ -168,11 +168,7 @@ CREATE POLICY "Admins can view verification files"
     ON storage.objects FOR SELECT
     USING (
         bucket_id = 'verification-uploads'
-        AND EXISTS (
-            SELECT 1 FROM profiles 
-            WHERE profiles.id = auth.uid() 
-            AND profiles.is_admin = true
-        )
+        AND is_admin(auth.uid())
     );
 
 -- Admins can delete verification files (for cleanup)
@@ -180,11 +176,7 @@ CREATE POLICY "Admins can delete verification files"
     ON storage.objects FOR DELETE
     USING (
         bucket_id = 'verification-uploads'
-        AND EXISTS (
-            SELECT 1 FROM profiles 
-            WHERE profiles.id = auth.uid() 
-            AND profiles.is_admin = true
-        )
+        AND is_admin(auth.uid())
     );
 
 -- =====================================================
