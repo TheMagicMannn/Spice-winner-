@@ -203,12 +203,12 @@ class VerificationService {
     try {
       console.log('Fetching pending verifications...');
       
-      // Use direct query (RPC functions have issues, using fixed RLS policies instead)
+      // Use direct query without explicit foreign key name
       const { data, error } = await supabase
         .from('verification_requests')
         .select(`
           *,
-          profiles!verification_requests_user_id_fkey (
+          profiles:user_id (
             display_name,
             display_name2,
             account_type,
