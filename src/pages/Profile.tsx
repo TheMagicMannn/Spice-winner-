@@ -511,7 +511,7 @@ export const ProfilePage: React.FC = () => {
         isOpen={isGetVerifiedOpen}
         onClose={() => setIsGetVerifiedOpen(false)}
         userId={user.id}
-        userEmail={email}
+        userEmail={email || ''}
         profile={profile}
       />
 
