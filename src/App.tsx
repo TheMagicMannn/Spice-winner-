@@ -30,7 +30,23 @@ import { Profile } from './types';
  * Checks all required fields for both individual and couple accounts
  */
 const isProfileComplete = (profile: Profile | null | undefined, accountType?: string): boolean => {
-  if (!profile) return false;
+  if (!profile) {
+    console.log('Profile check: No profile found');
+    return false;
+  }
+  
+  // Debug: Log profile data
+  console.log('Checking profile completion:', {
+    displayName: profile.displayName,
+    location: profile.location,
+    age: profile.age,
+    gender: profile.gender,
+    orientation: profile.orientation,
+    relationshipStatus: profile.relationshipStatus,
+    bioLength: profile.bio?.length,
+    photoCount: profile.photos?.length,
+    accountType: profile.accountType
+  });
   
   // Base requirements for all account types
   const baseRequirements = [
@@ -47,7 +63,22 @@ const isProfileComplete = (profile: Profile | null | undefined, accountType?: st
   // Check if all base requirements are met
   const baseComplete = baseRequirements.every(Boolean);
   
-  if (!baseComplete) return false;
+  console.log('Base requirements check:', {
+    hasDisplayName: !!profile.displayName,
+    hasLocation: !!profile.location,
+    hasAge: !!profile.age && profile.age >= 18,
+    hasGender: !!profile.gender,
+    hasOrientation: !!profile.orientation,
+    hasRelationshipStatus: !!profile.relationshipStatus,
+    hasBio: !!profile.bio && profile.bio.length >= 69,
+    hasPhotos: !!profile.photos && profile.photos.length >= 2,
+    baseComplete
+  });
+  
+  if (!baseComplete) {
+    console.log('Profile incomplete: Base requirements not met');
+    return false;
+  }
   
   // Additional requirements for couple accounts
   if (accountType === 'couple' || profile.accountType === 'couple') {
@@ -58,9 +89,19 @@ const isProfileComplete = (profile: Profile | null | undefined, accountType?: st
       profile.orientation2 && profile.orientation2.trim().length > 0
     ];
     
-    return coupleRequirements.every(Boolean);
+    const coupleComplete = coupleRequirements.every(Boolean);
+    console.log('Couple requirements check:', {
+      hasDisplayName2: !!profile.displayName2,
+      hasAge2: !!profile.age2 && profile.age2 >= 18,
+      hasGender2: !!profile.gender2,
+      hasOrientation2: !!profile.orientation2,
+      coupleComplete
+    });
+    
+    return coupleComplete;
   }
   
+  console.log('Profile complete!');
   return true;
 };
 
