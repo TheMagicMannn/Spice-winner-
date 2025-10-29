@@ -449,6 +449,20 @@ export const ProfilePage: React.FC = () => {
                   <HelpCircle className="h-4 w-4 mr-3" />
                   Help & Support
                 </Button>
+                {isAdmin && (
+                  <>
+                    <Separator className="bg-pink-500/30" />
+                    <Button
+                      variant="ghost"
+                      onClick={() => navigate('/admin/verification')}
+                      className="w-full justify-start text-yellow-400 hover:bg-yellow-500/10"
+                      data-testid="admin-verification-action"
+                    >
+                      <Shield className="h-4 w-4 mr-3" />
+                      Admin: Verification Panel
+                    </Button>
+                  </>
+                )}
               </CardContent>
             </Card>
 
