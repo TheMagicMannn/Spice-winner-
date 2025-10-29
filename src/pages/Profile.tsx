@@ -26,6 +26,7 @@ import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
 import { EditProfileModal } from '@/components/EditProfileModal';
 import { MatchPreferencesModal } from '@/components/MatchPreferencesModal';
+import { GetVerifiedModal } from '@/components/GetVerifiedModal';
 import { ProfileService } from '@/services/profileService';
 import { SpiceBackground, SpiceButton } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
@@ -35,6 +36,7 @@ export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
+  const [isGetVerifiedOpen, setIsGetVerifiedOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'own' | 'preview'>('own');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
