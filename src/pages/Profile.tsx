@@ -387,7 +387,9 @@ export const ProfilePage: React.FC = () => {
                   <>
                     <Button
                       variant="ghost"
+                      onClick={() => setIsGetVerifiedOpen(true)}
                       className="w-full justify-start text-blue-400 hover:bg-blue-500/10"
+                      data-testid="get-verified-action"
                     >
                       <CheckCircle className="h-4 w-4 mr-3" />
                       Get Verified
