@@ -38,6 +38,7 @@ $$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
 -- Step 3: Create simple, non-conflicting RLS policies for profiles
 
 -- SELECT: Users can view their own profile OR admins can view all profiles
+DROP POLICY IF EXISTS "select_own_or_admin_profile" ON profiles;
 CREATE POLICY "select_own_or_admin_profile"
     ON profiles FOR SELECT
     USING (
@@ -47,11 +48,13 @@ CREATE POLICY "select_own_or_admin_profile"
     );
 
 -- INSERT: Users can only insert their own profile
+DROP POLICY IF EXISTS "insert_own_profile" ON profiles;
 CREATE POLICY "insert_own_profile"
     ON profiles FOR INSERT
     WITH CHECK (auth.uid() = id);
 
 -- UPDATE: Users can only update their own profile OR admins can update any profile
+DROP POLICY IF EXISTS "update_own_or_admin_profile" ON profiles;
 CREATE POLICY "update_own_or_admin_profile"
     ON profiles FOR UPDATE
     USING (
