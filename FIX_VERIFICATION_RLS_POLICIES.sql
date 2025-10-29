@@ -195,7 +195,7 @@ BEGIN
         vr.partner2_email,
         vr.partner2_selfie_photo_url,
         vr.partner2_fetlife_profile_url,
-        vr.partner2_fetlie_screenshot_url,
+        vr.partner2_fetlife_screenshot_url,
         vr.reviewed_by,
         vr.reviewed_at,
         vr.admin_notes,
