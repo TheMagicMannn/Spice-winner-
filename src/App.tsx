@@ -15,6 +15,7 @@ import { BrowsePage } from './pages/Browse';
 import { MatchesPage } from './pages/Matches';
 import { MessagesPage } from './pages/Messages';
 import { ProfilePage } from './pages/Profile';
+import { AdminVerificationPage } from './pages/AdminVerification';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { Spinner } from './components/Spinner';
