@@ -28,12 +28,15 @@ import { EditProfileModal } from '@/components/EditProfileModal';
 import { MatchPreferencesModal } from '@/components/MatchPreferencesModal';
 import { GetVerifiedModal } from '@/components/GetVerifiedModal';
 import { ProfileService } from '@/services/profileService';
+import { verificationService } from '@/services/verificationService';
 import { SpiceBackground, SpiceButton } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
 import { Profile, MatchPreferences } from '@/types';
+import { useNavigate } from 'react-router-dom';
 
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
+  const navigate = useNavigate();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
   const [isGetVerifiedOpen, setIsGetVerifiedOpen] = useState(false);
@@ -41,6 +44,7 @@ export const ProfilePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [renderError, setRenderError] = useState<Error | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Enhanced error boundary logging
   React.useEffect(() => {
