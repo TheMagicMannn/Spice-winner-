@@ -483,6 +483,15 @@ export const ProfilePage: React.FC = () => {
         onSave={handleSaveMatchPreferences}
       />
 
+      {/* Get Verified Modal */}
+      <GetVerifiedModal
+        isOpen={isGetVerifiedOpen}
+        onClose={() => setIsGetVerifiedOpen(false)}
+        userId={user.id}
+        userEmail={email}
+        profile={profile}
+      />
+
       {/* Theme Styles */}
       <style>{`
         ${themeStyles}
