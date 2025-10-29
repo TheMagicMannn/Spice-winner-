@@ -201,11 +201,13 @@ class VerificationService {
    */
   async getPendingVerifications(): Promise<any[]> {
     try {
+      console.log('Fetching pending verifications...');
+      
       const { data, error } = await supabase
         .from('verification_requests')
         .select(`
           *,
-          profiles:user_id (
+          profiles!verification_requests_user_id_fkey (
             display_name,
             display_name2,
             account_type,
@@ -215,7 +217,10 @@ class VerificationService {
         .eq('status', 'pending')
         .order('created_at', { ascending: true });
 
+      console.log('Pending verifications query result:', { data, error });
+
       if (error) {
+        console.error('Supabase error:', error);
         throw error;
       }
 
