@@ -280,6 +280,20 @@ CREATE POLICY "System can insert verification history"
 -- 8. FUNCTIONS
 -- =====================================================
 
+-- Function to check if user is admin (bypasses RLS to prevent recursion)
+CREATE OR REPLACE FUNCTION is_admin(user_id UUID)
+RETURNS BOOLEAN AS $$
+DECLARE
+    admin_status BOOLEAN;
+BEGIN
+    SELECT is_admin INTO admin_status
+    FROM profiles
+    WHERE id = user_id;
+    
+    RETURN COALESCE(admin_status, false);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Function to update verification status and profile
 CREATE OR REPLACE FUNCTION update_profile_verification_status()
 RETURNS TRIGGER AS $$
