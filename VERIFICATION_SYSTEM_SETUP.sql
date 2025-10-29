@@ -410,7 +410,6 @@ SELECT
     p.display_name,
     p.display_name2,
     p.account_type,
-    p.email as profile_email,
     p.photos,
     au.email as user_email
 FROM verification_requests vr
