@@ -241,34 +241,9 @@ class VerificationService {
    */
   async getAllVerifications(status?: VerificationStatus): Promise<any[]> {
     try {
-      console.log('Fetching all verifications...');
+      console.log('Fetching all verifications...', { filterStatus: status });
       
-      // Try using RPC function first (bypasses RLS issues)
-      if (!status) {
-        try {
-          const { data: rpcData, error: rpcError } = await supabase
-            .rpc('get_all_verifications');
-          
-          if (!rpcError && rpcData) {
-            console.log('Successfully fetched via RPC:', rpcData);
-            // Transform RPC data to match expected format
-            return rpcData.map((item: any) => ({
-              ...item,
-              profiles: {
-                display_name: item.display_name,
-                display_name2: item.display_name2,
-                account_type: item.account_type,
-                photos: item.photos
-              }
-            }));
-          }
-          console.log('RPC failed, trying direct query:', rpcError);
-        } catch (rpcErr) {
-          console.log('RPC not available, using direct query:', rpcErr);
-        }
-      }
-      
-      // Fallback to direct query
+      // Use direct query (RLS policies are now fixed)
       let query = supabase
         .from('verification_requests')
         .select(`
@@ -287,10 +262,14 @@ class VerificationService {
 
       const { data, error } = await query.order('created_at', { ascending: false });
 
-      console.log('All verifications query result:', { data, error });
+      console.log('All verifications query result:', { 
+        count: data?.length || 0, 
+        hasError: !!error,
+        error: error 
+      });
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('Supabase error details:', error);
         throw error;
       }
 
