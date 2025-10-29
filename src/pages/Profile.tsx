@@ -56,6 +56,11 @@ export const ProfilePage: React.FC = () => {
       console.error('ProfilePage - User exists but profile is null/undefined');
       setError('Profile data is missing. Please try logging out and back in.');
     }
+
+    // Check if user is admin
+    if (user) {
+      verificationService.isAdmin(user.id).then(setIsAdmin);
+    }
   }, [user]);
 
   // Catch any render errors
