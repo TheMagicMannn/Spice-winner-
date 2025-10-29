@@ -203,30 +203,7 @@ class VerificationService {
     try {
       console.log('Fetching pending verifications...');
       
-      // Try using RPC function first (bypasses RLS issues)
-      try {
-        const { data: rpcData, error: rpcError } = await supabase
-          .rpc('get_pending_verifications');
-        
-        if (!rpcError && rpcData) {
-          console.log('Successfully fetched via RPC:', rpcData);
-          // Transform RPC data to match expected format
-          return rpcData.map((item: any) => ({
-            ...item,
-            profiles: {
-              display_name: item.display_name,
-              display_name2: item.display_name2,
-              account_type: item.account_type,
-              photos: item.photos
-            }
-          }));
-        }
-        console.log('RPC failed, trying direct query:', rpcError);
-      } catch (rpcErr) {
-        console.log('RPC not available, using direct query:', rpcErr);
-      }
-      
-      // Fallback to direct query
+      // Use direct query (RPC functions have issues, using fixed RLS policies instead)
       const { data, error } = await supabase
         .from('verification_requests')
         .select(`
@@ -241,10 +218,14 @@ class VerificationService {
         .eq('status', 'pending')
         .order('created_at', { ascending: true });
 
-      console.log('Pending verifications query result:', { data, error });
+      console.log('Pending verifications query result:', { 
+        count: data?.length || 0, 
+        hasError: !!error,
+        error: error 
+      });
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error('Supabase error details:', error);
         throw error;
       }
 
