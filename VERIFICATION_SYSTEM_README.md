@@ -237,6 +237,20 @@ Tracks all status changes for audit purposes.
 
 ## 🐛 Troubleshooting
 
+### Issue: "infinite recursion detected in policy for relation verification_requests"
+**Solution:** 
+This occurs when RLS policies reference each other in a loop. Run the fix:
+
+1. Go to Supabase SQL Editor
+2. Run the file: `/app/VERIFICATION_RLS_FIX.sql`
+3. This creates a `SECURITY DEFINER` function that bypasses RLS when checking admin status
+
+**What the fix does:**
+- Drops the problematic policies
+- Creates `is_admin(user_id)` function with `SECURITY DEFINER`
+- Recreates policies using the new function
+- Prevents infinite recursion by bypassing RLS for admin checks
+
 ### Issue: "Failed to upload photo"
 **Solution:** 
 - Check storage bucket exists: `verification-uploads`
