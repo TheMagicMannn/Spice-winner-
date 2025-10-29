@@ -236,11 +236,13 @@ class VerificationService {
    */
   async getAllVerifications(status?: VerificationStatus): Promise<any[]> {
     try {
+      console.log('Fetching all verifications...');
+      
       let query = supabase
         .from('verification_requests')
         .select(`
           *,
-          profiles:user_id (
+          profiles!verification_requests_user_id_fkey (
             display_name,
             display_name2,
             account_type,
@@ -254,7 +256,10 @@ class VerificationService {
 
       const { data, error } = await query.order('created_at', { ascending: false });
 
+      console.log('All verifications query result:', { data, error });
+
       if (error) {
+        console.error('Supabase error:', error);
         throw error;
       }
 
