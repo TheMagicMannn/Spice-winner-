@@ -243,12 +243,12 @@ class VerificationService {
     try {
       console.log('Fetching all verifications...', { filterStatus: status });
       
-      // Use direct query (RLS policies are now fixed)
+      // Use direct query without explicit foreign key name
       let query = supabase
         .from('verification_requests')
         .select(`
           *,
-          profiles!verification_requests_user_id_fkey (
+          profiles:user_id (
             display_name,
             display_name2,
             account_type,
