@@ -1,0 +1,560 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/Input';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { 
+  Send, 
+  Image as ImageIcon, 
+  Video, 
+  Mic, 
+  X, 
+  ChevronLeft,
+  Clock,
+  Check,
+  CheckCheck
+} from 'lucide-react';
+import { MessageService, Message } from '@/services/messageService';
+import { useAuth } from '@/hooks/useAuth';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { formatDistanceToNow } from 'date-fns';
+
+interface ChatModalProps {
+  matchId: string;
+  otherUserId: string;
+  otherUserName: string;
+  otherUserPhoto: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onProfileClick: () => void;
+}
+
+const SELF_DESTRUCT_OPTIONS = [
+  { label: '10 seconds', value: 10 },
+  { label: '30 seconds', value: 30 },
+  { label: '1 minute', value: 60 },
+  { label: '5 minutes', value: 300 },
+  { label: '1 hour', value: 3600 },
+  { label: '24 hours', value: 86400 },
+  { label: '7 days', value: 604800 }
+];
+
+export const ChatModal: React.FC<ChatModalProps> = ({
+  matchId,
+  otherUserId,
+  otherUserName,
+  otherUserPhoto,
+  isOpen,
+  onClose,
+  onProfileClick
+}) => {
+  const { user } = useAuth();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputText, setInputText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<File | null>(null);
+  const [mediaPreview, setMediaPreview] = useState<string | null>(null);
+  const [mediaType, setMediaType] = useState<'image' | 'video' | 'voice' | null>(null);
+  const [showSelfDestructMenu, setShowSelfDestructMenu] = useState(false);
+  const [selectedSelfDestruct, setSelectedSelfDestruct] = useState<number | undefined>();
+  const [isRecording, setIsRecording] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messageChannelRef = useRef<RealtimeChannel | null>(null);
+  const typingChannelRef = useRef<RealtimeChannel | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+
+  // Load messages
+  useEffect(() => {
+    if (isOpen && matchId) {
+      loadMessages();
+      markAsRead();
+    }
+  }, [isOpen, matchId]);
+
+  // Subscribe to real-time messages
+  useEffect(() => {
+    if (isOpen && matchId && user) {
+      messageChannelRef.current = MessageService.subscribeToMessages(
+        matchId,
+        handleNewMessage
+      );
+
+      typingChannelRef.current = MessageService.subscribeToTyping(
+        matchId,
+        user.id,
+        setIsTyping
+      );
+
+      return () => {
+        messageChannelRef.current?.unsubscribe();
+        typingChannelRef.current?.unsubscribe();
+      };
+    }
+  }, [isOpen, matchId, user]);
+
+  // Auto-scroll to bottom
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const loadMessages = async () => {
+    try {
+      const loadedMessages = await MessageService.getMessages(matchId);
+      setMessages(loadedMessages);
+    } catch (error) {
+      console.error('Error loading messages:', error);
+    }
+  };
+
+  const markAsRead = async () => {
+    if (user) {
+      await MessageService.markConversationAsRead(matchId, user.id);
+    }
+  };
+
+  const handleNewMessage = (message: Message) => {
+    setMessages(prev => {
+      const exists = prev.find(m => m.id === message.id);
+      if (exists) {
+        return prev.map(m => m.id === message.id ? message : m);
+      }
+      return [...prev, message];
+    });
+
+    // Mark as read if it's from the other user
+    if (message.senderId !== user?.id) {
+      MessageService.markAsRead(message.id);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!inputText.trim() || !user || isSending) return;
+
+    setIsSending(true);
+    try {
+      await MessageService.sendMessage(matchId, user.id, inputText);
+      setInputText('');
+      handleTyping(false);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleTyping = (typing: boolean) => {
+    if (!user) return;
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    if (typing) {
+      MessageService.setTyping(matchId, user.id, true);
+      typingTimeoutRef.current = setTimeout(() => {
+        MessageService.setTyping(matchId, user.id, false);
+      }, 3000);
+    } else {
+      MessageService.setTyping(matchId, user.id, false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
+    handleTyping(true);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedMedia(file);
+      setMediaType(type);
+      const preview = URL.createObjectURL(file);
+      setMediaPreview(preview);
+      setShowSelfDestructMenu(true);
+    }
+  };
+
+  const handleSendMedia = async () => {
+    if (!selectedMedia || !mediaType || !user) return;
+
+    setIsSending(true);
+    try {
+      await MessageService.sendMediaMessage(
+        matchId,
+        user.id,
+        selectedMedia,
+        mediaType,
+        selectedSelfDestruct
+      );
+      clearMediaSelection();
+    } catch (error) {
+      console.error('Error sending media:', error);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const clearMediaSelection = () => {
+    setSelectedMedia(null);
+    setMediaPreview(null);
+    setMediaType(null);
+    setShowSelfDestructMenu(false);
+    setSelectedSelfDestruct(undefined);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (videoInputRef.current) videoInputRef.current.value = '';
+  };
+
+  const startVoiceRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: 'audio/webm' });
+        
+        if (user) {
+          setIsSending(true);
+          try {
+            await MessageService.sendMediaMessage(matchId, user.id, audioFile, 'voice');
+          } catch (error) {
+            console.error('Error sending voice message:', error);
+          } finally {
+            setIsSending(false);
+          }
+        }
+        
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting voice recording:', error);
+    }
+  };
+
+  const stopVoiceRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const formatTime = (date: string) => {
+    return new Date(date).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit'
+    });
+  };
+
+  const renderMessage = (message: Message) => {
+    const isMine = message.senderId === user?.id;
+
+    return (
+      <div
+        key={message.id}
+        className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-4`}
+      >
+        <div
+          className={`max-w-[70%] ${
+            isMine
+              ? 'bg-pink-600 text-white rounded-l-2xl rounded-tr-2xl'
+              : 'bg-black/40 text-white rounded-r-2xl rounded-tl-2xl'
+          } px-4 py-2`}
+        >
+          {message.messageType === 'text' && (
+            <p className="text-sm break-words">{message.content}</p>
+          )}
+
+          {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
+            <MediaMessage message={message} />
+          )}
+
+          {message.messageType === 'voice' && message.mediaUrl && (
+            <audio controls className="max-w-full">
+              <source src={message.mediaUrl} type="audio/webm" />
+            </audio>
+          )}
+
+          <div className="flex items-center justify-between mt-1 text-xs opacity-70">
+            <span>{formatTime(message.createdAt)}</span>
+            {isMine && (
+              <span className="ml-2">
+                {message.isRead ? (
+                  <CheckCheck className="h-3 w-3" />
+                ) : (
+                  <Check className="h-3 w-3" />
+                )}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-lg h-[80vh] p-0 bg-black/95 border-pink-500/30">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-pink-500/30">
+          <div className="flex items-center gap-3 flex-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="text-white hover:bg-pink-500/10 -ml-2"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+            <button
+              onClick={onProfileClick}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            >
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={otherUserPhoto} alt={otherUserName} />
+                <AvatarFallback>{otherUserName[0]}</AvatarFallback>
+              </Avatar>
+              <div className="text-left">
+                <h3 className="text-white font-semibold">{otherUserName}</h3>
+                {isTyping && (
+                  <p className="text-xs text-pink-400">typing...</p>
+                )}
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+          {messages.map(renderMessage)}
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Media Preview */}
+        {mediaPreview && (
+          <div className="p-4 border-t border-pink-500/30 bg-black/50">
+            <div className="relative">
+              {mediaType === 'image' && (
+                <img src={mediaPreview} alt="Preview" className="max-h-40 rounded-lg" />
+              )}
+              {mediaType === 'video' && (
+                <video src={mediaPreview} className="max-h-40 rounded-lg" controls />
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={clearMediaSelection}
+                className="absolute top-2 right-2 bg-black/50 text-white"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {showSelfDestructMenu && (
+              <div className="mt-3">
+                <p className="text-white text-sm mb-2">Self-destruct timer:</p>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant={selectedSelfDestruct === undefined ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedSelfDestruct(undefined)}
+                    className="text-xs"
+                  >
+                    No timer
+                  </Button>
+                  {SELF_DESTRUCT_OPTIONS.map(option => (
+                    <Button
+                      key={option.value}
+                      variant={selectedSelfDestruct === option.value ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setSelectedSelfDestruct(option.value)}
+                      className="text-xs"
+                    >
+                      {option.label}
+                    </Button>
+                  ))}
+                </div>
+                <Button
+                  onClick={handleSendMedia}
+                  disabled={isSending}
+                  className="w-full mt-3 bg-pink-600 hover:bg-pink-700 text-white"
+                >
+                  {isSending ? 'Sending...' : 'Send'}
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Input */}
+        <div className="p-4 border-t border-pink-500/30">
+          <div className="flex items-center gap-2">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileSelect(e, 'image')}
+              className="hidden"
+            />
+            <input
+              ref={videoInputRef}
+              type="file"
+              accept="video/*"
+              onChange={(e) => handleFileSelect(e, 'video')}
+              className="hidden"
+            />
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => fileInputRef.current?.click()}
+              className="text-white hover:bg-pink-500/10"
+              disabled={isSending}
+            >
+              <ImageIcon className="h-5 w-5" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => videoInputRef.current?.click()}
+              className="text-white hover:bg-pink-500/10"
+              disabled={isSending}
+            >
+              <Video className="h-5 w-5" />
+            </Button>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
+              className={`text-white hover:bg-pink-500/10 ${isRecording ? 'bg-red-500' : ''}`}
+              disabled={isSending}
+            >
+              <Mic className="h-5 w-5" />
+            </Button>
+
+            <Input
+              value={inputText}
+              onChange={handleInputChange}
+              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              placeholder="Type a message..."
+              className="flex-1 bg-black/30 border-pink-500/30 text-white"
+              disabled={isSending || isRecording}
+            />
+
+            <Button
+              onClick={handleSendMessage}
+              disabled={!inputText.trim() || isSending}
+              className="bg-pink-600 hover:bg-pink-700 text-white"
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// Media Message Component with Self-Destruct
+const MediaMessage: React.FC<{ message: Message }> = ({ message }) => {
+  const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (message.expiresAt) {
+      const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const expires = new Date(message.expiresAt!).getTime();
+        const remaining = Math.max(0, Math.floor((expires - now) / 1000));
+        
+        setTimeRemaining(remaining);
+
+        if (remaining === 0) {
+          clearInterval(interval);
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [message.expiresAt]);
+
+  const handleView = async () => {
+    if (!isViewed && message.selfDestructSeconds) {
+      await MessageService.markMediaViewed(message.id);
+      setIsViewed(true);
+    }
+  };
+
+  if (message.isDeleted) {
+    return (
+      <div className="flex items-center gap-2 text-white/50 italic text-sm">
+        <Clock className="h-4 w-4" />
+        <span>This media has expired</span>
+      </div>
+    );
+  }
+
+  if (message.selfDestructSeconds && !isViewed) {
+    return (
+      <div className="flex flex-col items-center gap-2 p-4">
+        <Clock className="h-8 w-8 text-white" />
+        <p className="text-sm">Tap to view</p>
+        <p className="text-xs opacity-70">
+          Self-destructs after {message.selfDestructSeconds}s
+        </p>
+        <Button
+          onClick={handleView}
+          className="mt-2 bg-pink-600 hover:bg-pink-700 text-white"
+          size="sm"
+        >
+          View Media
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      {message.messageType === 'image' && (
+        <img
+          src={message.mediaUrl}
+          alt="Shared image"
+          className="max-w-full rounded-lg"
+        />
+      )}
+      {message.messageType === 'video' && (
+        <video
+          src={message.mediaUrl}
+          className="max-w-full rounded-lg"
+          controls
+        />
+      )}
+      {timeRemaining !== null && timeRemaining > 0 && (
+        <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
+          <Clock className="h-3 w-3" />
+          <span>{timeRemaining}s</span>
+        </div>
+      )}
+    </div>
+  );
+};
