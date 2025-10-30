@@ -489,11 +489,16 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               variant="ghost"
               size="sm"
               onClick={isRecording ? stopVoiceRecording : startVoiceRecording}
-              className={`text-white hover:bg-pink-500/10 ${isRecording ? 'bg-red-500' : ''}`}
+              className={`text-white hover:bg-pink-500/10 ${isRecording ? 'bg-red-500/50 animate-pulse' : ''}`}
               disabled={isSending}
+              title={isRecording ? 'Stop recording' : 'Record voice message'}
             >
               <Mic className="h-5 w-5" />
             </Button>
+
+            {isRecording && (
+              <span className="text-red-500 text-xs animate-pulse">Recording...</span>
+            )}
 
             <Input
               value={inputText}
