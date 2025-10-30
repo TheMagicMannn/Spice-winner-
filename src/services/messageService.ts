@@ -389,11 +389,11 @@ export class MessageService {
           table: 'typing_indicators',
           filter: `match_id=eq.${matchId}`
         },
-        (payload) => {
+        (payload: any) => {
           // Only notify if it's the other user typing
-          if (payload.new && payload.new.user_id !== currentUserId) {
-            onTypingChange(payload.new.is_typing);
-          } else if (payload.eventType === 'DELETE' && payload.old.user_id !== currentUserId) {
+          if (payload.new && payload.new.user_id && payload.new.user_id !== currentUserId) {
+            onTypingChange(payload.new.is_typing || false);
+          } else if (payload.eventType === 'DELETE' && payload.old && payload.old.user_id !== currentUserId) {
             onTypingChange(false);
           }
         }
