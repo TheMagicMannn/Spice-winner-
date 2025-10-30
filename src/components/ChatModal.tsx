@@ -202,6 +202,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     if (!selectedMedia || !mediaType || !user) return;
 
     setIsSending(true);
+    setUploadError(null);
     try {
       await MessageService.sendMediaMessage(
         matchId,
@@ -211,8 +212,9 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         selectedSelfDestruct
       );
       clearMediaSelection();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending media:', error);
+      setUploadError(error.message || 'Failed to upload media. Please try again.');
     } finally {
       setIsSending(false);
     }
