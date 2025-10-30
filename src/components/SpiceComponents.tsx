@@ -38,11 +38,12 @@ export const SpiceLogo: React.FC<{
 
 // Animated Button component from Hero.tsx
 export const SpiceButton: React.FC<{
-  onClick: () => void;
+  onClick?: () => void;
   children: React.ReactNode;
   variant?: 'primary' | 'secondary' | 'gradient';
   className?: string;
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
   'data-testid'?: string;
 }> = ({ 
   onClick, 
@@ -50,6 +51,7 @@ export const SpiceButton: React.FC<{
   variant = 'primary', 
   className = '',
   disabled = false,
+  type = 'button',
   'data-testid': dataTestId
 }) => {
   const getVariantStyles = () => {
@@ -65,6 +67,7 @@ export const SpiceButton: React.FC<{
 
   return (
     <button
+      type={type}
       onClick={onClick}
       disabled={disabled}
       data-testid={dataTestId}
