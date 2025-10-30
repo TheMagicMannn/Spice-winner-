@@ -39,14 +39,7 @@ export class MessageService {
       // Get all matched conversations
       const { data: matches, error: matchError } = await supabase
         .from('matches')
-        .select(`
-          id,
-          user1_id,
-          user2_id,
-          matched_at,
-          profiles!matches_user1_id_fkey(id, display_name, photos, last_active_at),
-          profiles2:profiles!matches_user2_id_fkey(id, display_name, photos, last_active_at)
-        `)
+        .select('id, user1_id, user2_id, matched_at')
         .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
         .eq('status', 'matched')
         .order('matched_at', { ascending: false });
@@ -57,10 +50,26 @@ export class MessageService {
         return [];
       }
 
+      // Get profiles for all users in matches
+      const userIds = Array.from(new Set(
+        matches.flatMap(m => [m.user1_id, m.user2_id])
+      )).filter(id => id !== userId);
+
+      const { data: profiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, display_name, photos, last_active_at')
+        .in('id', userIds);
+
+      if (profileError) throw profileError;
+
+      // Create a map for quick profile lookup
+      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
       // Get last message and unread count for each match
       const conversations: Conversation[] = await Promise.all(
         matches.map(async (match: any) => {
-          const otherUser = match.user1_id === userId ? match.profiles2 : match.profiles;
+          const otherUserId = match.user1_id === userId ? match.user2_id : match.user1_id;
+          const otherUser = profileMap.get(otherUserId);
           
           // Get last message
           const { data: lastMessage } = await supabase
@@ -87,7 +96,7 @@ export class MessageService {
 
           return {
             matchId: match.id,
-            otherUserId: otherUser?.id || '',
+            otherUserId: otherUserId || '',
             otherUserName: otherUser?.display_name || 'Unknown User',
             otherUserPhoto: otherUser?.photos?.[0] || '',
             lastMessage: lastMessage ? this.formatLastMessage(lastMessage) : undefined,
