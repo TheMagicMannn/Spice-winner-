@@ -1,32 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/Spinner';
+import { ChatModal } from '@/components/ChatModal';
+import { ProfileDetailModal } from '@/components/ProfileDetailModal';
+import { MessageService, Conversation } from '@/services/messageService';
+import { ProfileService } from '@/services/profileService';
+import { useAuth } from '@/hooks/useAuth';
+import { Profile } from '@/types';
+import { formatDistanceToNow } from 'date-fns';
 
 export const MessagesPage: React.FC = () => {
-  // Placeholder data
-  const conversations = [
-    {
-      id: '1',
-      name: 'Sarah & Mike',
-      image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400',
-      lastMessage: 'That sounds great! When are you free?',
-      timestamp: '10m ago',
-      unread: 2,
-      online: true
-    },
-    {
-      id: '2',
-      name: 'Jessica',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-      lastMessage: 'Thanks for the invite!',
-      timestamp: '2h ago',
-      unread: 0,
-      online: false
-    },
-  ];
+  const { user } = useAuth();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-black pb-20">
