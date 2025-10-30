@@ -241,24 +241,31 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const startVoiceRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus'
+      });
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
         const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: 'audio/webm' });
         
         if (user) {
           setIsSending(true);
           try {
-            await MessageService.sendMediaMessage(matchId, user.id, audioFile, 'voice');
+            const newMessage = await MessageService.sendMediaMessage(matchId, user.id, audioFile, 'voice');
+            // Add message immediately to UI
+            handleNewMessage(newMessage);
           } catch (error) {
             console.error('Error sending voice message:', error);
+            setUploadError('Failed to send voice message. Please try again.');
           } finally {
             setIsSending(false);
           }
@@ -271,6 +278,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       setIsRecording(true);
     } catch (error) {
       console.error('Error starting voice recording:', error);
+      setUploadError('Could not access microphone. Please check permissions.');
     }
   };
 
