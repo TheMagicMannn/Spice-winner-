@@ -179,13 +179,23 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
     const file = e.target.files?.[0];
-    if (file) {
-      setSelectedMedia(file);
-      setMediaType(type);
-      const preview = URL.createObjectURL(file);
-      setMediaPreview(preview);
-      setShowSelfDestructMenu(true);
+    if (!file) return;
+
+    // Check file size
+    const maxSize = FILE_SIZE_LIMITS[type];
+    if (file.size > maxSize) {
+      const maxSizeMB = Math.round(maxSize / (1024 * 1024));
+      setUploadError(`File too large. Maximum size for ${type}s is ${maxSizeMB}MB`);
+      setTimeout(() => setUploadError(null), 5000);
+      return;
     }
+
+    setUploadError(null);
+    setSelectedMedia(file);
+    setMediaType(type);
+    const preview = URL.createObjectURL(file);
+    setMediaPreview(preview);
+    setShowSelfDestructMenu(true);
   };
 
   const handleSendMedia = async () => {
