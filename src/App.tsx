@@ -18,6 +18,7 @@ import { ProfilePage } from './pages/Profile';
 import { AdminVerificationPage } from './pages/AdminVerification';
 import { UserProfilePage } from './pages/UserProfile';
 import { HelpSupportPage } from './pages/HelpSupport';
+import { AboutSpicePage } from './pages/AboutSpice';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { Spinner } from './components/Spinner';
