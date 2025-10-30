@@ -282,6 +282,15 @@ export const UserProfilePage: React.FC = () => {
                   {currentPhotoIndex + 1} / {profile.photos.length}
                 </div>
               )}
+
+              {/* Swipe Hint (shown on first photo for mobile) */}
+              {profile.photos && profile.photos.length > 1 && currentPhotoIndex === 0 && (
+                <div className="absolute top-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs z-10 flex items-center space-x-1 md:hidden animate-pulse">
+                  <ChevronLeft className="h-3 w-3" />
+                  <span>Swipe</span>
+                  <ChevronRight className="h-3 w-3" />
+                </div>
+              )}
               
               {/* Photo Navigation Dots */}
               {profile.photos && profile.photos.length > 1 && (
