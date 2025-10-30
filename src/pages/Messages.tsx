@@ -20,6 +20,66 @@ export const MessagesPage: React.FC = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
 
+  // Load conversations
+  useEffect(() => {
+    if (user) {
+      loadConversations();
+    }
+  }, [user]);
+
+  const loadConversations = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    try {
+      const convos = await MessageService.getConversations(user.id);
+      setConversations(convos);
+    } catch (error) {
+      console.error('Error loading conversations:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConversationClick = (conversation: Conversation) => {
+    setSelectedConversation(conversation);
+  };
+
+  const handleCloseChat = () => {
+    setSelectedConversation(null);
+    // Reload conversations to update unread counts
+    loadConversations();
+  };
+
+  const handleProfileClick = async () => {
+    if (!selectedConversation) return;
+
+    try {
+      const profile = await ProfileService.getProfile(selectedConversation.otherUserId);
+      setSelectedProfile(profile);
+      setShowProfileModal(true);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  const formatTimestamp = (timestamp?: string) => {
+    if (!timestamp) return '';
+    try {
+      return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+    } catch {
+      return '';
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-black pb-20 flex items-center justify-center">
+        <Spinner className="h-8 w-8" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-black pb-20">
       {/* Header */}
@@ -28,7 +88,7 @@ export const MessagesPage: React.FC = () => {
           Messages
         </h1>
         <p className="text-white/70 text-sm">
-          {conversations.filter(c => c.unread > 0).length} unread conversations
+          {conversations.filter(c => c.unreadCount > 0).length} unread conversations
         </p>
       </div>
 
@@ -36,20 +96,21 @@ export const MessagesPage: React.FC = () => {
       <div className="p-4 space-y-2">
         {conversations.map((conversation) => (
           <Card
-            key={conversation.id}
+            key={conversation.matchId}
+            onClick={() => handleConversationClick(conversation)}
             className="bg-black/50 border-pink-500/30 hover:border-pink-500/60 transition-all cursor-pointer"
-            data-testid={`conversation-${conversation.id}`}
+            data-testid={`conversation-${conversation.matchId}`}
           >
             <CardContent className="p-4">
               <div className="flex gap-3">
                 {/* Profile Image with Online Indicator */}
                 <div className="relative">
                   <img
-                    src={conversation.image}
-                    alt={conversation.name}
+                    src={conversation.otherUserPhoto || 'https://via.placeholder.com/150'}
+                    alt={conversation.otherUserName}
                     className="w-14 h-14 rounded-full object-cover"
                   />
-                  {conversation.online && (
+                  {conversation.isOnline && (
                     <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-black rounded-full" />
                   )}
                 </div>
@@ -58,20 +119,20 @@ export const MessagesPage: React.FC = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-1">
                     <h3 className="text-white font-semibold truncate">
-                      {conversation.name}
+                      {conversation.otherUserName}
                     </h3>
                     <span className="text-white/50 text-xs whitespace-nowrap ml-2">
-                      {conversation.timestamp}
+                      {formatTimestamp(conversation.lastMessageAt)}
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <p className="text-white/70 text-sm truncate">
-                      {conversation.lastMessage}
+                      {conversation.lastMessage || 'No messages yet'}
                     </p>
-                    {conversation.unread > 0 && (
+                    {conversation.unreadCount > 0 && (
                       <Badge className="bg-pink-600 text-white border-0 ml-2">
-                        {conversation.unread}
+                        {conversation.unreadCount}
                       </Badge>
                     )}
                   </div>
@@ -93,13 +154,30 @@ export const MessagesPage: React.FC = () => {
         )}
       </div>
 
-      {/* Floating Action Button */}
-      <Button
-        className="fixed bottom-20 right-4 h-14 w-14 rounded-full bg-pink-600 hover:bg-pink-700 text-white shadow-lg"
-        data-testid="button-new-message"
-      >
-        <Send className="h-6 w-6" />
-      </Button>
+      {/* Chat Modal */}
+      {selectedConversation && (
+        <ChatModal
+          matchId={selectedConversation.matchId}
+          otherUserId={selectedConversation.otherUserId}
+          otherUserName={selectedConversation.otherUserName}
+          otherUserPhoto={selectedConversation.otherUserPhoto}
+          isOpen={!!selectedConversation}
+          onClose={handleCloseChat}
+          onProfileClick={handleProfileClick}
+        />
+      )}
+
+      {/* Profile Modal */}
+      {selectedProfile && (
+        <ProfileDetailModal
+          profile={selectedProfile}
+          isOpen={showProfileModal}
+          onClose={() => {
+            setShowProfileModal(false);
+            setSelectedProfile(null);
+          }}
+        />
+      )}
     </div>
   );
 };
