@@ -369,6 +369,13 @@ export const ChatModal: React.FC<ChatModalProps> = ({
           <div ref={messagesEndRef} />
         </div>
 
+        {/* Upload Error */}
+        {uploadError && (
+          <div className="px-4 py-3 bg-red-500/20 border-t border-red-500/50 text-red-200 text-sm">
+            {uploadError}
+          </div>
+        )}
+
         {/* Media Preview */}
         {mediaPreview && (
           <div className="p-4 border-t border-pink-500/30 bg-black/50">
