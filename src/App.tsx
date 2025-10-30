@@ -17,6 +17,7 @@ import { MessagesPage } from './pages/Messages';
 import { ProfilePage } from './pages/Profile';
 import { AdminVerificationPage } from './pages/AdminVerification';
 import { UserProfilePage } from './pages/UserProfile';
+import { HelpSupportPage } from './pages/HelpSupport';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { Spinner } from './components/Spinner';
