@@ -31,9 +31,10 @@ app.post('/api/support/submit-ticket', async (req, res) => {
     }
 
     // Send email via Resend
+    // Note: Using verified email for testing (Resend requires domain verification for production)
     const { data, error } = await resend.emails.send({
       from: 'The Spice App Support <onboarding@resend.dev>',
-      to: ['support@thespiceapp.com'],
+      to: ['kwitter1982@gmail.com'], // Using verified email for testing
       replyTo: email,
       subject: `Support Ticket: ${subject}`,
       html: `
