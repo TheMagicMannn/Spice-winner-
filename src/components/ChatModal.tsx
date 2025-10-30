@@ -209,13 +209,15 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     setIsSending(true);
     setUploadError(null);
     try {
-      await MessageService.sendMediaMessage(
+      const newMessage = await MessageService.sendMediaMessage(
         matchId,
         user.id,
         selectedMedia,
         mediaType,
         selectedSelfDestruct
       );
+      // Add message immediately to UI
+      handleNewMessage(newMessage);
       clearMediaSelection();
     } catch (error: any) {
       console.error('Error sending media:', error);
