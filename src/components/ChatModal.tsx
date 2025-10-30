@@ -324,9 +324,13 @@ export const ChatModal: React.FC<ChatModalProps> = ({
           )}
 
           {message.messageType === 'voice' && message.mediaUrl && (
-            <audio controls className="max-w-full">
-              <source src={message.mediaUrl} type="audio/webm" />
-            </audio>
+            <div className="py-2">
+              <audio controls className="max-w-full" preload="metadata">
+                <source src={message.mediaUrl} type="audio/webm" />
+                <source src={message.mediaUrl} type="audio/mpeg" />
+                Your browser does not support audio playback.
+              </audio>
+            </div>
           )}
 
           <div className="flex items-center justify-between mt-1 text-xs opacity-70">
