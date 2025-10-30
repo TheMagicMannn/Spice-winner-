@@ -226,6 +226,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     setMediaType(null);
     setShowSelfDestructMenu(false);
     setSelectedSelfDestruct(undefined);
+    setUploadError(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     if (videoInputRef.current) videoInputRef.current.value = '';
   };
