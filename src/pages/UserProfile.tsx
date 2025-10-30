@@ -73,6 +73,22 @@ export const UserProfilePage: React.FC = () => {
     }
   }, [userId]);
 
+  // Keyboard navigation for photos
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!profile?.photos) return;
+      
+      if (e.key === 'ArrowLeft' && currentPhotoIndex > 0) {
+        setCurrentPhotoIndex(currentPhotoIndex - 1);
+      } else if (e.key === 'ArrowRight' && currentPhotoIndex < profile.photos.length - 1) {
+        setCurrentPhotoIndex(currentPhotoIndex + 1);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [currentPhotoIndex, profile?.photos]);
+
   const loadUserProfile = async (id: string) => {
     setIsLoading(true);
     setError(null);
