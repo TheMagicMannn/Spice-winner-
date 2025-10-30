@@ -38,9 +38,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Send email via Resend
+    // Note: Using verified email for testing. For production, verify domain at resend.com/domains
     const { data, error } = await resend.emails.send({
       from: 'The Spice App Support <onboarding@resend.dev>',
-      to: ['support@thespiceapp.com'],
+      to: ['kwitter1982@gmail.com'], // Using verified email address
       replyTo: email,
       subject: `Support Ticket: ${subject}`,
       html: `
