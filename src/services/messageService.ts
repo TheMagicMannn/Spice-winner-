@@ -245,14 +245,27 @@ export class MessageService {
           upsert: false
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Storage upload error:', error);
+        
+        // Provide user-friendly error messages
+        if (error.message.includes('Payload too large')) {
+          throw new Error('File is too large. Maximum size is 50MB for videos and 10MB for images.');
+        } else if (error.message.includes('policy')) {
+          throw new Error('You do not have permission to upload this file.');
+        } else if (error.message.includes('mime')) {
+          throw new Error('File type not supported. Please use JPG, PNG, MP4, or WebM.');
+        } else {
+          throw new Error(`Upload failed: ${error.message}`);
+        }
+      }
 
       const { data: publicData } = supabase.storage
         .from('message-attachments')
         .getPublicUrl(fileName);
 
       return publicData.publicUrl;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading media:', error);
       throw error;
     }
