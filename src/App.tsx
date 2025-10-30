@@ -148,6 +148,7 @@ const AppContent: React.FC = () => {
             <Route path="/matches" element={<MatchesPage />} />
             <Route path="/messages" element={<MessagesPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/user/:userId" element={<UserProfilePage />} />
             <Route path="/admin/verification" element={<AdminVerificationPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/community" />} />
