@@ -444,7 +444,9 @@ export const ProfilePage: React.FC = () => {
                 <Separator className="bg-pink-500/30" />
                 <Button
                   variant="ghost"
+                  onClick={() => navigate('/help-support')}
                   className="w-full justify-start text-white hover:bg-pink-500/10"
+                  data-testid="help-support-action"
                 >
                   <HelpCircle className="h-4 w-4 mr-3" />
                   Help & Support
