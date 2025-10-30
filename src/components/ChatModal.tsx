@@ -39,6 +39,13 @@ const SELF_DESTRUCT_OPTIONS = [
   { label: '7 days', value: 604800 }
 ];
 
+// File size limits in bytes
+const FILE_SIZE_LIMITS = {
+  image: 10 * 1024 * 1024,  // 10MB
+  video: 50 * 1024 * 1024,  // 50MB
+  voice: 5 * 1024 * 1024    // 5MB
+};
+
 export const ChatModal: React.FC<ChatModalProps> = ({
   matchId,
   otherUserId,
