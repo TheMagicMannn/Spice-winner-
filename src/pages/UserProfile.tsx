@@ -106,6 +106,45 @@ export const UserProfilePage: React.FC = () => {
     });
   };
 
+  // Swipe gesture handling
+  const minSwipeDistance = 50;
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd || !profile?.photos) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe && currentPhotoIndex < profile.photos.length - 1) {
+      setCurrentPhotoIndex(currentPhotoIndex + 1);
+    }
+    if (isRightSwipe && currentPhotoIndex > 0) {
+      setCurrentPhotoIndex(currentPhotoIndex - 1);
+    }
+  };
+
+  const goToNextPhoto = () => {
+    if (profile?.photos && currentPhotoIndex < profile.photos.length - 1) {
+      setCurrentPhotoIndex(currentPhotoIndex + 1);
+    }
+  };
+
+  const goToPreviousPhoto = () => {
+    if (currentPhotoIndex > 0) {
+      setCurrentPhotoIndex(currentPhotoIndex - 1);
+    }
+  };
+
   if (isLoading) {
     return (
       <SpiceBackground className="min-h-screen flex items-center justify-center">
