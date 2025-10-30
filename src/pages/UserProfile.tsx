@@ -17,7 +17,9 @@ import {
   User as UserIcon,
   Sparkles,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme } from '@/styles/theme';
