@@ -144,12 +144,17 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     if (!inputText.trim() || !user || isSending) return;
 
     setIsSending(true);
+    const messageText = inputText;
+    setInputText(''); // Clear input immediately for better UX
+    
     try {
-      await MessageService.sendMessage(matchId, user.id, inputText);
-      setInputText('');
+      const newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+      // Add message immediately to UI
+      handleNewMessage(newMessage);
       handleTyping(false);
     } catch (error) {
       console.error('Error sending message:', error);
+      setInputText(messageText); // Restore text on error
     } finally {
       setIsSending(false);
     }
