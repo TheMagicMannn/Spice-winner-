@@ -411,7 +411,21 @@ export const AdminVerificationPage: React.FC = () => {
                       <span className="text-white font-medium">{new Date(selectedRequest.verification_date).toLocaleDateString()}</span>
                     </div>
                   )}
+                  <div className="flex justify-between">
+                    <span className="text-white/60">User ID:</span>
+                    <span className="text-white/50 font-mono text-xs">{selectedRequest.user_id}</span>
+                  </div>
                 </div>
+                
+                {/* View Full Profile Button */}
+                <Button
+                  onClick={() => window.open(`#/user/${selectedRequest.user_id}`, '_blank')}
+                  className="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white"
+                  data-testid="view-user-profile-button"
+                >
+                  <User className="h-4 w-4 mr-2" />
+                  View Full Profile
+                </Button>
               </div>
 
               <Separator className="bg-pink-500/30" />
