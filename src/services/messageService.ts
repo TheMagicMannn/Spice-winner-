@@ -440,21 +440,28 @@ export class MessageService {
    */
   static async getOtherUserFromMatch(matchId: string, currentUserId: string): Promise<any> {
     try {
-      const { data, error } = await supabase
+      // Get the match
+      const { data: match, error: matchError } = await supabase
         .from('matches')
-        .select(`
-          user1_id,
-          user2_id,
-          profiles!matches_user1_id_fkey(*),
-          profiles2:profiles!matches_user2_id_fkey(*)
-        `)
+        .select('user1_id, user2_id')
         .eq('id', matchId)
         .single();
 
-      if (error) throw error;
+      if (matchError) throw matchError;
 
-      const otherUser = data.user1_id === currentUserId ? data.profiles2 : data.profiles;
-      return otherUser;
+      // Determine other user ID
+      const otherUserId = match.user1_id === currentUserId ? match.user2_id : match.user1_id;
+
+      // Get the other user's profile
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', otherUserId)
+        .single();
+
+      if (profileError) throw profileError;
+
+      return profile;
     } catch (error) {
       console.error('Error getting other user from match:', error);
       throw error;
