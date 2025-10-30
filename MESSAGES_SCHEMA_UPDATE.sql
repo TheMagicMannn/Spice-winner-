@@ -3,11 +3,12 @@
 -- Add support for media, self-destruct, and typing indicators
 -- =====================================================
 
--- Update message_type enum to include more types
-ALTER TYPE message_type RENAME TO message_type_old;
-CREATE TYPE message_type AS ENUM ('text', 'image', 'video', 'voice', 'gif');
-ALTER TABLE messages ALTER COLUMN message_type TYPE message_type USING message_type::text::message_type;
-DROP TYPE message_type_old;
+-- Drop the old CHECK constraint on message_type
+ALTER TABLE messages DROP CONSTRAINT IF EXISTS messages_message_type_check;
+
+-- Add new CHECK constraint with updated message types
+ALTER TABLE messages ADD CONSTRAINT messages_message_type_check 
+  CHECK (message_type IN ('text', 'image', 'video', 'voice', 'gif'));
 
 -- Add new columns to messages table
 ALTER TABLE messages ADD COLUMN IF NOT EXISTS media_url TEXT;
@@ -30,6 +31,9 @@ CREATE TABLE IF NOT EXISTS typing_indicators (
 
 -- Enable RLS on typing_indicators
 ALTER TABLE typing_indicators ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policy if it exists
+DROP POLICY IF EXISTS "Users can manage their typing indicators" ON typing_indicators;
 
 -- Create policy for typing indicators
 CREATE POLICY "Users can manage their typing indicators"
@@ -80,3 +84,12 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 COMMENT ON TABLE typing_indicators IS 'Tracks real-time typing status in conversations';
 COMMENT ON FUNCTION delete_expired_media() IS 'Soft deletes messages that have expired based on self-destruct timer';
 COMMENT ON FUNCTION mark_media_viewed(UUID) IS 'Marks media as viewed and calculates expiration time';
+
+-- Verify installation
+DO $$
+BEGIN
+    RAISE NOTICE 'Messages schema update completed successfully!';
+    RAISE NOTICE 'Added columns: media_url, self_destruct_seconds, first_viewed_at, expires_at, is_deleted, deleted_at';
+    RAISE NOTICE 'Created table: typing_indicators';
+    RAISE NOTICE 'Created functions: mark_media_viewed(), delete_expired_media()';
+END $$;
