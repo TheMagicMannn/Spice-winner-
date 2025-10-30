@@ -203,12 +203,28 @@ export class MessageService {
       const mediaUrl = await this.uploadMedia(senderId, matchId, file, messageType);
 
       // Create message with media
+      // Provide meaningful content for all media types to satisfy DB constraint
+      let content = '';
+      switch (messageType) {
+        case 'image':
+          content = 'Photo';
+          break;
+        case 'video':
+          content = 'Video';
+          break;
+        case 'voice':
+          content = 'Voice message';
+          break;
+        default:
+          content = 'Media';
+      }
+
       const { data, error } = await supabase
         .from('messages')
         .insert({
           match_id: matchId,
           sender_id: senderId,
-          content: messageType === 'voice' ? 'Voice message' : '',
+          content: content,
           message_type: messageType,
           media_url: mediaUrl,
           self_destruct_seconds: selfDestructSeconds
