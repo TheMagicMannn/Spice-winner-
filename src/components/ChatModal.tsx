@@ -411,23 +411,6 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   };
 
-          <div className="flex items-center justify-between mt-1 text-xs opacity-70">
-            <span>{formatTime(message.createdAt)}</span>
-            {isMine && (
-              <span className="ml-2">
-                {message.isRead ? (
-                  <CheckCheck className="h-3 w-3" />
-                ) : (
-                  <Check className="h-3 w-3" />
-                )}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-lg h-[80vh] p-0 bg-black/95 border-pink-500/30">
