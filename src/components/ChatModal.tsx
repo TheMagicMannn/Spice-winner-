@@ -240,10 +240,35 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
   const startVoiceRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
+      // Request microphone access
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        } 
       });
+
+      // Try different mime types for better browser compatibility
+      let options: MediaRecorderOptions = {};
+      const mimeTypes = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/ogg;codecs=opus',
+        'audio/mp4',
+        ''
+      ];
+
+      for (const mimeType of mimeTypes) {
+        if (mimeType === '' || MediaRecorder.isTypeSupported(mimeType)) {
+          if (mimeType) {
+            options = { mimeType };
+          }
+          break;
+        }
+      }
+
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -254,8 +279,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm;codecs=opus' });
-        const audioFile = new File([audioBlob], `voice-${Date.now()}.webm`, { type: 'audio/webm' });
+        const mimeType = mediaRecorder.mimeType || 'audio/webm';
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+        const fileExt = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
+        const audioFile = new File([audioBlob], `voice-${Date.now()}.${fileExt}`, { type: mimeType });
         
         if (user) {
           setIsSending(true);
@@ -276,9 +303,23 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
       mediaRecorder.start();
       setIsRecording(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error starting voice recording:', error);
-      setUploadError('Could not access microphone. Please check permissions.');
+      
+      // Provide specific error messages
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        setUploadError('Microphone access denied. Please allow microphone permissions in your browser settings.');
+      } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+        setUploadError('No microphone found. Please connect a microphone and try again.');
+      } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+        setUploadError('Microphone is already in use by another application.');
+      } else if (error.name === 'SecurityError') {
+        setUploadError('Microphone access requires HTTPS. Please use a secure connection.');
+      } else {
+        setUploadError('Could not access microphone. Please check permissions and try again.');
+      }
+      
+      setTimeout(() => setUploadError(null), 5000);
     }
   };
 
