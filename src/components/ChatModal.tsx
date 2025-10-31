@@ -171,6 +171,12 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       if (exists) {
         return prev.map(m => m.id === message.id ? message : m);
       }
+      
+      // Show scroll button if user is not at bottom and new message arrives
+      if (!isNearBottom() && message.senderId !== user?.id) {
+        setShowScrollButton(true);
+      }
+      
       return [...prev, message];
     });
 
