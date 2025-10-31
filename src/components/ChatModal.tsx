@@ -596,6 +596,12 @@ const MediaMessage: React.FC<{
         
         setTimeRemaining(remaining);
 
+        return remaining;
+      };
+
+      updateCountdown(); // Run immediately
+      const interval = setInterval(() => {
+        const remaining = updateCountdown();
         if (remaining === 0) {
           clearInterval(interval);
           // Mark as deleted locally
@@ -605,10 +611,7 @@ const MediaMessage: React.FC<{
             deletedAt: new Date().toISOString()
           });
         }
-      };
-
-      updateCountdown(); // Run immediately
-      const interval = setInterval(updateCountdown, 1000);
+      }, 1000);
 
       return () => clearInterval(interval);
     }
