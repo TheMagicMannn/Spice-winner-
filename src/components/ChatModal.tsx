@@ -610,12 +610,29 @@ const MediaMessage: React.FC<{
   message: Message;
   onMessageUpdate: (updatedMessage: Message) => void;
 }> = ({ message, onMessageUpdate }) => {
-  try {
-    const { user } = useAuth();
-    const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
-    const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const isSender = message.senderId === user?.id;
+  const { user } = useAuth();
+  const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const isSender = message.senderId === user?.id;
+
+  // Handle errors gracefully
+  if (!message || !message.id) {
+    return (
+      <div className="text-red-200 text-xs p-2">
+        Invalid message data
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-200 text-xs p-2">
+        Error loading media: {error}
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (message.expiresAt) {
