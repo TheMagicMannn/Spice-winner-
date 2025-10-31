@@ -581,12 +581,15 @@ const MediaMessage: React.FC<{
   message: Message;
   onMessageUpdate: (updatedMessage: Message) => void;
 }> = ({ message, onMessageUpdate }) => {
+  const { user } = useAuth();
   const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const isSender = message.senderId === user?.id;
 
   useEffect(() => {
     if (message.expiresAt) {
-      const interval = setInterval(() => {
+      const updateCountdown = () => {
         const now = new Date().getTime();
         const expires = new Date(message.expiresAt!).getTime();
         const remaining = Math.max(0, Math.floor((expires - now) / 1000));
@@ -595,15 +598,25 @@ const MediaMessage: React.FC<{
 
         if (remaining === 0) {
           clearInterval(interval);
+          // Mark as deleted locally
+          onMessageUpdate({
+            ...message,
+            isDeleted: true,
+            deletedAt: new Date().toISOString()
+          });
         }
-      }, 1000);
+      };
+
+      updateCountdown(); // Run immediately
+      const interval = setInterval(updateCountdown, 1000);
 
       return () => clearInterval(interval);
     }
-  }, [message.expiresAt]);
+  }, [message.expiresAt, message, onMessageUpdate]);
 
   const handleView = async () => {
-    if (!isViewed && message.selfDestructSeconds) {
+    if (!isViewed && message.selfDestructSeconds && !isSender) {
+      setIsLoading(true);
       try {
         // Mark as viewed in database and get updated message
         const updatedMessage = await MessageService.markMediaViewed(message.id);
@@ -613,6 +626,8 @@ const MediaMessage: React.FC<{
         onMessageUpdate(updatedMessage);
       } catch (error) {
         console.error('Error marking media as viewed:', error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
