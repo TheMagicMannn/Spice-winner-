@@ -109,16 +109,20 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   useEffect(() => {
     // Use setTimeout to ensure DOM has updated
     const timer = setTimeout(() => {
-      scrollToBottom();
+      // Use instant scroll for initial load, smooth for new messages
+      const behavior = isInitialLoadRef.current ? 'auto' : 'smooth';
+      scrollToBottom(behavior);
+      isInitialLoadRef.current = false;
     }, 100);
     
     return () => clearTimeout(timer);
   }, [messages]);
 
-  // Also scroll when modal opens
+  // Also scroll when modal opens and reset initial load flag
   useEffect(() => {
     if (isOpen && messages.length > 0) {
-      setTimeout(() => scrollToBottom(), 200);
+      isInitialLoadRef.current = true;
+      setTimeout(() => scrollToBottom('auto'), 200);
     }
   }, [isOpen]);
 
