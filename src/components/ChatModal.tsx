@@ -499,6 +499,20 @@ export const ChatModal: React.FC<ChatModalProps> = ({
           <div ref={messagesEndRef} className="h-1" />
         </div>
 
+        {/* Scroll to Bottom Button */}
+        {showScrollButton && (
+          <div className="absolute bottom-24 right-8 z-10">
+            <Button
+              onClick={() => scrollToBottom('smooth')}
+              className="bg-pink-600 hover:bg-pink-700 text-white rounded-full shadow-lg"
+              size="sm"
+            >
+              <ChevronLeft className="h-5 w-5 rotate-[-90deg]" />
+              <span className="ml-1">New messages</span>
+            </Button>
+          </div>
+        )}
+
         {/* Upload Error */}
         {uploadError && (
           <div className="px-4 py-3 bg-red-500/20 border-t border-red-500/50 text-red-200 text-sm">
