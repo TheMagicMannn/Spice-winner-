@@ -483,7 +483,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2 scroll-smooth">
+        <div 
+          ref={messagesContainerRef}
+          className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2 scroll-smooth"
+        >
           {messages.map(renderMessage)}
           <div ref={messagesEndRef} className="h-1" />
         </div>
