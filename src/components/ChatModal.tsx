@@ -649,6 +649,23 @@ const MediaMessage: React.FC<{
     }
   };
 
+  // Handle errors gracefully
+  if (!message || !message.id) {
+    return (
+      <div className="text-red-200 text-xs p-2">
+        Invalid message data
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-red-200 text-xs p-2">
+        Error loading media: {error}
+      </div>
+    );
+  }
+
   if (message.isDeleted) {
     return (
       <div className="flex items-center gap-2 text-white/50 italic text-sm py-4">
