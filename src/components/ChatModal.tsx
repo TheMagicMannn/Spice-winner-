@@ -348,39 +348,68 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   };
 
   const renderMessage = (message: Message) => {
-    const isMine = message.senderId === user?.id;
+    try {
+      const isMine = message.senderId === user?.id;
 
-    return (
-      <div
-        key={message.id}
-        className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-4`}
-      >
+      return (
         <div
-          className={`max-w-[70%] ${
-            isMine
-              ? 'bg-pink-600 text-white rounded-l-2xl rounded-tr-2xl'
-              : 'bg-black/40 text-white rounded-r-2xl rounded-tl-2xl'
-          } px-4 py-2`}
+          key={message.id}
+          className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-4`}
         >
-          {message.messageType === 'text' && (
-            <p className="text-sm break-words">{message.content}</p>
-          )}
+          <div
+            className={`max-w-[70%] ${
+              isMine
+                ? 'bg-pink-600 text-white rounded-l-2xl rounded-tr-2xl'
+                : 'bg-black/40 text-white rounded-r-2xl rounded-tl-2xl'
+            } px-4 py-2`}
+          >
+            {message.messageType === 'text' && (
+              <p className="text-sm break-words">{message.content}</p>
+            )}
 
-          {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
-            <MediaMessage message={message} onMessageUpdate={handleMessageUpdate} />
-          )}
+            {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
+              <MediaMessage message={message} onMessageUpdate={handleMessageUpdate} />
+            )}
 
-          {message.messageType === 'voice' && message.mediaUrl && (
-            <div className="py-2">
-              <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
-                <source src={message.mediaUrl} type="audio/webm" />
-                <source src={message.mediaUrl} type="audio/ogg" />
-                <source src={message.mediaUrl} type="audio/mp4" />
-                <source src={message.mediaUrl} type="audio/mpeg" />
-                Your browser does not support audio playback.
-              </audio>
+            {message.messageType === 'voice' && message.mediaUrl && (
+              <div className="py-2">
+                <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
+                  <source src={message.mediaUrl} type="audio/webm" />
+                  <source src={message.mediaUrl} type="audio/ogg" />
+                  <source src={message.mediaUrl} type="audio/mp4" />
+                  <source src={message.mediaUrl} type="audio/mpeg" />
+                  Your browser does not support audio playback.
+                </audio>
+              </div>
+            )}
+
+            <div className="flex items-center justify-between mt-1 text-xs opacity-70">
+              <span>{formatTime(message.createdAt)}</span>
+              {isMine && (
+                <span className="ml-2">
+                  {message.isRead ? (
+                    <CheckCheck className="h-3 w-3" />
+                  ) : (
+                    <Check className="h-3 w-3" />
+                  )}
+                </span>
+              )}
             </div>
-          )}
+          </div>
+        </div>
+      );
+    } catch (error) {
+      console.error('Error rendering message:', error, message);
+      // Return error message instead of crashing
+      return (
+        <div key={message.id} className="flex justify-center mb-4">
+          <div className="bg-red-500/20 text-red-200 px-4 py-2 rounded-lg text-xs">
+            Unable to display this message
+          </div>
+        </div>
+      );
+    }
+  };
 
           <div className="flex items-center justify-between mt-1 text-xs opacity-70">
             <span>{formatTime(message.createdAt)}</span>
