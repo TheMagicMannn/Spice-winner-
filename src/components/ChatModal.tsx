@@ -367,7 +367,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
           )}
 
           {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
-            <MediaMessage message={message} />
+            <MediaMessage message={message} onMessageUpdate={handleMessageUpdate} />
           )}
 
           {message.messageType === 'voice' && message.mediaUrl && (
