@@ -126,6 +126,8 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     try {
       const loadedMessages = await MessageService.getMessages(matchId);
       setMessages(loadedMessages);
+      // Scroll instantly on initial load
+      setTimeout(() => scrollToBottom('auto'), 100);
     } catch (error) {
       console.error('Error loading messages:', error);
     }
