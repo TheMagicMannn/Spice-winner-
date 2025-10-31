@@ -140,6 +140,12 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   };
 
+  const handleMessageUpdate = (updatedMessage: Message) => {
+    setMessages(prev => 
+      prev.map(m => m.id === updatedMessage.id ? updatedMessage : m)
+    );
+  };
+
   const handleSendMessage = async () => {
     if (!inputText.trim() || !user || isSending) return;
 
