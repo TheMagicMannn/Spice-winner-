@@ -107,17 +107,36 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   }, [isOpen, matchId, user]);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    // Use setTimeout to ensure DOM has updated
-    const timer = setTimeout(() => {
-      // Use instant scroll for initial load, smooth for new messages
-      const behavior = isInitialLoadRef.current ? 'auto' : 'smooth';
-      scrollToBottom(behavior);
-      isInitialLoadRef.current = false;
-    }, 100);
+  // Check if user is scrolled near the bottom
+  const isNearBottom = () => {
+    if (!messagesContainerRef.current) return true;
     
-    return () => clearTimeout(timer);
+    const container = messagesContainerRef.current;
+    const threshold = 150; // pixels from bottom
+    const position = container.scrollTop + container.clientHeight;
+    const bottom = container.scrollHeight;
+    
+    return bottom - position < threshold;
+  };
+
+  // Auto-scroll to bottom only if user is near bottom or on initial load
+  useEffect(() => {
+    const shouldScroll = isInitialLoadRef.current || 
+                        isNearBottom() || 
+                        messages.length > previousMessageCountRef.current;
+    
+    if (shouldScroll) {
+      const timer = setTimeout(() => {
+        const behavior = isInitialLoadRef.current ? 'auto' : 'smooth';
+        scrollToBottom(behavior);
+        isInitialLoadRef.current = false;
+      }, 100);
+      
+      previousMessageCountRef.current = messages.length;
+      return () => clearTimeout(timer);
+    }
+    
+    previousMessageCountRef.current = messages.length;
   }, [messages]);
 
   // Also scroll when modal opens and reset initial load flag
