@@ -610,11 +610,12 @@ const MediaMessage: React.FC<{
   message: Message;
   onMessageUpdate: (updatedMessage: Message) => void;
 }> = ({ message, onMessageUpdate }) => {
-  const { user } = useAuth();
-  const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
-  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const isSender = message.senderId === user?.id;
+  try {
+    const { user } = useAuth();
+    const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
+    const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const isSender = message.senderId === user?.id;
 
   useEffect(() => {
     if (message.expiresAt) {
