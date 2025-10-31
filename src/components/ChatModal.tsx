@@ -705,9 +705,17 @@ const MediaMessage: React.FC<{
         />
       )}
       {timeRemaining !== null && timeRemaining > 0 && (
-        <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs flex items-center gap-1">
-          <Clock className="h-3 w-3" />
-          <span>{timeRemaining}s</span>
+        <div className="absolute top-2 right-2 bg-red-600/90 text-white px-3 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 animate-pulse">
+          <Clock className="h-4 w-4" />
+          <span>Expires in {timeRemaining}s</span>
+        </div>
+      )}
+      {timeRemaining !== null && timeRemaining === 0 && (
+        <div className="absolute inset-0 bg-black/80 rounded-lg flex items-center justify-center">
+          <div className="text-center text-white">
+            <Clock className="h-12 w-12 mx-auto mb-2 opacity-50" />
+            <p className="text-sm">Media expired</p>
+          </div>
         </div>
       )}
     </div>
