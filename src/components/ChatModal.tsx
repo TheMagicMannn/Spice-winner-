@@ -107,8 +107,20 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
   // Auto-scroll to bottom
   useEffect(() => {
-    scrollToBottom();
+    // Use setTimeout to ensure DOM has updated
+    const timer = setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [messages]);
+
+  // Also scroll when modal opens
+  useEffect(() => {
+    if (isOpen && messages.length > 0) {
+      setTimeout(() => scrollToBottom(), 200);
+    }
+  }, [isOpen]);
 
   const loadMessages = async () => {
     try {
