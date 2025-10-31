@@ -348,8 +348,8 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
+    messagesEndRef.current?.scrollIntoView({ behavior, block: 'end' });
   };
 
   const formatTime = (date: string) => {
