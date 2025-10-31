@@ -634,28 +634,56 @@ const MediaMessage: React.FC<{
 
   if (message.isDeleted) {
     return (
-      <div className="flex items-center gap-2 text-white/50 italic text-sm">
+      <div className="flex items-center gap-2 text-white/50 italic text-sm py-4">
         <Clock className="h-4 w-4" />
-        <span>This media has expired</span>
+        <span>This media has expired and been deleted</span>
       </div>
     );
   }
 
-  if (message.selfDestructSeconds && !isViewed) {
+  // Show "Tap to view" for receiver when media has self-destruct and hasn't been viewed
+  if (message.selfDestructSeconds && !isViewed && !isSender) {
     return (
-      <div className="flex flex-col items-center gap-2 p-4">
-        <Clock className="h-8 w-8 text-white" />
-        <p className="text-sm">Tap to view</p>
-        <p className="text-xs opacity-70">
-          Self-destructs after {message.selfDestructSeconds}s
+      <div className="flex flex-col items-center gap-2 p-4 bg-black/20 rounded-lg">
+        <Clock className="h-8 w-8 text-pink-400" />
+        <p className="text-sm font-semibold">Tap to view</p>
+        <p className="text-xs opacity-70 text-center">
+          This media will self-destruct after {message.selfDestructSeconds} seconds once opened
         </p>
         <Button
           onClick={handleView}
+          disabled={isLoading}
           className="mt-2 bg-pink-600 hover:bg-pink-700 text-white"
           size="sm"
         >
-          View Media
+          {isLoading ? 'Loading...' : 'View Media'}
         </Button>
+      </div>
+    );
+  }
+
+  // Show countdown info for sender before receiver views
+  if (message.selfDestructSeconds && !message.firstViewedAt && isSender) {
+    return (
+      <div className="relative">
+        {message.messageType === 'image' && (
+          <img
+            src={message.mediaUrl}
+            alt="Shared image"
+            className="max-w-full rounded-lg"
+          />
+        )}
+        {message.messageType === 'video' && (
+          <video
+            src={message.mediaUrl}
+            className="max-w-full rounded-lg"
+            controls
+          />
+        )}
+        <div className="absolute top-2 right-2 bg-black/70 text-white px-3 py-1 rounded-full text-xs flex items-center gap-1">
+          <Clock className="h-3 w-3" />
+          <span>Waiting to be viewed</span>
+        </div>
       </div>
     );
   }
