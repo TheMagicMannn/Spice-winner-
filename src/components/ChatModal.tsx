@@ -600,23 +600,6 @@ const MediaMessage: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const isSender = message.senderId === user?.id;
 
-  // Handle errors gracefully
-  if (!message || !message.id) {
-    return (
-      <div className="text-red-200 text-xs p-2">
-        Invalid message data
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-red-200 text-xs p-2">
-        Error loading media: {error}
-      </div>
-    );
-  }
-
   useEffect(() => {
     if (message.expiresAt) {
       const updateCountdown = () => {
