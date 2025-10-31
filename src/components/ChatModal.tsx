@@ -674,8 +674,9 @@ const MediaMessage: React.FC<{
         
         // Update the message in parent state with expires_at
         onMessageUpdate(updatedMessage);
-      } catch (error) {
-        console.error('Error marking media as viewed:', error);
+      } catch (err: any) {
+        console.error('Error marking media as viewed:', err);
+        setError(err.message || 'Failed to load media');
       } finally {
         setIsLoading(false);
       }
