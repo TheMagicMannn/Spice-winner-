@@ -75,7 +75,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const videoInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
-
+  const isInitialLoadRef = useRef(true);
   // Load messages
   useEffect(() => {
     if (isOpen && matchId) {
