@@ -333,13 +333,24 @@ export class MessageService {
   /**
    * Mark media as viewed and start self-destruct timer
    */
-  static async markMediaViewed(messageId: string): Promise<void> {
+  static async markMediaViewed(messageId: string): Promise<Message> {
     try {
       const { error } = await supabase.rpc('mark_media_viewed', {
         message_id: messageId
       });
 
       if (error) throw error;
+
+      // Fetch the updated message to get first_viewed_at and expires_at
+      const { data: updatedMessage, error: fetchError } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('id', messageId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      return this.transformMessage(updatedMessage);
     } catch (error) {
       console.error('Error marking media as viewed:', error);
       throw error;
