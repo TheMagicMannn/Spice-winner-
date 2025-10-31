@@ -68,6 +68,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messageChannelRef = useRef<RealtimeChannel | null>(null);
   const typingChannelRef = useRef<RealtimeChannel | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -76,6 +77,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const isInitialLoadRef = useRef(true);
+  const previousMessageCountRef = useRef(0);
   // Load messages
   useEffect(() => {
     if (isOpen && matchId) {
