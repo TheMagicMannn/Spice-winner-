@@ -67,6 +67,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const [selectedSelfDestruct, setSelectedSelfDestruct] = useState<number | undefined>();
   const [isRecording, setIsRecording] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messageChannelRef = useRef<RealtimeChannel | null>(null);
