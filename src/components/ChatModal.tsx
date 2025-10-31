@@ -571,7 +571,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 };
 
 // Media Message Component with Self-Destruct
-const MediaMessage: React.FC<{ message: Message }> = ({ message }) => {
+const MediaMessage: React.FC<{ 
+  message: Message;
+  onMessageUpdate: (updatedMessage: Message) => void;
+}> = ({ message, onMessageUpdate }) => {
   const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
 
@@ -596,16 +599,12 @@ const MediaMessage: React.FC<{ message: Message }> = ({ message }) => {
   const handleView = async () => {
     if (!isViewed && message.selfDestructSeconds) {
       try {
-        // Mark as viewed in database
+        // Mark as viewed in database and get updated message
         const updatedMessage = await MessageService.markMediaViewed(message.id);
         setIsViewed(true);
         
-        // Update the message in the parent component's state
-        // This will trigger the countdown timer
-        if (updatedMessage && updatedMessage.expiresAt) {
-          // The real-time subscription should handle this, but we'll force update
-          window.location.reload(); // Temporary - ideally use state update
-        }
+        // Update the message in parent state with expires_at
+        onMessageUpdate(updatedMessage);
       } catch (error) {
         console.error('Error marking media as viewed:', error);
       }
