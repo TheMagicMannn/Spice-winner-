@@ -595,8 +595,20 @@ const MediaMessage: React.FC<{ message: Message }> = ({ message }) => {
 
   const handleView = async () => {
     if (!isViewed && message.selfDestructSeconds) {
-      await MessageService.markMediaViewed(message.id);
-      setIsViewed(true);
+      try {
+        // Mark as viewed in database
+        const updatedMessage = await MessageService.markMediaViewed(message.id);
+        setIsViewed(true);
+        
+        // Update the message in the parent component's state
+        // This will trigger the countdown timer
+        if (updatedMessage && updatedMessage.expiresAt) {
+          // The real-time subscription should handle this, but we'll force update
+          window.location.reload(); // Temporary - ideally use state update
+        }
+      } catch (error) {
+        console.error('Error marking media as viewed:', error);
+      }
     }
   };
 
