@@ -440,10 +440,9 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   };
 
   const handleReactToMessage = (messageId: string) => {
-    setContextMenu(null);
-    setShowEmojiPicker(true);
-    // Store the message ID for reaction
+    // Keep the message ID and show emoji picker
     setContextMenu({ messageId, x: 0, y: 0 });
+    setShowEmojiPicker(true);
   };
 
   const handleEmojiSelect = async (emoji: string) => {
