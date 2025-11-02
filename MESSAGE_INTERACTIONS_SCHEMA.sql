@@ -1,21 +1,62 @@
--- Add reply_to_id and reactions columns to messages table
+-- ============================================
+-- MESSAGE INTERACTIONS SCHEMA UPDATE
+-- Run this in your Supabase SQL Editor
+-- ============================================
 
--- Add reply_to_id column for message replies
-ALTER TABLE messages 
-ADD COLUMN IF NOT EXISTS reply_to_id UUID REFERENCES messages(id) ON DELETE SET NULL;
+-- Step 1: Add columns if they don't exist
+DO $$ 
+BEGIN
+    -- Add reply_to_id column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'messages' AND column_name = 'reply_to_id'
+    ) THEN
+        ALTER TABLE messages 
+        ADD COLUMN reply_to_id UUID REFERENCES messages(id) ON DELETE SET NULL;
+        
+        RAISE NOTICE 'Added reply_to_id column';
+    ELSE
+        RAISE NOTICE 'reply_to_id column already exists';
+    END IF;
 
--- Add reactions column as JSONB array
-ALTER TABLE messages 
-ADD COLUMN IF NOT EXISTS reactions JSONB DEFAULT '[]'::jsonb;
+    -- Add reactions column
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'messages' AND column_name = 'reactions'
+    ) THEN
+        ALTER TABLE messages 
+        ADD COLUMN reactions JSONB DEFAULT '[]'::jsonb;
+        
+        RAISE NOTICE 'Added reactions column';
+    ELSE
+        RAISE NOTICE 'reactions column already exists';
+    END IF;
+END $$;
 
--- Add index for better performance on replies
-CREATE INDEX IF NOT EXISTS idx_messages_reply_to_id ON messages(reply_to_id);
+-- Step 2: Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_messages_reply_to_id 
+ON messages(reply_to_id) 
+WHERE reply_to_id IS NOT NULL;
 
--- Add index for reactions queries
-CREATE INDEX IF NOT EXISTS idx_messages_reactions ON messages USING GIN (reactions);
+CREATE INDEX IF NOT EXISTS idx_messages_reactions 
+ON messages USING GIN (reactions) 
+WHERE reactions != '[]'::jsonb;
 
--- Update RLS policies to allow reactions and reply updates
--- Users should be able to update reactions on any message in their matches
+-- Step 3: Drop existing policy if it exists and recreate
+DO $$
+BEGIN
+    -- Drop the policy if it exists
+    IF EXISTS (
+        SELECT 1 FROM pg_policies 
+        WHERE tablename = 'messages' 
+        AND policyname = 'Users can update reactions on messages in their matches'
+    ) THEN
+        DROP POLICY "Users can update reactions on messages in their matches" ON messages;
+        RAISE NOTICE 'Dropped existing reaction update policy';
+    END IF;
+END $$;
+
+-- Create policy for updating reactions
 CREATE POLICY "Users can update reactions on messages in their matches"
 ON messages FOR UPDATE
 USING (
@@ -31,6 +72,32 @@ WITH CHECK (
   )
 );
 
--- Comment for reference
+-- Step 4: Add comments for documentation
 COMMENT ON COLUMN messages.reply_to_id IS 'References the message this is replying to';
 COMMENT ON COLUMN messages.reactions IS 'Array of reactions: [{userId, emoji, createdAt}]';
+
+-- Step 5: Verify the changes
+DO $$
+DECLARE
+    reply_exists BOOLEAN;
+    reactions_exists BOOLEAN;
+BEGIN
+    SELECT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'messages' AND column_name = 'reply_to_id'
+    ) INTO reply_exists;
+    
+    SELECT EXISTS (
+        SELECT 1 FROM information_schema.columns 
+        WHERE table_name = 'messages' AND column_name = 'reactions'
+    ) INTO reactions_exists;
+    
+    IF reply_exists AND reactions_exists THEN
+        RAISE NOTICE '✅ SUCCESS: All columns created successfully!';
+        RAISE NOTICE '✅ reply_to_id column: EXISTS';
+        RAISE NOTICE '✅ reactions column: EXISTS';
+        RAISE NOTICE '✅ You can now use message interactions (copy, reply, unsend, react)';
+    ELSE
+        RAISE WARNING '⚠️ Some columns may be missing. Please check manually.';
+    END IF;
+END $$;
