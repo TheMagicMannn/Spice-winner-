@@ -15,8 +15,17 @@ export interface Message {
   readAt?: string;
   isDeleted: boolean;
   deletedAt?: string;
+  replyToId?: string;
+  replyToMessage?: Message;
+  reactions?: MessageReaction[];
   createdAt: string;
   updatedAt: string;
+}
+
+export interface MessageReaction {
+  userId: string;
+  emoji: string;
+  createdAt: string;
 }
 
 export interface Conversation {
