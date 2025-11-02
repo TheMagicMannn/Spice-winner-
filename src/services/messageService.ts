@@ -517,4 +517,119 @@ export class MessageService {
       throw error;
     }
   }
+
+  /**
+   * Unsend (delete) a message - only sender can unsend
+   */
+  static async unsendMessage(messageId: string, userId: string): Promise<void> {
+    try {
+      // First verify the user is the sender
+      const { data: message, error: fetchError } = await supabase
+        .from('messages')
+        .select('sender_id')
+        .eq('id', messageId)
+        .single();
+
+      if (fetchError) throw fetchError;
+      if (message.sender_id !== userId) {
+        throw new Error('You can only unsend your own messages');
+      }
+
+      // Soft delete the message
+      const { error } = await supabase
+        .from('messages')
+        .update({ 
+          is_deleted: true, 
+          deleted_at: new Date().toISOString() 
+        })
+        .eq('id', messageId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error unsending message:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Add or remove reaction to a message
+   */
+  static async toggleReaction(messageId: string, userId: string, emoji: string): Promise<Message> {
+    try {
+      // Get current message with reactions
+      const { data: message, error: fetchError } = await supabase
+        .from('messages')
+        .select('reactions')
+        .eq('id', messageId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      let reactions = message.reactions || [];
+      
+      // Check if user already reacted with this emoji
+      const existingIndex = reactions.findIndex(
+        (r: MessageReaction) => r.userId === userId && r.emoji === emoji
+      );
+
+      if (existingIndex >= 0) {
+        // Remove reaction
+        reactions = reactions.filter((_: any, i: number) => i !== existingIndex);
+      } else {
+        // Add reaction
+        reactions.push({
+          userId,
+          emoji,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      // Update message with new reactions
+      const { data: updatedMessage, error: updateError } = await supabase
+        .from('messages')
+        .update({ reactions })
+        .eq('id', messageId)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      return this.transformMessage(updatedMessage);
+    } catch (error) {
+      console.error('Error toggling reaction:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send a reply message
+   */
+  static async sendReplyMessage(
+    matchId: string,
+    senderId: string,
+    content: string,
+    replyToId: string
+  ): Promise<Message> {
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .insert({
+          match_id: matchId,
+          sender_id: senderId,
+          content,
+          message_type: 'text',
+          reply_to_id: replyToId
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return this.transformMessage(data);
+    } catch (error) {
+      console.error('Error sending reply message:', error);
+      throw error;
+    }
+  }
 }
+
