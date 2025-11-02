@@ -594,22 +594,6 @@ export const ChatModal: React.FC<ChatModalProps> = ({
       );
     }
   };
-            </div>
-          </div>
-        </div>
-      );
-    } catch (error) {
-      console.error('Error rendering message:', error, message);
-      // Return error message instead of crashing
-      return (
-        <div key={message.id} className="flex justify-center mb-4">
-          <div className="bg-red-500/20 text-red-200 px-4 py-2 rounded-lg text-xs">
-            Unable to display this message
-          </div>
-        </div>
-      );
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
