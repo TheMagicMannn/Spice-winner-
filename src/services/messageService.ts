@@ -153,7 +153,15 @@ export class MessageService {
     try {
       const { data, error } = await supabase
         .from('messages')
-        .select('*')
+        .select(`
+          *,
+          reply_to_message:reply_to_id (
+            id,
+            content,
+            message_type,
+            sender_id
+          )
+        `)
         .eq('match_id', matchId)
         .eq('is_deleted', false)
         .order('created_at', { ascending: true })
