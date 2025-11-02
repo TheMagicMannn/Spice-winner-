@@ -393,6 +393,73 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   };
 
+  // Message interaction handlers
+  const handleLongPress = (messageId: string, event: React.MouseEvent | React.TouchEvent) => {
+    event.preventDefault();
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    setContextMenu({
+      messageId,
+      x: rect.left,
+      y: rect.top - 10
+    });
+  };
+
+  const handleCopyMessage = async (message: Message) => {
+    try {
+      await navigator.clipboard.writeText(message.content);
+      setContextMenu(null);
+      // Could add a toast notification here
+    } catch (error) {
+      console.error('Error copying message:', error);
+    }
+  };
+
+  const handleReplyTo = (message: Message) => {
+    setReplyingTo(message);
+    setContextMenu(null);
+  };
+
+  const handleUnsendMessage = async (messageId: string) => {
+    if (!user) return;
+    
+    try {
+      await MessageService.unsendMessage(messageId, user.id);
+      // Update local state
+      setMessages(prev => prev.map(m => 
+        m.id === messageId 
+          ? { ...m, isDeleted: true, deletedAt: new Date().toISOString() }
+          : m
+      ));
+      setContextMenu(null);
+    } catch (error) {
+      console.error('Error unsending message:', error);
+      alert('Failed to unsend message');
+    }
+  };
+
+  const handleReactToMessage = (messageId: string) => {
+    setContextMenu(null);
+    setShowEmojiPicker(true);
+    // Store the message ID for reaction
+    setContextMenu({ messageId, x: 0, y: 0 });
+  };
+
+  const handleEmojiSelect = async (emoji: string) => {
+    if (!user || !contextMenu) return;
+    
+    try {
+      const updatedMessage = await MessageService.toggleReaction(contextMenu.messageId, user.id, emoji);
+      // Update local state
+      setMessages(prev => prev.map(m => 
+        m.id === contextMenu.messageId ? updatedMessage : m
+      ));
+      setShowEmojiPicker(false);
+      setContextMenu(null);
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+    }
+  };
+
   const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
     messagesEndRef.current?.scrollIntoView({ behavior, block: 'end' });
     setShowScrollButton(false);
