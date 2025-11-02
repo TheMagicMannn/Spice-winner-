@@ -631,7 +631,15 @@ export class MessageService {
           message_type: 'text',
           reply_to_id: replyToId
         })
-        .select()
+        .select(`
+          *,
+          reply_to_message:reply_to_id (
+            id,
+            content,
+            message_type,
+            sender_id
+          )
+        `)
         .single();
 
       if (error) throw error;
