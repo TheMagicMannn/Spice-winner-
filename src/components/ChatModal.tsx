@@ -203,7 +203,15 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     setInputText(''); // Clear input immediately for better UX
     
     try {
-      const newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+      let newMessage;
+      if (replyingTo) {
+        // Send as reply
+        newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
+        setReplyingTo(null);
+      } else {
+        // Send normal message
+        newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+      }
       // Add message immediately to UI
       handleNewMessage(newMessage);
       handleTyping(false);
