@@ -18,6 +18,8 @@ import { MessageService, Message } from '@/services/messageService';
 import { useAuth } from '@/hooks/useAuth';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { formatDistanceToNow } from 'date-fns';
+import { MessageContextMenu } from './MessageContextMenu';
+import { EmojiPicker } from './EmojiPicker';
 
 interface ChatModalProps {
   matchId: string;
