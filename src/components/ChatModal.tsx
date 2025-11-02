@@ -553,7 +553,17 @@ export const ChatModal: React.FC<ChatModalProps> = ({
                     return (
                       <button
                         key={emoji}
-                        onClick={() => user && handleEmojiSelect(emoji)}
+                        onClick={async () => {
+                          if (!user) return;
+                          try {
+                            const updatedMessage = await MessageService.toggleReaction(message.id, user.id, emoji);
+                            setMessages(prev => prev.map(m => 
+                              m.id === message.id ? updatedMessage : m
+                            ));
+                          } catch (error) {
+                            console.error('Error toggling reaction:', error);
+                          }
+                        }}
                         className={`text-sm px-2 py-0.5 rounded-full ${
                           userReacted ? 'bg-pink-500/30' : 'bg-white/10'
                         } hover:bg-pink-500/20 transition-colors`}
