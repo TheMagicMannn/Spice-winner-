@@ -475,50 +475,123 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const renderMessage = (message: Message) => {
     try {
       const isMine = message.senderId === user?.id;
+      let touchTimer: NodeJS.Timeout;
+
+      const handleTouchStart = (e: React.TouchEvent) => {
+        touchTimer = setTimeout(() => {
+          handleLongPress(message.id, e);
+        }, 500);
+      };
+
+      const handleTouchEnd = () => {
+        clearTimeout(touchTimer);
+      };
+
+      const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        handleLongPress(message.id, e);
+      };
 
       return (
         <div
           key={message.id}
           className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-4`}
         >
-          <div
-            className={`max-w-[70%] ${
-              isMine
-                ? 'bg-pink-600 text-white rounded-l-2xl rounded-tr-2xl'
-                : 'bg-black/40 text-white rounded-r-2xl rounded-tl-2xl'
-            } px-4 py-2`}
-          >
-            {message.messageType === 'text' && (
-              <p className="text-sm break-words">{message.content}</p>
-            )}
-
-            {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
-              <MediaMessage message={message} onMessageUpdate={handleMessageUpdate} />
-            )}
-
-            {message.messageType === 'voice' && message.mediaUrl && (
-              <div className="py-2">
-                <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
-                  <source src={message.mediaUrl} type="audio/webm" />
-                  <source src={message.mediaUrl} type="audio/ogg" />
-                  <source src={message.mediaUrl} type="audio/mp4" />
-                  <source src={message.mediaUrl} type="audio/mpeg" />
-                  Your browser does not support audio playback.
-                </audio>
-              </div>
-            )}
-
-            <div className="flex items-center justify-between mt-1 text-xs opacity-70">
-              <span>{formatTime(message.createdAt)}</span>
-              {isMine && (
-                <span className="ml-2">
-                  {message.isRead ? (
-                    <CheckCheck className="h-3 w-3" />
-                  ) : (
-                    <Check className="h-3 w-3" />
-                  )}
-                </span>
+          <div className="max-w-[70%] relative group">
+            <div
+              className={`${
+                isMine
+                  ? 'bg-pink-600 text-white rounded-l-2xl rounded-tr-2xl'
+                  : 'bg-black/40 text-white rounded-r-2xl rounded-tl-2xl'
+              } px-4 py-2 cursor-pointer`}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onContextMenu={handleContextMenu}
+            >
+              {/* Reply preview */}
+              {message.replyToMessage && (
+                <div className="mb-2 pb-2 border-l-2 border-white/30 pl-2 opacity-70">
+                  <p className="text-xs font-semibold">Replying to</p>
+                  <p className="text-xs truncate">{message.replyToMessage.content}</p>
+                </div>
               )}
+
+              {/* Message content */}
+              {message.messageType === 'text' && (
+                <p className="text-sm break-words">{message.content}</p>
+              )}
+
+              {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
+                <MediaMessage message={message} onMessageUpdate={handleMessageUpdate} />
+              )}
+
+              {message.messageType === 'voice' && message.mediaUrl && (
+                <div className="py-2">
+                  <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
+                    <source src={message.mediaUrl} type="audio/webm" />
+                    <source src={message.mediaUrl} type="audio/ogg" />
+                    <source src={message.mediaUrl} type="audio/mp4" />
+                    <source src={message.mediaUrl} type="audio/mpeg" />
+                    Your browser does not support audio playback.
+                  </audio>
+                </div>
+              )}
+
+              {/* Reactions */}
+              {message.reactions && message.reactions.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {Object.entries(
+                    message.reactions.reduce((acc: Record<string, number>, r) => {
+                      acc[r.emoji] = (acc[r.emoji] || 0) + 1;
+                      return acc;
+                    }, {})
+                  ).map(([emoji, count]) => {
+                    const userReacted = message.reactions?.some(
+                      r => r.emoji === emoji && r.userId === user?.id
+                    );
+                    return (
+                      <button
+                        key={emoji}
+                        onClick={() => user && handleEmojiSelect(emoji)}
+                        className={`text-sm px-2 py-0.5 rounded-full ${
+                          userReacted ? 'bg-pink-500/30' : 'bg-white/10'
+                        } hover:bg-pink-500/20 transition-colors`}
+                      >
+                        {emoji} {count}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between mt-1 text-xs opacity-70">
+                <span>{formatTime(message.createdAt)}</span>
+                {isMine && (
+                  <span className="ml-2">
+                    {message.isRead ? (
+                      <CheckCheck className="h-3 w-3" />
+                    ) : (
+                      <Check className="h-3 w-3" />
+                    )}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    } catch (error) {
+      console.error('Error rendering message:', error, message);
+      // Return error message instead of crashing
+      return (
+        <div key={message.id} className="flex justify-center mb-4">
+          <div className="bg-red-500/20 text-red-200 px-4 py-2 rounded-lg text-xs">
+            Unable to display this message
+          </div>
+        </div>
+      );
+    }
+  };
             </div>
           </div>
         </div>
