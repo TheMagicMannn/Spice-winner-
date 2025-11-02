@@ -723,8 +723,28 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         )}
 
         {/* Input */}
-        <div className="p-4 border-t border-pink-500/30">
-          <div className="flex items-center gap-2">
+        <div className="border-t border-pink-500/30">
+          {/* Reply Preview */}
+          {replyingTo && (
+            <div className="px-4 pt-2 pb-0">
+              <div className="bg-black/60 border-l-2 border-pink-500 p-2 rounded">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <p className="text-xs text-pink-400 font-semibold">Replying to</p>
+                    <p className="text-sm text-white truncate">{replyingTo.content}</p>
+                  </div>
+                  <button
+                    onClick={() => setReplyingTo(null)}
+                    className="text-white/70 hover:text-white ml-2"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="p-4 flex items-center gap-2">
             <input
               ref={fileInputRef}
               type="file"
@@ -773,24 +793,6 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
             {isRecording && (
               <span className="text-red-500 text-xs animate-pulse">Recording...</span>
-            )}
-
-            {/* Reply Preview */}
-            {replyingTo && (
-              <div className="absolute bottom-full left-0 right-0 mb-2 bg-black/60 border-l-2 border-pink-500 p-2 rounded">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-xs text-pink-400 font-semibold">Replying to</p>
-                    <p className="text-sm text-white truncate">{replyingTo.content}</p>
-                  </div>
-                  <button
-                    onClick={() => setReplyingTo(null)}
-                    className="text-white/70 hover:text-white ml-2"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
             )}
 
             <Input
