@@ -480,6 +480,9 @@ export class MessageService {
       readAt: dbMessage.read_at,
       isDeleted: dbMessage.is_deleted,
       deletedAt: dbMessage.deleted_at,
+      replyToId: dbMessage.reply_to_id,
+      replyToMessage: dbMessage.reply_to_message,
+      reactions: dbMessage.reactions || [],
       createdAt: dbMessage.created_at,
       updatedAt: dbMessage.updated_at
     };
