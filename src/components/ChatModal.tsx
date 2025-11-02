@@ -818,6 +818,37 @@ export const ChatModal: React.FC<ChatModalProps> = ({
             </Button>
           </div>
         </div>
+
+        {/* Context Menu */}
+        {contextMenu && (
+          <MessageContextMenu
+            message={messages.find(m => m.id === contextMenu.messageId)!}
+            isMine={messages.find(m => m.id === contextMenu.messageId)?.senderId === user?.id}
+            position={{ x: contextMenu.x, y: contextMenu.y }}
+            onCopy={() => {
+              const msg = messages.find(m => m.id === contextMenu.messageId);
+              if (msg) handleCopyMessage(msg);
+            }}
+            onReply={() => {
+              const msg = messages.find(m => m.id === contextMenu.messageId);
+              if (msg) handleReplyTo(msg);
+            }}
+            onUnsend={() => handleUnsendMessage(contextMenu.messageId)}
+            onReact={() => handleReactToMessage(contextMenu.messageId)}
+            onClose={() => setContextMenu(null)}
+          />
+        )}
+
+        {/* Emoji Picker */}
+        {showEmojiPicker && (
+          <EmojiPicker
+            onSelect={handleEmojiSelect}
+            onClose={() => {
+              setShowEmojiPicker(false);
+              setContextMenu(null);
+            }}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );
