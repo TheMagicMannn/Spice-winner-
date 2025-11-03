@@ -44,9 +44,12 @@ export interface Conversation {
 
 export class MessageService {
   /**
-   * Get all conversations for a user
+   * Get all conversations for a user with optional filtering
    */
-  static async getConversations(userId: string): Promise<Conversation[]> {
+  static async getConversations(
+    userId: string, 
+    filter: 'all' | 'unread' | 'sent' | 'deleted' = 'all'
+  ): Promise<Conversation[]> {
     try {
       // Get all matched conversations
       const { data: matches, error: matchError } = await supabase
@@ -61,6 +64,16 @@ export class MessageService {
       if (!matches || matches.length === 0) {
         return [];
       }
+
+      // Get conversation settings for this user
+      const { data: settings, error: settingsError } = await supabase
+        .from('conversation_settings')
+        .select('*')
+        .eq('user_id', userId);
+
+      if (settingsError) throw settingsError;
+
+      const settingsMap = new Map(settings?.map(s => [s.match_id, s]) || []);
 
       // Get profiles for all users in matches
       const userIds = Array.from(new Set(
@@ -82,11 +95,12 @@ export class MessageService {
         matches.map(async (match: any) => {
           const otherUserId = match.user1_id === userId ? match.user2_id : match.user1_id;
           const otherUser = profileMap.get(otherUserId);
+          const setting = settingsMap.get(match.id);
           
           // Get last message
           const { data: lastMessage } = await supabase
             .from('messages')
-            .select('content, message_type, created_at')
+            .select('content, message_type, sender_id, created_at')
             .eq('match_id', match.id)
             .eq('is_deleted', false)
             .order('created_at', { ascending: false })
@@ -113,14 +127,39 @@ export class MessageService {
             otherUserPhoto: otherUser?.photos?.[0] || '',
             lastMessage: lastMessage ? this.formatLastMessage(lastMessage) : undefined,
             lastMessageAt: lastMessage?.created_at,
+            lastMessageSenderId: lastMessage?.sender_id,
             unreadCount: unreadCount || 0,
-            isOnline: !!isOnline
+            isOnline: !!isOnline,
+            isPinned: setting?.is_pinned || false,
+            isDeleted: setting?.is_deleted || false
           };
         })
       );
 
-      // Sort by last message time
-      return conversations.sort((a, b) => {
+      // Filter conversations based on filter type
+      let filtered = conversations;
+      
+      switch (filter) {
+        case 'unread':
+          filtered = conversations.filter(c => c.unreadCount > 0 && !c.isDeleted);
+          break;
+        case 'sent':
+          filtered = conversations.filter(c => c.lastMessageSenderId === userId && !c.isDeleted);
+          break;
+        case 'deleted':
+          filtered = conversations.filter(c => c.isDeleted);
+          break;
+        default: // 'all'
+          filtered = conversations.filter(c => !c.isDeleted);
+      }
+
+      // Sort: pinned first, then by last message time
+      return filtered.sort((a, b) => {
+        // Pinned conversations always first
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        
+        // Then sort by last message time
         if (!a.lastMessageAt) return 1;
         if (!b.lastMessageAt) return -1;
         return new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime();
