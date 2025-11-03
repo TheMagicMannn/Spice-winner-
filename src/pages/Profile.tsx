@@ -428,7 +428,9 @@ export const ProfilePage: React.FC = () => {
                 <Separator className="bg-pink-500/30" />
                 <Button
                   variant="ghost"
+                  onClick={() => navigate('/settings')}
                   className="w-full justify-start text-white hover:bg-pink-500/10"
+                  data-testid="settings-action"
                 >
                   <Settings className="h-4 w-4 mr-3" />
                   Settings
