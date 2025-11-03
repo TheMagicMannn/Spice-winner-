@@ -485,17 +485,21 @@ class SettingsService {
         throw error;
       }
 
-      return (data || []).map(item => ({
-        id: item.id,
-        ownerId: item.owner_id,
-        grantedToId: item.granted_to_id,
-        grantedAt: item.granted_at,
-        expiresAt: item.expires_at || undefined,
-        grantedProfile: item.granted_profile ? {
-          displayName: item.granted_profile.display_name || 'Unknown User',
-          photos: item.granted_profile.photos || []
-        } : undefined
-      }));
+      return (data || []).map((item: any) => {
+        const profile = Array.isArray(item.granted_profile) ? item.granted_profile[0] : item.granted_profile;
+        
+        return {
+          id: item.id,
+          ownerId: item.owner_id,
+          grantedToId: item.granted_to_id,
+          grantedAt: item.granted_at,
+          expiresAt: item.expires_at || undefined,
+          grantedProfile: profile ? {
+            displayName: profile.display_name || 'Unknown User',
+            photos: profile.photos || []
+          } : undefined
+        };
+      });
     } catch (error) {
       console.error('SettingsService.getPrivatePhotoAccessList error:', error);
       throw error;
