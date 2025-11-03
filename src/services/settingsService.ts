@@ -374,19 +374,23 @@ class SettingsService {
         throw error;
       }
 
-      return (data || []).map(item => ({
-        id: item.id,
-        blockerId: item.blocker_id,
-        blockedId: item.blocked_id,
-        reason: item.reason || undefined,
-        createdAt: item.created_at,
-        blockedProfile: item.blocked_profile ? {
-          displayName: item.blocked_profile.display_name || 'Unknown User',
-          photos: item.blocked_profile.photos || [],
-          age: item.blocked_profile.age,
-          location: item.blocked_profile.location
-        } : undefined
-      }));
+      return (data || []).map((item: any) => {
+        const profile = Array.isArray(item.blocked_profile) ? item.blocked_profile[0] : item.blocked_profile;
+        
+        return {
+          id: item.id,
+          blockerId: item.blocker_id,
+          blockedId: item.blocked_id,
+          reason: item.reason || undefined,
+          createdAt: item.created_at,
+          blockedProfile: profile ? {
+            displayName: profile.display_name || 'Unknown User',
+            photos: profile.photos || [],
+            age: profile.age,
+            location: profile.location
+          } : undefined
+        };
+      });
     } catch (error) {
       console.error('SettingsService.getBlockedUsers error:', error);
       throw error;
