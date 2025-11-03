@@ -692,5 +692,116 @@ export class MessageService {
       throw error;
     }
   }
+
+  /**
+   * Pin or unpin a conversation
+   */
+  static async togglePinConversation(userId: string, matchId: string): Promise<boolean> {
+    try {
+      // Check if setting exists
+      const { data: existing } = await supabase
+        .from('conversation_settings')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('match_id', matchId)
+        .maybeSingle();
+
+      if (existing) {
+        // Toggle pin status
+        const { error } = await supabase
+          .from('conversation_settings')
+          .update({ 
+            is_pinned: !existing.is_pinned,
+            pinned_at: !existing.is_pinned ? new Date().toISOString() : null
+          })
+          .eq('user_id', userId)
+          .eq('match_id', matchId);
+
+        if (error) throw error;
+        return !existing.is_pinned;
+      } else {
+        // Create new setting with pinned = true
+        const { error } = await supabase
+          .from('conversation_settings')
+          .insert({
+            user_id: userId,
+            match_id: matchId,
+            is_pinned: true,
+            pinned_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+        return true;
+      }
+    } catch (error) {
+      console.error('Error toggling pin conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete (soft delete) a conversation
+   */
+  static async deleteConversation(userId: string, matchId: string): Promise<void> {
+    try {
+      // Check if setting exists
+      const { data: existing } = await supabase
+        .from('conversation_settings')
+        .select('*')
+        .eq('user_id', userId)
+        .eq('match_id', matchId)
+        .maybeSingle();
+
+      if (existing) {
+        // Update to deleted
+        const { error } = await supabase
+          .from('conversation_settings')
+          .update({ 
+            is_deleted: true,
+            deleted_at: new Date().toISOString()
+          })
+          .eq('user_id', userId)
+          .eq('match_id', matchId);
+
+        if (error) throw error;
+      } else {
+        // Create new setting with deleted = true
+        const { error } = await supabase
+          .from('conversation_settings')
+          .insert({
+            user_id: userId,
+            match_id: matchId,
+            is_deleted: true,
+            deleted_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+      }
+    } catch (error) {
+      console.error('Error deleting conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Restore a deleted conversation
+   */
+  static async restoreConversation(userId: string, matchId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('conversation_settings')
+        .update({ 
+          is_deleted: false,
+          deleted_at: null
+        })
+        .eq('user_id', userId)
+        .eq('match_id', matchId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error restoring conversation:', error);
+      throw error;
+    }
+  }
 }
 
