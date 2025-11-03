@@ -37,6 +37,9 @@ export interface Conversation {
   lastMessageAt?: string;
   unreadCount: number;
   isOnline: boolean;
+  isPinned: boolean;
+  isDeleted: boolean;
+  lastMessageSenderId?: string; // Track who sent the last message
 }
 
 export class MessageService {
