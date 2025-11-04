@@ -391,6 +391,25 @@ function EventDetailModal({ event, isOpen, onClose }: { event: Event | null; isO
 
 // ISO Post Preview Card Component
 function ISOPostPreviewCard({ post, onClick }: { post: ISOPost; onClick: () => void }) {
+  const getDisplayName = () => {
+    if (post.account_type === 'couple' && post.display_name2) {
+      return `${post.display_name || 'User'} & ${post.display_name2}`;
+    }
+    return post.display_name || 'User';
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+    return date.toLocaleDateString();
+  };
+
   return (
     <Card
       className={`${spiceTheme.components.card} min-w-[280px] p-4 cursor-pointer hover:scale-105 transform transition-all duration-300 animate-glow`}
@@ -400,11 +419,11 @@ function ISOPostPreviewCard({ post, onClick }: { post: ISOPost; onClick: () => v
       <div className="flex items-start space-x-3 mb-3">
         <div className="relative">
           <img
-            src={post.authorImage}
-            alt={post.author}
+            src={post.photos?.[0] || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400'}
+            alt={getDisplayName()}
             className="w-12 h-12 rounded-full object-cover"
           />
-          {post.isVerified && (
+          {post.is_verified && (
             <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-0.5">
               <Shield className="h-3 w-3 text-white" />
             </div>
@@ -412,15 +431,17 @@ function ISOPostPreviewCard({ post, onClick }: { post: ISOPost; onClick: () => v
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2">
-            <h3 className={`font-semibold text-sm truncate ${spiceTheme.components.text.gradient}`}>{post.author}</h3>
-            {post.isPremium && <Crown className="h-3 w-3 text-yellow-400 fill-current flex-shrink-0" />}
+            <h3 className={`font-semibold text-sm truncate ${spiceTheme.components.text.gradient}`}>
+              {getDisplayName()}
+            </h3>
+            {post.membership_tier === 'vip' && <Crown className="h-3 w-3 text-yellow-400 fill-current flex-shrink-0" />}
           </div>
           <div className="flex items-center space-x-2 text-xs text-white/60">
             <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
-              {post.accountType}
+              {post.account_type === 'couple' ? 'Couple' : 'Single'}
             </Badge>
             <span>•</span>
-            <span>{post.postedAt}</span>
+            <span>{formatTimeAgo(post.created_at)}</span>
           </div>
         </div>
       </div>
@@ -432,11 +453,11 @@ function ISOPostPreviewCard({ post, onClick }: { post: ISOPost; onClick: () => v
         <div className="flex items-center space-x-3 text-white/60">
           <span className="flex items-center">
             <Heart className="h-3 w-3 mr-1" />
-            {post.likes}
+            {post.likes_count || 0}
           </span>
           <span className="flex items-center">
             <MessageSquare className="h-3 w-3 mr-1" />
-            {post.responses}
+            {post.comments_count || 0}
           </span>
         </div>
         <MapPin className="h-3 w-3 text-pink-400" />
