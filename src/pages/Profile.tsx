@@ -65,8 +65,23 @@ export const ProfilePage: React.FC = () => {
     // Check if user is admin
     if (user) {
       verificationService.isAdmin(user.id).then(setIsAdmin);
+      loadUserIsoPosts();
     }
   }, [user]);
+
+  const loadUserIsoPosts = async () => {
+    if (!user) return;
+    
+    setIsLoadingIsoPosts(true);
+    try {
+      const posts = await isoPostService.getPostsByUser(user.id);
+      setUserIsoPosts(posts);
+    } catch (error) {
+      console.error('Error loading user ISO posts:', error);
+    } finally {
+      setIsLoadingIsoPosts(false);
+    }
+  };
 
   // Catch any render errors
   if (renderError) {
