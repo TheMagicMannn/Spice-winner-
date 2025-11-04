@@ -73,6 +73,27 @@ export const ISOPostDetailPage: React.FC = () => {
       if (user) {
         const userLiked = await isoPostService.hasUserLikedPost(postId, user.id);
         setIsLiked(userLiked);
+        
+        // Load comment likes and replies for each comment
+        const likesMap: Record<string, number> = {};
+        const likedMap: Record<string, boolean> = {};
+        const repliesMap: Record<string, any[]> = {};
+        
+        for (const comment of commentsData) {
+          const [likesCount, userLiked, replies] = await Promise.all([
+            isoPostService.getCommentLikesCount(comment.id),
+            isoPostService.hasUserLikedComment(comment.id, user.id),
+            isoPostService.getCommentReplies(comment.id)
+          ]);
+          
+          likesMap[comment.id] = likesCount;
+          likedMap[comment.id] = userLiked;
+          repliesMap[comment.id] = replies;
+        }
+        
+        setCommentLikes(likesMap);
+        setCommentLikedByUser(likedMap);
+        setCommentReplies(repliesMap);
       }
     } catch (error) {
       console.error('Error loading post details:', error);
