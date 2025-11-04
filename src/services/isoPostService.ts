@@ -290,7 +290,11 @@ class ISOPostService {
             membership_tier,
             location,
             age,
-            age2
+            age2,
+            gender,
+            gender2,
+            orientation,
+            orientation2
           )
         `)
         .eq('author_id', userId)
@@ -318,6 +322,10 @@ class ISOPostService {
             author_location: post.profiles?.location,
             age: post.profiles?.age,
             age2: post.profiles?.age2,
+            gender: post.profiles?.gender,
+            gender2: post.profiles?.gender2,
+            orientation: post.profiles?.orientation,
+            orientation2: post.profiles?.orientation2,
             likes_count: likesResult.count || 0,
             comments_count: commentsResult.count || 0
           };
@@ -344,6 +352,7 @@ class ISOPostService {
           content: postData.content,
           location: postData.location,
           tags: postData.tags,
+          seeking_type: postData.seeking_type,
           is_active: true
         })
         .select()
