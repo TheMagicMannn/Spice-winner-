@@ -7,6 +7,7 @@ export interface ISOPost {
   content: string;
   location: string;
   tags: string[];
+  seeking_type: string[];
   created_at: string;
   updated_at: string;
   is_active: boolean;
@@ -21,6 +22,10 @@ export interface ISOPost {
   author_location?: string;
   age?: number;
   age2?: number;
+  gender?: string;
+  gender2?: string;
+  orientation?: string;
+  orientation2?: string;
   
   // Counts
   likes_count?: number;
