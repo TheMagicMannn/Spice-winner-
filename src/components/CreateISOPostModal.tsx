@@ -5,9 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
-import { X, Plus, Loader2 } from 'lucide-react';
+import { X, Plus, Loader2, CheckCircle } from 'lucide-react';
 import { spiceTheme } from '@/styles/theme';
-import { ISOPost } from '@/services/isoPostService';
+import { ISOPost, SEEKING_TYPE_OPTIONS } from '@/services/isoPostService';
 
 interface CreateISOPostModalProps {
   isOpen: boolean;
