@@ -36,6 +36,12 @@ export const ISOPostDetailPage: React.FC = () => {
   const [newComment, setNewComment] = useState('');
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [commentLikes, setCommentLikes] = useState<Record<string, number>>({});
+  const [commentLikedByUser, setCommentLikedByUser] = useState<Record<string, boolean>>({});
+  const [commentReplies, setCommentReplies] = useState<Record<string, any[]>>({});
+  const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [replyContent, setReplyContent] = useState('');
+  const [showReplies, setShowReplies] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     if (postId) {
