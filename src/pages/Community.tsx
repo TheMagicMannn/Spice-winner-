@@ -805,12 +805,6 @@ export const CommunityPage: React.FC = () => {
         onClose={() => setShowEventDetail(false)}
       />
 
-      <ISOPostDetailModal
-        post={selectedISOPost}
-        isOpen={showISOPostDetail}
-        onClose={() => setShowISOPostDetail(false)}
-      />
-
       {/* Theme Styles */}
       <style>{themeStyles}</style>
     </SpiceBackground>
