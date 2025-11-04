@@ -141,6 +141,59 @@ function ISOPostCard({ post, onClick, onAuthorClick }: ISOPostCardProps) {
 
 export const ISOPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [posts, setPosts] = useState<ISOPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  const loadPosts = async () => {
+    setIsLoading(true);
+    try {
+      const postsData = await isoPostService.getAllPosts();
+      setPosts(postsData);
+    } catch (error) {
+      console.error('Error loading ISO posts:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCreatePost = async (data: {
+    title: string;
+    content: string;
+    location: string;
+    tags: string[];
+  }) => {
+    if (!user) return;
+
+    try {
+      await isoPostService.createPost(user.id, data);
+      await loadPosts(); // Reload posts
+    } catch (error) {
+      console.error('Error creating ISO post:', error);
+      throw error;
+    }
+  };
+
+  const handlePostClick = (postId: string) => {
+    navigate(`/iso/${postId}`);
+  };
+
+  const handleAuthorClick = (authorId: string) => {
+    navigate(`/user/${authorId}`);
+  };
+
+  if (isLoading) {
+    return (
+      <SpiceBackground className="min-h-screen flex items-center justify-center">
+        <Spinner />
+      </SpiceBackground>
+    );
+  }
 
   return (
     <SpiceBackground className="min-h-screen flex flex-col pb-20">
@@ -160,34 +213,60 @@ export const ISOPage: React.FC = () => {
             <p className={spiceTheme.components.text.subtitle}>In Search Of - Connect with what you're looking for</p>
           </div>
         </div>
-        <Button className={spiceTheme.components.button.gradient}>
-          Create Post
-        </Button>
+        {user && (
+          <Button 
+            className={spiceTheme.components.button.gradient}
+            onClick={() => setIsCreateModalOpen(true)}
+            data-testid="create-iso-post-button"
+          >
+            <Plus className="h-5 w-5 mr-2" />
+            Create
+          </Button>
+        )}
       </div>
 
       {/* ISO Posts List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {mockISOPosts.map((post, index) => (
-          <div 
-            key={post.id} 
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <ISOPostCard post={post} />
-          </div>
-        ))}
-
-        {/* Empty State (if no posts) */}
-        {mockISOPosts.length === 0 && (
+        {posts.length === 0 ? (
           <div className="text-center py-20">
             <MessageSquare className="h-16 w-16 text-pink-400/50 mx-auto mb-4" />
             <h3 className="text-white font-semibold text-xl mb-2">No ISO Posts Yet</h3>
             <p className="text-white/60 mb-4">Be the first to share what you're looking for!</p>
-            <Button className={spiceTheme.components.button.gradient}>
-              Create First Post
-            </Button>
+            {user && (
+              <Button 
+                className={spiceTheme.components.button.gradient}
+                onClick={() => setIsCreateModalOpen(true)}
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                Create First Post
+              </Button>
+            )}
           </div>
+        ) : (
+          posts.map((post, index) => (
+            <div 
+              key={post.id} 
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <ISOPostCard 
+                post={post} 
+                onClick={() => handlePostClick(post.id)}
+                onAuthorClick={handleAuthorClick}
+              />
+            </div>
+          ))
         )}
       </div>
+
+      {/* Create ISO Post Modal */}
+      {user && (
+        <CreateISOPostModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSubmit={handleCreatePost}
+          mode="create"
+        />
+      )}
 
       {/* Theme Styles */}
       <style>{themeStyles}</style>
