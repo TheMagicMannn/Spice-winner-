@@ -48,6 +48,8 @@ export const ProfilePage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [renderError, setRenderError] = useState<Error | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userIsoPosts, setUserIsoPosts] = useState<ISOPost[]>([]);
+  const [isLoadingIsoPosts, setIsLoadingIsoPosts] = useState(true);
 
   // Enhanced error boundary logging
   React.useEffect(() => {
