@@ -20,7 +20,9 @@ import {
   CheckCircle,
   Calendar,
   Camera,
-  Zap
+  Zap,
+  MessageSquare,
+  Heart
 } from 'lucide-react';
 import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
@@ -33,6 +35,7 @@ import { SpiceBackground, SpiceButton } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
 import { Profile, MatchPreferences } from '@/types';
 import { useNavigate } from 'react-router-dom';
+import { isoPostService, ISOPost } from '@/services/isoPostService';
 
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
