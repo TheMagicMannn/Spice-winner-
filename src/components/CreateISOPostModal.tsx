@@ -53,12 +53,15 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
   const [content, setContent] = useState('');
   const [location, setLocation] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [seekingTypes, setSeekingTypes] = useState<string[]>([]);
   const [customTag, setCustomTag] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSeekingDropdown, setShowSeekingDropdown] = useState(false);
   const [errors, setErrors] = useState<{
     title?: string;
     content?: string;
     location?: string;
+    seeking_type?: string;
   }>({});
 
   // Load initial data when editing
@@ -68,12 +71,14 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
       setContent(initialData.content);
       setLocation(initialData.location);
       setTags(initialData.tags || []);
+      setSeekingTypes(initialData.seeking_type || []);
     } else {
       // Reset form for create mode
       setTitle('');
       setContent('');
       setLocation('');
       setTags([]);
+      setSeekingTypes([]);
     }
     setErrors({});
   }, [initialData, mode, isOpen]);
