@@ -369,15 +369,36 @@ export const ISOPostDetailPage: React.FC = () => {
                     <Crown className="h-4 w-4 text-yellow-400 fill-current" />
                   )}
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-white/60">
-                  <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
-                    {post.account_type === 'couple' ? 'Couple' : 'Single'}
-                  </Badge>
-                  <span>•</span>
-                  <span>{formatTimeAgo(post.created_at)}</span>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center space-x-2 text-sm text-white/60">
+                    <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
+                      {post.account_type === 'couple' ? 'Couple' : 'Single'}
+                    </Badge>
+                    <span>•</span>
+                    <span>{formatTimeAgo(post.created_at)}</span>
+                  </div>
+                  {getAuthorDetails() && (
+                    <div className="text-sm text-white/50">
+                      {getAuthorDetails()}
+                    </div>
+                  )}
                 </div>
               </div>
             </button>
+
+            {/* Seeking Type Badges */}
+            {post.seeking_type && post.seeking_type.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {post.seeking_type.map((type) => (
+                  <Badge
+                    key={type}
+                    className="bg-purple-500/20 text-purple-400 border-purple-500/30"
+                  >
+                    {type}
+                  </Badge>
+                ))}
+              </div>
+            )}
 
             {/* Title */}
             <h1 className="text-2xl font-bold text-white">{post.title}</h1>
