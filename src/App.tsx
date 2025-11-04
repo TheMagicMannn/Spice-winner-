@@ -11,6 +11,7 @@ import { HeroPage } from './pages/Hero';
 import { CommunityPage } from './pages/Community';
 import { EventsPage } from './pages/Events';
 import { ISOPage } from './pages/ISOPage';
+import { ISOPostDetailPage } from './pages/ISOPostDetailPage';
 import { BrowsePage } from './pages/Browse';
 import { MatchesPage } from './pages/Matches';
 import { MessagesPage } from './pages/Messages';
