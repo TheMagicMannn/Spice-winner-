@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +9,7 @@ import { Users, Calendar, MessageSquare, MapPin, Heart, Star, Shield, Crown, Arr
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
 import { mockEvents, Event, User as EventUser } from '@/data/mockEvents';
-import { mockISOPosts, ISOPost, User as ISOUser } from '@/data/mockISOPosts';
+import { isoPostService, ISOPost } from '@/services/isoPostService';
 
 // Mock data - will be replaced with real API calls
 const mockOnlineUsers = [
