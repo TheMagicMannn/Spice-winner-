@@ -142,6 +142,7 @@ export const ISOPostDetailPage: React.FC = () => {
     content: string;
     location: string;
     tags: string[];
+    seeking_type: string[];
   }) => {
     if (!user || !postId) return;
 
@@ -167,6 +168,52 @@ export const ISOPostDetailPage: React.FC = () => {
     } catch (error) {
       console.error('Error deleting post:', error);
     }
+  };
+
+  const handleCommentLike = async (commentId: string) => {
+    if (!user) return;
+
+    try {
+      const isLiked = commentLikedByUser[commentId];
+      
+      if (isLiked) {
+        await isoPostService.unlikeComment(commentId, user.id);
+        setCommentLikedByUser({ ...commentLikedByUser, [commentId]: false });
+        setCommentLikes({ ...commentLikes, [commentId]: (commentLikes[commentId] || 1) - 1 });
+      } else {
+        await isoPostService.likeComment(commentId, user.id);
+        setCommentLikedByUser({ ...commentLikedByUser, [commentId]: true });
+        setCommentLikes({ ...commentLikes, [commentId]: (commentLikes[commentId] || 0) + 1 });
+      }
+    } catch (error) {
+      console.error('Error toggling comment like:', error);
+    }
+  };
+
+  const handleAddReply = async (commentId: string) => {
+    if (!user || !replyContent.trim()) return;
+
+    try {
+      const reply = await isoPostService.addCommentReply(commentId, user.id, replyContent.trim());
+      
+      // Update replies state
+      setCommentReplies({
+        ...commentReplies,
+        [commentId]: [...(commentReplies[commentId] || []), reply]
+      });
+      
+      setReplyContent('');
+      setReplyingTo(null);
+    } catch (error) {
+      console.error('Error adding reply:', error);
+    }
+  };
+
+  const toggleReplies = (commentId: string) => {
+    setShowReplies({
+      ...showReplies,
+      [commentId]: !showReplies[commentId]
+    });
   };
 
   const handleAuthorClick = () => {
