@@ -136,9 +136,9 @@ class ISOPostService {
   /**
    * Fetch all active ISO posts with author details
    */
-  async getAllPosts(): Promise<ISOPost[]> {
+  async getAllPosts(seekingTypeFilter?: string, searchQuery?: string): Promise<ISOPost[]> {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('iso_posts')
         .select(`
           *,
@@ -151,11 +151,26 @@ class ISOPostService {
             membership_tier,
             location,
             age,
-            age2
+            age2,
+            gender,
+            gender2,
+            orientation,
+            orientation2
           )
         `)
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
+        .eq('is_active', true);
+
+      // Apply seeking type filter
+      if (seekingTypeFilter && seekingTypeFilter !== 'All Posts') {
+        query = query.contains('seeking_type', [seekingTypeFilter]);
+      }
+
+      // Apply search filter
+      if (searchQuery && searchQuery.trim()) {
+        query = query.or(`title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
 
@@ -178,6 +193,10 @@ class ISOPostService {
             author_location: post.profiles?.location,
             age: post.profiles?.age,
             age2: post.profiles?.age2,
+            gender: post.profiles?.gender,
+            gender2: post.profiles?.gender2,
+            orientation: post.profiles?.orientation,
+            orientation2: post.profiles?.orientation2,
             likes_count: likesResult.count || 0,
             comments_count: commentsResult.count || 0
           };
