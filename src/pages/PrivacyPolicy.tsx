@@ -27,109 +27,123 @@ export const PrivacyPolicyPage: React.FC = () => {
       {/* Content */}
       <div className="p-4 space-y-6">
         <Card className={spiceTheme.components.card}>
-          <div className="p-6 space-y-6 text-white">
+          <div className="p-6 space-y-6 text-white/90 text-sm leading-relaxed">
             <div>
-              <p className="text-white/70 mb-6">
-                <strong>Last Updated:</strong> {new Date().toLocaleDateString()}
-              </p>
-              <p className="text-white/80 leading-relaxed">
-                Welcome to SPICE. We are committed to protecting your privacy and ensuring your personal information is handled responsibly. This Privacy Policy explains how we collect, use, and safeguard your information.
+              <h2 className="text-xl font-bold text-white mb-2">SPICE Privacy Notice</h2>
+              <p className="text-white/60 text-xs mb-4">Last updated: August 25, 2025</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">Privacy Notice</h3>
+              <p>Welcome to SPICE's Privacy Notice. Thank you for taking the time to read it.</p>
+              <p className="mt-2">Please read this Privacy Notice carefully before accessing or using our services. If you have any questions about this Privacy Notice or how we use your personal information, please contact us using the contact details set out below.</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">What this Privacy Notice covers</h3>
+              <p>This Privacy Notice applies to websites, apps, events and other services that post or link to this Privacy Notice or are operated by SPICE ("SPICE", "we", "us" or "our"). For simplicity, we refer to all of these as our "services" in this Privacy Notice.</p>
+              <p className="mt-2">This Privacy Notice sets out how we collect, store, transfer, share and use information that identifies, relates to, describes, is reasonably capable of being associated with, or could reasonably be linked, directly or indirectly, to a person ("personal information") when you sign up to, access and use the services.</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">1. Information we collect and how we use it</h3>
+              <p>We collect information that you provide to us when you set up your profile on our services, sign up for VIP access, and use our services to interact with other users. We also collect certain information automatically about how you use our services and your device.</p>
+              
+              <h4 className="text-md font-semibold text-white mt-4 mb-2">Information you provide when you set up your profile</h4>
+              <p>We will collect the following information from you when you set up your account and profile on our services:</p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
+                <li>Contact information, including your email address or phone number</li>
+                <li>Basic profile information, including your username and profile picture</li>
+                <li>Additional and verification pictures</li>
+                <li>Your date of birth</li>
+                <li>Your sex and gender</li>
+                <li>Your bio and preferences</li>
+                <li>Your sexual orientation and relationship preferences</li>
+                <li>Information about your partner (if joining as a couple)</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">2. How we use your personal information</h3>
+              <p>The main reason we use your information is to operate, maintain and deliver our services, including:</p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
+                <li>Allowing you to view and match with other users</li>
+                <li>Enabling other users to view your profile and match with you</li>
+                <li>Personalizing your experience on our services</li>
+                <li>Facilitating communications between users</li>
+                <li>Ensuring safety and security for all users</li>
+                <li>Preventing fraud and unauthorized activities</li>
+                <li>Improving our services and developing new features</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">3. Photo Verification</h3>
+              <p>If you choose to verify your profile photo, we will review your verification photo and compare it to the other photos you submit to help ensure that you are who you say you are. We do not add the verification photos to your profile.</p>
+              <p className="mt-2">With your consent, we will use facial recognition AI technology to compare your verification photo against the photos you upload. We do not retain your biometric template after completing the photo verification process.</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">4. How we share information</h3>
+              <p>We may share your personal information as follows:</p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
+                <li><strong>With other users:</strong> You share information when you voluntarily disclose it on the services, including your public profile</li>
+                <li><strong>With our service providers:</strong> We use third parties to help us operate and improve our services</li>
+                <li><strong>For legal compliance:</strong> When required by law or to protect the safety of any person</li>
+                <li><strong>For corporate transactions:</strong> If we are involved in a merger, sale, or acquisition</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">5. Control over your information</h3>
+              <p>You can control how your personal information is used:</p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
+                <li><strong>In-app settings:</strong> Update privacy settings, access, rectify or delete information directly within the service</li>
+                <li><strong>Device permissions:</strong> Control access to your phone book and location through your device settings</li>
+                <li><strong>Modifying and deleting:</strong> Review, amend or delete your personal information or entire account</li>
+                <li><strong>Email preferences:</strong> Unsubscribe from promotional emails at any time</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">6. Your Rights</h3>
+              <p>Depending on your location, you may have the following rights:</p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
+                <li><strong>Right of access:</strong> Obtain confirmation of whether we are processing your personal information</li>
+                <li><strong>Right of portability:</strong> Receive a copy of your personal information in a machine-readable format</li>
+                <li><strong>Right to rectification:</strong> Obtain rectification of any inaccurate personal information</li>
+                <li><strong>Right to deletion:</strong> Require us to erase your personal information</li>
+                <li><strong>Right to restriction:</strong> Limit the purposes for which we process your information</li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">7. Data Retention</h3>
+              <p>We will normally keep your personal information for as long as you are an active user of our services. If you delete your account, your profile will no longer be visible to others, but we will retain your personal information for one month (or three months for VIP users), after which it will be deleted or anonymized.</p>
+              <p className="mt-2">We will also delete or anonymize your personal information if you are inactive for a continuous period of two years.</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">8. Children's Privacy</h3>
+              <p>Our services are restricted to users who are 18 years of age or older. We do not permit users under the age of 18 on our platform and we do not knowingly collect personal information from anyone under the age of 18.</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-white mb-3">9. Contact Us</h3>
+              <p>If you have questions about this Privacy Notice or our privacy practices, you can contact us at:</p>
+              <p className="mt-2">
+                <a 
+                  href="mailto:support@thespiceapp.com" 
+                  className="text-pink-400 hover:text-pink-300 underline"
+                >
+                  support@thespiceapp.com
+                </a>
               </p>
             </div>
 
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">1. Information We Collect</h2>
-              <div className="space-y-3 text-white/80">
-                <p><strong>Personal Information:</strong> Name, age, email address, photos, location, and profile details.</p>
-                <p><strong>Usage Data:</strong> Information about how you use our platform, including pages visited, features used, and interactions.</p>
-                <p><strong>Communication Data:</strong> Messages, posts, and other content you share on the platform.</p>
-                <p><strong>Device Information:</strong> IP address, browser type, device type, and operating system.</p>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">2. How We Use Your Information</h2>
-              <ul className="list-disc list-inside space-y-2 text-white/80">
-                <li>To provide, maintain, and improve our services</li>
-                <li>To create and manage your account</li>
-                <li>To facilitate connections between members</li>
-                <li>To send you notifications, updates, and promotional materials</li>
-                <li>To ensure platform safety and prevent fraud</li>
-                <li>To comply with legal obligations</li>
-                <li>To personalize your experience and show relevant content</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">3. Information Sharing</h2>
-              <div className="space-y-3 text-white/80">
-                <p><strong>With Other Users:</strong> Your profile information is visible to other verified members based on your privacy settings.</p>
-                <p><strong>Service Providers:</strong> We may share information with trusted third-party service providers who assist in operating our platform.</p>
-                <p><strong>Legal Requirements:</strong> We may disclose information when required by law or to protect our rights.</p>
-                <p className="text-pink-400 font-semibold">We do NOT sell your personal information to third parties.</p>
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">4. Data Security</h2>
-              <p className="text-white/80">
-                We implement industry-standard security measures to protect your information, including encryption, secure servers, and regular security audits. However, no method of transmission over the internet is 100% secure.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">5. Your Rights</h2>
-              <ul className="list-disc list-inside space-y-2 text-white/80">
-                <li><strong>Access:</strong> Request access to your personal data</li>
-                <li><strong>Correction:</strong> Update or correct your information</li>
-                <li><strong>Deletion:</strong> Request deletion of your account and data</li>
-                <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications</li>
-                <li><strong>Data Portability:</strong> Request a copy of your data</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">6. Cookies and Tracking</h2>
-              <p className="text-white/80">
-                We use cookies and similar tracking technologies to enhance your experience, analyze usage patterns, and personalize content. You can manage cookie preferences in your browser settings.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">7. Age Restrictions</h2>
-              <p className="text-white/80">
-                SPICE is an adults-only platform. Users must be 18 years or older. We do not knowingly collect information from individuals under 18.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">8. International Users</h2>
-              <p className="text-white/80">
-                By using SPICE, you consent to the transfer and processing of your information in the United States and other countries where we operate.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">9. Changes to This Policy</h2>
-              <p className="text-white/80">
-                We may update this Privacy Policy from time to time. We will notify you of significant changes via email or platform notification. Continued use of SPICE after changes constitutes acceptance.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-pink-400 mb-3">10. Contact Us</h2>
-              <p className="text-white/80">
-                If you have questions about this Privacy Policy or wish to exercise your rights, please contact us at:
-              </p>
-              <div className="mt-3 p-4 bg-white/5 rounded-lg">
-                <p className="text-white/80">Email: privacy@spiceapp.com</p>
-                <p className="text-white/80">Address: SPICE Privacy Team, [Your Address]</p>
-              </div>
-            </section>
-
-            <div className="pt-6 border-t border-white/10">
-              <p className="text-white/60 text-sm italic">
-                By using SPICE, you acknowledge that you have read, understood, and agree to this Privacy Policy.
+            <div className="border-t border-pink-500/20 pt-4 mt-6">
+              <p className="text-white/60 text-xs">
+                This Privacy Notice may change over time. When we make changes, we will update the "Last Updated" date at the beginning of this notice. Material changes will be communicated through email or prominent posting on our services.
               </p>
             </div>
           </div>
