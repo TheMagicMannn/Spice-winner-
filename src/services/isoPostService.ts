@@ -597,6 +597,175 @@ class ISOPostService {
       throw error;
     }
   }
+
+  /**
+   * Like a comment
+   */
+  async likeComment(commentId: string, userId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('iso_comment_likes')
+        .insert({
+          comment_id: commentId,
+          user_id: userId
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error liking comment:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Unlike a comment
+   */
+  async unlikeComment(commentId: string, userId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('iso_comment_likes')
+        .delete()
+        .eq('comment_id', commentId)
+        .eq('user_id', userId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error unliking comment:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Check if user has liked a comment
+   */
+  async hasUserLikedComment(commentId: string, userId: string): Promise<boolean> {
+    try {
+      const { data, error } = await supabase
+        .from('iso_comment_likes')
+        .select('id')
+        .eq('comment_id', commentId)
+        .eq('user_id', userId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      return !!data;
+    } catch (error) {
+      console.error('Error checking comment like status:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get comment likes count
+   */
+  async getCommentLikesCount(commentId: string): Promise<number> {
+    try {
+      const { count, error } = await supabase
+        .from('iso_comment_likes')
+        .select('id', { count: 'exact', head: true })
+        .eq('comment_id', commentId);
+
+      if (error) throw error;
+      return count || 0;
+    } catch (error) {
+      console.error('Error getting comment likes count:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Add a reply to a comment
+   */
+  async addCommentReply(commentId: string, userId: string, content: string): Promise<ISOCommentReply> {
+    try {
+      const { data, error } = await supabase
+        .from('iso_comment_replies')
+        .insert({
+          comment_id: commentId,
+          user_id: userId,
+          content: content
+        })
+        .select(`
+          *,
+          profiles:user_id (
+            display_name,
+            display_name2,
+            account_type,
+            photos,
+            is_verified
+          )
+        `)
+        .single();
+
+      if (error) throw error;
+
+      return {
+        ...data,
+        display_name: data.profiles?.display_name,
+        display_name2: data.profiles?.display_name2,
+        account_type: data.profiles?.account_type,
+        photos: data.profiles?.photos,
+        is_verified: data.profiles?.is_verified
+      };
+    } catch (error) {
+      console.error('Error adding comment reply:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get replies for a comment
+   */
+  async getCommentReplies(commentId: string): Promise<ISOCommentReply[]> {
+    try {
+      const { data, error } = await supabase
+        .from('iso_comment_replies')
+        .select(`
+          *,
+          profiles:user_id (
+            display_name,
+            display_name2,
+            account_type,
+            photos,
+            is_verified
+          )
+        `)
+        .eq('comment_id', commentId)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+
+      return (data || []).map(reply => ({
+        ...reply,
+        display_name: reply.profiles?.display_name,
+        display_name2: reply.profiles?.display_name2,
+        account_type: reply.profiles?.account_type,
+        photos: reply.profiles?.photos,
+        is_verified: reply.profiles?.is_verified
+      }));
+    } catch (error) {
+      console.error('Error fetching comment replies:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Delete a reply
+   */
+  async deleteCommentReply(replyId: string, userId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('iso_comment_replies')
+        .delete()
+        .eq('id', replyId)
+        .eq('user_id', userId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting comment reply:', error);
+      throw error;
+    }
+  }
 }
 
 export const isoPostService = new ISOPostService();
