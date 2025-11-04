@@ -26,6 +26,36 @@ function ISOPostCard({ post, onClick, onAuthorClick }: ISOPostCardProps) {
     return post.display_name || 'User';
   };
 
+  const getAuthorDetails = () => {
+    const details = [];
+    
+    if (post.age) {
+      if (post.account_type === 'couple' && post.age2) {
+        details.push(`${post.age} & ${post.age2}`);
+      } else {
+        details.push(`${post.age}`);
+      }
+    }
+    
+    if (post.gender) {
+      if (post.account_type === 'couple' && post.gender2) {
+        details.push(`${post.gender}/${post.gender2}`);
+      } else {
+        details.push(post.gender);
+      }
+    }
+    
+    if (post.orientation) {
+      if (post.account_type === 'couple' && post.orientation2) {
+        details.push(`${post.orientation}/${post.orientation2}`);
+      } else {
+        details.push(post.orientation);
+      }
+    }
+    
+    return details.join(' • ');
+  };
+
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -72,12 +102,37 @@ function ISOPostCard({ post, onClick, onAuthorClick }: ISOPostCardProps) {
               </h3>
               {post.membership_tier === 'vip' && <Crown className="h-4 w-4 text-yellow-400 fill-current" />}
             </div>
-            <div className="flex items-center space-x-2 text-xs text-white/60">
-              <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
-                {post.account_type === 'couple' ? 'Couple' : 'Single'}
-              </Badge>
-              <span>•</span>
-              <span>{formatTimeAgo(post.created_at)}</span>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center space-x-2 text-xs text-white/60">
+                <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
+                  {post.account_type === 'couple' ? 'Couple' : 'Single'}
+                </Badge>
+                <span>•</span>
+                <span>{formatTimeAgo(post.created_at)}</span>
+              </div>
+              {getAuthorDetails() && (
+                <div className="text-xs text-white/50">
+                  {getAuthorDetails()}
+                </div>
+              )}
+            </div>
+          </div>
+        </button>
+      </div>
+
+      {/* Seeking Type Badges */}
+      {post.seeking_type && post.seeking_type.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          {post.seeking_type.map((type) => (
+            <Badge
+              key={type}
+              className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs"
+            >
+              {type}
+            </Badge>
+          ))}
+        </div>
+      )}
             </div>
           </div>
         </button>
