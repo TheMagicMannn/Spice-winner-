@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, MapPin, Heart, ArrowLeft, Crown, Shield, Plus } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { MessageSquare, MapPin, Heart, ArrowLeft, Crown, Shield, Plus, Search } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
 import { Spinner } from '@/components/Spinner';
 import { useAuth } from '@/hooks/useAuth';
-import { isoPostService, ISOPost } from '@/services/isoPostService';
+import { isoPostService, ISOPost, SEEKING_TYPE_OPTIONS } from '@/services/isoPostService';
 import { CreateISOPostModal } from '@/components/CreateISOPostModal';
 
 interface ISOPostCardProps {
