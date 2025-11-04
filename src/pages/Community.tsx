@@ -649,12 +649,30 @@ function ISOPostDetailModal({ post, isOpen, onClose }: { post: ISOPost | null; i
 }
 
 export const CommunityPage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedUser, setSelectedUser] = useState<OnlineUser | null>(null);
   const [showUserDetail, setShowUserDetail] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [showEventDetail, setShowEventDetail] = useState(false);
-  const [selectedISOPost, setSelectedISOPost] = useState<ISOPost | null>(null);
-  const [showISOPostDetail, setShowISOPostDetail] = useState(false);
+  const [isoPosts, setIsoPosts] = useState<ISOPost[]>([]);
+  const [isLoadingIsoPosts, setIsLoadingIsoPosts] = useState(true);
+
+  // Load ISO posts on mount
+  useEffect(() => {
+    loadIsoPosts();
+  }, []);
+
+  const loadIsoPosts = async () => {
+    setIsLoadingIsoPosts(true);
+    try {
+      const posts = await isoPostService.getAllPosts();
+      setIsoPosts(posts.slice(0, 4)); // Only show first 4
+    } catch (error) {
+      console.error('Error loading ISO posts:', error);
+    } finally {
+      setIsLoadingIsoPosts(false);
+    }
+  };
 
   const handleUserClick = (user: OnlineUser) => {
     setSelectedUser(user);
@@ -666,9 +684,8 @@ export const CommunityPage: React.FC = () => {
     setShowEventDetail(true);
   };
 
-  const handleISOPostClick = (post: ISOPost) => {
-    setSelectedISOPost(post);
-    setShowISOPostDetail(true);
+  const handleISOPostClick = (postId: string) => {
+    navigate(`/iso/${postId}`);
   };
 
   return (
