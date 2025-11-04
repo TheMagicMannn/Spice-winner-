@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, MapPin, Heart, ArrowLeft, Crown, Shield } from 'lucide-react';
+import { MessageSquare, MapPin, Heart, ArrowLeft, Crown, Shield, Plus } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
-import { mockISOPosts, ISOPost } from '@/data/mockISOPosts';
+import { Spinner } from '@/components/Spinner';
+import { useAuth } from '@/hooks/useAuth';
+import { isoPostService, ISOPost } from '@/services/isoPostService';
+import { CreateISOPostModal } from '@/components/CreateISOPostModal';
 
 interface ISOPostCardProps {
   post: ISOPost;
