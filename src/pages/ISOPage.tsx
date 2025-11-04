@@ -199,52 +199,85 @@ export const ISOPage: React.FC = () => {
     setSearchQuery(e.target.value);
   };
 
-  if (isLoading) {
-    return (
-      <SpiceBackground className="min-h-screen flex items-center justify-center">
-        <Spinner />
-      </SpiceBackground>
-    );
-  }
-
   return (
     <SpiceBackground className="min-h-screen flex flex-col pb-20">
       {/* Header with Back Button */}
-      <div className={`${spiceTheme.components.header} flex items-center justify-between`}>
-        <div className="flex items-center">
-          <Button
-            variant="ghost"
-            onClick={() => navigate('/community')}
-            className="mr-3 text-pink-400 hover:bg-pink-500/10 p-2"
-            data-testid="back-to-community-button"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className={`text-2xl ${spiceTheme.components.text.title} mb-1`}>ISO Posts</h1>
-            <p className={spiceTheme.components.text.subtitle}>In Search Of - Connect with what you're looking for</p>
+      <div className={`${spiceTheme.components.header}`}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center flex-1">
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/community')}
+              className="mr-3 text-pink-400 hover:bg-pink-500/10 p-2"
+              data-testid="back-to-community-button"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div className="flex-1">
+              <h1 className={`text-2xl ${spiceTheme.components.text.title} mb-1`}>ISO Posts</h1>
+              <p className={spiceTheme.components.text.subtitle}>In Search Of - Connect with what you're looking for</p>
+            </div>
           </div>
+          {user && (
+            <Button 
+              className={spiceTheme.components.button.gradient}
+              onClick={() => setIsCreateModalOpen(true)}
+              data-testid="create-iso-post-button"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Create
+            </Button>
+          )}
         </div>
-        {user && (
-          <Button 
-            className={spiceTheme.components.button.gradient}
-            onClick={() => setIsCreateModalOpen(true)}
-            data-testid="create-iso-post-button"
-          >
-            <Plus className="h-5 w-5 mr-2" />
-            Create
-          </Button>
-        )}
+
+        {/* Search Bar */}
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" />
+          <Input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search posts..."
+            className="bg-white/5 border-pink-500/30 text-white placeholder:text-white/40 pl-10"
+            data-testid="search-input"
+          />
+        </div>
+
+        {/* Tabs */}
+        <div className="flex overflow-x-auto space-x-2 pb-2 scrollbar-hide">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-full whitespace-nowrap transition-all ${
+                activeTab === tab
+                  ? 'bg-pink-500 text-white'
+                  : 'bg-white/5 text-white/70 hover:bg-white/10'
+              }`}
+              data-testid={`tab-${tab}`}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* ISO Posts List */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {posts.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Spinner />
+          </div>
+        ) : posts.length === 0 ? (
           <div className="text-center py-20">
             <MessageSquare className="h-16 w-16 text-pink-400/50 mx-auto mb-4" />
-            <h3 className="text-white font-semibold text-xl mb-2">No ISO Posts Yet</h3>
-            <p className="text-white/60 mb-4">Be the first to share what you're looking for!</p>
-            {user && (
+            <h3 className="text-white font-semibold text-xl mb-2">
+              {searchQuery ? 'No posts found' : 'No ISO Posts Yet'}
+            </h3>
+            <p className="text-white/60 mb-4">
+              {searchQuery ? 'Try a different search term' : 'Be the first to share what you\'re looking for!'}
+            </p>
+            {user && !searchQuery && (
               <Button 
                 className={spiceTheme.components.button.gradient}
                 onClick={() => setIsCreateModalOpen(true)}
