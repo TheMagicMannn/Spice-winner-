@@ -46,6 +46,41 @@ export interface ISOComment {
   account_type?: 'individual' | 'couple';
   photos?: string[];
   is_verified?: boolean;
+  
+  // Engagement
+  likes_count?: number;
+  replies_count?: number;
+  replies?: ISOCommentReply[];
+}
+
+export interface ISOCommentReply {
+  id: string;
+  comment_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  
+  // User details (from join)
+  display_name?: string;
+  display_name2?: string;
+  account_type?: 'individual' | 'couple';
+  photos?: string[];
+  is_verified?: boolean;
+}
+
+export interface ISOCommentLike {
+  id: string;
+  comment_id: string;
+  user_id: string;
+  created_at: string;
+  
+  // User details (from join)
+  display_name?: string;
+  display_name2?: string;
+  account_type?: 'individual' | 'couple';
+  photos?: string[];
+  is_verified?: boolean;
 }
 
 export interface ISOLike {
