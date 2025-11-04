@@ -234,6 +234,37 @@ export const ISOPostDetailPage: React.FC = () => {
     return post.display_name || 'User';
   };
 
+  const getAuthorDetails = () => {
+    if (!post) return '';
+    const details = [];
+    
+    if (post.age) {
+      if (post.account_type === 'couple' && post.age2) {
+        details.push(`${post.age} & ${post.age2}`);
+      } else {
+        details.push(`${post.age}`);
+      }
+    }
+    
+    if (post.gender) {
+      if (post.account_type === 'couple' && post.gender2) {
+        details.push(`${post.gender}/${post.gender2}`);
+      } else {
+        details.push(post.gender);
+      }
+    }
+    
+    if (post.orientation) {
+      if (post.account_type === 'couple' && post.orientation2) {
+        details.push(`${post.orientation}/${post.orientation2}`);
+      } else {
+        details.push(post.orientation);
+      }
+    }
+    
+    return details.join(' • ');
+  };
+
   const formatTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
