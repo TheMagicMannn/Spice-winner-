@@ -17,6 +17,7 @@ interface CreateISOPostModalProps {
     content: string;
     location: string;
     tags: string[];
+    seeking_type: string[];
   }) => Promise<void>;
   initialData?: ISOPost | null;
   mode?: 'create' | 'edit';
