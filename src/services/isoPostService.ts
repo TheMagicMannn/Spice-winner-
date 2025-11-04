@@ -1,5 +1,24 @@
 import { supabase } from './supabase';
 
+// Seeking type options
+export const SEEKING_TYPE_OPTIONS = [
+  'Couple seeking Couple',
+  'Couple seeking Male',
+  'Couple seeking Female',
+  'Couple seeking A',
+  'Male seeking Couple',
+  'Male seeking Female',
+  'Male seeking Male',
+  'Male seeking A',
+  'Female seeking Couple',
+  'Female seeking Male',
+  'Female seeking Female',
+  'Female seeking A',
+  'MtF seeking',
+  'FtM seeking',
+  'Group'
+];
+
 export interface ISOPost {
   id: string;
   author_id: string;
