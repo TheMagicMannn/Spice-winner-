@@ -1,0 +1,455 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { 
+  ArrowLeft, 
+  Heart, 
+  MessageSquare, 
+  MapPin, 
+  Shield, 
+  Crown, 
+  Edit, 
+  Trash2,
+  Loader2,
+  Send
+} from 'lucide-react';
+import { SpiceBackground } from '@/components/SpiceComponents';
+import { spiceTheme, themeStyles } from '@/styles/theme';
+import { Spinner } from '@/components/Spinner';
+import { useAuth } from '@/hooks/useAuth';
+import { isoPostService, ISOPost, ISOComment, ISOLike } from '@/services/isoPostService';
+import { CreateISOPostModal } from '@/components/CreateISOPostModal';
+
+export const ISOPostDetailPage: React.FC = () => {
+  const { postId } = useParams<{ postId: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  
+  const [post, setPost] = useState<ISOPost | null>(null);
+  const [comments, setComments] = useState<ISOComment[]>([]);
+  const [likes, setLikes] = useState<ISOLike[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLiked, setIsLiked] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (postId) {
+      loadPostDetails();
+    }
+  }, [postId]);
+
+  const loadPostDetails = async () => {
+    if (!postId) return;
+    
+    setIsLoading(true);
+    try {
+      const [postData, commentsData, likesData] = await Promise.all([
+        isoPostService.getPostById(postId),
+        isoPostService.getPostComments(postId),
+        isoPostService.getPostLikes(postId)
+      ]);
+
+      if (!postData) {
+        navigate('/iso');
+        return;
+      }
+
+      setPost(postData);
+      setComments(commentsData);
+      setLikes(likesData);
+
+      // Check if current user has liked the post
+      if (user) {
+        const userLiked = await isoPostService.hasUserLikedPost(postId, user.id);
+        setIsLiked(userLiked);
+      }
+    } catch (error) {
+      console.error('Error loading post details:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLikeToggle = async () => {
+    if (!user || !postId) return;
+
+    try {
+      if (isLiked) {
+        await isoPostService.unlikePost(postId, user.id);
+        setIsLiked(false);
+        setLikes(likes.filter(like => like.user_id !== user.id));
+      } else {
+        await isoPostService.likePost(postId, user.id);
+        setIsLiked(true);
+        // Reload likes to get the full data
+        const likesData = await isoPostService.getPostLikes(postId);
+        setLikes(likesData);
+      }
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (!user || !postId || !newComment.trim()) return;
+
+    setIsSubmittingComment(true);
+    try {
+      const comment = await isoPostService.addComment(postId, user.id, newComment.trim());
+      setComments([...comments, comment]);
+      setNewComment('');
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    } finally {
+      setIsSubmittingComment(false);
+    }
+  };
+
+  const handleEditPost = async (data: {
+    title: string;
+    content: string;
+    location: string;
+    tags: string[];
+  }) => {
+    if (!user || !postId) return;
+
+    try {
+      await isoPostService.updatePost(postId, user.id, data);
+      await loadPostDetails(); // Reload to get updated data
+    } catch (error) {
+      console.error('Error updating post:', error);
+      throw error;
+    }
+  };
+
+  const handleDeletePost = async () => {
+    if (!user || !postId || !post) return;
+
+    if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      await isoPostService.deletePost(postId, user.id);
+      navigate('/iso');
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
+
+  const handleAuthorClick = () => {
+    if (post?.author_id) {
+      navigate(`/user/${post.author_id}`);
+    }
+  };
+
+  const handleUserClick = (userId: string) => {
+    navigate(`/user/${userId}`);
+  };
+
+  const getDisplayName = () => {
+    if (!post) return '';
+    if (post.account_type === 'couple' && post.display_name2) {
+      return `${post.display_name || 'User'} & ${post.display_name2}`;
+    }
+    return post.display_name || 'User';
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+    return date.toLocaleDateString();
+  };
+
+  if (isLoading) {
+    return (
+      <SpiceBackground className="min-h-screen flex items-center justify-center">
+        <Spinner />
+      </SpiceBackground>
+    );
+  }
+
+  if (!post) {
+    return (
+      <SpiceBackground className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center text-white">
+          <h2 className="text-2xl mb-4">Post not found</h2>
+          <Button onClick={() => navigate('/iso')} className={spiceTheme.components.button.primary}>
+            Back to ISO Posts
+          </Button>
+        </div>
+      </SpiceBackground>
+    );
+  }
+
+  const isAuthor = user?.id === post.author_id;
+
+  return (
+    <SpiceBackground className="min-h-screen pb-20">
+      {/* Header */}
+      <div className={`${spiceTheme.components.header} flex items-center justify-between`}>
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="text-pink-400 hover:bg-pink-500/10 p-2"
+          data-testid="back-button"
+        >
+          <ArrowLeft className="h-5 w-5 mr-2" />
+          Back
+        </Button>
+        
+        {isAuthor && (
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setIsEditModalOpen(true)}
+              className={spiceTheme.components.button.secondary}
+              size="sm"
+              data-testid="edit-post-button"
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={handleDeletePost}
+              variant="outline"
+              size="sm"
+              className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+              data-testid="delete-post-button"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="p-4 space-y-6">
+        {/* Post Card */}
+        <Card className={spiceTheme.components.card}>
+          <div className="p-6 space-y-4">
+            {/* Author */}
+            <button
+              onClick={handleAuthorClick}
+              className="flex items-start space-x-3 hover:opacity-80 transition-opacity w-full text-left"
+              data-testid="author-profile-link"
+            >
+              <div className="relative">
+                <img
+                  src={post.photos?.[0] || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400'}
+                  alt={getDisplayName()}
+                  className="w-14 h-14 rounded-full object-cover"
+                />
+                {post.is_verified && (
+                  <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-0.5">
+                    <Shield className="h-4 w-4 text-white" />
+                  </div>
+                )}
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center space-x-2">
+                  <h3 className={`font-semibold text-lg ${spiceTheme.components.text.gradient}`}>
+                    {getDisplayName()}
+                  </h3>
+                  {post.membership_tier === 'vip' && (
+                    <Crown className="h-4 w-4 text-yellow-400 fill-current" />
+                  )}
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-white/60">
+                  <Badge className={`text-xs ${spiceTheme.components.badge.pink}`}>
+                    {post.account_type === 'couple' ? 'Couple' : 'Single'}
+                  </Badge>
+                  <span>•</span>
+                  <span>{formatTimeAgo(post.created_at)}</span>
+                </div>
+              </div>
+            </button>
+
+            {/* Title */}
+            <h1 className="text-2xl font-bold text-white">{post.title}</h1>
+
+            {/* Content */}
+            <p className="text-white/80 leading-relaxed whitespace-pre-wrap">{post.content}</p>
+
+            {/* Tags */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    className="bg-pink-500/10 text-pink-300 border-pink-500/30"
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Location */}
+            <div className="flex items-center text-white/70">
+              <MapPin className="h-4 w-4 mr-2 text-pink-400" />
+              <span>{post.location}</span>
+            </div>
+
+            {/* Like/Comment Stats */}
+            <div className="flex items-center space-x-6 pt-4 border-t border-white/10">
+              <button
+                onClick={handleLikeToggle}
+                className="flex items-center space-x-2 text-white/60 hover:text-pink-400 transition-colors"
+                data-testid="like-button"
+              >
+                <Heart className={`h-5 w-5 ${isLiked ? 'fill-pink-400 text-pink-400' : ''}`} />
+                <span className="font-semibold">{likes.length}</span>
+              </button>
+              <div className="flex items-center space-x-2 text-white/60">
+                <MessageSquare className="h-5 w-5" />
+                <span className="font-semibold">{comments.length}</span>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        {/* Likes Section */}
+        {likes.length > 0 && (
+          <Card className={spiceTheme.components.card}>
+            <div className="p-6">
+              <h3 className="text-white font-semibold text-lg mb-4 flex items-center">
+                <Heart className="h-5 w-5 mr-2 text-pink-400" />
+                Liked by {likes.length} {likes.length === 1 ? 'person' : 'people'}
+              </h3>
+              <div className="flex flex-wrap gap-3">
+                {likes.map((like) => (
+                  <button
+                    key={like.id}
+                    onClick={() => handleUserClick(like.user_id)}
+                    className="flex items-center space-x-2 bg-white/5 rounded-full pr-4 hover:bg-white/10 transition-all"
+                    data-testid={`like-user-${like.user_id}`}
+                  >
+                    <img
+                      src={like.photos?.[0] || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100'}
+                      alt={like.display_name || 'User'}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <span className="text-white text-sm">
+                      {like.account_type === 'couple' && like.display_name2
+                        ? `${like.display_name} & ${like.display_name2}`
+                        : like.display_name || 'User'}
+                    </span>
+                    {like.is_verified && <Shield className="h-4 w-4 text-blue-400" />}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Comments Section */}
+        <Card className={spiceTheme.components.card}>
+          <div className="p-6">
+            <h3 className="text-white font-semibold text-lg mb-4 flex items-center">
+              <MessageSquare className="h-5 w-5 mr-2 text-pink-400" />
+              Comments ({comments.length})
+            </h3>
+
+            {/* Add Comment */}
+            {user && (
+              <div className="mb-6">
+                <Textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Write a comment..."
+                  className="bg-white/5 border-pink-500/30 text-white placeholder:text-white/40 mb-3"
+                  rows={3}
+                  maxLength={500}
+                  data-testid="comment-input"
+                />
+                <div className="flex justify-between items-center">
+                  <span className="text-white/50 text-xs">{newComment.length}/500</span>
+                  <Button
+                    onClick={handleAddComment}
+                    disabled={!newComment.trim() || isSubmittingComment}
+                    className={spiceTheme.components.button.gradient}
+                    data-testid="submit-comment-button"
+                  >
+                    {isSubmittingComment ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Send className="h-4 w-4 mr-2" />
+                        Comment
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Comments List */}
+            <div className="space-y-4">
+              {comments.length === 0 ? (
+                <p className="text-white/50 text-center py-8">No comments yet. Be the first to comment!</p>
+              ) : (
+                comments.map((comment) => (
+                  <div key={comment.id} className="bg-white/5 rounded-lg p-4" data-testid={`comment-${comment.id}`}>
+                    <div className="flex items-start space-x-3">
+                      <button onClick={() => handleUserClick(comment.user_id)}>
+                        <img
+                          src={comment.photos?.[0] || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100'}
+                          alt={comment.display_name || 'User'}
+                          className="w-10 h-10 rounded-full object-cover hover:ring-2 hover:ring-pink-400 transition-all"
+                        />
+                      </button>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <button
+                            onClick={() => handleUserClick(comment.user_id)}
+                            className="font-semibold text-white hover:text-pink-400 transition-colors"
+                          >
+                            {comment.account_type === 'couple' && comment.display_name2
+                              ? `${comment.display_name} & ${comment.display_name2}`
+                              : comment.display_name || 'User'}
+                          </button>
+                          {comment.is_verified && <Shield className="h-4 w-4 text-blue-400" />}
+                          <Badge className="text-xs bg-pink-500/20 text-pink-400 border-pink-500/30">
+                            {comment.account_type === 'couple' ? 'Couple' : 'Single'}
+                          </Badge>
+                        </div>
+                        <p className="text-white/80 leading-relaxed">{comment.content}</p>
+                        <span className="text-white/50 text-sm mt-2 block">
+                          {formatTimeAgo(comment.created_at)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Edit Modal */}
+      {isAuthor && (
+        <CreateISOPostModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSubmit={handleEditPost}
+          initialData={post}
+          mode="edit"
+        />
+      )}
+
+      {/* Theme Styles */}
+      <style>{themeStyles}</style>
+    </SpiceBackground>
+  );
+};
