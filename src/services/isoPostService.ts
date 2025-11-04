@@ -228,7 +228,11 @@ class ISOPostService {
             membership_tier,
             location,
             age,
-            age2
+            age2,
+            gender,
+            gender2,
+            orientation,
+            orientation2
           )
         `)
         .eq('id', postId)
@@ -255,6 +259,10 @@ class ISOPostService {
         author_location: data.profiles?.location,
         age: data.profiles?.age,
         age2: data.profiles?.age2,
+        gender: data.profiles?.gender,
+        gender2: data.profiles?.gender2,
+        orientation: data.profiles?.orientation,
+        orientation2: data.profiles?.orientation2,
         likes_count: likesResult.count || 0,
         comments_count: commentsResult.count || 0
       };
