@@ -133,10 +133,6 @@ function ISOPostCard({ post, onClick, onAuthorClick }: ISOPostCardProps) {
           ))}
         </div>
       )}
-            </div>
-          </div>
-        </button>
-      </div>
 
       {/* Post Content - Clickable */}
       <div className="space-y-3" onClick={onClick}>
