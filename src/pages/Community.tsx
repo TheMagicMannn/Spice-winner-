@@ -764,7 +764,7 @@ export const CommunityPage: React.FC = () => {
             <Button
               variant="ghost"
               className="text-pink-400 hover:bg-pink-500/10 p-2"
-              onClick={() => window.location.hash = '/iso'}
+              onClick={() => navigate('/iso')}
             >
               <span className="text-sm">View All</span>
               <ArrowRight className="h-4 w-4 ml-1" />
@@ -772,15 +772,21 @@ export const CommunityPage: React.FC = () => {
           </div>
 
           <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
-            {mockISOPosts.slice(0, 4).map((post, index) => (
-              <div 
-                key={post.id} 
-                className="animate-fade-in snap-start"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <ISOPostPreviewCard post={post} onClick={() => handleISOPostClick(post)} />
-              </div>
-            ))}
+            {isLoadingIsoPosts ? (
+              <div className="text-white/60 text-sm">Loading ISO posts...</div>
+            ) : isoPosts.length === 0 ? (
+              <div className="text-white/60 text-sm">No ISO posts yet</div>
+            ) : (
+              isoPosts.map((post, index) => (
+                <div 
+                  key={post.id} 
+                  className="animate-fade-in snap-start"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <ISOPostPreviewCard post={post} onClick={() => handleISOPostClick(post.id)} />
+                </div>
+              ))
+            )}
           </div>
         </section>
 
