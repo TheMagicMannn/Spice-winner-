@@ -229,6 +229,70 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
             )}
           </div>
 
+          {/* Seeking Type */}
+          <div>
+            <Label className="text-white mb-2 block">
+              What are you seeking? <span className="text-red-400">*</span>
+              <span className="text-white/50 text-xs ml-2">(Select 1-3 options)</span>
+            </Label>
+            
+            {/* Selected Seeking Types */}
+            {seekingTypes.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-3">
+                {seekingTypes.map((type) => (
+                  <Badge
+                    key={type}
+                    className="bg-pink-500/20 text-pink-400 border-pink-500/30 cursor-pointer hover:bg-pink-500/30"
+                    onClick={() => toggleSeekingType(type)}
+                  >
+                    {type}
+                    <X className="h-3 w-3 ml-1" />
+                  </Badge>
+                ))}
+              </div>
+            )}
+
+            {/* Dropdown Toggle */}
+            <Button
+              type="button"
+              onClick={() => setShowSeekingDropdown(!showSeekingDropdown)}
+              className="w-full justify-between bg-white/5 border border-pink-500/30 text-white hover:bg-white/10"
+              variant="outline"
+            >
+              <span>{seekingTypes.length === 0 ? 'Select seeking type...' : `${seekingTypes.length} selected`}</span>
+              <span className="text-xs">{showSeekingDropdown ? '▲' : '▼'}</span>
+            </Button>
+
+            {/* Dropdown Options */}
+            {showSeekingDropdown && (
+              <div className="mt-2 max-h-60 overflow-y-auto bg-black border border-pink-500/30 rounded-lg">
+                {SEEKING_TYPE_OPTIONS.map((option) => {
+                  const isSelected = seekingTypes.includes(option);
+                  const isDisabled = !isSelected && seekingTypes.length >= 3;
+                  
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => !isDisabled && toggleSeekingType(option)}
+                      disabled={isDisabled}
+                      className={`w-full text-left px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors ${
+                        isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                      }`}
+                    >
+                      <span className="text-white text-sm">{option}</span>
+                      {isSelected && <CheckCircle className="h-4 w-4 text-pink-400" />}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+            {errors.seeking_type && (
+              <span className="text-red-400 text-sm mt-2 block">{errors.seeking_type}</span>
+            )}
+          </div>
+
           {/* Content */}
           <div>
             <Label htmlFor="content" className="text-white mb-2 block">
