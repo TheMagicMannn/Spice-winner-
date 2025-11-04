@@ -106,6 +106,12 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
       newErrors.location = 'Location is required';
     }
 
+    if (seekingTypes.length === 0) {
+      newErrors.seeking_type = 'Please select at least one seeking type';
+    } else if (seekingTypes.length > 3) {
+      newErrors.seeking_type = 'Maximum 3 seeking types allowed';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -119,7 +125,8 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
         title: title.trim(),
         content: content.trim(),
         location: location.trim(),
-        tags
+        tags,
+        seeking_type: seekingTypes
       });
       handleClose();
     } catch (error) {
@@ -134,7 +141,9 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
     setContent('');
     setLocation('');
     setTags([]);
+    setSeekingTypes([]);
     setCustomTag('');
+    setShowSeekingDropdown(false);
     setErrors({});
     onClose();
   };
@@ -154,6 +163,14 @@ export const CreateISOPostModal: React.FC<CreateISOPostModalProps> = ({
     if (trimmedTag && !tags.includes(trimmedTag) && tags.length < 8) {
       setTags([...tags, trimmedTag]);
       setCustomTag('');
+    }
+  };
+
+  const toggleSeekingType = (type: string) => {
+    if (seekingTypes.includes(type)) {
+      setSeekingTypes(seekingTypes.filter(t => t !== type));
+    } else if (seekingTypes.length < 3) {
+      setSeekingTypes([...seekingTypes, type]);
     }
   };
 
