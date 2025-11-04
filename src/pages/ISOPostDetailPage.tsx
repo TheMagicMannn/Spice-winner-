@@ -549,10 +549,115 @@ export const ISOPostDetailPage: React.FC = () => {
                             {comment.account_type === 'couple' ? 'Couple' : 'Single'}
                           </Badge>
                         </div>
-                        <p className="text-white/80 leading-relaxed">{comment.content}</p>
-                        <span className="text-white/50 text-sm mt-2 block">
-                          {formatTimeAgo(comment.created_at)}
-                        </span>
+                        <p className="text-white/80 leading-relaxed mb-2">{comment.content}</p>
+                        
+                        {/* Comment Actions */}
+                        <div className="flex items-center space-x-4 text-sm">
+                          <span className="text-white/50">
+                            {formatTimeAgo(comment.created_at)}
+                          </span>
+                          
+                          {user && (
+                            <>
+                              <button
+                                onClick={() => handleCommentLike(comment.id)}
+                                className="flex items-center space-x-1 text-white/60 hover:text-pink-400 transition-colors"
+                                data-testid={`like-comment-${comment.id}`}
+                              >
+                                <Heart className={`h-4 w-4 ${commentLikedByUser[comment.id] ? 'fill-pink-400 text-pink-400' : ''}`} />
+                                <span>{commentLikes[comment.id] || 0}</span>
+                              </button>
+                              
+                              <button
+                                onClick={() => setReplyingTo(replyingTo === comment.id ? null : comment.id)}
+                                className="text-white/60 hover:text-pink-400 transition-colors"
+                                data-testid={`reply-comment-${comment.id}`}
+                              >
+                                Reply
+                              </button>
+                              
+                              {commentReplies[comment.id] && commentReplies[comment.id].length > 0 && (
+                                <button
+                                  onClick={() => toggleReplies(comment.id)}
+                                  className="text-white/60 hover:text-pink-400 transition-colors"
+                                >
+                                  {showReplies[comment.id] ? 'Hide' : 'Show'} {commentReplies[comment.id].length} {commentReplies[comment.id].length === 1 ? 'reply' : 'replies'}
+                                </button>
+                              )}
+                            </>
+                          )}
+                        </div>
+
+                        {/* Reply Input */}
+                        {replyingTo === comment.id && (
+                          <div className="mt-3 space-y-2">
+                            <Textarea
+                              value={replyContent}
+                              onChange={(e) => setReplyContent(e.target.value)}
+                              placeholder="Write a reply..."
+                              className="bg-white/5 border-pink-500/30 text-white placeholder:text-white/40"
+                              rows={2}
+                              maxLength={500}
+                            />
+                            <div className="flex justify-end space-x-2">
+                              <Button
+                                onClick={() => {
+                                  setReplyingTo(null);
+                                  setReplyContent('');
+                                }}
+                                variant="outline"
+                                size="sm"
+                                className="border-white/20 text-white hover:bg-white/5"
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                onClick={() => handleAddReply(comment.id)}
+                                disabled={!replyContent.trim()}
+                                size="sm"
+                                className={spiceTheme.components.button.gradient}
+                              >
+                                Reply
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Replies List */}
+                        {showReplies[comment.id] && commentReplies[comment.id] && commentReplies[comment.id].length > 0 && (
+                          <div className="mt-3 ml-6 space-y-3 border-l-2 border-pink-500/30 pl-4">
+                            {commentReplies[comment.id].map((reply: any) => (
+                              <div key={reply.id} className="bg-black/40 rounded-lg p-3">
+                                <div className="flex items-start space-x-2">
+                                  <button onClick={() => handleUserClick(reply.user_id)}>
+                                    <img
+                                      src={reply.photos?.[0] || 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100'}
+                                      alt={reply.display_name || 'User'}
+                                      className="w-8 h-8 rounded-full object-cover hover:ring-2 hover:ring-pink-400 transition-all"
+                                    />
+                                  </button>
+                                  <div className="flex-1">
+                                    <div className="flex items-center space-x-2 mb-1">
+                                      <button
+                                        onClick={() => handleUserClick(reply.user_id)}
+                                        className="font-semibold text-white text-sm hover:text-pink-400 transition-colors"
+                                      >
+                                        {reply.account_type === 'couple' && reply.display_name2
+                                          ? `${reply.display_name} & ${reply.display_name2}`
+                                          : reply.display_name || 'User'}
+                                      </button>
+                                      {reply.is_verified && <Shield className="h-3 w-3 text-blue-400" />}
+                                    </div>
+                                    <p className="text-white/80 text-sm leading-relaxed">{reply.content}</p>
+                                    <span className="text-white/50 text-xs mt-1 block">
+                                      {formatTimeAgo(reply.created_at)}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
