@@ -102,6 +102,7 @@ export interface CreateISOPostData {
   content: string;
   location: string;
   tags: string[];
+  seeking_type: string[];
 }
 
 export interface UpdateISOPostData {
@@ -109,6 +110,7 @@ export interface UpdateISOPostData {
   content?: string;
   location?: string;
   tags?: string[];
+  seeking_type?: string[];
 }
 
 class ISOPostService {
