@@ -123,8 +123,34 @@ export const SignupPage: React.FC = () => {
             </div>
 
             <div className="space-y-3 pt-2">
-              <div className="flex items-start space-x-3"><Checkbox id="terms" checked={agreeToTerms} onCheckedChange={setAgreeToTerms} /><Label htmlFor="terms" className="text-sm text-text-secondary leading-5 mb-0">I agree to the <span className="text-brand-secondary">Terms of Service</span> and understand this is an adults-only platform</Label></div>
-              <div className="flex items-start space-x-3"><Checkbox id="privacy" checked={agreeToPrivacy} onCheckedChange={setAgreeToPrivacy} /><Label htmlFor="privacy" className="text-sm text-text-secondary leading-5 mb-0">I agree to the <span className="text-brand-secondary">Privacy Policy</span> and consent to data processing</Label></div>
+              <div className="flex items-start space-x-3">
+                <Checkbox id="terms" checked={agreeToTerms} onCheckedChange={setAgreeToTerms} />
+                <Label htmlFor="terms" className="text-sm text-text-secondary leading-5 mb-0">
+                  I agree to the{' '}
+                  <button
+                    type="button"
+                    onClick={() => navigate('/terms-of-service')}
+                    className="text-brand-secondary hover:text-brand-primary underline"
+                  >
+                    Terms of Service
+                  </button>{' '}
+                  and understand this is an adults-only platform
+                </Label>
+              </div>
+              <div className="flex items-start space-x-3">
+                <Checkbox id="privacy" checked={agreeToPrivacy} onCheckedChange={setAgreeToPrivacy} />
+                <Label htmlFor="privacy" className="text-sm text-text-secondary leading-5 mb-0">
+                  I agree to the{' '}
+                  <button
+                    type="button"
+                    onClick={() => navigate('/privacy-policy')}
+                    className="text-brand-secondary hover:text-brand-primary underline"
+                  >
+                    Privacy Policy
+                  </button>{' '}
+                  and consent to data processing
+                </Label>
+              </div>
             </div>
 
             <button type="submit" disabled={!isFormValid} className="w-full py-4 px-5 bg-gray-900 text-white font-bold text-lg rounded-full border-2 border-brand-primary/50 transition-all duration-300 hover:border-brand-primary hover:shadow-lg hover:shadow-brand-primary/50 animate-glow disabled:opacity-50 disabled:cursor-not-allowed mt-4">
