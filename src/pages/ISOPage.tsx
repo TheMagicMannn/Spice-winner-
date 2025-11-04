@@ -146,15 +146,21 @@ export const ISOPage: React.FC = () => {
   const [posts, setPosts] = useState<ISOPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('All Posts');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  // Create tabs array with "All Posts" first
+  const tabs = ['All Posts', ...SEEKING_TYPE_OPTIONS];
 
   useEffect(() => {
     loadPosts();
-  }, []);
+  }, [activeTab, searchQuery]);
 
   const loadPosts = async () => {
     setIsLoading(true);
     try {
-      const postsData = await isoPostService.getAllPosts();
+      const seekingFilter = activeTab === 'All Posts' ? undefined : activeTab;
+      const postsData = await isoPostService.getAllPosts(seekingFilter, searchQuery);
       setPosts(postsData);
     } catch (error) {
       console.error('Error loading ISO posts:', error);
@@ -168,6 +174,7 @@ export const ISOPage: React.FC = () => {
     content: string;
     location: string;
     tags: string[];
+    seeking_type: string[];
   }) => {
     if (!user) return;
 
@@ -186,6 +193,10 @@ export const ISOPage: React.FC = () => {
 
   const handleAuthorClick = (authorId: string) => {
     navigate(`/user/${authorId}`);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
   };
 
   if (isLoading) {
