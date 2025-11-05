@@ -214,8 +214,8 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
   if (results) {
     return (
       <div className="fixed inset-0 z-50 bg-black flex flex-col">
-        {/* Header with close button */}
-        <div className="flex items-center justify-between p-4 border-b border-pink-500/30">
+        {/* Header with close button - sticky */}
+        <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-pink-500/30 bg-black/90 backdrop-blur-sm flex-shrink-0">
           <h2 className="text-2xl font-bold text-white">Quiz Complete!</h2>
           <Button
             variant="ghost"
@@ -228,55 +228,57 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
           </Button>
         </div>
 
-        {/* Results content */}
-        <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            className="max-w-2xl mx-auto space-y-3 pb-20"
-          >
-            {results.map((r, i) => (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0, y: 20 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                transition={{ delay: i * 0.05 }} 
-                className="bg-black/50 border border-pink-500/30 rounded-lg p-4 hover:border-pink-500/60 transition-all"
-              >
-                <div className="flex items-center gap-3">
-                  <motion.span 
-                    initial={{ scale: 0 }} 
-                    animate={{ scale: 1 }} 
-                    transition={{ type: "spring", delay: i * 0.05 + 0.2 }}
-                    className="text-xl font-bold text-pink-400 min-w-[60px]"
-                  >
-                    {r.pct}%
-                  </motion.span>
-                  <div className="flex-1">
-                    <div className="h-3 bg-gray-800 rounded-full overflow-hidden mb-2">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${r.pct}%` }}
-                        transition={{ delay: i * 0.05 + 0.2, duration: 0.6 }}
-                        className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full"
-                      />
+        {/* Results content - with proper padding for bottom nav */}
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
+          <div className="p-4 pb-28">
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              className="max-w-3xl mx-auto space-y-3"
+            >
+              {results.map((r, i) => (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ delay: i * 0.05 }} 
+                  className="bg-black/50 border border-pink-500/30 rounded-lg p-4 hover:border-pink-500/60 transition-all"
+                >
+                  <div className="flex items-center gap-3">
+                    <motion.span 
+                      initial={{ scale: 0 }} 
+                      animate={{ scale: 1 }} 
+                      transition={{ type: "spring", delay: i * 0.05 + 0.2 }}
+                      className="text-xl font-bold text-pink-400 min-w-[60px]"
+                    >
+                      {r.pct}%
+                    </motion.span>
+                    <div className="flex-1">
+                      <div className="h-3 bg-gray-800 rounded-full overflow-hidden mb-2">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${r.pct}%` }}
+                          transition={{ delay: i * 0.05 + 0.2, duration: 0.6 }}
+                          className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full"
+                        />
+                      </div>
+                      <span className="text-white font-medium">{r.name}</span>
                     </div>
-                    <span className="text-white font-medium">{r.name}</span>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
-        {/* Action buttons at bottom */}
+        {/* Action buttons at bottom - fixed */}
         <motion.div 
           initial={{ y: 50 }} 
           animate={{ y: 0 }} 
           transition={{ delay: 0.4 }} 
-          className="p-4 border-t border-pink-500/30 bg-black/90 backdrop-blur-sm"
+          className="sticky bottom-0 p-4 border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0"
         >
-          <div className="flex gap-3 max-w-2xl mx-auto">
+          <div className="flex gap-3 max-w-3xl mx-auto">
             <Button
               onClick={copy}
               className="flex-1 bg-gray-900 text-pink-400 font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all"
