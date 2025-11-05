@@ -222,8 +222,11 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
     });
 
     const sorted: Result[] = Object.entries(cats)
-      .sort(([,a], [,b]) => b - a)
-      .map(([k, v]) => ({ name: k.replace(/([A-Z])/g, ' $1').trim(), pct: v }));
+      .sort(([,a], [,b]) => (b || 0) - (a || 0))
+      .map(([k, v]) => ({ 
+        name: k.replace(/([A-Z])/g, ' $1').trim(), 
+        pct: typeof v === 'number' ? Math.round(v) : 0 
+      }));
 
     setResults(sorted);
     onSaveResults?.(cats as KinkResults);
