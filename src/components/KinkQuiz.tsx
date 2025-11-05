@@ -84,32 +84,60 @@ const STATEMENTS = [
 ] as const;
 
 // === CATEGORIES ===
+// CORRECTED MAPPINGS - Each statement logically matches the category
 const CATEGORIES = {
-  Ageplayer: [11, 26, 32, 62],
-  Experimentalist: [8, 31, 35],
-  Pet: [12, 23, 36, 50],
-  Ropebunny: [10, 18, 22],
-  Masochist: [2, 52],
-  Degradee: [13, 25, 63],
-  Submissive: [1, 7, 29, 44, 55],
-  Exhibitionist: [6, 14, 45],
-  PrimalPrey: [19, 46],
-  Nonmonogamist: [5, 17, 37, 39],
-  Rigger: [9, 30],
-  Switch: [33, 55],
-  DaddyMommy: [41, 58],
-  Voyeur: [42, 6],
-  Sadist: [24, 54, 59],
-  Dominant: [3, 51, 56],
-  MasterMistress: [43, 61],
-  BratTamer: [64],
-  Slave: [16, 21, 27, 47, 53, 60],
-  Owner: [34, 36],
-  Degrader: [4, 28, 49, 57],
-  Little: [32, 62],
-  Brat: [48],
-  Vanilla: [15, 20],
-  PrimalHunter: [38, 40]
+  // Submission-related categories
+  Submissive: [1, 7, 10, 29, 48, 63],        // Being dominated, partner decides, helpless, forced submission
+  Slave: [16, 21, 27, 46, 66, 79],           // Formal training, 24/7 service, address as superior
+  
+  // Dominance-related categories
+  Dominant: [3, 4, 22, 62, 70, 75],          // Making decisions, forcing submission, in charge
+  MasterMistress: [43, 62, 80],              // Fear/authority, 24/7 submission, addressed as superior
+  Owner: [34, 53],                            // Group of slaves owned by me
+  
+  // Pain-related categories
+  Masochist: [2, 65, 71],                    // Receiving pain, fear of physical harm, being tortured
+  Sadist: [24, 43, 73, 78],                  // Inflicting pain, seeing fear, torture
+  
+  // Degradation-related categories
+  Degrader: [4, 28, 47, 68, 76],             // No respect, forcing, verbally degrading
+  Degradee: [13, 25, 44, 82],                // Being treated with no respect, humiliated, degraded
+  
+  // Bondage-related categories
+  Rigger: [9, 30, 49],                       // Physically restricting partner, tying up
+  Ropebunny: [10, 18, 22, 41],               // Being helpless, restricted, tied up
+  
+  // Age play categories
+  Ageplayer: [11, 26, 45],                   // Age differences, playing different age
+  Little: [32, 51, 60, 81],                  // Playing different age, childlike, parental role from perspective
+  DaddyMommy: [51, 60, 77],                  // Partner acts childlike, nurturing parental role
+  
+  // Pet play categories  
+  Pet: [12, 23, 42, 69],                     // Playing as pet, being kept as pet
+  
+  // Primal categories
+  PrimalPrey: [19, 38],                      // Feeling like prey hunted
+  PrimalHunter: [38, 57, 59],                // Predator hunting, animalistic behavior
+  
+  // Brat categories
+  Brat: [67],                                // Talking back teasingly, disobeying
+  BratTamer: [83],                           // Taming bratty behavior
+  
+  // Versatility
+  Switch: [33, 52, 74],                      // Submissive now, dominant other times, need both
+  
+  // Observation categories
+  Voyeur: [42, 61],                          // Watching other people
+  Exhibitionist: [6, 14, 64],                // Being watched, public sex, selling content
+  
+  // Relationship style
+  Nonmonogamist: [5, 17, 37, 56, 58],        // Multiple people, join poly, see others
+  
+  // Openness
+  Experimentalist: [8, 31, 35, 50, 54],      // Try anything, many fantasies, no big deal if bad
+  
+  // Traditional
+  Vanilla: [15, 20, 39]                      // Romantic over sexual, no fetish
 } as const;
 
 // === TYPES ===
