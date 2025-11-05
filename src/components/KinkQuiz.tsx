@@ -242,23 +242,23 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
 
   if (results) {
     return (
-      <div className="fixed inset-0 z-50 bg-black flex flex-col">
+      <div className="fixed inset-0 z-50 bg-black flex flex-col overflow-hidden">
         {/* Top Header - sticky */}
         <div className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 flex-shrink-0">
-          {/* Header with back arrow */}
+          {/* Header */}
           <div className="flex items-center justify-between p-4">
-            <div className="flex items-center gap-3 flex-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="text-white hover:bg-pink-500/10 -ml-2"
-                data-testid="close-results-button"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
+            <div className="flex-1">
               <h2 className="text-lg font-bold text-white">Quiz Results</h2>
             </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="text-white hover:bg-pink-500/10"
+              data-testid="close-results-button"
+            >
+              <X className="h-5 w-5" />
+            </Button>
           </div>
 
           {/* SPICE Logo below header */}
