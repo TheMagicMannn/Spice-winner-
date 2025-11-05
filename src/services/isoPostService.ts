@@ -398,15 +398,33 @@ class ISOPostService {
    */
   async deletePost(postId: string, userId: string): Promise<void> {
     try {
+      // Verify user is authenticated
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        console.error('Authentication error:', sessionError);
+        throw new Error('You must be logged in to delete a post. Please refresh the page and try again.');
+      }
+
+      console.log('Deleting post:', { postId, userId, sessionUserId: session.user.id });
+
+      // Verify session user matches the userId parameter
+      if (session.user.id !== userId) {
+        throw new Error('Authentication mismatch. Please refresh the page and try again.');
+      }
+
       // First verify the post exists and user owns it
       const { data: postCheck, error: checkError } = await supabase
         .from('iso_posts')
-        .select('id, author_id')
+        .select('id, author_id, is_active')
         .eq('id', postId)
         .single();
 
       if (checkError) {
         console.error('Error checking post ownership:', checkError);
+        if (checkError.code === 'PGRST116') {
+          throw new Error('Post not found or already deleted');
+        }
         throw new Error('Failed to verify post ownership');
       }
 
@@ -415,7 +433,12 @@ class ISOPostService {
       }
 
       if (postCheck.author_id !== userId) {
+        console.error('Ownership mismatch:', { postAuthor: postCheck.author_id, userId });
         throw new Error('You do not have permission to delete this post');
+      }
+
+      if (!postCheck.is_active) {
+        throw new Error('This post has already been deleted');
       }
 
       // Perform the soft delete
@@ -428,15 +451,22 @@ class ISOPostService {
 
       if (error) {
         console.error('Supabase error deleting post:', error);
+        
+        // Provide more specific error messages based on error codes
+        if (error.code === '42501') {
+          throw new Error('Permission denied. Please refresh the page and try again.');
+        }
+        
         throw new Error(`Failed to delete post: ${error.message}`);
       }
 
       // Verify the update was successful
       if (!data || data.length === 0) {
-        throw new Error('Post deletion failed - no rows updated. This may be due to permission issues.');
+        console.error('No rows updated during deletion');
+        throw new Error('Post deletion failed - no rows updated. This may be due to permission issues or the post may have already been deleted.');
       }
 
-      console.log('Post successfully deleted:', postId);
+      console.log('Post successfully deleted:', { postId, updatedData: data });
     } catch (error) {
       console.error('Error deleting ISO post:', error);
       throw error;
