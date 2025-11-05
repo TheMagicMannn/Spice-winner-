@@ -180,6 +180,10 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
     if (page > 0) {
       setDir(-1); 
       setPage(p => p - 1);
+      // Scroll to top of content area when moving to previous page
+      if (contentRef.current) {
+        contentRef.current.scrollTop = 0;
+      }
     }
   };
 
