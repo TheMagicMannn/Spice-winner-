@@ -221,12 +221,16 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
       cats[cat] = vanillaPct > 80 && cat !== 'Vanilla' ? Math.max(0, pct - 10) : pct;
     });
 
+    console.log('KinkQuiz - Calculated categories:', cats);
+
     const sorted: Result[] = Object.entries(cats)
       .sort(([,a], [,b]) => (b || 0) - (a || 0))
       .map(([k, v]) => ({ 
         name: k.replace(/([A-Z])/g, ' $1').trim(), 
         pct: typeof v === 'number' ? Math.round(v) : 0 
       }));
+
+    console.log('KinkQuiz - Sorted results:', sorted);
 
     setResults(sorted);
     onSaveResults?.(cats as KinkResults);
