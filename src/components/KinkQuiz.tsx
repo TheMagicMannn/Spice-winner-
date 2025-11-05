@@ -369,11 +369,11 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
         </div>
       </div>
 
-      {/* Questions area - with proper padding for bottom nav */}
+      {/* Questions area - with proper padding for bottom nav (increased significantly) */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <div className="p-4 pb-48">
+        <div className="p-4 pb-64">
           {/* Scale Legend */}
-          <div className="max-w-3xl mx-auto mb-4">
+          <div className="max-w-3xl mx-auto mb-6">
             <div className="bg-black/50 border border-pink-500/30 rounded-lg p-3">
               <div className="flex justify-between items-center text-xs sm:text-sm">
                 <span className="text-pink-400 font-semibold">Strongly Disagree</span>
