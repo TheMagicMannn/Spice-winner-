@@ -145,12 +145,14 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
   // If viewing results only, show them immediately
   React.useEffect(() => {
     if (viewResultsOnly && existingResults) {
+      console.log('KinkQuiz - Loading existing results:', existingResults);
       const sorted: Result[] = Object.entries(existingResults)
         .sort(([,a], [,b]) => (b || 0) - (a || 0))
         .map(([k, v]) => ({ 
           name: k.replace(/([A-Z])/g, ' $1').trim(), 
           pct: typeof v === 'number' ? v : 0 
         }));
+      console.log('KinkQuiz - Formatted results:', sorted);
       setResults(sorted);
     }
   }, [viewResultsOnly, existingResults]);
