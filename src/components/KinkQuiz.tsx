@@ -311,46 +311,51 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col">
-      {/* Header - sticky */}
-      <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-pink-500/30 bg-black/90 backdrop-blur-sm flex-shrink-0">
-        <div className="flex-1">
-          <h2 className="text-xl font-bold text-white">BDSM/Kink Quiz</h2>
-          <p className="text-sm text-white/70">To what extent do you agree?</p>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onClose}
-          className="text-white hover:bg-pink-500/10"
-          data-testid="close-quiz-button"
-        >
-          <X className="h-5 w-5" />
-        </Button>
-      </div>
-
-      {/* Progress bar */}
-      <div className="px-4 pt-4 pb-2 flex-shrink-0 bg-black">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-              <motion.div
-                className="h-full bg-gradient-to-r from-pink-600 to-pink-400"
-                animate={{ width: `${((page + 1) / totalPages) * 100}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
-            <motion.span 
-              key={page} 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
-              className="text-pink-400 font-bold min-w-[50px] text-right"
-            >
-              {Math.round(((page + 1) / totalPages) * 100)}%
-            </motion.span>
+      {/* Header with SPICE logo - sticky */}
+      <div className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 flex-shrink-0">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex-1">
+            <SpiceLogo className="text-3xl" showUnderline={false} />
           </div>
-          <p className="text-center text-white/60 text-sm mt-2">
-            Page {page + 1} of {totalPages}
-          </p>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="text-white hover:bg-pink-500/10"
+            data-testid="close-quiz-button"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
+        <div className="px-4 pb-3">
+          <h2 className="text-lg font-bold text-white text-center">BDSM/Kink Quiz</h2>
+          <p className="text-sm text-white/70 text-center">To what extent do you agree?</p>
+        </div>
+
+        {/* Progress bar */}
+        <div className="px-4 pb-4">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-pink-600 to-pink-400"
+                  animate={{ width: `${((page + 1) / totalPages) * 100}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+              <motion.span 
+                key={page} 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                className="text-pink-400 font-bold min-w-[50px] text-right"
+              >
+                {Math.round(((page + 1) / totalPages) * 100)}%
+              </motion.span>
+            </div>
+            <p className="text-center text-white/60 text-sm mt-2">
+              Page {page + 1} of {totalPages}
+            </p>
+          </div>
         </div>
       </div>
 
