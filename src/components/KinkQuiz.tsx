@@ -1,9 +1,10 @@
 // src/components/KinkQuiz.tsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Share2, ArrowLeft } from 'lucide-react';
+import { X, Copy, Share2, ArrowLeft, ExternalLink, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SpiceLogo } from '@/components/SpiceComponents';
+import { getRoleInfo, formatRoleName } from '@/data/kinkRoleDescriptions';
 
 const SCALE = [1, 2, 3, 4, 5, 6, 7, 8, 9] as const;
 // SPICE theme colors - pink gradient from disagree to agree
