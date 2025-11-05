@@ -169,10 +169,6 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
     const cats: Partial<KinkResults> = {};
     (Object.keys(CATEGORIES) as Archetype[]).forEach(cat => {
       const stmts = CATEGORIES[cat];
-      if (stmts.length === 0) {
-        cats[cat] = 0;
-        return;
-      }
       const pct = Math.round(
         stmts.reduce((s, i) => s + finalScores[i - 1], 0) / (9 * stmts.length) * 100
       );
