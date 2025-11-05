@@ -298,6 +298,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
             >
               {results.map((r, i) => {
                 const roleInfo = getRoleInfo(r.name.replace(/\s+/g, ''));
+                const percentage = r.pct ?? 0;
                 return (
                   <motion.div 
                     key={i} 
@@ -314,13 +315,13 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
                           transition={{ type: "spring", delay: i * 0.05 + 0.2 }}
                           className="text-xl font-bold text-pink-400 min-w-[60px]"
                         >
-                          {r.pct}%
+                          {percentage}%
                         </motion.span>
                         <div className="flex-1">
                           <div className="h-3 bg-gray-800 rounded-full overflow-hidden mb-2">
                             <motion.div
                               initial={{ width: 0 }}
-                              animate={{ width: `${r.pct}%` }}
+                              animate={{ width: `${percentage}%` }}
                               transition={{ delay: i * 0.05 + 0.2, duration: 0.6 }}
                               className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full"
                             />
