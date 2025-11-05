@@ -456,7 +456,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
               disabled={!currentPageAnswered}
               className={`font-bold rounded-full border-2 transition-all px-6 sm:px-8 ${
                 currentPageAnswered
-                  ? 'bg-pink-600 text-white border-pink-500 hover:bg-pink-700 hover:shadow-lg hover:shadow-pink-500/50'
+                  ? 'bg-pink-600 text-white border-pink-500 hover:bg-pink-700 animate-glow-pink'
                   : 'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed'
               }`}
               data-testid="next-button"
