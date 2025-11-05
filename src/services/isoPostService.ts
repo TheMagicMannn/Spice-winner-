@@ -398,13 +398,45 @@ class ISOPostService {
    */
   async deletePost(postId: string, userId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      // First verify the post exists and user owns it
+      const { data: postCheck, error: checkError } = await supabase
+        .from('iso_posts')
+        .select('id, author_id')
+        .eq('id', postId)
+        .single();
+
+      if (checkError) {
+        console.error('Error checking post ownership:', checkError);
+        throw new Error('Failed to verify post ownership');
+      }
+
+      if (!postCheck) {
+        throw new Error('Post not found');
+      }
+
+      if (postCheck.author_id !== userId) {
+        throw new Error('You do not have permission to delete this post');
+      }
+
+      // Perform the soft delete
+      const { data, error } = await supabase
         .from('iso_posts')
         .update({ is_active: false })
         .eq('id', postId)
-        .eq('author_id', userId); // Ensure user owns the post
+        .eq('author_id', userId)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error deleting post:', error);
+        throw new Error(`Failed to delete post: ${error.message}`);
+      }
+
+      // Verify the update was successful
+      if (!data || data.length === 0) {
+        throw new Error('Post deletion failed - no rows updated. This may be due to permission issues.');
+      }
+
+      console.log('Post successfully deleted:', postId);
     } catch (error) {
       console.error('Error deleting ISO post:', error);
       throw error;
