@@ -127,6 +127,16 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
   const [scores, setScores] = useState(() => Array(STATEMENTS.length).fill(null));
   const [results, setResults] = useState<Result[] | null>(null);
   const [dir, setDir] = useState(1);
+  const [showCompletion, setShowCompletion] = useState(false);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  // Prevent background scrolling when quiz is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const totalPages = Math.ceil(STATEMENTS.length / PAGESIZE);
   const start = page * PAGESIZE;
