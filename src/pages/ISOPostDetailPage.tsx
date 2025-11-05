@@ -28,6 +28,7 @@ export const ISOPostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { toast } = useToast();
   
   const [post, setPost] = useState<ISOPost | null>(null);
   const [comments, setComments] = useState<ISOComment[]>([]);
@@ -43,6 +44,7 @@ export const ISOPostDetailPage: React.FC = () => {
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const [replyContent, setReplyContent] = useState('');
   const [showReplies, setShowReplies] = useState<Record<string, boolean>>({});
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (postId) {
