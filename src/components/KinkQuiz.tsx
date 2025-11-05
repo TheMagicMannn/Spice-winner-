@@ -124,7 +124,7 @@ interface Props {
 }
 
 // === COMPONENT ===
-export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
+export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResults, viewResultsOnly = false }) => {
   const [page, setPage] = useState(0);
   const [scores, setScores] = useState(() => Array(STATEMENTS.length).fill(null));
   const [results, setResults] = useState<Result[] | null>(null);
@@ -139,6 +139,16 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
       document.body.style.overflow = 'unset';
     };
   }, []);
+
+  // If viewing results only, show them immediately
+  React.useEffect(() => {
+    if (viewResultsOnly && existingResults) {
+      const sorted: Result[] = Object.entries(existingResults)
+        .sort(([,a], [,b]) => b - a)
+        .map(([k, v]) => ({ name: k.replace(/([A-Z])/g, ' $1').trim(), pct: v }));
+      setResults(sorted);
+    }
+  }, [viewResultsOnly, existingResults]);
 
   const totalPages = Math.ceil(STATEMENTS.length / PAGESIZE);
   const start = page * PAGESIZE;
