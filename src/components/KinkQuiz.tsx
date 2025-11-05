@@ -220,24 +220,28 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
   if (results) {
     return (
       <div className="fixed inset-0 z-50 bg-black flex flex-col">
-        {/* Header with SPICE logo - sticky */}
+        {/* Top Header - sticky */}
         <div className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 flex-shrink-0">
+          {/* Header with back arrow */}
           <div className="flex items-center justify-between p-4">
-            <div className="flex-1">
-              <SpiceLogo className="text-3xl" showUnderline={false} />
+            <div className="flex items-center gap-3 flex-1">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onClose}
+                className="text-white hover:bg-pink-500/10 -ml-2"
+                data-testid="close-results-button"
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <h2 className="text-lg font-bold text-white">Quiz Results</h2>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="text-white hover:bg-pink-500/10"
-              data-testid="close-results-button"
-            >
-              <X className="h-5 w-5" />
-            </Button>
           </div>
-          <div className="px-4 pb-3">
-            <h2 className="text-xl font-bold text-white text-center">Quiz Complete!</h2>
+
+          {/* SPICE Logo below header */}
+          <div className="pb-4">
+            <SpiceLogo className="text-4xl sm:text-5xl" showUnderline={true} />
+            <p className="text-center text-white/70 text-sm mt-2">Your Kink Profile</p>
           </div>
         </div>
 
