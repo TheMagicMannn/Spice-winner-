@@ -522,13 +522,13 @@ export const ProfilePage: React.FC = () => {
                 <Separator className="bg-pink-500/30" />
                 <Button
                   variant="ghost"
-                  onClick={() => setIsKinkQuizOpen(true)}
+                  onClick={handleOpenKinkQuiz}
                   className="w-full justify-start text-white hover:bg-pink-500/10"
                   data-testid="kink-quiz-action"
                 >
                   <Heart className="h-4 w-4 mr-3" />
                   BDSM/Kink Quiz
-                  {profile.kinkQuizResults && (
+                  {profile.kinkQuizResults && Object.keys(profile.kinkQuizResults).length > 0 && (
                     <CheckCircle className="h-4 w-4 ml-auto text-green-400" />
                   )}
                 </Button>
