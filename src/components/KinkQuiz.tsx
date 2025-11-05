@@ -394,7 +394,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
               animate="center"
               exit="exit"
               transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
-              className="space-y-4 max-w-3xl mx-auto"
+              className="space-y-5 max-w-3xl mx-auto"
             >
               {pageStmts.map((stmt, i) => {
                 const isAnswered = scores[start + i] !== null;
@@ -404,14 +404,14 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03 }}
-                    className={`bg-black/50 border rounded-lg p-4 transition-all ${
+                    className={`bg-black/50 border rounded-lg p-5 transition-all ${
                       isAnswered 
                         ? 'border-pink-500/50' 
                         : 'border-pink-500/20'
                     }`}
                     data-testid={`question-${start + i}`}
                   >
-                    <p className="text-white mb-3 leading-relaxed text-sm sm:text-base">{stmt}</p>
+                    <p className="text-white mb-4 leading-relaxed text-sm sm:text-base">{stmt}</p>
                     <div className="flex justify-center gap-1.5 sm:gap-2">
                       {SCALE.map(v => (
                         <motion.button
