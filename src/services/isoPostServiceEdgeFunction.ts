@@ -4,6 +4,7 @@
  */
 
 import { supabase } from './supabase';
+import { supabaseUrl } from '../config';
 
 /**
  * Delete an ISO post using Supabase Edge Function (bypasses RLS)
