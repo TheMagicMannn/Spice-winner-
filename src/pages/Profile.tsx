@@ -44,6 +44,7 @@ export const ProfilePage: React.FC = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
   const [isGetVerifiedOpen, setIsGetVerifiedOpen] = useState(false);
+  const [isKinkQuizOpen, setIsKinkQuizOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'own' | 'preview'>('own');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
