@@ -232,6 +232,28 @@ export const ProfilePage: React.FC = () => {
     await logout();
   };
 
+  const handleOpenKinkQuiz = () => {
+    // Check if user has existing results
+    if (profile.kinkQuizResults && Object.keys(profile.kinkQuizResults).length > 0) {
+      setShowKinkQuizPrompt(true);
+    } else {
+      setIsKinkQuizOpen(true);
+      setViewKinkResultsOnly(false);
+    }
+  };
+
+  const handleViewExistingResults = () => {
+    setShowKinkQuizPrompt(false);
+    setViewKinkResultsOnly(true);
+    setIsKinkQuizOpen(true);
+  };
+
+  const handleRetakeQuiz = () => {
+    setShowKinkQuizPrompt(false);
+    setViewKinkResultsOnly(false);
+    setIsKinkQuizOpen(true);
+  };
+
   const handleSaveKinkQuizResults = async (results: Record<string, number>) => {
     setIsLoading(true);
     try {
