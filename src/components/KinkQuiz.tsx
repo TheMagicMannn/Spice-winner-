@@ -162,8 +162,17 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
     if (page < totalPages - 1) {
       setDir(1); 
       setPage(p => p + 1);
+      // Scroll to top of content area when moving to next page
+      if (contentRef.current) {
+        contentRef.current.scrollTop = 0;
+      }
     } else {
-      calculate();
+      // Show completion message before results
+      setShowCompletion(true);
+      setTimeout(() => {
+        calculate();
+        setShowCompletion(false);
+      }, 2000);
     }
   };
 
