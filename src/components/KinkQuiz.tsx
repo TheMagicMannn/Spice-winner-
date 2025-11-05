@@ -342,27 +342,68 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
     );
   }
 
+  // Completion screen
+  if (showCompletion) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="text-center space-y-6 p-8"
+        >
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring" }}
+          >
+            <div className="text-6xl mb-4">🎉</div>
+          </motion.div>
+          <motion.h2
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-3xl font-bold text-white"
+          >
+            Quiz Complete!
+          </motion.h2>
+          <motion.p
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="text-white/70 text-lg"
+          >
+            Calculating your results...
+          </motion.p>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.5 }}
+            className="w-16 h-16 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mx-auto"
+          />
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col">
+    <div className="fixed inset-0 z-50 bg-black flex flex-col overflow-hidden">
       {/* Top Header - sticky */}
       <div className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 flex-shrink-0">
-        {/* Header with back arrow */}
+        {/* Header */}
         <div className="flex items-center justify-between p-4">
-          <div className="flex items-center gap-3 flex-1">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="text-white hover:bg-pink-500/10 -ml-2"
-              data-testid="close-quiz-button"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <h2 className="text-lg font-bold text-white">BDSM/Kink Quiz</h2>
-              <p className="text-xs text-white/70">To what extent do you agree?</p>
-            </div>
+          <div className="flex-1">
+            <h2 className="text-lg font-bold text-white">BDSM/Kink Quiz</h2>
+            <p className="text-xs text-white/70">To what extent do you agree?</p>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="text-white hover:bg-pink-500/10"
+            data-testid="close-quiz-button"
+          >
+            <X className="h-5 w-5" />
+          </Button>
         </div>
 
         {/* SPICE Logo below header */}
