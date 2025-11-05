@@ -497,6 +497,19 @@ export const ProfilePage: React.FC = () => {
                 <Separator className="bg-pink-500/30" />
                 <Button
                   variant="ghost"
+                  onClick={() => setIsKinkQuizOpen(true)}
+                  className="w-full justify-start text-white hover:bg-pink-500/10"
+                  data-testid="kink-quiz-action"
+                >
+                  <Heart className="h-4 w-4 mr-3" />
+                  BDSM/Kink Quiz
+                  {profile.kinkQuizResults && (
+                    <CheckCircle className="h-4 w-4 ml-auto text-green-400" />
+                  )}
+                </Button>
+                <Separator className="bg-pink-500/30" />
+                <Button
+                  variant="ghost"
                   onClick={() => setIsMatchPreferencesOpen(true)}
                   className="w-full justify-start text-white hover:bg-pink-500/10"
                   data-testid="match-preferences-action"
