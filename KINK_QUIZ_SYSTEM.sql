@@ -333,9 +333,12 @@ GRANT SELECT ON profiles TO anon;
 -- END OF KINK QUIZ SYSTEM SETUP
 -- =====================================================
 
-RAISE NOTICE '✓ Kink Quiz System setup completed successfully';
-RAISE NOTICE '  - Quiz results column added to profiles';
-RAISE NOTICE '  - Quiz history table created';
-RAISE NOTICE '  - RLS policies configured';
-RAISE NOTICE '  - Helper functions created';
-RAISE NOTICE '  - Triggers configured';
+DO $$
+BEGIN
+    RAISE NOTICE '✓ Kink Quiz System setup completed successfully';
+    RAISE NOTICE '  - Quiz results column added to profiles';
+    RAISE NOTICE '  - Quiz history table created';
+    RAISE NOTICE '  - RLS policies configured';
+    RAISE NOTICE '  - Helper functions created';
+    RAISE NOTICE '  - Triggers configured';
+END $$;
