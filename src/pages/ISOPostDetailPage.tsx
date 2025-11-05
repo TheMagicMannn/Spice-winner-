@@ -22,6 +22,7 @@ import { Spinner } from '@/components/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import { isoPostService, ISOPost, ISOComment, ISOLike } from '@/services/isoPostService';
 import { CreateISOPostModal } from '@/components/CreateISOPostModal';
+import { useToast } from '@/hooks/useToast';
 
 export const ISOPostDetailPage: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
