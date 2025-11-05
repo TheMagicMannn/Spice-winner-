@@ -316,25 +316,30 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col">
-      {/* Header with SPICE logo - sticky */}
+      {/* Top Header - sticky */}
       <div className="sticky top-0 z-10 bg-black/90 backdrop-blur-sm border-b border-pink-500/30 flex-shrink-0">
+        {/* Header with back arrow */}
         <div className="flex items-center justify-between p-4">
-          <div className="flex-1">
-            <SpiceLogo className="text-3xl" showUnderline={false} />
+          <div className="flex items-center gap-3 flex-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="text-white hover:bg-pink-500/10 -ml-2"
+              data-testid="close-quiz-button"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div>
+              <h2 className="text-lg font-bold text-white">BDSM/Kink Quiz</h2>
+              <p className="text-xs text-white/70">To what extent do you agree?</p>
+            </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="text-white hover:bg-pink-500/10"
-            data-testid="close-quiz-button"
-          >
-            <X className="h-5 w-5" />
-          </Button>
         </div>
-        <div className="px-4 pb-3">
-          <h2 className="text-lg font-bold text-white text-center">BDSM/Kink Quiz</h2>
-          <p className="text-sm text-white/70 text-center">To what extent do you agree?</p>
+
+        {/* SPICE Logo below header */}
+        <div className="pb-3">
+          <SpiceLogo className="text-4xl sm:text-5xl" showUnderline={true} />
         </div>
 
         {/* Progress bar */}
@@ -344,21 +349,21 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
               <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-gradient-to-r from-pink-600 to-pink-400"
-                  animate={{ width: `${((page + 1) / totalPages) * 100}%` }}
+                  animate={{ width: `${questionProgress}%` }}
                   transition={{ duration: 0.3 }}
                 />
               </div>
               <motion.span 
-                key={page} 
+                key={answeredCount} 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
                 className="text-pink-400 font-bold min-w-[50px] text-right"
               >
-                {Math.round(((page + 1) / totalPages) * 100)}%
+                {questionProgress}%
               </motion.span>
             </div>
-            <p className="text-center text-white/60 text-sm mt-2">
-              Page {page + 1} of {totalPages}
+            <p className="text-center text-white/60 text-xs sm:text-sm mt-2">
+              {answeredCount} of {totalQuestions} questions answered • Page {page + 1} of {totalPages}
             </p>
           </div>
         </div>
