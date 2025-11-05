@@ -84,60 +84,60 @@ const STATEMENTS = [
 ] as const;
 
 // === CATEGORIES ===
-// FINAL CORRECTED MAPPINGS - Using ONLY statements 1-64
+// VERIFIED CORRECT - All statement numbers 1-64 only, mapped by content
 const CATEGORIES = {
-  // Submission-related (statements about being dominated, serving, helpless)
-  Submissive: [1, 7, 10, 29, 48, 63],        // 1:dominated, 7:partner decides, 10:helpless, 29:helpless, 48:forced, 63:degraded
-  Slave: [16, 21, 27, 46, 60, 61],           // 16:formal training, 21:group slaves, 27:24/7 slave, 46:24/7 slave, 60:torture, 61:submit 24/7
+  // SUBMISSION (being dominated, serving, helpless, obedient)
+  Submissive: [1, 7, 10, 30, 45, 48],        // 1:dominated, 7:partner decides, 10:helpless, 30:forced, 45:in charge, 48:serve/respect
+  Slave: [17, 22, 28, 48, 61],               // 17:formal training, 22:group slaves, 28:24/7 slave, 48:serve superior, 61:submit 24/7
   
-  // Dominance-related (statements about controlling, dominating, authority)
-  Dominant: [3, 4, 22, 56, 57, 62],          // 3:making decisions, 4:forcing, 22:partner tied, 56:dominate, 57:dominate, 62:serve me
-  MasterMistress: [43, 61, 62],              // 43:fear eyes, 61:serve me, 62:serve me  
-  Owner: [34, 53],                            // 34:group slaves (statement 34), 53:group slaves owned
+  // DOMINANCE (controlling, authority, in charge)
+  Dominant: [3, 4, 44, 52, 57, 62],          // 3:decisions, 4:forcing, 44:submit 24/7, 52:in charge, 57:dominate, 62:serve me
+  MasterMistress: [44, 62],                  // 44:submit 24/7, 62:serve me superior
+  Owner: [35, 37],                           // 35:group slaves owned, 37:keeping pet
   
-  // Pain-related (statements about giving/receiving pain)
-  Masochist: [2, 43, 60],                    // 2:receiving pain, 43:fear, 60:torture idea
-  Sadist: [24, 43, 59, 60],                  // 24:fear/pain, 43:fear eyes, 59:torture idea, 60:torture idea
+  // PAIN (giving/receiving pain, torture)
+  Masochist: [2, 47, 53],                    // 2:receiving pain, 47:fear physical, 53:tortured
+  Sadist: [25, 55, 60],                      // 25:fear/pain, 55:inflicting pain, 60:torture idea
   
-  // Degradation-related (statements about degrading/being degraded)
-  Degrader: [4, 28, 47, 57, 58],             // 4:forcing, 28:no respect, 47:no respect, 57:degrade, 58:degrade/humiliate
-  Degradee: [13, 25, 44, 63, 64],            // 13:no respect, 25:degraded, 44:degraded, 63:degraded, 64:verbally degraded
+  // DEGRADATION (humiliation, no respect)
+  Degrader: [29, 50, 58],                    // 29:no respect, 50:verbally degrading, 58:degrade/humiliate
+  Degradee: [14, 26, 64],                    // 14:no respect, 26:degraded/humiliated, 64:verbally degraded
   
-  // Bondage-related (statements about tying up/being tied)
-  Rigger: [9, 30, 49],                       // 9:restricting partner, 30:partner tied, 49:partner tied
-  Ropebunny: [10, 18, 22, 41],               // 10:helpless, 18:restricted, 22:tied up, 41:tied up
+  // BONDAGE (tying up, restricting)
+  Rigger: [9, 31],                           // 9:restricting partner, 31:partner tied
+  Ropebunny: [10, 19, 23],                   // 10:helpless, 19:restricted, 23:tied up
   
-  // Age play (statements about age differences, childlike behavior)
-  Ageplayer: [11, 26, 32, 45, 62, 63],       // 11:age differences, 26:different age, 32:different age, 45:different age, 62:child, 63:child
-  Little: [32, 51, 60, 62, 63],              // 32:different age, 51:childlike, 60:parental role, 62:child, 63:dressing like child
-  DaddyMommy: [51, 58, 59],                  // 51:childlike partner, 58:parental, 59:nurturing parental role
+  // AGE PLAY (age differences, childlike)
+  Ageplayer: [12, 27, 63],                   // 12:age differences, 27:different age, 63:childlike dress
+  Little: [33, 42, 63],                      // 33:partner childlike, 42:parental role, 63:dressing child
+  DaddyMommy: [33, 59],                      // 33:partner childlike, 59:nurturing parental
   
-  // Pet play (statements about acting like pet/keeping as pet)
-  Pet: [12, 23, 42, 55],                     // 12:pet animal, 23:kept as pet, 42:kept as pet, 55:keeping partner as pet
+  // PET PLAY (acting as/keeping pets)
+  Pet: [13, 24, 51],                         // 13:pet animal, 24:kept as pet, 51:partner plays pet
   
-  // Primal (statements about prey/predator dynamics)
-  PrimalPrey: [19, 38],                      // 19:prey hunted, 38:prey hunted
-  PrimalHunter: [38, 40, 57],                // 38:predator, 40:predator, 57:animalistic
+  // PRIMAL (prey/predator, animalistic)
+  PrimalPrey: [20, 41],                      // 20:prey hunted, 41:predator hunting
+  PrimalHunter: [39, 41],                    // 39:animalistic, 41:predator
   
-  // Brat (statements about bratty behavior/taming)
-  Brat: [48],                                // 48:forced submission (bratty resistance)
-  BratTamer: [64],                           // 64:taming bratty (statement 64 is taming)
+  // BRAT (bratty behavior, teasing disobedience)
+  Brat: [49],                                // 49:talking back teasingly
+  BratTamer: [49],                           // 49:taming bratty (from dom perspective)
   
-  // Versatility (statements about switching roles)
-  Switch: [33, 52, 55],                      // 33:sub/dom switch, 52:sub/dom switch, 55:could not be always
+  // SWITCH (both dominant and submissive)
+  Switch: [34, 56],                          // 34:sub/dom switch, 56:need both
   
-  // Observation (statements about watching/being watched)
-  Voyeur: [42, 61],                          // 42:watching others, 61:watching others
-  Exhibitionist: [6, 14, 45],                // 6:people watch me, 14:not private, 45:selling porn
+  // OBSERVATION (watching/being watched)
+  Voyeur: [43],                              // 43:watching others
+  Exhibitionist: [6, 15, 46],                // 6:people watch me, 15:not private, 46:selling porn
   
-  // Relationship style (statements about multiple partners)
-  Nonmonogamist: [5, 17, 37, 39, 56, 58],    // 5:multiple people, 17:join couple, 37:restricted, 39:partner see others, 56:see others, 58:see others
+  // RELATIONSHIP STYLE (multiple partners)
+  Nonmonogamist: [5, 18, 38, 40],            // 5:multiple people, 18:join couple, 38:partner see others, 40:see others
   
-  // Openness (statements about trying new things)
-  Experimentalist: [8, 31, 35, 50, 54],      // 8:try anything, 31:many fantasies, 35:try bad, 50:many fantasies, 54:bad not big deal
+  // OPENNESS (trying new things, experimental)
+  Experimentalist: [8, 32, 36, 54],          // 8:try anything, 32:many fantasies, 36:try bad, 54:BDSM life
   
-  // Traditional (statements about vanilla preferences)
-  Vanilla: [15, 20, 39]                      // 15:romantic important, 20:no fetish, 39:no fetish
+  // TRADITIONAL (vanilla, romantic, no kink)
+  Vanilla: [16, 21]                          // 16:romantic important, 21:no fetish
 } as const;
 
 // === TYPES ===
