@@ -439,7 +439,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
       </div>
 
       {/* Questions area - with proper padding for bottom nav (increased significantly) */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide">
+      <div ref={contentRef} className="flex-1 overflow-y-auto scrollbar-hide">
         <div className="p-4 pb-64">
           {/* Scale Legend */}
           <div className="max-w-3xl mx-auto mb-6">
