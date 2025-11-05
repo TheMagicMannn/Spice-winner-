@@ -360,9 +360,14 @@ export const ISOPostDetailPage: React.FC = () => {
               variant="outline"
               size="sm"
               className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+              disabled={isDeleting}
               data-testid="delete-post-button"
             >
-              <Trash2 className="h-4 w-4" />
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2 className="h-4 w-4" />
+              )}
             </Button>
           </div>
         )}
