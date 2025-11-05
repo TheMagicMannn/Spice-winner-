@@ -60,6 +60,9 @@ export interface Profile {
   // matching preferences
   matchPreferences?: MatchPreferences;
 
+  // kink quiz results
+  kinkQuizResults?: Record<string, number>;
+
   // DB-related optional meta (from profiles table)
   id?: string;  // User's UUID (same as auth.users.id)
   createdAt?: string;  // Maps to created_at in database
