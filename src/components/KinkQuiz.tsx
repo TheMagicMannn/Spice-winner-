@@ -84,33 +84,32 @@ const STATEMENTS = [
 ] as const;
 
 // === CATEGORIES ===
-// Each category maps to specific statement numbers (1-indexed, statements 1-64 only)
 const CATEGORIES = {
-  Submissive: [1, 7, 48, 63],            // 1:dominated, 7:partner decides, 48:forced submission, 63:completely in charge
-  Masochist: [2],                         // 2:receiving pain
-  Dominant: [3, 62],                      // 3:making decisions, 62:submit 24/7
-  Degrader: [4, 28, 47],                  // 4:forcing submission, 28:no respect, 47:no respect
-  Nonmonogamist: [5, 17, 37, 56, 58],     // 5:multiple people, 17:join couple, 37:restricted, 56:fulfill desires, 58:fulfill desires
-  Exhibitionist: [6, 14, 64],             // 6:watched, 14:private spaces, 64:selling porn
-  Experimentalist: [8, 31, 54],           // 8:try anything, 31:more fantasies, 54:things turn bad
-  Rigger: [9, 30, 49],                    // 9:restricting partner, 30:partner tied, 49:partner tied
-  Ropebunny: [10, 18, 22, 41],            // 10:helpless, 18:restricted, 22:tied up, 41:tied up
-  Ageplayer: [11, 26, 45],                // 11:age differences, 26:different age, 45:different age
-  Pet: [12, 23, 42, 55],                  // 12:pet animal, 23:kept as pet, 42:kept as pet, 55:keeping partner as pet
-  Degradee: [13, 25, 44],                 // 13:no respect, 25:degraded, 44:degraded
-  Vanilla: [15, 20, 39],                  // 15:romantic, 20:no fetish, 39:no fetish
-  Slave: [16, 21, 27, 46],                // 16:formal serving, 21:group of slaves, 27:24/7 slave, 46:24/7 slave
-  PrimalPrey: [19, 38],                   // 19:prey hunted, 38:prey hunted
-  Sadist: [24, 43],                       // 24:inflicting pain, 43:inflicting pain
-  Brat: [48],                             // 48:forced submission (can be bratty)
-  Little: [32, 51, 60],                   // 32:childlike, 51:childlike, 60:parental role
-  Switch: [33, 52],                       // 33:submissive now dominant other, 52:submissive now dominant other
-  Owner: [34, 53],                        // 34:group of slaves, 53:group of slaves
-  PrimalHunter: [38, 57, 59],             // 38:prey, 57:animalistic, 59:predator hunting
-  Voyeur: [42, 61],                       // 42:watching, 61:watching
-  DaddyMommy: [51, 60],                   // 51:childlike partner, 60:parental role
-  MasterMistress: [43, 62],               // 43:fear/pain, 62:submit 24/7
-  BratTamer: [48]                         // 48:Talking back teasingly (brat taming)
+  Ageplayer: [11, 26, 32, 62],
+  Experimentalist: [8, 31, 35],
+  Pet: [12, 23, 36, 50],
+  Ropebunny: [10, 18, 22],
+  Masochist: [2, 52],
+  Degradee: [13, 25, 63],
+  Submissive: [1, 7, 29, 44, 55],
+  Exhibitionist: [6, 14, 45],
+  PrimalPrey: [19, 46],
+  Nonmonogamist: [5, 17, 37, 39],
+  Rigger: [9, 30],
+  Switch: [33, 55],
+  DaddyMommy: [41, 58],
+  Voyeur: [42, 6],
+  Sadist: [24, 54, 59],
+  Dominant: [3, 51, 56],
+  MasterMistress: [43, 61],
+  BratTamer: [64],
+  Slave: [16, 21, 27, 47, 53, 60],
+  Owner: [34, 36],
+  Degrader: [4, 28, 49, 57],
+  Little: [32, 62],
+  Brat: [48],
+  Vanilla: [15, 20],
+  PrimalHunter: [38, 40]
 } as const;
 
 // === TYPES ===
