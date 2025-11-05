@@ -480,6 +480,19 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
+        .animate-glow-pink {
+          animation: glowPink 2.4s ease-in-out infinite;
+        }
+        @keyframes glowPink {
+          0%, 100% {
+            box-shadow: 0 0 8px rgba(255, 20, 147, 0.5);
+            border-color: rgba(255, 20, 147, 0.5);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(255, 20, 147, 1), 0 0 30px rgba(255, 105, 180, 0.8);
+            border-color: rgba(255, 20, 147, 1);
+          }
+        }
       `}</style>
     </div>
   );
