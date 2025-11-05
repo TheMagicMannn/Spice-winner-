@@ -1,7 +1,7 @@
 // src/components/KinkQuiz.tsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Share2 } from 'lucide-react';
+import { X, Copy, Share2, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { SpiceLogo } from '@/components/SpiceComponents';
 
