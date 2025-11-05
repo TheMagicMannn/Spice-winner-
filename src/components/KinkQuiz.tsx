@@ -146,8 +146,11 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
   React.useEffect(() => {
     if (viewResultsOnly && existingResults) {
       const sorted: Result[] = Object.entries(existingResults)
-        .sort(([,a], [,b]) => b - a)
-        .map(([k, v]) => ({ name: k.replace(/([A-Z])/g, ' $1').trim(), pct: v }));
+        .sort(([,a], [,b]) => (b || 0) - (a || 0))
+        .map(([k, v]) => ({ 
+          name: k.replace(/([A-Z])/g, ' $1').trim(), 
+          pct: typeof v === 'number' ? v : 0 
+        }));
       setResults(sorted);
     }
   }, [viewResultsOnly, existingResults]);
