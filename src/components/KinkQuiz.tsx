@@ -84,33 +84,33 @@ const STATEMENTS = [
 ] as const;
 
 // === CATEGORIES ===
-// Each category maps to specific statement numbers (1-indexed)
+// Each category maps to specific statement numbers (1-indexed from 1-64)
 const CATEGORIES = {
-  Submissive: [1, 7, 29, 47, 62],        // Likes to be dominated, prefers partner to decide
-  Masochist: [2, 65, 70],                 // Enjoys receiving pain
-  Dominant: [3, 51, 69, 74],              // Likes to dominate and be in charge
-  Degrader: [4, 28, 49, 67, 75],          // Enjoys degrading partner
-  Nonmonogamist: [5, 17, 37, 39, 57],     // Open to multiple partners
-  Exhibitionist: [6, 14, 45],             // Enjoys being watched
-  Experimentalist: [8, 35, 53],           // Willing to try new things
-  Rigger: [9, 28, 30],                    // Enjoys tying up partners
-  Ropebunny: [10, 18, 40],                // Enjoys being tied up
-  Ageplayer: [11, 26, 44],                // Enjoys age play
-  Pet: [12, 23, 41, 54, 68],              // Enjoys pet play
-  Degradee: [13, 25, 63, 81],             // Enjoys being degraded
-  Vanilla: [15, 20, 34],                  // Prefers traditional sex, no specific fetishes
-  Slave: [16, 21, 27, 47, 60, 78],        // Desires 24/7 submission and service
-  PrimalPrey: [19, 37, 64],               // Enjoys being hunted/prey
-  Sadist: [24, 43, 72, 77],               // Enjoys inflicting pain
-  Brat: [48, 66],                         // Enjoys playful disobedience
-  Little: [32, 50, 62, 80],               // Enjoys age regression
-  Switch: [33, 51, 73],                   // Enjoys both dominant and submissive roles
-  Owner: [34, 36, 52],                    // Desires to own slaves
-  PrimalHunter: [38, 40, 58],             // Enjoys hunting/predator role
-  Voyeur: [42, 60],                       // Enjoys watching others
-  DaddyMommy: [41, 50, 59, 76],           // Nurturing parental role
-  MasterMistress: [43, 61, 79],           // Seeks complete authority 24/7
-  BratTamer: [64, 82]                     // Enjoys taming bratty behavior
+  Submissive: [1, 7, 48, 63],            // Likes to be dominated, prefers partner to decide
+  Masochist: [2, 65],                     // Enjoys receiving pain  
+  Dominant: [3, 62, 70, 75],              // Likes to dominate and be in charge
+  Degrader: [4, 28, 47, 68, 76],          // Enjoys degrading partner
+  Nonmonogamist: [5, 17, 37, 56, 58],     // Open to multiple partners
+  Exhibitionist: [6, 14, 64],             // Enjoys being watched
+  Experimentalist: [8, 31, 54],           // Willing to try new things
+  Rigger: [9, 30, 49],                    // Enjoys tying up partners
+  Ropebunny: [10, 18, 22, 41],            // Enjoys being tied up
+  Ageplayer: [11, 26, 45],                // Enjoys age play
+  Pet: [12, 23, 42, 55, 69],              // Enjoys pet play
+  Degradee: [13, 25, 44, 82],             // Enjoys being degraded
+  Vanilla: [15, 20, 39],                  // Prefers traditional sex, no specific fetishes
+  Slave: [16, 21, 27, 46, 66, 79],        // Desires 24/7 submission and service
+  PrimalPrey: [19, 38, 65],               // Enjoys being hunted/prey
+  Sadist: [24, 43, 73, 78],               // Enjoys inflicting pain
+  Brat: [48, 67],                         // Enjoys playful disobedience
+  Little: [32, 51, 60, 81],               // Enjoys age regression
+  Switch: [33, 52, 74],                   // Enjoys both dominant and submissive roles
+  Owner: [34, 53, 80],                    // Desires to own slaves
+  PrimalHunter: [38, 57, 59],             // Enjoys hunting/predator role
+  Voyeur: [42, 61],                       // Enjoys watching others
+  DaddyMommy: [51, 60, 77],               // Nurturing parental role
+  MasterMistress: [43, 62, 80],           // Seeks complete authority 24/7
+  BratTamer: [67, 83]                     // Enjoys taming bratty behavior
 } as const;
 
 // === TYPES ===
