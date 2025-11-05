@@ -288,17 +288,18 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
           </div>
         </div>
 
-        {/* Action buttons at bottom - fixed */}
+        {/* Action buttons at bottom - fixed with extra padding */}
         <motion.div 
           initial={{ y: 50 }} 
           animate={{ y: 0 }} 
           transition={{ delay: 0.4 }} 
-          className="sticky bottom-0 p-4 border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0"
+          className="sticky bottom-0 p-4 pb-24 border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0"
+          style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
         >
           <div className="flex gap-3 max-w-3xl mx-auto">
             <Button
               onClick={copy}
-              className="flex-1 bg-gray-900 text-pink-400 font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all"
+              className="flex-1 bg-gray-900 text-pink-400 font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all py-3"
               data-testid="copy-results-button"
             >
               <Copy className="h-4 w-4 mr-2" />
@@ -306,7 +307,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
             </Button>
             <Button
               onClick={share}
-              className="flex-1 bg-gray-900 text-pink-400 font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all"
+              className="flex-1 bg-gray-900 text-pink-400 font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all py-3"
               data-testid="share-results-button"
             >
               <Share2 className="h-4 w-4 mr-2" />
