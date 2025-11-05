@@ -289,37 +289,65 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
               animate={{ opacity: 1 }} 
               className="max-w-3xl mx-auto space-y-3"
             >
-              {results.map((r, i) => (
-                <motion.div 
-                  key={i} 
-                  initial={{ opacity: 0, y: 20 }} 
-                  animate={{ opacity: 1, y: 0 }} 
-                  transition={{ delay: i * 0.05 }} 
-                  className="bg-black/50 border border-pink-500/30 rounded-lg p-4 hover:border-pink-500/60 transition-all"
-                >
-                  <div className="flex items-center gap-3">
-                    <motion.span 
-                      initial={{ scale: 0 }} 
-                      animate={{ scale: 1 }} 
-                      transition={{ type: "spring", delay: i * 0.05 + 0.2 }}
-                      className="text-xl font-bold text-pink-400 min-w-[60px]"
-                    >
-                      {r.pct}%
-                    </motion.span>
-                    <div className="flex-1">
-                      <div className="h-3 bg-gray-800 rounded-full overflow-hidden mb-2">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${r.pct}%` }}
-                          transition={{ delay: i * 0.05 + 0.2, duration: 0.6 }}
-                          className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full"
-                        />
+              {results.map((r, i) => {
+                const roleInfo = getRoleInfo(r.name.replace(/\s+/g, ''));
+                return (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, y: 20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    transition={{ delay: i * 0.05 }} 
+                    className="bg-black/50 border border-pink-500/30 rounded-lg p-4 hover:border-pink-500/60 transition-all"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <motion.span 
+                          initial={{ scale: 0 }} 
+                          animate={{ scale: 1 }} 
+                          transition={{ type: "spring", delay: i * 0.05 + 0.2 }}
+                          className="text-xl font-bold text-pink-400 min-w-[60px]"
+                        >
+                          {r.pct}%
+                        </motion.span>
+                        <div className="flex-1">
+                          <div className="h-3 bg-gray-800 rounded-full overflow-hidden mb-2">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${r.pct}%` }}
+                              transition={{ delay: i * 0.05 + 0.2, duration: 0.6 }}
+                              className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full"
+                            />
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-white font-medium">{r.name}</span>
+                            <a
+                              href={roleInfo.detailsUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-pink-400 hover:text-pink-300 transition-colors"
+                              title="Learn more"
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                            </a>
+                          </div>
+                        </div>
                       </div>
-                      <span className="text-white font-medium">{r.name}</span>
+                      
+                      {/* Role Description */}
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        transition={{ delay: i * 0.05 + 0.3 }}
+                        className="pl-[72px]"
+                      >
+                        <p className="text-white/70 text-sm leading-relaxed">
+                          {roleInfo.description}
+                        </p>
+                      </motion.div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </div>
         </div>
