@@ -672,11 +672,25 @@ export const ProfilePage: React.FC = () => {
         profile={profile}
       />
 
+      {/* Kink Quiz Prompt */}
+      {showKinkQuizPrompt && (
+        <KinkQuizPrompt
+          onViewResults={handleViewExistingResults}
+          onRetake={handleRetakeQuiz}
+          onClose={() => setShowKinkQuizPrompt(false)}
+        />
+      )}
+
       {/* Kink Quiz Modal */}
       {isKinkQuizOpen && (
         <KinkQuiz
-          onClose={() => setIsKinkQuizOpen(false)}
+          onClose={() => {
+            setIsKinkQuizOpen(false);
+            setViewKinkResultsOnly(false);
+          }}
           onSaveResults={handleSaveKinkQuizResults}
+          existingResults={profile.kinkQuizResults}
+          viewResultsOnly={viewKinkResultsOnly}
         />
       )}
 
