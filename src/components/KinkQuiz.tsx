@@ -442,18 +442,19 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
         </div>
       </div>
 
-      {/* Navigation at bottom - fixed */}
+      {/* Navigation at bottom - fixed with extra padding to avoid bottom nav bar */}
       <motion.div 
         initial={{ y: 50 }} 
         animate={{ y: 0 }} 
-        className="sticky bottom-0 p-4 border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0"
+        className="sticky bottom-0 p-4 pb-24 border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0"
+        style={{ marginBottom: 'env(safe-area-inset-bottom, 0px)' }}
       >
         <div className="max-w-3xl mx-auto space-y-3">
           <div className="flex justify-between gap-3">
             {page > 0 ? (
               <Button
                 onClick={prev}
-                className="bg-gray-900 text-white font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all px-6 sm:px-8"
+                className="bg-gray-900 text-white font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all px-6 sm:px-8 py-3"
                 data-testid="previous-button"
               >
                 ← Previous
@@ -464,7 +465,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
             <Button
               onClick={next}
               disabled={!currentPageAnswered}
-              className={`font-bold rounded-full border-2 transition-all px-6 sm:px-8 ${
+              className={`font-bold rounded-full border-2 transition-all px-6 sm:px-8 py-3 ${
                 currentPageAnswered
                   ? 'bg-pink-600 text-white border-pink-500 hover:bg-pink-700 animate-glow-pink'
                   : 'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed'
