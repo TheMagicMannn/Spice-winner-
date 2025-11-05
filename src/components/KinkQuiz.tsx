@@ -303,8 +303,8 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-pink-500/30 flex-shrink-0">
+      {/* Header - sticky */}
+      <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-pink-500/30 bg-black/90 backdrop-blur-sm flex-shrink-0">
         <div className="flex-1">
           <h2 className="text-xl font-bold text-white">BDSM/Kink Quiz</h2>
           <p className="text-sm text-white/70">To what extent do you agree?</p>
@@ -321,127 +321,133 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
       </div>
 
       {/* Progress bar */}
-      <div className="px-4 pt-4 flex-shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-pink-600 to-pink-400"
-              animate={{ width: `${((page + 1) / totalPages) * 100}%` }}
-              transition={{ duration: 0.3 }}
-            />
+      <div className="px-4 pt-4 pb-2 flex-shrink-0 bg-black">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-pink-600 to-pink-400"
+                animate={{ width: `${((page + 1) / totalPages) * 100}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+            <motion.span 
+              key={page} 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              className="text-pink-400 font-bold min-w-[50px] text-right"
+            >
+              {Math.round(((page + 1) / totalPages) * 100)}%
+            </motion.span>
           </div>
-          <motion.span 
-            key={page} 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            className="text-pink-400 font-bold min-w-[50px] text-right"
-          >
-            {Math.round(((page + 1) / totalPages) * 100)}%
-          </motion.span>
+          <p className="text-center text-white/60 text-sm mt-2">
+            Page {page + 1} of {totalPages}
+          </p>
         </div>
-        <p className="text-center text-white/60 text-sm mt-2">
-          Page {page + 1} of {totalPages}
-        </p>
       </div>
 
-      {/* Questions area */}
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
-        <AnimatePresence mode="wait" custom={dir}>
-          <motion.div
-            key={page}
-            custom={dir}
-            variants={slide}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
-            className="space-y-4 max-w-2xl mx-auto pb-4"
-          >
-            {pageStmts.map((stmt, i) => {
-              const isAnswered = scores[start + i] !== null;
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.03 }}
-                  className={`bg-black/50 border rounded-lg p-4 transition-all ${
-                    isAnswered 
-                      ? 'border-pink-500/50' 
-                      : 'border-pink-500/20 animate-pulse'
-                  }`}
-                  data-testid={`question-${start + i}`}
-                >
-                  <p className="text-white mb-3 leading-relaxed">{stmt}</p>
-                  <div className="flex justify-between gap-2">
-                    <span className="text-xs text-white/50 self-center">Disagree</span>
-                    <div className="flex gap-2">
-                      {SCALE.map(v => (
-                        <motion.button
-                          key={v}
-                          className={`w-10 h-10 rounded-full border-2 font-bold text-white text-sm transition-all ${
-                            scores[start + i] === v
-                              ? 'border-white scale-110 shadow-lg shadow-pink-500/50'
-                              : 'border-transparent hover:scale-110'
-                          }`}
-                          style={{ backgroundColor: COLORS[v - 1] }}
-                          onClick={() => select(i, v)}
-                          whileHover={{ scale: 1.15 }}
-                          whileTap={{ scale: 0.95 }}
-                          initial={{ scale: 0 }}
-                          animate={{ scale: scores[start + i] === v ? 1.1 : 1 }}
-                          transition={{ delay: i * 0.03 + 0.1 }}
-                          data-testid={`answer-${start + i}-${v}`}
-                        >
-                          {v === 5 ? 'N' : ''}
-                        </motion.button>
-                      ))}
+      {/* Questions area - with proper padding for bottom nav */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div className="p-4 pb-32">
+          <AnimatePresence mode="wait" custom={dir}>
+            <motion.div
+              key={page}
+              custom={dir}
+              variants={slide}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ x: { type: "spring", stiffness: 300, damping: 30 }, opacity: { duration: 0.2 } }}
+              className="space-y-4 max-w-3xl mx-auto"
+            >
+              {pageStmts.map((stmt, i) => {
+                const isAnswered = scores[start + i] !== null;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03 }}
+                    className={`bg-black/50 border rounded-lg p-4 transition-all ${
+                      isAnswered 
+                        ? 'border-pink-500/50' 
+                        : 'border-pink-500/20 animate-pulse'
+                    }`}
+                    data-testid={`question-${start + i}`}
+                  >
+                    <p className="text-white mb-3 leading-relaxed text-sm sm:text-base">{stmt}</p>
+                    <div className="flex justify-between gap-2 items-center">
+                      <span className="text-xs text-white/50 hidden sm:block">Disagree</span>
+                      <div className="flex gap-1.5 sm:gap-2 flex-1 justify-center">
+                        {SCALE.map(v => (
+                          <motion.button
+                            key={v}
+                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 font-bold text-white text-sm transition-all ${
+                              scores[start + i] === v
+                                ? 'border-white scale-110 shadow-lg shadow-pink-500/50'
+                                : 'border-transparent hover:scale-110'
+                            }`}
+                            style={{ backgroundColor: COLORS[v - 1] }}
+                            onClick={() => select(i, v)}
+                            whileHover={{ scale: 1.15 }}
+                            whileTap={{ scale: 0.95 }}
+                            initial={{ scale: 0 }}
+                            animate={{ scale: scores[start + i] === v ? 1.1 : 1 }}
+                            transition={{ delay: i * 0.03 + 0.1 }}
+                            data-testid={`answer-${start + i}-${v}`}
+                          >
+                            {v === 5 ? 'N' : ''}
+                          </motion.button>
+                        ))}
+                      </div>
+                      <span className="text-xs text-white/50 hidden sm:block">Agree</span>
                     </div>
-                    <span className="text-xs text-white/50 self-center">Agree</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </AnimatePresence>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Navigation at bottom */}
+      {/* Navigation at bottom - fixed */}
       <motion.div 
         initial={{ y: 50 }} 
         animate={{ y: 0 }} 
-        className="p-4 border-t border-pink-500/30 bg-black/90 backdrop-blur-sm flex-shrink-0"
+        className="sticky bottom-0 p-4 border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0"
       >
-        <div className="flex justify-between gap-3 max-w-2xl mx-auto">
-          {page > 0 ? (
+        <div className="max-w-3xl mx-auto space-y-3">
+          <div className="flex justify-between gap-3">
+            {page > 0 ? (
+              <Button
+                onClick={prev}
+                className="bg-gray-900 text-white font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all px-6 sm:px-8"
+                data-testid="previous-button"
+              >
+                ← Previous
+              </Button>
+            ) : (
+              <div />
+            )}
             <Button
-              onClick={prev}
-              className="bg-gray-900 text-white font-bold rounded-full border-2 border-pink-500/50 hover:border-pink-500 hover:shadow-lg hover:shadow-pink-500/50 transition-all px-8"
-              data-testid="previous-button"
+              onClick={next}
+              disabled={!currentPageAnswered}
+              className={`font-bold rounded-full border-2 transition-all px-6 sm:px-8 ${
+                currentPageAnswered
+                  ? 'bg-pink-600 text-white border-pink-500 hover:bg-pink-700 hover:shadow-lg hover:shadow-pink-500/50'
+                  : 'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed'
+              }`}
+              data-testid="next-button"
             >
-              ← Previous
+              {page === totalPages - 1 ? 'Finish' : 'Next'} →
             </Button>
-          ) : (
-            <div />
+          </div>
+          {!currentPageAnswered && (
+            <p className="text-center text-pink-400 text-sm animate-pulse">
+              Please answer all questions to continue
+            </p>
           )}
-          <Button
-            onClick={next}
-            disabled={!currentPageAnswered}
-            className={`font-bold rounded-full border-2 transition-all px-8 ${
-              currentPageAnswered
-                ? 'bg-pink-600 text-white border-pink-500 hover:bg-pink-700 hover:shadow-lg hover:shadow-pink-500/50'
-                : 'bg-gray-800 text-gray-500 border-gray-700 cursor-not-allowed'
-            }`}
-            data-testid="next-button"
-          >
-            {page === totalPages - 1 ? 'Finish' : 'Next'} →
-          </Button>
         </div>
-        {!currentPageAnswered && (
-          <p className="text-center text-pink-400 text-sm mt-3 animate-pulse">
-            Please answer all questions to continue
-          </p>
-        )}
       </motion.div>
 
       <style>{`
