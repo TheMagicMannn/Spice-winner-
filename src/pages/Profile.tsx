@@ -647,6 +647,14 @@ export const ProfilePage: React.FC = () => {
         profile={profile}
       />
 
+      {/* Kink Quiz Modal */}
+      {isKinkQuizOpen && (
+        <KinkQuiz
+          onClose={() => setIsKinkQuizOpen(false)}
+          onSaveResults={handleSaveKinkQuizResults}
+        />
+      )}
+
       {/* Theme Styles */}
       <style>{`
         ${themeStyles}
