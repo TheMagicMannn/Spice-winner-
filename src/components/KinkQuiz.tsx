@@ -361,7 +361,20 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
 
       {/* Questions area - with proper padding for bottom nav */}
       <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <div className="p-4 pb-32">
+        <div className="p-4 pb-48">
+          {/* Scale Legend */}
+          <div className="max-w-3xl mx-auto mb-4">
+            <div className="bg-black/50 border border-pink-500/30 rounded-lg p-3">
+              <div className="flex justify-between items-center text-xs sm:text-sm">
+                <span className="text-pink-400 font-semibold">Strongly Disagree</span>
+                <span className="text-white/50">←</span>
+                <span className="text-white/70 font-medium">Neutral</span>
+                <span className="text-white/50">→</span>
+                <span className="text-pink-400 font-semibold">Strongly Agree</span>
+              </div>
+            </div>
+          </div>
+
           <AnimatePresence mode="wait" custom={dir}>
             <motion.div
               key={page}
@@ -384,36 +397,32 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
                     className={`bg-black/50 border rounded-lg p-4 transition-all ${
                       isAnswered 
                         ? 'border-pink-500/50' 
-                        : 'border-pink-500/20 animate-pulse'
+                        : 'border-pink-500/20'
                     }`}
                     data-testid={`question-${start + i}`}
                   >
                     <p className="text-white mb-3 leading-relaxed text-sm sm:text-base">{stmt}</p>
-                    <div className="flex justify-between gap-2 items-center">
-                      <span className="text-xs text-white/50 hidden sm:block">Disagree</span>
-                      <div className="flex gap-1.5 sm:gap-2 flex-1 justify-center">
-                        {SCALE.map(v => (
-                          <motion.button
-                            key={v}
-                            className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 font-bold text-white text-sm transition-all ${
-                              scores[start + i] === v
-                                ? 'border-white scale-110 shadow-lg shadow-pink-500/50'
-                                : 'border-transparent hover:scale-110'
-                            }`}
-                            style={{ backgroundColor: COLORS[v - 1] }}
-                            onClick={() => select(i, v)}
-                            whileHover={{ scale: 1.15 }}
-                            whileTap={{ scale: 0.95 }}
-                            initial={{ scale: 0 }}
-                            animate={{ scale: scores[start + i] === v ? 1.1 : 1 }}
-                            transition={{ delay: i * 0.03 + 0.1 }}
-                            data-testid={`answer-${start + i}-${v}`}
-                          >
-                            {v === 5 ? 'N' : ''}
-                          </motion.button>
-                        ))}
-                      </div>
-                      <span className="text-xs text-white/50 hidden sm:block">Agree</span>
+                    <div className="flex justify-center gap-1.5 sm:gap-2">
+                      {SCALE.map(v => (
+                        <motion.button
+                          key={v}
+                          className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 font-bold text-white text-sm transition-all ${
+                            scores[start + i] === v
+                              ? 'border-white scale-110 shadow-lg shadow-pink-500/50'
+                              : 'border-transparent hover:scale-110'
+                          }`}
+                          style={{ backgroundColor: COLORS[v - 1] }}
+                          onClick={() => select(i, v)}
+                          whileHover={{ scale: 1.15 }}
+                          whileTap={{ scale: 0.95 }}
+                          initial={{ scale: 0 }}
+                          animate={{ scale: scores[start + i] === v ? 1.1 : 1 }}
+                          transition={{ delay: i * 0.03 + 0.1 }}
+                          data-testid={`answer-${start + i}-${v}`}
+                        >
+                          {v === 5 ? 'N' : ''}
+                        </motion.button>
+                      ))}
                     </div>
                   </motion.div>
                 );
