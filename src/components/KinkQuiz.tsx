@@ -119,6 +119,8 @@ type Result = { name: string; pct: number };
 interface Props {
   onClose: () => void;
   onSaveResults?: (results: KinkResults) => void;
+  existingResults?: Record<string, number>;
+  viewResultsOnly?: boolean;
 }
 
 // === COMPONENT ===
