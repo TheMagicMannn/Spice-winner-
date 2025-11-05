@@ -22,13 +22,6 @@ export async function deletePostViaEdgeFunction(postId: string): Promise<void> {
 
     console.log('Deleting post via Edge Function:', { postId, userId: session.user.id });
 
-    // Get the Supabase URL from config
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.REACT_APP_SUPABASE_URL;
-    
-    if (!supabaseUrl) {
-      throw new Error('Supabase URL not configured');
-    }
-
     // Call the Edge Function
     const response = await fetch(`${supabaseUrl}/functions/v1/delete-iso-post`, {
       method: 'POST',
