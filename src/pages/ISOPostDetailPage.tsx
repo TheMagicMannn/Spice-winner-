@@ -159,17 +159,45 @@ export const ISOPostDetailPage: React.FC = () => {
   };
 
   const handleDeletePost = async () => {
-    if (!user || !postId || !post) return;
+    if (!user || !postId || !post) {
+      toast({
+        title: 'Error',
+        description: 'Unable to delete post. Please try again.',
+        variant: 'destructive'
+      });
+      return;
+    }
 
     if (!window.confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
       return;
     }
 
+    setIsDeleting(true);
     try {
       await isoPostService.deletePost(postId, user.id);
-      navigate('/iso');
-    } catch (error) {
+      
+      toast({
+        title: 'Success',
+        description: 'Post deleted successfully',
+        variant: 'success'
+      });
+      
+      // Navigate after a short delay to let the user see the success message
+      setTimeout(() => {
+        navigate('/iso');
+      }, 500);
+    } catch (error: any) {
       console.error('Error deleting post:', error);
+      
+      // Show detailed error message to user
+      const errorMessage = error?.message || 'Failed to delete post. Please try again.';
+      toast({
+        title: 'Deletion Failed',
+        description: errorMessage,
+        variant: 'destructive'
+      });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
