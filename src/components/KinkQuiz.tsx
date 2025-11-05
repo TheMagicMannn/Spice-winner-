@@ -247,7 +247,7 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
 
         {/* Results content - with proper padding for bottom nav */}
         <div className="flex-1 overflow-y-auto scrollbar-hide">
-          <div className="p-4 pb-28">
+          <div className="p-4 pb-40">
             <motion.div 
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
