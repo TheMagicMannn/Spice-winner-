@@ -36,6 +36,7 @@ import { spiceTheme, themeStyles } from '@/styles/theme';
 import { Profile, MatchPreferences } from '@/types';
 import { useNavigate } from 'react-router-dom';
 import { isoPostService, ISOPost } from '@/services/isoPostService';
+import { KinkQuiz } from '@/components/KinkQuiz';
 
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
