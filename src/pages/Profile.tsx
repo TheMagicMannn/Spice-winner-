@@ -229,6 +229,25 @@ export const ProfilePage: React.FC = () => {
     await logout();
   };
 
+  const handleSaveKinkQuizResults = async (results: Record<string, number>) => {
+    setIsLoading(true);
+    try {
+      console.log('ProfilePage - Saving kink quiz results:', results);
+      const updatedProfile = {
+        ...profile,
+        kinkQuizResults: results
+      };
+      const savedProfile = await ProfileService.updateProfile(user.id, updatedProfile);
+      updateProfile(savedProfile);
+      console.log('ProfilePage - Kink quiz results saved successfully');
+    } catch (error) {
+      console.error('ProfilePage - Failed to save kink quiz results:', error);
+      setError('Failed to save quiz results. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getNameDisplay = () => {
     if (profile.accountType === 'couple' && profile.displayName2) {
       return `${displayName || 'User'} & ${profile.displayName2}`;
