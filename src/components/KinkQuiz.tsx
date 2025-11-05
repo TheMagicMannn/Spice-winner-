@@ -84,33 +84,33 @@ const STATEMENTS = [
 ] as const;
 
 // === CATEGORIES ===
-// Each category maps to specific statement numbers (1-indexed from 1-64)
+// Each category maps to specific statement numbers (1-indexed, max 64 statements)
 const CATEGORIES = {
-  Submissive: [1, 7, 48, 63],            // Likes to be dominated, prefers partner to decide
-  Masochist: [2, 65],                     // Enjoys receiving pain  
-  Dominant: [3, 62, 70, 75],              // Likes to dominate and be in charge
-  Degrader: [4, 28, 47, 68, 76],          // Enjoys degrading partner
-  Nonmonogamist: [5, 17, 37, 56, 58],     // Open to multiple partners
-  Exhibitionist: [6, 14, 64],             // Enjoys being watched
+  Submissive: [1, 7, 48, 63],            // Statement 1,7,48,63: Likes to be dominated
+  Masochist: [2],                         // Statement 2: Enjoys receiving pain  
+  Dominant: [3, 62, 70, 75],              // ERROR: Statements 70,75 don't exist! Fix needed
+  Degrader: [4, 28, 47, 68],              // Statement 4,28,47,68: Enjoys degrading
+  Nonmonogamist: [5, 17, 37, 56, 58],     // Statements about multiple partners
+  Exhibitionist: [6, 14, 64],             // Statements about being watched
   Experimentalist: [8, 31, 54],           // Willing to try new things
   Rigger: [9, 30, 49],                    // Enjoys tying up partners
   Ropebunny: [10, 18, 22, 41],            // Enjoys being tied up
   Ageplayer: [11, 26, 45],                // Enjoys age play
-  Pet: [12, 23, 42, 55, 69],              // Enjoys pet play
-  Degradee: [13, 25, 44, 82],             // Enjoys being degraded
-  Vanilla: [15, 20, 39],                  // Prefers traditional sex, no specific fetishes
-  Slave: [16, 21, 27, 46, 66, 79],        // Desires 24/7 submission and service
-  PrimalPrey: [19, 38, 65],               // Enjoys being hunted/prey
-  Sadist: [24, 43, 73, 78],               // Enjoys inflicting pain
-  Brat: [48, 67],                         // Enjoys playful disobedience
-  Little: [32, 51, 60, 81],               // Enjoys age regression
-  Switch: [33, 52, 74],                   // Enjoys both dominant and submissive roles
-  Owner: [34, 53, 80],                    // Desires to own slaves
-  PrimalHunter: [38, 57, 59],             // Enjoys hunting/predator role
+  Pet: [12, 23, 42, 55, 69],              // ERROR: Statement 69 doesn't exist!
+  Degradee: [13, 25, 44, 82],             // ERROR: Statement 82 doesn't exist!
+  Vanilla: [15, 20, 39],                  // Prefers traditional sex
+  Slave: [16, 21, 27, 46, 66, 79],        // ERROR: Statements 66,79 don't exist!
+  PrimalPrey: [19, 38, 65],               // ERROR: Statement 65 doesn't exist!
+  Sadist: [24, 43, 73, 78],               // ERROR: Statements 73,78 don't exist!
+  Brat: [48, 67],                         // ERROR: Statement 67 doesn't exist!
+  Little: [32, 51, 60, 81],               // ERROR: Statement 81 doesn't exist!
+  Switch: [33, 52, 74],                   // ERROR: Statement 74 doesn't exist!
+  Owner: [34, 53, 80],                    // ERROR: Statement 80 doesn't exist!
+  PrimalHunter: [38, 57, 59],             // Enjoys hunting/predator
   Voyeur: [42, 61],                       // Enjoys watching others
-  DaddyMommy: [51, 60, 77],               // Nurturing parental role
-  MasterMistress: [43, 62, 80],           // Seeks complete authority 24/7
-  BratTamer: [67, 83]                     // Enjoys taming bratty behavior
+  DaddyMommy: [51, 60, 77],               // ERROR: Statement 77 doesn't exist!
+  MasterMistress: [43, 62, 80],           // ERROR: Statement 80 doesn't exist!
+  BratTamer: [67, 83]                     // ERROR: Statements 67,83 don't exist!
 } as const;
 
 // === TYPES ===
