@@ -134,6 +134,11 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults }) => {
   
   // Check if all questions on current page are answered
   const currentPageAnswered = pageStmts.every((_, i) => scores[start + i] !== null);
+  
+  // Calculate question progress (not page progress)
+  const answeredCount = scores.filter(s => s !== null).length;
+  const totalQuestions = STATEMENTS.length;
+  const questionProgress = Math.round((answeredCount / totalQuestions) * 100);
 
   const select = (i: number, v: number) => {
     const newScores = [...scores];
