@@ -84,32 +84,33 @@ const STATEMENTS = [
 ] as const;
 
 // === CATEGORIES ===
+// Each category maps to specific statement numbers (1-indexed)
 const CATEGORIES = {
-  Ageplayer: [11, 26, 32, 62],
-  Experimentalist: [8, 31, 35],
-  Pet: [12, 23, 36, 50],
-  Ropebunny: [10, 18, 22],
-  Masochist: [2, 52],
-  Degradee: [13, 25, 63],
-  Submissive: [1, 7, 29, 44, 55],
-  Exhibitionist: [6, 14, 45],
-  PrimalPrey: [19, 46],
-  Nonmonogamist: [5, 17, 37, 39],
-  Rigger: [9, 30],
-  Switch: [33, 55],
-  DaddyMommy: [41, 58],
-  Voyeur: [42, 6],
-  Sadist: [24, 54, 59],
-  Dominant: [3, 51, 56],
-  MasterMistress: [43, 61],
-  BratTamer: [64],
-  Slave: [16, 21, 27, 47, 53, 60],
-  Owner: [34, 36],
-  Degrader: [4, 28, 49, 57],
-  Little: [32, 62],
-  Brat: [48],
-  Vanilla: [15, 20],
-  PrimalHunter: [38, 40]
+  Submissive: [1, 7, 29, 47, 62],        // Likes to be dominated, prefers partner to decide
+  Masochist: [2, 65, 70],                 // Enjoys receiving pain
+  Dominant: [3, 51, 69, 74],              // Likes to dominate and be in charge
+  Degrader: [4, 28, 49, 67, 75],          // Enjoys degrading partner
+  Nonmonogamist: [5, 17, 37, 39, 57],     // Open to multiple partners
+  Exhibitionist: [6, 14, 45],             // Enjoys being watched
+  Experimentalist: [8, 35, 53],           // Willing to try new things
+  Rigger: [9, 28, 30],                    // Enjoys tying up partners
+  Ropebunny: [10, 18, 40],                // Enjoys being tied up
+  Ageplayer: [11, 26, 44],                // Enjoys age play
+  Pet: [12, 23, 41, 54, 68],              // Enjoys pet play
+  Degradee: [13, 25, 63, 81],             // Enjoys being degraded
+  Vanilla: [15, 20, 34],                  // Prefers traditional sex, no specific fetishes
+  Slave: [16, 21, 27, 47, 60, 78],        // Desires 24/7 submission and service
+  PrimalPrey: [19, 37, 64],               // Enjoys being hunted/prey
+  Sadist: [24, 43, 72, 77],               // Enjoys inflicting pain
+  Brat: [48, 66],                         // Enjoys playful disobedience
+  Little: [32, 50, 62, 80],               // Enjoys age regression
+  Switch: [33, 51, 73],                   // Enjoys both dominant and submissive roles
+  Owner: [34, 36, 52],                    // Desires to own slaves
+  PrimalHunter: [38, 40, 58],             // Enjoys hunting/predator role
+  Voyeur: [42, 60],                       // Enjoys watching others
+  DaddyMommy: [41, 50, 59, 76],           // Nurturing parental role
+  MasterMistress: [43, 61, 79],           // Seeks complete authority 24/7
+  BratTamer: [64, 82]                     // Enjoys taming bratty behavior
 } as const;
 
 // === TYPES ===
