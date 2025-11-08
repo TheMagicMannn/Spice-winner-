@@ -180,8 +180,8 @@ const RoleSelection = ({
       <h3 className="font-semibold text-lg text-brand-secondary">{partnerName}'s Role Selection</h3>
       
       <div className="space-y-2">
-        <Label>Select Role (or take quiz for suggestions)</Label>
         <Select
+          label="Select Role (or take quiz for suggestions)"
           value={selectedRole}
           onChange={(e) => handleRoleSelect(e.target.value)}
           options={ROLE_OPTIONS}
