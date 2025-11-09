@@ -45,12 +45,12 @@ export const HeroPage: React.FC = () => {
           newVisible[i] = true;
           return newVisible;
         });
-      }, i * 100);
+      }, i * 150);
     });
 
-    setTimeout(() => setShowSubtext(true), 1500);
-    setTimeout(() => setShowButtons(true), 2000);
-    setTimeout(() => setShowDisclaimer(true), 2500);
+    setTimeout(() => setShowSubtext(true), 1800);
+    setTimeout(() => setShowButtons(true), 2400);
+    setTimeout(() => setShowDisclaimer(true), 3000);
 
     return () => clearInterval(logoInterval);
   }, []);
