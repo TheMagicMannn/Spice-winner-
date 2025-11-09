@@ -104,7 +104,7 @@ export const HeroPage: React.FC = () => {
           {headlineWords.map((word, index) => (
             <span
               key={index}
-              className={`text-3xl md:text-4xl font-bold text-white mx-1 transition-all duration-500 ${
+              className={`text-3xl md:text-4xl font-bold text-white mx-1 transition-all duration-700 ease-out ${
                 headlineVisible[index] 
                   ? 'opacity-100 translate-y-0' 
                   : 'opacity-0 translate-y-5'
