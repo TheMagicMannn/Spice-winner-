@@ -420,17 +420,12 @@ export const ProfilePage: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Bio Section */}
-            {bio && (
-              <Card className={`${spiceTheme.components.card} animate-fade-in`}>
-                <CardHeader>
-                  <CardTitle className="text-white">About Me</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-white/80 leading-relaxed">{bio}</p>
-                </CardContent>
-              </Card>
-            )}
+            {/* Sliding Content Carousel */}
+            <Card className={`${spiceTheme.components.card} animate-fade-in overflow-hidden`}>
+              <CardContent className="p-0">
+                <SlideCarousel navigate={navigate} />
+              </CardContent>
+            </Card>
 
             {/* Active ISO Posts Section */}
             <Card className={`${spiceTheme.components.card} animate-fade-in`}>
