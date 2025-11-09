@@ -132,8 +132,8 @@ export const HeroPage: React.FC = () => {
 
         {/* Disclaimer Card */}
         {showDisclaimer && (
-          <div className="bg-black/70 rounded-2xl border-2 border-pink-500/60 p-4 mt-10 max-w-sm shadow-lg shadow-pink-500/20 animate-fade-in">
-            <div className="flex items-center mb-2">
+          <div className="bg-black/70 rounded-2xl border-2 border-pink-500/60 p-4 mt-10 max-w-sm mx-auto shadow-lg shadow-pink-500/20 animate-fade-in">
+            <div className="flex items-center justify-center mb-2">
               <span className="text-xl text-pink-400 mr-2">⚠️</span>
               <h3 className="font-bold text-base text-white">Adults Only Platform</h3>
             </div>
