@@ -151,11 +151,22 @@ export const HeroPage: React.FC = () => {
 
       <style>{`
         .animate-fade-in {
-          animation: fadeIn 0.5s ease-out forwards;
+          animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
         
         .animate-glow {
           animation: glow 2.4s ease-in-out infinite;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         
         @keyframes glow {
