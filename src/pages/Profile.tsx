@@ -39,6 +39,126 @@ import { isoPostService, ISOPost } from '@/services/isoPostService';
 import { KinkQuiz } from '@/components/KinkQuiz';
 import { KinkQuizPrompt } from '@/components/KinkQuizPrompt';
 
+// Sliding Carousel Component
+interface SlideCarouselProps {
+  navigate: (path: string) => void;
+}
+
+const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const slides = [
+    {
+      id: 1,
+      title: 'My Learning Journey',
+      description: 'Track your progress through educational modules and learning paths',
+      icon: <BookOpen className="h-8 w-8 text-pink-400" />,
+      path: '/learning-journey',
+      gradient: 'from-pink-500/20 to-purple-500/20'
+    },
+    {
+      id: 2,
+      title: 'Achievements',
+      description: 'View your badges, milestones, and community accomplishments',
+      icon: <Award className="h-8 w-8 text-yellow-400" />,
+      path: '/achievements',
+      gradient: 'from-yellow-500/20 to-orange-500/20'
+    },
+    {
+      id: 3,
+      title: 'Community Stats',
+      description: 'See your activity, connections, and engagement metrics',
+      icon: <TrendingUp className="h-8 w-8 text-blue-400" />,
+      path: '/stats',
+      gradient: 'from-blue-500/20 to-cyan-500/20'
+    }
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      nextSlide();
+    }
+    if (touchStart - touchEnd < -75) {
+      prevSlide();
+    }
+  };
+
+  const handleSlideClick = () => {
+    navigate(slides[currentSlide].path);
+  };
+
+  return (
+    <div 
+      className="relative"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
+      {/* Slide Content */}
+      <button
+        onClick={handleSlideClick}
+        className="w-full p-6 text-left transition-all hover:scale-[1.02] cursor-pointer"
+        data-testid="carousel-slide"
+      >
+        <div className={`bg-gradient-to-br ${slides[currentSlide].gradient} rounded-lg p-6 border border-white/10`}>
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-black/30 rounded-full">
+              {slides[currentSlide].icon}
+            </div>
+            <div className="flex-1">
+              <h3 className="text-white font-semibold text-lg mb-2">
+                {slides[currentSlide].title}
+              </h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                {slides[currentSlide].description}
+              </p>
+            </div>
+            <div className="text-white/50">
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="flex items-center justify-center gap-2 py-4">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`transition-all rounded-full ${
+              index === currentSlide 
+                ? 'w-8 h-2 bg-pink-500' 
+                : 'w-2 h-2 bg-white/30 hover:bg-white/50'
+            }`}
+            data-testid={`carousel-dot-${index}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 export const ProfilePage: React.FC = () => {
   const { user, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
