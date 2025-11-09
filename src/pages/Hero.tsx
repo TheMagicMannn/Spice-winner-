@@ -48,9 +48,11 @@ export const HeroPage: React.FC = () => {
       }, i * 150);
     });
 
-    setTimeout(() => setShowSubtext(true), 1800);
-    setTimeout(() => setShowButtons(true), 2400);
-    setTimeout(() => setShowDisclaimer(true), 3000);
+    // All three elements fade in together after headline completes
+    const fadeInDelay = 1200;
+    setTimeout(() => setShowSubtext(true), fadeInDelay);
+    setTimeout(() => setShowButtons(true), fadeInDelay);
+    setTimeout(() => setShowDisclaimer(true), fadeInDelay);
 
     return () => clearInterval(logoInterval);
   }, []);
