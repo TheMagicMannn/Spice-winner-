@@ -22,7 +22,10 @@ import {
   Camera,
   Zap,
   MessageSquare,
-  Heart
+  Heart,
+  BookOpen,
+  Award,
+  TrendingUp
 } from 'lucide-react';
 import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
