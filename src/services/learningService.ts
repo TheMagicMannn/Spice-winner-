@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/services/supabase';
 
 export interface ModuleProgress {
   id?: string;
