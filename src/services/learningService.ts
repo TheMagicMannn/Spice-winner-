@@ -108,22 +108,31 @@ class LearningService {
     moduleId: string, 
     progressPercentage: number
   ): Promise<boolean> {
-    const { error } = await supabase
-      .from('user_module_progress')
-      .update({
-        progress_percentage: progressPercentage,
-        status: progressPercentage >= 100 ? 'completed' : 'in-progress',
-        updated_at: new Date().toISOString()
-      })
-      .eq('user_id', userId)
-      .eq('module_id', moduleId);
+    try {
+      console.log('Updating module progress:', { userId, moduleId, progressPercentage });
+      
+      const { data, error } = await supabase
+        .from('user_module_progress')
+        .update({
+          progress_percentage: progressPercentage,
+          status: progressPercentage >= 100 ? 'completed' : 'in-progress',
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+        .eq('module_id', moduleId)
+        .select();
 
-    if (error) {
-      console.error('Error updating progress:', error);
+      if (error) {
+        console.error('Error updating progress:', error);
+        return false;
+      }
+
+      console.log('Progress updated successfully:', data);
+      return true;
+    } catch (error) {
+      console.error('Exception in updateModuleProgress:', error);
       return false;
     }
-
-    return true;
   }
 
   /**
