@@ -506,13 +506,16 @@ export const LearningJourneyPage: React.FC = () => {
               {path.modules.map((module, index) => {
                 const status = getModuleStatus(module.id);
                 const progress = getModuleProgress(module.id);
+                const isUnlocked = isModuleUnlocked(path.modules, index);
+                const isLocked = status === 'locked' && !isUnlocked;
                 
                 return (
                   <button
                     key={module.id}
                     onClick={() => handleModuleClick(module)}
+                    disabled={isLocked}
                     className={`w-full text-left p-4 rounded-lg border transition-all ${
-                      status === 'locked' && index > 0
+                      isLocked
                         ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed'
                         : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-pink-500/50'
                     }`}
@@ -520,7 +523,15 @@ export const LearningJourneyPage: React.FC = () => {
                   >
                     <div className="flex items-start gap-3">
                       <div className="mt-1">
-                        {getStatusIcon(status)}
+                        {status === 'completed' ? (
+                          <CheckCircle className="h-5 w-5 text-green-400" />
+                        ) : status === 'in-progress' ? (
+                          <Play className="h-5 w-5 text-pink-400" />
+                        ) : isUnlocked ? (
+                          <BookOpen className="h-5 w-5 text-blue-400" />
+                        ) : (
+                          <Lock className="h-5 w-5 text-gray-500" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
@@ -533,12 +544,14 @@ export const LearningJourneyPage: React.FC = () => {
                                 ? 'bg-green-500/20 text-green-400 border-green-500/30'
                                 : status === 'in-progress'
                                 ? 'bg-pink-500/20 text-pink-400 border-pink-500/30'
+                                : isUnlocked
+                                ? 'bg-blue-500/20 text-blue-400 border-blue-500/30'
                                 : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
                             }
                           >
                             {status === 'completed' ? 'Completed' : 
                              status === 'in-progress' ? 'In Progress' : 
-                             index === 0 ? 'Start' : 'Locked'}
+                             isUnlocked ? 'Start' : 'Locked'}
                           </Badge>
                         </div>
                         <p className="text-white/70 text-sm mb-2">{module.description}</p>
