@@ -136,26 +136,102 @@ export const ModuleContent: React.FC<ModuleContentProps> = ({
         ]
       },
       'mod-2': {
+        estimatedTime: '20-25 minutes',
         sections: [
           {
-            heading: 'Understanding Boundaries',
-            content: 'Boundaries are personal limits that define what you are comfortable with in various situations. In the lifestyle, understanding and respecting boundaries is essential for creating safe, enjoyable experiences for everyone involved.'
+            heading: 'Understanding Boundaries: Your Personal Blueprint',
+            content: 'Boundaries are personal limits that define what you are comfortable with in various situations. Think of them as your personal blueprint for healthy interactions—they protect your physical, emotional, and mental well-being while allowing you to connect authentically with others.\n\nIn the lifestyle, boundaries aren\'t restrictions—they\'re the framework that makes authentic connection possible. Without clear boundaries, you risk resentment, burnout, or experiences that leave you feeling uncomfortable or violated. With strong boundaries, you create space for genuine pleasure, trust, and growth.',
+            type: 'normal'
           },
           {
-            heading: 'Types of Boundaries',
-            content: 'Physical Boundaries: What physical contact or activities you are comfortable with.\n\nEmotional Boundaries: What level of emotional intimacy you prefer.\n\nTime Boundaries: When and how often you are available for interactions.\n\nPrivacy Boundaries: What personal information you wish to share.'
+            heading: 'Why Boundaries Matter in the Lifestyle',
+            content: 'The lifestyle involves unique situations that don\'t exist in traditional relationships:\n\n• Physical intimacy with people you may have just met\n• Navigating attractions while honoring existing relationships\n• Balancing multiple connections and schedules\n• Managing privacy and discretion\n• Exploring desires that may push your comfort zone\n\nWithout clear boundaries, these situations become chaotic and potentially harmful. With them, they become opportunities for incredible experiences.',
+            type: 'normal'
           },
           {
-            heading: 'Communicating Your Boundaries',
-            content: 'Express your boundaries clearly and confidently. Use "I" statements like "I am comfortable with..." or "I need...". Remember, boundaries can change, and it is okay to adjust them as needed.'
+            heading: 'The Six Types of Lifestyle Boundaries',
+            content: '1. PHYSICAL BOUNDARIES\n   What physical activities, contact, and intimacy you\'re comfortable with\n\n2. EMOTIONAL BOUNDARIES\n   The level of emotional connection and vulnerability you\'re open to\n\n3. TIME BOUNDARIES\n   When and how often you\'re available for lifestyle activities\n\n4. PRIVACY BOUNDARIES\n   What personal information you share and with whom\n\n5. RELATIONSHIP BOUNDARIES\n   Rules and agreements within your primary relationship\n\n6. SOCIAL BOUNDARIES\n   How you interact in lifestyle spaces and who you connect with\n\nEach type requires separate consideration and clear communication.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Deep Dive: Physical Boundaries',
+            content: 'Physical boundaries are often what people think of first, but they\'re more nuanced than you might expect. Consider:\n\n• What types of touch are you comfortable with?\n• Are there specific activities that are off-limits?\n• Do your boundaries change based on attraction level?\n• Are there activities you\'ll do with some partners but not others?\n• Do you have boundaries around safer sex practices?\n• Are there body parts or zones that are not okay to touch?\n• Do your boundaries differ in group settings vs. one-on-one?\n\nBe specific. "I\'m okay with most things" is not a boundary—it\'s an invitation for confusion.',
+            type: 'normal'
+          },
+          {
+            heading: 'Emotional Boundaries: The Often-Overlooked Dimension',
+            content: 'Physical boundaries get a lot of attention, but emotional boundaries are equally important. In the lifestyle, emotional boundaries might include:\n\n• Not sharing deeply personal life details with casual connections\n• Limiting communication frequency with play partners\n• Keeping certain activities exclusive to your primary relationship\n• Not developing romantic feelings for play partners\n• Maintaining appropriate relationship expectations\n• Protecting your primary relationship\'s emotional primacy\n\nEmotional boundaries prevent situations where play partners develop unexpected attachment or where your primary relationship feels threatened.',
+            type: 'normal'
+          },
+          {
+            heading: 'Common Emotional Boundary Mistakes',
+            content: '🚫 Texting play partners more frequently than your primary partner\n🚫 Sharing relationship problems with play partners\n🚫 Seeking emotional support from connections instead of your partner\n🚫 Comparing partners or making one feel inferior\n🚫 Keeping secrets from your primary partner\n🚫 Allowing new connections to interfere with existing commitments\n\nThese patterns erode primary relationships and create complicated situations. Set clear emotional boundaries from the start.',
+            type: 'warning'
+          },
+          {
+            heading: 'Time Boundaries: Protecting Your Life Balance',
+            content: 'The lifestyle can be exciting and all-consuming, but it shouldn\'t take over your life. Time boundaries help you maintain balance:\n\n• Designate specific days/times for lifestyle activities\n• Protect date nights with your primary partner\n• Maintain boundaries around work and family time\n• Set limits on messaging and app usage\n• Don\'t let lifestyle activities interfere with responsibilities\n• Schedule breaks to reconnect with your partner\n\nWithout time boundaries, the lifestyle can become overwhelming and damage your primary relationship.',
+            type: 'normal'
+          },
+          {
+            heading: 'Privacy Boundaries in the Digital Age',
+            content: 'Privacy is crucial in the lifestyle. Consider what you share:\n\n📱 PROFILE INFORMATION\n• Do you use real names or lifestyle names?\n• Do you show your face in photos?\n• What personal details do you include?\n• Where do you mention you live?\n\n💬 CONVERSATIONS\n• How much about your vanilla life do you share?\n• Do you discuss your workplace or profession?\n• Do you share photos of your home or identifying locations?\n\n🤝 IN-PERSON MEETINGS\n• Do you give out your real phone number?\n• Do you meet in your own neighborhood?\n• Do you share your social media accounts?\n\nYour privacy boundaries should reflect your comfort level with potential exposure.',
+            type: 'example'
+          },
+          {
+            heading: 'Discovering Your Boundaries',
+            content: 'Many people don\'t know their boundaries until they\'re crossed. Here\'s how to identify them proactively:\n\n1. REFLECT on past experiences\n   What felt good? What didn\'t?\n\n2. VISUALIZE scenarios\n   Imagine different situations—how do they make you feel?\n\n3. DISCUSS with your partner\n   What are their boundaries? Where do yours align?\n\n4. START CONSERVATIVE\n   It\'s easier to expand boundaries than heal from crossing them\n\n5. CHECK IN with yourself\n   How do you feel before, during, and after experiences?\n\nBoundaries aren\'t always obvious—they require self-awareness and honest self-reflection.',
+            type: 'tip'
+          },
+          {
+            heading: 'Communicating Your Boundaries Effectively',
+            content: 'Knowing your boundaries is only half the battle—you must communicate them clearly:\n\n✅ BE DIRECT: "I\'m not comfortable with..." not "I don\'t think I want to..."\n✅ BE SPECIFIC: "No full swap" not "Let\'s take it slow"\n✅ BE CONFIDENT: State them as facts, not apologies\n✅ BE EARLY: Share boundaries before situations arise\n✅ BE CONSISTENT: Don\'t waffle or send mixed signals\n\nUse "I" statements:\n• "I need to check in with my partner first"\n• "I\'m not comfortable with that activity"\n• "I need to take a break"\n• "I\'d prefer to keep this interaction social tonight"',
+            type: 'key-point'
+          },
+          {
+            heading: 'When to Communicate Boundaries',
+            content: 'TIMING IS EVERYTHING. Share boundaries:\n\n🕐 BEFORE MEETING\nIn initial messages, establish basic boundaries and expectations\n\n🕑 AT THE START OF DATES\n"Before we get too far, let\'s talk about what we\'re all comfortable with tonight"\n\n🕒 WHEN THINGS SHIFT\nIf the energy or activity level changes, check in\n\n🕓 IMMEDIATELY IF UNCOMFORTABLE\nDon\'t wait—speak up the moment something feels wrong\n\nNever assume others know your boundaries. Always communicate them explicitly.',
+            type: 'normal'
+          },
+          {
+            heading: 'Real-World Scenario: Boundary Communication',
+            content: 'SITUATION: You\'re at a meet-and-greet and a couple invites you back to their place. You\'re attracted but not ready for play on a first meeting.\n\n❌ POOR RESPONSE:\n"Um, maybe... I\'ll see how I feel..."\n(Vague, unclear, leads to confusion)\n\n✅ GOOD RESPONSE:\n"We\'re definitely attracted and would love to get to know you better! Our boundary is that we don\'t play on first meetings—it helps us make sure the connection is right. Could we exchange numbers and plan something for next week?"\n\nThis is clear, confident, and leaves the door open while maintaining your boundary.',
+            type: 'example'
           },
           {
             heading: 'Respecting Others\' Boundaries',
-            content: 'When someone shares their boundaries with you, acknowledge them without judgment. Never pressure someone to change their boundaries. Respecting boundaries builds trust and shows maturity.'
+            content: 'When someone shares a boundary with you:\n\n✅ ACCEPT IT IMMEDIATELY\n   Don\'t question, negotiate, or ask for explanations\n\n✅ THANK THEM\n   "Thanks for being clear about that"\n\n✅ REMEMBER IT\n   Don\'t make them repeat their boundaries\n\n✅ HONOR IT COMPLETELY\n   Don\'t test or push boundaries\n\n✅ CHECK UNDERSTANDING\n   If unclear, ask clarifying questions\n\nRespecting boundaries isn\'t just about being a good person—it\'s about being a safe person to play with. Your reputation in the lifestyle depends on it.',
+            type: 'key-point'
           },
           {
-            heading: 'Key Takeaways',
-            content: '• Boundaries are personal and valid\n• Communicate boundaries clearly and early\n• Respect others\' boundaries without question\n• Boundaries can evolve over time\n• No explanation is needed for setting boundaries'
+            heading: 'Red Flags: Boundary Violations to Watch For',
+            content: '🚩 Someone asks you to keep secrets from your partner\n🚩 They pressure you after you\'ve said no\n🚩 They act hurt or angry when you set boundaries\n🚩 They "forget" boundaries you\'ve clearly stated\n🚩 They test boundaries to see what they can get away with\n🚩 They make you feel guilty for having boundaries\n🚩 They proceed with activities without clear consent\n\nThese behaviors indicate someone who doesn\'t respect boundaries. End the interaction immediately.',
+            type: 'warning'
+          },
+          {
+            heading: 'Boundaries Can Change—And That\'s Okay',
+            content: 'Your boundaries aren\'t set in stone. They can and should evolve as you:\n\n• Gain experience and confidence\n• Discover new interests\n• Process past experiences\n• Change life circumstances\n• Grow in your relationships\n\nWhat\'s NOT okay:\n• Changing boundaries mid-scene without discussion\n• Feeling pressured to change boundaries\n• Ignoring your gut feelings to please others\n• Expanding boundaries before you\'re ready\n\nRegular check-ins with yourself and your partner help you understand when boundaries are naturally evolving vs. when you\'re compromising them under pressure.',
+            type: 'normal'
+          },
+          {
+            heading: 'Boundary Maintenance: The Ongoing Work',
+            content: 'Setting boundaries once isn\'t enough. You must maintain them:\n\n1. REGULAR CHECK-INS\n   With yourself and your partner—are boundaries still serving you?\n\n2. AFTER-ACTION REVIEWS\n   After lifestyle experiences, discuss what worked and what didn\'t\n\n3. ADJUSTMENT AS NEEDED\n   If something doesn\'t feel right, it\'s okay to adjust\n\n4. CLEAR COMMUNICATION\n   If boundaries change, communicate the changes\n\n5. ACCOUNTABILITY\n   Hold yourself and your partner accountable to stated boundaries',
+            type: 'tip'
+          },
+          {
+            heading: 'When Boundaries Are Crossed',
+            content: 'If your boundary is violated:\n\n1. STOP IMMEDIATELY\n   Use your safe word or clearly say "stop"\n\n2. REMOVE YOURSELF\n   Leave the situation if needed\n\n3. PROCESS YOUR FEELINGS\n   Talk to your partner about what happened\n\n4. ADDRESS IT DIRECTLY\n   Communicate with the person who crossed your boundary\n\n5. LEARN FROM IT\n   What can you do differently next time?\n\n6. CUT CONTACT IF NEEDED\n   If someone intentionally violated boundaries, end the connection\n\nYou are never wrong for enforcing your boundaries, even if it creates awkwardness or disappointment.',
+            type: 'normal'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Boundaries protect your well-being and enable authentic connection\n✅ Six types: Physical, Emotional, Time, Privacy, Relationship, Social\n✅ Communicate boundaries clearly, specifically, and confidently\n✅ Share boundaries early and often\n✅ Respect others\' boundaries without question or negotiation\n✅ Boundaries can evolve—that\'s healthy and normal\n✅ Red flags indicate people who don\'t respect boundaries—walk away\n✅ If boundaries are crossed, address it immediately\n✅ No explanation or justification needed for your boundaries\n\nMastering boundaries is essential for safe, fulfilling lifestyle experiences.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Reflection Exercise',
+            content: 'Before proceeding to the quiz, take 2-3 minutes to answer:\n\n• What are your three most important boundaries?\n• Have you communicated them clearly to your partner?\n• What boundary do you most struggle to enforce?\n• How will you handle it if someone crosses your boundary?\n\nWrite these down. Clear boundaries require conscious thought and commitment.',
+            type: 'tip'
           }
         ]
       },
