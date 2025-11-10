@@ -354,6 +354,31 @@ export const LearningJourneyPage: React.FC = () => {
 
       {/* Content */}
       <div className="p-4 space-y-6">
+        {/* Earned Badges Section */}
+        {userBadges.length > 0 && (
+          <Card className={`${spiceTheme.components.card} animate-fade-in`}>
+            <CardHeader>
+              <CardTitle className="text-white text-xl flex items-center gap-2">
+                <Award className="h-5 w-5 text-yellow-400" />
+                Your Achievements
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-3 gap-4">
+                {learningPaths.map((path) => (
+                  <PathBadge
+                    key={path.id}
+                    pathId={path.id}
+                    pathTitle={path.title}
+                    isEarned={isPathComplete(path.id)}
+                    earnedDate={userBadges.find(b => b.path_id === path.id)?.earned_at}
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Overall Progress Card */}
         <Card className={`${spiceTheme.components.card} animate-fade-in`}>
           <CardContent className="p-6">
