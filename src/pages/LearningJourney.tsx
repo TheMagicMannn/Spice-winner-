@@ -130,14 +130,31 @@ export const LearningJourneyPage: React.FC = () => {
   const handleQuizPass = async () => {
     if (!user || !selectedModule) return;
     
-    // Mark module as completed
-    await learningService.completeModule(user.id, selectedModule.id, 100);
-    
-    // Reload data to check for badge awards
-    await loadUserData();
-    
-    setShowModuleQuiz(false);
-    setSelectedModule(null);
+    try {
+      console.log('Quiz passed! Completing module:', selectedModule.id);
+      
+      // Mark module as completed
+      const success = await learningService.completeModule(user.id, selectedModule.id, 100);
+      
+      if (!success) {
+        console.error('Failed to complete module');
+        alert('Failed to save your progress. Please try again.');
+        return;
+      }
+      
+      console.log('Module marked as completed, reloading data...');
+      
+      // Reload data to check for badge awards and update UI
+      await loadUserData();
+      
+      console.log('Data reloaded successfully');
+      
+      setShowModuleQuiz(false);
+      setSelectedModule(null);
+    } catch (error) {
+      console.error('Error in handleQuizPass:', error);
+      alert('An error occurred. Please try again.');
+    }
   };
 
   const handleQuizClose = () => {
