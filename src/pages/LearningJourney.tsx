@@ -52,6 +52,99 @@ export const LearningJourneyPage: React.FC = () => {
   const [showModuleQuiz, setShowModuleQuiz] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Load user progress and badges
+  useEffect(() => {
+    if (user) {
+      loadUserData();
+    }
+  }, [user]);
+
+  const loadUserData = async () => {
+    if (!user) return;
+    
+    setIsLoading(true);
+    try {
+      const [progress, badges] = await Promise.all([
+        learningService.getAllUserProgress(user.id),
+        learningService.getUserBadges(user.id)
+      ]);
+      
+      setUserProgress(progress);
+      setUserBadges(badges);
+    } catch (error) {
+      console.error('Error loading learning data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getModuleStatus = (moduleId: string): 'completed' | 'in-progress' | 'locked' => {
+    const progress = userProgress.find(p => p.module_id === moduleId);
+    if (!progress) return 'locked';
+    return progress.status as 'completed' | 'in-progress' | 'locked';
+  };
+
+  const getModuleProgress = (moduleId: string): number => {
+    const progress = userProgress.find(p => p.module_id === moduleId);
+    return progress?.progress_percentage || 0;
+  };
+
+  const isPathComplete = (pathId: string): boolean => {
+    return userBadges.some(badge => badge.path_id === pathId);
+  };
+
+  const handleModuleClick = async (module: LearningModule) => {
+    const status = getModuleStatus(module.id);
+    
+    // Check if previous module is completed (except for first module)
+    const path = learningPaths.find(p => p.modules.some(m => m.id === module.id));
+    if (path) {
+      const moduleIndex = path.modules.findIndex(m => m.id === module.id);
+      if (moduleIndex > 0) {
+        const prevModule = path.modules[moduleIndex - 1];
+        const prevStatus = getModuleStatus(prevModule.id);
+        if (prevStatus !== 'completed') {
+          alert('Please complete the previous module first!');
+          return;
+        }
+      }
+    }
+    
+    if (status === 'locked') {
+      // Start the module
+      if (user) {
+        await learningService.startModule(user.id, module.id);
+        await loadUserData();
+      }
+    }
+    
+    setSelectedModule(module);
+    setShowModuleContent(true);
+  };
+
+  const handleModuleContentComplete = () => {
+    setShowModuleContent(false);
+    setShowModuleQuiz(true);
+  };
+
+  const handleQuizPass = async () => {
+    if (!user || !selectedModule) return;
+    
+    // Mark module as completed
+    await learningService.completeModule(user.id, selectedModule.id, 100);
+    
+    // Reload data to check for badge awards
+    await loadUserData();
+    
+    setShowModuleQuiz(false);
+    setSelectedModule(null);
+  };
+
+  const handleQuizClose = () => {
+    setShowModuleQuiz(false);
+    setSelectedModule(null);
+  };
+
   // Mock learning paths data
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([
     {
