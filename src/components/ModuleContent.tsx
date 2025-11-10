@@ -1,5 +1,5 @@
-import React from 'react';
-import { X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, AlertCircle, CheckCircle, Lightbulb, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface ModuleContentProps {
@@ -9,14 +9,42 @@ interface ModuleContentProps {
   onComplete: () => void;
 }
 
+interface ContentSection {
+  heading: string;
+  content: string;
+  type?: 'normal' | 'tip' | 'warning' | 'example' | 'key-point';
+}
+
 export const ModuleContent: React.FC<ModuleContentProps> = ({ 
   moduleId, 
   title, 
   onClose, 
   onComplete 
 }) => {
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [canComplete, setCanComplete] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLElement;
+      const scrollHeight = target.scrollHeight - target.clientHeight;
+      const scrolled = target.scrollTop;
+      const progress = (scrolled / scrollHeight) * 100;
+      setScrollProgress(progress);
+      
+      // Enable complete button after scrolling 80%
+      if (progress > 80) {
+        setCanComplete(true);
+      }
+    };
+
+    const contentEl = document.getElementById('module-content-scroll');
+    contentEl?.addEventListener('scroll', handleScroll);
+    return () => contentEl?.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const getModuleContent = (id: string) => {
-    const content: Record<string, { sections: Array<{ heading: string; content: string }> }> = {
+    const content: Record<string, { sections: Array<ContentSection>; estimatedTime: string }> = {
       'mod-1': {
         sections: [
           {
