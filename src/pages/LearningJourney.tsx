@@ -311,20 +311,10 @@ export const LearningJourneyPage: React.FC = () => {
     }
   ]);
 
-  const totalProgress = learningPaths.reduce((acc, path) => {
-    return acc + (path.completedModules / path.totalModules * 100);
-  }, 0) / learningPaths.length;
-
-  const totalCompleted = learningPaths.reduce((acc, path) => acc + path.completedModules, 0);
+  // Calculate real progress from user data
   const totalModules = learningPaths.reduce((acc, path) => acc + path.totalModules, 0);
-
-  const handleModuleClick = (module: LearningModule) => {
-    if (module.status === 'locked') {
-      return;
-    }
-    // Navigate to module content or open modal
-    console.log('Opening module:', module.title);
-  };
+  const totalCompleted = userProgress.filter(p => p.status === 'completed').length;
+  const totalProgress = totalModules > 0 ? (totalCompleted / totalModules) * 100 : 0;
 
   const getStatusIcon = (status: string) => {
     switch (status) {
