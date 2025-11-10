@@ -354,6 +354,231 @@ export const ModuleContent: React.FC<ModuleContentProps> = ({
             type: 'tip'
           }
         ]
+      },
+      'mod-4': {
+        estimatedTime: '30 minutes',
+        sections: [
+          {
+            heading: 'Why Difficult Conversations Matter',
+            content: 'Not every conversation in the lifestyle is easy. Sometimes you need to address uncomfortable topics, deliver disappointing news, or navigate conflicts. These difficult conversations are where most people struggle—but they\'re also where strong communication skills have the biggest impact.\n\nAvoiding difficult conversations doesn\'t make problems go away. It makes them worse. Learning to handle these moments with grace, honesty, and respect is one of the most valuable skills you can develop.',
+            type: 'normal'
+          },
+          {
+            heading: 'Common Difficult Conversations in the Lifestyle',
+            content: '• Declining an invitation or connection\n• Addressing boundary violations\n• Expressing hurt feelings or disappointment\n• Ending a play partnership\n• Discussing jealousy or insecurity\n• Addressing performance issues\n• Confronting dishonesty or rule-breaking\n• Discussing changing interests or desires\n• Managing expectations mismatches\n• Addressing hygiene or safety concerns\n\nEach of these requires courage, tact, and clear communication.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Five Principles of Difficult Conversations',
+            content: '1. TIMING: Choose the right moment and setting\n2. HONESTY: Be direct but compassionate\n3. RESPECT: Honor the other person\'s dignity\n4. CLARITY: Be specific about the issue\n5. SOLUTION-FOCUS: When possible, offer constructive paths forward\n\nThese principles ensure difficult conversations are productive rather than destructive.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Choosing the Right Time and Place',
+            content: 'Never have difficult conversations:\n❌ In public or at parties\n❌ In the heat of emotion\n❌ Late at night when tired\n❌ Via text or social media\n❌ When rushed or distracted\n\nInstead, choose:\n✅ Private, neutral settings\n✅ When both parties are calm\n✅ When you have adequate time\n✅ Face-to-face or video call\n✅ When you\'re prepared and composed\n\nTiming and setting significantly impact the outcome.',
+            type: 'tip'
+          },
+          {
+            heading: 'The "I" Statement Formula',
+            content: 'Use this structure for addressing issues:\n\n"When [specific behavior], I felt [emotion], because [reason]. I need [request]."\n\nExamples:\n\n✅ "When you didn\'t check in during play last week, I felt uncomfortable, because we agreed on regular check-ins. I need us to stick to that agreement."\n\n✅ "When you shared details about our private life, I felt betrayed, because we agreed on discretion. I need you to respect our privacy boundaries."\n\nThis format is non-accusatory while being clear and specific.',
+            type: 'example'
+          },
+          {
+            heading: 'Scenario: Declining an Unwanted Invitation',
+            content: 'THE SITUATION:\nA couple keeps inviting you to play, but you\'re not attracted. They\'re persistent.\n\n❌ BAD APPROACH:\n"We\'re busy" (vague excuse)\n"Maybe another time" (false hope)\nGhosting them\n\n✅ GOOD APPROACH:\n"We appreciate your interest and think you\'re wonderful people. We\'re looking for a different connection type, so we don\'t think we\'re the right match. We wish you the best in finding the right connections!"\n\nThis is clear, kind, and final. No room for misinterpretation.',
+            type: 'example'
+          },
+          {
+            heading: 'Addressing Boundary Violations',
+            content: 'If someone crosses your boundaries, address it immediately:\n\n1. STATE THE VIOLATION\n"You touched me without asking, which crossed my boundary"\n\n2. EXPLAIN THE IMPACT\n"That made me uncomfortable and broke my trust"\n\n3. SET EXPECTATIONS\n"I need clear consent before any touch moving forward"\n\n4. CONSEQUENCES\n"If this happens again, we won\'t continue playing"\n\nBe firm and direct. Boundary violations are serious.',
+            type: 'warning'
+          },
+          {
+            heading: 'Managing Your Emotions',
+            content: 'Before difficult conversations, manage your emotional state:\n\n• Take time to process your feelings first\n• Write down your thoughts to organize them\n• Practice what you want to say\n• Breathe deeply before starting\n• Remind yourself of your goal\n• Prepare for various responses\n\nEmotional regulation helps you stay clear and constructive, even when the topic is charged.',
+            type: 'normal'
+          },
+          {
+            heading: 'Listening During Difficult Conversations',
+            content: 'These conversations aren\'t just about delivering your message—you must also listen:\n\n• Let them respond fully\n• Don\'t interrupt with rebuttals\n• Ask clarifying questions\n• Acknowledge their perspective\n• Look for common ground\n• Stay open to their experience\n\nEven when you disagree, make space for their viewpoint.',
+            type: 'normal'
+          },
+          {
+            heading: 'De-Escalation Techniques',
+            content: 'If the conversation becomes heated:\n\n🔹 Lower your voice instead of raising it\n🔹 Slow down your speech\n🔹 Take breaks if needed\n🔹 Acknowledge their emotions\n🔹 Focus on the issue, not personal attacks\n🔹 Return to facts and specific behaviors\n🔹 Suggest continuing later if too emotional\n\nThe goal is resolution, not winning an argument.',
+            type: 'tip'
+          },
+          {
+            heading: 'Ending Play Partnerships Gracefully',
+            content: 'Sometimes connections don\'t work out. End them with respect:\n\n"We\'ve enjoyed getting to know you, but we feel like the connection isn\'t quite right for what we\'re looking for. We wanted to be honest rather than ghost or fade away. We appreciate the experiences we\'ve shared and wish you well!"\n\nBe:\n• Honest but kind\n• Clear about the ending\n• Appreciative of positive moments\n• Firm in your decision\n• Brief (don\'t over-explain)',
+            type: 'example'
+          },
+          {
+            heading: 'When You\'re On the Receiving End',
+            content: 'If someone brings a difficult topic to you:\n\n✅ Thank them for their honesty\n✅ Listen without interrupting\n✅ Ask for clarification if needed\n✅ Acknowledge their feelings\n✅ Take responsibility if appropriate\n✅ Work toward resolution\n✅ Don\'t get defensive\n\nHow you receive difficult feedback defines your character.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Red Flags: Poor Handling of Difficult Conversations',
+            content: '🚩 Becoming aggressive or threatening\n🚩 Making personal attacks\n🚩 Gaslighting or denying your experience\n🚩 Refusing to listen or engage\n🚩 Playing the victim\n🚩 Bringing up unrelated grievances\n🚩 Refusing to take any responsibility\n🚩 Storming off without resolution\n\nThese behaviors indicate someone who can\'t handle adult communication. Consider ending the connection.',
+            type: 'warning'
+          },
+          {
+            heading: 'The Follow-Up',
+            content: 'After a difficult conversation:\n\n• Check in with your partner about how it went\n• Reflect on what you learned\n• Follow through on any commitments made\n• Give the other party space to process\n• Monitor if behavior changes as discussed\n• Be prepared to have follow-up conversations\n\nDifficult conversations are often just the start of resolving an issue.',
+            type: 'normal'
+          },
+          {
+            heading: 'Module Summary',
+            content: '✅ Don\'t avoid difficult conversations—they don\'t go away\n✅ Choose appropriate timing and settings\n✅ Use "I" statements to express concerns\n✅ Be direct but compassionate\n✅ Listen as much as you speak\n✅ De-escalate when emotions run high\n✅ End connections gracefully when needed\n✅ Receive feedback with gratitude, not defensiveness\n\nMastering difficult conversations builds respect and trust.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-5': {
+        estimatedTime: '15 minutes',
+        sections: [
+          {
+            heading: 'Active Listening: The Foundation of Connection',
+            content: 'Active listening is the most underrated skill in the lifestyle. Most people think they\'re good listeners, but they\'re actually just waiting for their turn to talk. True active listening creates deeper connections, prevents misunderstandings, and shows respect.\n\nThis module teaches you how to become an exceptional listener—the kind of person others feel heard and understood by.',
+            type: 'normal'
+          },
+          {
+            heading: 'Why Active Listening Matters',
+            content: 'In the lifestyle, active listening:\n\n• Builds trust and intimacy\n• Uncovers desires and boundaries\n• Prevents miscommunication\n• Makes others feel valued\n• Enhances every interaction\n• Deepens connections\n• Improves consent and safety\n\nPeople remember how you make them feel. Great listeners create unforgettable experiences.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Components of Active Listening',
+            content: '1. FULL ATTENTION: Eliminate distractions, be present\n2. EYE CONTACT: Show engagement with your gaze\n3. BODY LANGUAGE: Face them, lean in, nod\n4. NO INTERRUPTING: Let them finish completely\n5. PARAPHRASING: Reflect back what you heard\n6. ASKING QUESTIONS: Dig deeper with curiosity\n7. ACKNOWLEDGING EMOTIONS: Recognize how they feel\n8. WITHHOLDING JUDGMENT: Stay open and accepting',
+            type: 'key-point'
+          },
+          {
+            heading: 'The Phone Rule',
+            content: 'THE RULE:\nWhen someone is sharing something important, your phone should be:\n\n📱 Face down\n📱 On silent\n📱 Not in your hand\n📱 Not checked "just quickly"\n📱 Completely ignored\n\nNothing says "you don\'t matter" like checking your phone mid-conversation. Your undivided attention is a gift.',
+            type: 'tip'
+          },
+          {
+            heading: 'The Power of Paraphrasing',
+            content: 'Paraphrasing confirms understanding:\n\n"So what I\'m hearing is..."\n"Let me make sure I understand..."\n"It sounds like you\'re saying..."\n\nExample:\nThem: "I\'m nervous about full swap because my last experience was uncomfortable."\n\nYou: "So you\'re open to the idea but you want to make sure we\'re attentive to your comfort level since you had a bad experience before?"\n\nThis shows you truly listened and gives them a chance to clarify.',
+            type: 'example'
+          },
+          {
+            heading: 'Asking Powerful Questions',
+            content: 'Move beyond surface level with deeper questions:\n\n❌ SURFACE: "So what are you into?"\n✅ DEEPER: "What draws you to the lifestyle?"\n\n❌ SURFACE: "Have you done this before?"\n✅ DEEPER: "What experiences have shaped your interests?"\n\n❌ SURFACE: "Are you having fun?"\n✅ DEEPER: "What\'s been the highlight of your experience so far?"\n\nDeeper questions show genuine interest and create meaningful conversations.',
+            type: 'example'
+          },
+          {
+            heading: 'Reading Between the Lines',
+            content: 'Listen not just to words, but to:\n\n• Tone of voice\n• Pauses and hesitations\n• What\'s NOT being said\n• Energy shifts\n• Body language changes\n• Emotional undertones\n\nExample:\nIf someone says "I\'m fine with that" but their voice is flat and they\'re not making eye contact, they\'re probably NOT fine. Check in deeper.',
+            type: 'normal'
+          },
+          {
+            heading: 'Common Listening Mistakes',
+            content: '❌ INTERRUPTING: Cutting them off to share your story\n❌ FIXING: Immediately offering solutions\n❌ MINIMIZING: "That\'s not a big deal"\n❌ ONE-UPPING: "You think that\'s bad? Listen to this..."\n❌ DISTRACTED: Looking around, multitasking\n❌ JUDGING: Visibly disapproving\n❌ INTERROGATING: Rapid-fire questions\n❌ PROJECTING: Assuming they feel like you would\n\nCatch yourself doing these and stop.',
+            type: 'warning'
+          },
+          {
+            heading: 'The 80/20 Rule',
+            content: 'In initial conversations, aim to listen 80% of the time and talk 20%. This:\n\n• Helps you understand the other person\n• Shows you\'re interested in them\n• Builds rapport and trust\n• Uncovers compatibility\n• Makes them feel heard\n\nThe person who asks great questions and listens deeply is always more memorable than the person who dominates the conversation.',
+            type: 'tip'
+          },
+          {
+            heading: 'Reflective Listening for Emotions',
+            content: 'When someone shares feelings, reflect them back:\n\nThem: "I felt embarrassed when that happened"\nYou: "That must have been really uncomfortable for you"\n\nThem: "I\'m excited but also nervous"\nYou: "So you\'re feeling a mix of anticipation and some anxiety?"\n\nThis validates their emotions and shows you\'re not just hearing words—you\'re understanding feelings.',
+            type: 'example'
+          },
+          {
+            heading: 'Module Summary',
+            content: '✅ Active listening creates connection and trust\n✅ Give full attention—put away distractions\n✅ Use body language to show engagement\n✅ Paraphrase to confirm understanding\n✅ Ask deeper questions with genuine curiosity\n✅ Listen to emotions, not just words\n✅ Avoid common mistakes like interrupting or fixing\n✅ Follow the 80/20 rule—listen more than you talk\n\nBecoming a great listener transforms your lifestyle experience.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-6': {
+        estimatedTime: '35 minutes',
+        sections: [
+          {
+            heading: 'Congratulations on Reaching the Final Module!',
+            content: 'You\'ve learned the fundamentals of lifestyle communication, from clarity and honesty to boundaries, consent, difficult conversations, and active listening. This final module brings it all together with advanced techniques that will make you an exceptional communicator.\n\nThese advanced strategies separate good communicators from great ones. They\'ll help you navigate complex situations, build deeper connections, and become a respected member of the lifestyle community.',
+            type: 'normal'
+          },
+          {
+            heading: 'Advanced Communication Framework',
+            content: 'The three-layer communication model:\n\n🎯 LAYER 1: CONTENT (What you say)\nThe actual words and information you communicate\n\n🎯 LAYER 2: EMOTION (How you say it)\nYour tone, energy, and emotional expression\n\n🎯 LAYER 3: INTENTION (Why you say it)\nYour underlying motive and desired outcome\n\nMastery means aligning all three layers. When they conflict, people sense inauthenticity.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Reading Social Dynamics',
+            content: 'At lifestyle events, reading the room is crucial:\n\n• Who\'s open to conversation vs. focused on their partner?\n• What\'s the energy level—playful, serious, intimate?\n• Who seems interested in you vs. being polite?\n• What are the unspoken rules of this particular space?\n• When is it appropriate to approach vs. wait to be approached?\n\nDevelop this social intelligence through observation and practice.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Art of the Approach',
+            content: 'Approaching others at lifestyle events:\n\n1. OBSERVE FIRST: Are they open to conversation?\n2. MAKE EYE CONTACT: Gauge interest through non-verbal signals\n3. APPROACH RESPECTFULLY: "Hi, is it okay if we join you?"\n4. READ RECEPTIVENESS: Warm welcome vs. polite but distant?\n5. ENGAGE GENUINELY: Ask questions, listen actively\n6. RESPECT CUES: Exit gracefully if interest isn\'t mutual\n\nThe approach sets the tone for everything that follows.',
+            type: 'example'
+          },
+          {
+            heading: 'Handling Rejection Gracefully',
+            content: 'Not every approach will lead to connection. Handle rejection with class:\n\n✅ "Thanks for your time, enjoy your evening!"\n✅ "We appreciate you being direct—have a great night!"\n✅ "No worries at all, best of luck tonight!"\n\nDON\'T:\n❌ Ask "why not?" or argue\n❌ Get visibly upset or hurt\n❌ Make negative comments\n❌ Bad-mouth them to others\n❌ Keep trying after they\'ve declined\n\nHow you handle rejection demonstrates maturity and respect.',
+            type: 'tip'
+          },
+          {
+            heading: 'Creating Comfort Through Communication',
+            content: 'Make others feel safe and comfortable through:\n\n• Clear communication about expectations\n• Respecting boundaries without question\n• Regular check-ins during interactions\n• Reading and responding to non-verbal cues\n• Matching their energy and pace\n• Giving them control and choices\n• Being consistent and reliable\n\nPeople who feel safe with you will be more open and authentic.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Check-In Conversation Structure',
+            content: 'For ongoing play relationships, regular check-ins are vital:\n\n1. RECENT POSITIVE: "What went well in our last encounter?"\n2. AREAS FOR IMPROVEMENT: "Is there anything we could do differently?"\n3. BOUNDARY UPDATES: "Have any boundaries changed?"\n4. DESIRES EXPLORATION: "Are there new interests you want to explore?"\n5. RELATIONSHIP HEALTH: "How are you feeling about our connection?"\n6. SCHEDULING: "What works for getting together next?"\n\nThis structure keeps communication flowing and prevents issues from building up.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Managing Group Communication',
+            content: 'When communicating with multiple people (group play, poly dynamics):\n\n• Address everyone, not just one person\n• Make sure all voices are heard\n• Check that everyone consents to decisions\n• Avoid side conversations that exclude others\n• Be aware of power dynamics\n• Ensure everyone feels included\n• Have separate one-on-one check-ins too\n\nGroup communication requires extra attention to fairness and inclusion.',
+            type: 'normal'
+          },
+          {
+            heading: 'Digital Communication Mastery',
+            content: 'Advanced digital communication tips:\n\n📱 Response Time: Reply within 24 hours, or say you need more time\n📱 Message Quality: Put thought into your messages\n📱 Flirting vs. Planning: Know when to be playful vs. logistical\n📱 Photo Sharing: Get explicit consent before sending intimate images\n📱 Video Chats: Meet face-to-face before in-person meetings\n📱 Privacy: Use apps with good security features\n📱 Closing Loops: Always conclude conversations clearly\n\nYour digital communication reflects your overall communication quality.',
+            type: 'tip'
+          },
+          {
+            heading: 'The Art of Flirtation',
+            content: 'Effective flirting in the lifestyle:\n\n• Be playful without being pushy\n• Compliment specifically and authentically\n• Create intrigue through conversation\n• Match their energy and reciprocation\n• Read signals—are they flirting back?\n• Know when flirting crosses into negotiation\n• Always leave them wanting more\n\nExample:\n"I love how you described that—you clearly have a thoughtful approach to the lifestyle" (specific compliment)\n\nvs.\n\n"You\'re hot" (generic, low-effort)',
+            type: 'example'
+          },
+          {
+            heading: 'Building Long-Term Connections',
+            content: 'For ongoing play partnerships:\n\n• Consistent communication between meetings\n• Remembering details they\'ve shared\n• Celebrating milestones and special occasions\n• Being reliable with plans and commitments\n• Evolving together as interests change\n• Maintaining appropriate boundaries\n• Keeping things fresh and exciting\n\nLong-term lifestyle friendships are built on consistent, quality communication.',
+            type: 'normal'
+          },
+          {
+            heading: 'Cross-Cultural Communication',
+            content: 'The lifestyle community is diverse. Navigate cultural differences:\n\n• Don\'t assume everyone shares your communication style\n• Ask about preferences and norms\n• Be patient with language barriers\n• Avoid culture-specific slang or references\n• Show extra care in seeking consent and checking understanding\n• Appreciate different approaches to intimacy and relationships\n• Learn from diverse perspectives\n\nCultural sensitivity enhances your ability to connect with a wider range of people.',
+            type: 'normal'
+          },
+          {
+            heading: 'Conflict Resolution Mastery',
+            content: 'When conflicts arise:\n\n1. PAUSE: Don\'t react immediately in anger\n2. IDENTIFY THE CORE ISSUE: What\'s really bothering you?\n3. CHOOSE THE RIGHT TIME: When both parties are calm\n4. USE "I" STATEMENTS: Focus on your experience\n5. LISTEN TO UNDERSTAND: Not to counter-argue\n6. FIND COMMON GROUND: What do you both want?\n7. COLLABORATE ON SOLUTIONS: Work together\n8. FOLLOW UP: Check that the resolution is working\n\nEvery conflict successfully resolved strengthens the relationship.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Your Communication Reputation',
+            content: 'In the lifestyle, your reputation is everything. Build it through:\n\n✅ Consistent, honest communication\n✅ Respecting boundaries and consent\n✅ Following through on commitments\n✅ Handling difficult situations with grace\n✅ Being discreet and trustworthy\n✅ Treating everyone with respect\n✅ Contributing positively to the community\n\nYour reputation will precede you—make it a good one.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Path Forward',
+            content: 'You\'ve completed the Communication Fundamentals path! You\'ve learned:\n\n✅ Clear, honest communication basics\n✅ How to establish and maintain boundaries\n✅ Consent and negotiation mastery\n✅ Handling difficult conversations\n✅ Active listening skills\n✅ Advanced communication techniques\n\nBut learning doesn\'t end here. Every interaction is an opportunity to practice and refine these skills. Be patient with yourself as you apply what you\'ve learned.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Final Module Summary',
+            content: '✅ Align content, emotion, and intention in your communication\n✅ Read social dynamics at events\n✅ Approach respectfully and handle rejection gracefully\n✅ Create comfort through clear, consistent communication\n✅ Master both digital and in-person interaction\n✅ Build long-term connections through reliability\n✅ Navigate cultural differences with sensitivity\n✅ Resolve conflicts constructively\n✅ Build a reputation as a trusted communicator\n\nCongratulations on completing the Communication Fundamentals path! You\'re now equipped with the skills to navigate the lifestyle confidently and respectfully.',
+            type: 'key-point'
+          }
+        ]
       }
     };
 
