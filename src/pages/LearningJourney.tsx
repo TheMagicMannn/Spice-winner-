@@ -64,10 +64,15 @@ export const LearningJourneyPage: React.FC = () => {
     
     setIsLoading(true);
     try {
+      console.log('Loading user learning data for user:', user.id);
+      
       const [progress, badges] = await Promise.all([
         learningService.getAllUserProgress(user.id),
         learningService.getUserBadges(user.id)
       ]);
+      
+      console.log('Loaded progress:', progress);
+      console.log('Loaded badges:', badges);
       
       setUserProgress(progress);
       setUserBadges(badges);
