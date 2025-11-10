@@ -459,7 +459,9 @@ export const LearningJourneyPage: React.FC = () => {
               <div className="w-full bg-gray-700 rounded-full h-2 mt-4">
                 <div 
                   className="bg-gradient-to-r from-pink-500 to-pink-600 h-2 rounded-full transition-all duration-500"
-                  style={{ width: `${(path.completedModules / path.totalModules) * 100}%` }}
+                  style={{ 
+                    width: `${(path.modules.filter(m => getModuleStatus(m.id) === 'completed').length / path.totalModules) * 100}%` 
+                  }}
                 />
               </div>
             </CardHeader>
