@@ -134,6 +134,111 @@ export const ModuleQuiz: React.FC<ModuleQuizProps> = ({
           correctAnswer: 1,
           explanation: 'Enthusiastic consent is clear and positive—it should be an active "yes," not just the absence of a "no."'
         }
+      ],
+      'mod-4': [
+        {
+          question: 'What is the best approach when having a difficult conversation?',
+          options: [
+            'Have it immediately when emotions are high',
+            'Send a text message to avoid confrontation',
+            'Choose a private setting when both parties are calm',
+            'Bring it up at a party so others can mediate'
+          ],
+          correctAnswer: 2,
+          explanation: 'Difficult conversations should happen in private, calm settings when both parties are composed and have time to discuss the issue properly.'
+        },
+        {
+          question: 'What is the "I" statement formula for addressing issues?',
+          options: [
+            '"You always do this and it makes me angry"',
+            '"When [behavior], I felt [emotion], because [reason]. I need [request]"',
+            '"Everyone thinks you shouldn\'t do that"',
+            '"This is wrong and you need to stop"'
+          ],
+          correctAnswer: 1,
+          explanation: 'The "I" statement formula focuses on your experience without being accusatory, making it more effective for resolving issues.'
+        },
+        {
+          question: 'How should you decline an unwanted invitation in the lifestyle?',
+          options: [
+            'Ghost them and hope they get the hint',
+            'Make up vague excuses like "we\'re busy"',
+            'Be clear, kind, and final in your response',
+            'Say yes but then cancel repeatedly'
+          ],
+          correctAnswer: 2,
+          explanation: 'Being clear, kind, and final prevents false hope and shows respect for everyone\'s time. Honesty is always the best approach.'
+        }
+      ],
+      'mod-5': [
+        {
+          question: 'What percentage of the time should you aim to listen in initial conversations?',
+          options: [
+            '50% - equal talking and listening',
+            '80% - listen more than you talk',
+            '20% - talk more to make an impression',
+            '100% - never talk, only listen'
+          ],
+          correctAnswer: 1,
+          explanation: 'The 80/20 rule suggests listening 80% of the time in initial conversations. This helps you understand the other person and builds rapport.'
+        },
+        {
+          question: 'What is paraphrasing and why is it important?',
+          options: [
+            'Repeating exactly what they said word-for-word',
+            'Changing the subject to something more interesting',
+            'Reflecting back what you heard in your own words to confirm understanding',
+            'Interrupting to share your own similar story'
+          ],
+          correctAnswer: 2,
+          explanation: 'Paraphrasing confirms you understood correctly, shows you\'re truly listening, and gives them a chance to clarify if needed.'
+        },
+        {
+          question: 'Which is a common listening mistake to avoid?',
+          options: [
+            'Making eye contact with the speaker',
+            'Asking clarifying questions',
+            'Interrupting to share your own story',
+            'Nodding to show engagement'
+          ],
+          correctAnswer: 2,
+          explanation: 'Interrupting to share your own story (one-upping) is a common mistake that shows you\'re focused on yourself rather than truly listening to them.'
+        }
+      ],
+      'mod-6': [
+        {
+          question: 'What are the three layers of communication mastery?',
+          options: [
+            'Speaking, Writing, and Texting',
+            'Content (what you say), Emotion (how you say it), and Intention (why you say it)',
+            'Talking, Listening, and Silence',
+            'Verbal, Non-verbal, and Digital'
+          ],
+          correctAnswer: 1,
+          explanation: 'The three-layer model includes Content, Emotion, and Intention. Mastery means aligning all three layers for authentic communication.'
+        },
+        {
+          question: 'How should you handle rejection gracefully?',
+          options: [
+            'Ask "why not?" to understand their reasoning',
+            'Thank them for their time and wish them well',
+            'Try to convince them to change their mind',
+            'Make negative comments about them to others'
+          ],
+          correctAnswer: 1,
+          explanation: 'Graceful rejection handling means thanking them and moving on without arguing or getting upset. How you handle rejection demonstrates maturity.'
+        },
+        {
+          question: 'In ongoing play relationships, what should regular check-ins include?',
+          options: [
+            'Only discussing what went wrong',
+            'Just scheduling the next meeting',
+            'Recent positives, areas for improvement, boundary updates, and desires exploration',
+            'Avoiding difficult topics to keep things fun'
+          ],
+          correctAnswer: 2,
+          explanation: 'Comprehensive check-ins cover positives, improvements, boundary updates, desires, relationship health, and scheduling to maintain healthy connections.'
+        }
       ]
     };
 
