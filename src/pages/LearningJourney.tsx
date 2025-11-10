@@ -465,65 +465,70 @@ export const LearningJourneyPage: React.FC = () => {
             </CardHeader>
             
             <CardContent className="space-y-3">
-              {path.modules.map((module, index) => (
-                <button
-                  key={module.id}
-                  onClick={() => handleModuleClick(module)}
-                  disabled={module.status === 'locked'}
-                  className={`w-full text-left p-4 rounded-lg border transition-all ${
-                    module.status === 'locked'
-                      ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed'
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-pink-500/50'
-                  }`}
-                  data-testid={`module-${module.id}`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="mt-1">
-                      {getStatusIcon(module.status)}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <h4 className="text-white font-semibold">
-                          {index + 1}. {module.title}
-                        </h4>
-                        <Badge 
-                          className={
-                            module.status === 'completed' 
-                              ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                              : module.status === 'in-progress'
-                              ? 'bg-pink-500/20 text-pink-400 border-pink-500/30'
-                              : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
-                          }
-                        >
-                          {module.status === 'completed' ? 'Completed' : 
-                           module.status === 'in-progress' ? 'In Progress' : 'Locked'}
-                        </Badge>
+              {path.modules.map((module, index) => {
+                const status = getModuleStatus(module.id);
+                const progress = getModuleProgress(module.id);
+                
+                return (
+                  <button
+                    key={module.id}
+                    onClick={() => handleModuleClick(module)}
+                    className={`w-full text-left p-4 rounded-lg border transition-all ${
+                      status === 'locked' && index > 0
+                        ? 'bg-white/5 border-white/10 opacity-50 cursor-not-allowed'
+                        : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-pink-500/50'
+                    }`}
+                    data-testid={`module-${module.id}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1">
+                        {getStatusIcon(status)}
                       </div>
-                      <p className="text-white/70 text-sm mb-2">{module.description}</p>
-                      <div className="flex items-center text-xs text-white/60">
-                        <Clock className="h-3 w-3 mr-1" />
-                        {module.duration}
-                      </div>
-                      
-                      {/* Module Progress Bar for in-progress items */}
-                      {module.status === 'in-progress' && (
-                        <div className="mt-3">
-                          <div className="flex items-center justify-between text-xs text-white/60 mb-1">
-                            <span>Progress</span>
-                            <span>{module.progress}%</span>
-                          </div>
-                          <div className="w-full bg-gray-700 rounded-full h-1.5">
-                            <div 
-                              className="bg-gradient-to-r from-pink-500 to-pink-600 h-1.5 rounded-full transition-all duration-500"
-                              style={{ width: `${module.progress}%` }}
-                            />
-                          </div>
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="text-white font-semibold">
+                            {index + 1}. {module.title}
+                          </h4>
+                          <Badge 
+                            className={
+                              status === 'completed' 
+                                ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                                : status === 'in-progress'
+                                ? 'bg-pink-500/20 text-pink-400 border-pink-500/30'
+                                : 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+                            }
+                          >
+                            {status === 'completed' ? 'Completed' : 
+                             status === 'in-progress' ? 'In Progress' : 
+                             index === 0 ? 'Start' : 'Locked'}
+                          </Badge>
                         </div>
-                      )}
+                        <p className="text-white/70 text-sm mb-2">{module.description}</p>
+                        <div className="flex items-center text-xs text-white/60">
+                          <Clock className="h-3 w-3 mr-1" />
+                          {module.duration}
+                        </div>
+                        
+                        {/* Module Progress Bar for in-progress items */}
+                        {status === 'in-progress' && progress > 0 && (
+                          <div className="mt-3">
+                            <div className="flex items-center justify-between text-xs text-white/60 mb-1">
+                              <span>Progress</span>
+                              <span>{progress}%</span>
+                            </div>
+                            <div className="w-full bg-gray-700 rounded-full h-1.5">
+                              <div 
+                                className="bg-gradient-to-r from-pink-500 to-pink-600 h-1.5 rounded-full transition-all duration-500"
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </CardContent>
           </Card>
         ))}
