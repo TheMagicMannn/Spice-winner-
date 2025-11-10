@@ -357,17 +357,54 @@ export const ModuleContent: React.FC<ModuleContentProps> = ({
       }
     };
 
-    return content[id] || { sections: [] };
+    return content[id] || { sections: [], estimatedTime: '15 min' };
   };
 
   const content = getModuleContent(moduleId);
 
+  const getSectionStyle = (type?: string) => {
+    switch (type) {
+      case 'tip':
+        return 'bg-blue-500/10 border-l-4 border-blue-500 p-4 rounded-r-lg';
+      case 'warning':
+        return 'bg-red-500/10 border-l-4 border-red-500 p-4 rounded-r-lg';
+      case 'example':
+        return 'bg-purple-500/10 border-l-4 border-purple-500 p-4 rounded-r-lg';
+      case 'key-point':
+        return 'bg-pink-500/10 border-l-4 border-pink-500 p-4 rounded-r-lg';
+      default:
+        return '';
+    }
+  };
+
+  const getSectionIcon = (type?: string) => {
+    switch (type) {
+      case 'tip':
+        return <Lightbulb className="h-5 w-5 text-blue-400" />;
+      case 'warning':
+        return <AlertCircle className="h-5 w-5 text-red-400" />;
+      case 'example':
+        return <BookOpen className="h-5 w-5 text-purple-400" />;
+      case 'key-point':
+        return <CheckCircle className="h-5 w-5 text-pink-400" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border-2 border-pink-500/30">
+      <div className="bg-gray-900 rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col border-2 border-pink-500/30">
         {/* Header */}
-        <div className="sticky top-0 bg-gray-900 border-b border-pink-500/30 p-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-white">{title}</h2>
+        <div className="sticky top-0 bg-gray-900 border-b border-pink-500/30 p-6 flex items-center justify-between z-10">
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-white mb-1">{title}</h2>
+            <div className="flex items-center gap-3 text-sm text-white/60">
+              <span>📚 {content.estimatedTime}</span>
+              <span>•</span>
+              <span>{content.sections.length} sections</span>
+            </div>
+          </div>
           <button
             onClick={onClose}
             className="text-white/70 hover:text-white transition-colors"
@@ -376,26 +413,77 @@ export const ModuleContent: React.FC<ModuleContentProps> = ({
           </button>
         </div>
 
+        {/* Reading Progress Bar */}
+        <div className="h-1 bg-gray-800">
+          <div 
+            className="h-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-300"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+
         {/* Content */}
-        <div className="p-6 space-y-6">
+        <div 
+          id="module-content-scroll"
+          className="flex-1 overflow-y-auto p-6 space-y-6"
+        >
           {content.sections.map((section, index) => (
-            <div key={index} className="space-y-3">
-              <h3 className="text-xl font-semibold text-pink-400">{section.heading}</h3>
-              <p className="text-white/80 leading-relaxed whitespace-pre-line">{section.content}</p>
+            <div key={index} className={`space-y-3 ${getSectionStyle(section.type)}`}>
+              <div className="flex items-center gap-2">
+                {getSectionIcon(section.type)}
+                <h3 className="text-xl font-semibold text-pink-400">{section.heading}</h3>
+              </div>
+              <p className="text-white/80 leading-relaxed whitespace-pre-line">
+                {section.content}
+              </p>
             </div>
           ))}
+
+          {/* Completion Message */}
+          {canComplete && (
+            <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 animate-fade-in">
+              <div className="flex items-center gap-2 text-green-400 font-semibold mb-2">
+                <CheckCircle className="h-5 w-5" />
+                You've completed the reading!
+              </div>
+              <p className="text-white/70 text-sm">
+                You can now proceed to the quiz to test your knowledge.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-gray-900 border-t border-pink-500/30 p-6">
           <Button
             onClick={onComplete}
-            className="w-full bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white font-semibold py-3 rounded-full"
+            disabled={!canComplete}
+            className={`w-full font-semibold py-3 rounded-full transition-all ${
+              canComplete
+                ? 'bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white'
+                : 'bg-gray-700 text-gray-400 cursor-not-allowed opacity-50'
+            }`}
           >
-            Complete Module & Take Quiz
+            {canComplete ? 'Complete Module & Take Quiz' : 'Scroll to the bottom to continue'}
           </Button>
         </div>
       </div>
+
+      <style>{`
+        .animate-fade-in {
+          animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
