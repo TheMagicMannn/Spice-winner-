@@ -125,27 +125,38 @@ class LearningService {
     moduleId: string, 
     quizScore: number
   ): Promise<boolean> {
-    const existing = await this.getUserModuleProgress(userId, moduleId);
-    
-    const { error } = await supabase
-      .from('user_module_progress')
-      .upsert({
-        user_id: userId,
-        module_id: moduleId,
-        status: 'completed',
-        progress_percentage: 100,
-        quiz_score: quizScore,
-        quiz_attempts: (existing?.quiz_attempts || 0) + 1,
-        completed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      });
+    try {
+      const existing = await this.getUserModuleProgress(userId, moduleId);
+      
+      console.log('Completing module:', { userId, moduleId, quizScore, existing });
+      
+      const { data, error } = await supabase
+        .from('user_module_progress')
+        .upsert({
+          user_id: userId,
+          module_id: moduleId,
+          status: 'completed',
+          progress_percentage: 100,
+          quiz_score: quizScore,
+          quiz_attempts: (existing?.quiz_attempts || 0) + 1,
+          completed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id,module_id'
+        })
+        .select();
 
-    if (error) {
-      console.error('Error completing module:', error);
+      if (error) {
+        console.error('Error completing module:', error);
+        return false;
+      }
+
+      console.log('Module completed successfully:', data);
+      return true;
+    } catch (error) {
+      console.error('Exception in completeModule:', error);
       return false;
     }
-
-    return true;
   }
 
   /**
