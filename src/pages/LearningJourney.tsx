@@ -94,6 +94,16 @@ export const LearningJourneyPage: React.FC = () => {
     return progress?.progress_percentage || 0;
   };
 
+  const isModuleUnlocked = (pathModules: LearningModule[], currentIndex: number): boolean => {
+    // First module is always unlocked
+    if (currentIndex === 0) return true;
+    
+    // Check if previous module is completed
+    const previousModule = pathModules[currentIndex - 1];
+    const previousStatus = getModuleStatus(previousModule.id);
+    return previousStatus === 'completed';
+  };
+
   const isPathComplete = (pathId: string): boolean => {
     return userBadges.some(badge => badge.path_id === pathId);
   };
