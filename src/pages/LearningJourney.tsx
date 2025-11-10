@@ -5,6 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme } from '@/styles/theme';
+import { ModuleContent } from '@/components/ModuleContent';
+import { ModuleQuiz } from '@/components/ModuleQuiz';
+import { PathBadge } from '@/components/PathBadge';
+import { useAuth } from '@/hooks/useAuth';
+import { learningService, ModuleProgress } from '@/services/learningService';
 import { 
   BookOpen, 
   CheckCircle, 
