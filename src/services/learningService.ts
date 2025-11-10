@@ -64,31 +64,40 @@ class LearningService {
    * Start a module (mark as in-progress)
    */
   async startModule(userId: string, moduleId: string): Promise<ModuleProgress | null> {
-    // Check if progress already exists
-    const existing = await this.getUserModuleProgress(userId, moduleId);
-    
-    if (existing) {
-      return existing;
-    }
+    try {
+      // Check if progress already exists
+      const existing = await this.getUserModuleProgress(userId, moduleId);
+      
+      if (existing) {
+        console.log('Module already started:', existing);
+        return existing;
+      }
 
-    const { data, error } = await supabase
-      .from('user_module_progress')
-      .insert({
-        user_id: userId,
-        module_id: moduleId,
-        status: 'in-progress',
-        progress_percentage: 0,
-        quiz_attempts: 0
-      })
-      .select()
-      .single();
+      console.log('Starting new module:', { userId, moduleId });
 
-    if (error) {
-      console.error('Error starting module:', error);
+      const { data, error } = await supabase
+        .from('user_module_progress')
+        .insert({
+          user_id: userId,
+          module_id: moduleId,
+          status: 'in-progress',
+          progress_percentage: 0,
+          quiz_attempts: 0
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error starting module:', error);
+        return null;
+      }
+
+      console.log('Module started successfully:', data);
+      return data;
+    } catch (error) {
+      console.error('Exception in startModule:', error);
       return null;
     }
-
-    return data;
   }
 
   /**
