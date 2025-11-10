@@ -43,7 +43,14 @@ interface LearningPath {
 
 export const LearningJourneyPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const [userProgress, setUserProgress] = useState<ModuleProgress[]>([]);
+  const [userBadges, setUserBadges] = useState<any[]>([]);
+  const [selectedModule, setSelectedModule] = useState<LearningModule | null>(null);
+  const [showModuleContent, setShowModuleContent] = useState(false);
+  const [showModuleQuiz, setShowModuleQuiz] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Mock learning paths data
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([
