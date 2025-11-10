@@ -545,6 +545,26 @@ export const LearningJourneyPage: React.FC = () => {
         </Card>
       </div>
 
+      {/* Module Content Modal */}
+      {showModuleContent && selectedModule && (
+        <ModuleContent
+          moduleId={selectedModule.id}
+          title={selectedModule.title}
+          onClose={() => setShowModuleContent(false)}
+          onComplete={handleModuleContentComplete}
+        />
+      )}
+
+      {/* Module Quiz Modal */}
+      {showModuleQuiz && selectedModule && (
+        <ModuleQuiz
+          moduleId={selectedModule.id}
+          title={selectedModule.title}
+          onClose={handleQuizClose}
+          onPass={handleQuizPass}
+        />
+      )}
+
       {/* Theme Styles */}
       <style>{`
         .animate-fade-in {
