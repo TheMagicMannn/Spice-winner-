@@ -236,26 +236,122 @@ export const ModuleContent: React.FC<ModuleContentProps> = ({
         ]
       },
       'mod-3': {
+        estimatedTime: '25-30 minutes',
         sections: [
           {
             heading: 'The Foundation: Consent',
-            content: 'Consent is an enthusiastic, ongoing agreement to participate in any activity. In the lifestyle, consent is not just important—it is mandatory. Without clear consent, no activity should proceed.'
+            content: 'Consent is an enthusiastic, ongoing agreement to participate in any activity. In the lifestyle, consent isn\'t just important—it\'s the absolute foundation of everything we do. Without clear, genuine consent, no activity should proceed, period.\n\nThis module goes deep into the nuances of consent, negotiation, and ensuring everyone involved is truly on board—not just saying yes, but enthusiastically agreeing. We\'ll explore the FRIES model, practical negotiation techniques, and how to handle consent in real-time situations.',
+            type: 'normal'
           },
           {
-            heading: 'FRIES Model of Consent',
-            content: 'Freely given: Consent must be given without pressure or coercion.\n\nReversible: Anyone can change their mind at any time.\n\nInformed: All parties understand what they are consenting to.\n\nEnthusiastic: Consent should be clear and positive.\n\nSpecific: Consent for one activity does not mean consent for all.'
+            heading: 'Why Consent Is Non-Negotiable',
+            content: 'The lifestyle community is built on trust and mutual respect. Consent violations don\'t just harm individuals—they harm the entire community by:\n\n• Creating unsafe spaces\n• Destroying trust between community members\n• Giving the lifestyle a bad reputation\n• Potentially involving legal consequences\n• Causing lasting psychological harm\n\nOn the flip side, a culture of clear, enthusiastic consent creates:\n• Safe, exciting experiences\n• Deeper connections\n• Increased trust\n• Better experiences for everyone\n• A thriving, welcoming community',
+            type: 'normal'
           },
           {
-            heading: 'Negotiation Basics',
-            content: 'Before any interaction, discuss expectations, limits, and desires. This negotiation should cover what activities are on the table, what is off-limits, and any safety considerations. Use this time to ask questions and ensure everyone is comfortable.'
+            heading: 'Common Myths About Consent',
+            content: 'Let\'s clear up dangerous misconceptions:\n\n❌ MYTH: "If they\'re in a lifestyle space, they consent to activities"\n✅ TRUTH: Being in a space is not consent to anything\n\n❌ MYTH: "They consented last time, so it\'s okay now"\n✅ TRUTH: Consent must be obtained every single time\n\n❌ MYTH: "They didn\'t say no"\n✅ TRUTH: Only yes means yes. Silence or absence of no is not consent\n\n❌ MYTH: "They seemed into it"\n✅ TRUTH: Assumptions don\'t count. Verbal consent is required\n\n❌ MYTH: "It\'s too awkward to ask"\n✅ TRUTH: Asking for consent is sexy and shows respect\n\nThese myths have caused real harm. Know the truth.',
+            type: 'warning'
           },
           {
-            heading: 'During and After',
-            content: 'Check in regularly during activities to ensure ongoing consent. After the interaction, have a debrief conversation to discuss what went well and what could be improved for future experiences.'
+            heading: 'The FRIES Model of Consent',
+            content: 'FRIES is an acronym that defines the key elements of true consent:\n\nF - FREELY GIVEN\nConsent must be given without pressure, coercion, manipulation, or under the influence of substances that impair judgment\n\nR - REVERSIBLE\nAnyone can withdraw consent at any time, for any reason, without explanation or penalty\n\nI - INFORMED\nAll parties must fully understand what they\'re consenting to, including risks and implications\n\nE - ENTHUSIASTIC\nConsent should be clear, positive, and actively given—not reluctant or pressured\n\nS - SPECIFIC\nConsent to one activity doesn\'t mean consent to others. Each action requires separate consent',
+            type: 'key-point'
           },
           {
-            heading: 'Key Takeaways',
-            content: '• Consent must be clear, enthusiastic, and ongoing\n• Use the FRIES model as a guide\n• Negotiate before any interaction\n• Check in during activities\n• Debrief afterwards to strengthen communication'
+            heading: 'Deep Dive: Freely Given Consent',
+            content: 'Consent is NOT freely given when:\n\n🚫 Someone feels pressured or obligated\n🚫 There\'s a power imbalance (boss/employee, host/guest at party)\n🚫 Someone is intoxicated or under influence\n🚫 They\'re worried about consequences of saying no\n🚫 They\'re trying to please their partner\n🚫 They fear being judged or ostracized\n🚫 They\'ve been worn down by repeated asking\n\nTrue consent comes from a place of genuine desire and free choice. If someone seems hesitant, pause and check in. Better to have an awkward conversation than to proceed without true consent.',
+            type: 'normal'
+          },
+          {
+            heading: 'Understanding Reversible Consent',
+            content: 'One of the most important aspects of consent: it can be withdrawn at ANY time.\n\nExamples of reversible consent:\n• Someone can say yes, then change their mind\n• You can be in the middle of an activity and stop\n• Previous consent doesn\'t mean automatic future consent\n• Being aroused doesn\'t mean you can\'t stop\n\nWhen someone withdraws consent:\n✅ STOP IMMEDIATELY\n✅ Don\'t ask why or try to convince them\n✅ Thank them for being honest\n✅ Don\'t make them feel guilty\n✅ Respect their decision completely\n\nAnyone who gets upset when consent is withdrawn is not safe to play with.',
+            type: 'normal'
+          },
+          {
+            heading: 'Informed Consent: Full Disclosure Required',
+            content: 'People can\'t truly consent to something they don\'t fully understand. Informed consent requires disclosing:\n\n• What activities you want to engage in\n• Any potential risks or discomforts\n• Your STI status and safer sex practices\n• If others will be present or joining\n• If you\'ll be recording or taking photos\n• Any relationship status or commitments\n• Relevant health information\n• What happens if someone changes their mind\n\nWithholding information that could affect someone\'s decision is a violation of consent, even if they technically said yes.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Case Study: Informed Consent Violation',
+            content: 'SCENARIO:\nA couple agrees to play with another couple. During the encounter, the husband of the second couple reveals he and his wife have a "don\'t ask, don\'t tell" policy—she doesn\'t actually know about this encounter.\n\nWHY THIS IS WRONG:\nThe first couple consented to play with a consensual foursome. They did not consent to participate in cheating or deception. This is an informed consent violation because critical information was withheld.\n\nRIGHT APPROACH:\nFull disclosure before any interaction begins. If someone is hiding the encounter from a partner, that\'s a red flag and you should decline.',
+            type: 'example'
+          },
+          {
+            heading: 'Enthusiastic Consent: Yes Means YES',
+            content: 'Enthusiastic consent is:\n\n✅ "Yes! I\'d love to"\n✅ "That sounds amazing"\n✅ "I\'ve been hoping you\'d ask"\n✅ Eager body language and engagement\n✅ Active participation\n\nEnthusiastic consent is NOT:\n\n❌ "I guess so"\n❌ "If you want to"\n❌ "I don\'t know..."\n❌ Silence or lack of resistance\n❌ Passive acceptance\n❌ Reluctant agreement\n\nIf someone doesn\'t seem enthusiastic, pause and check in. Aim for "Hell yes!" not "Well, okay..."',
+            type: 'normal'
+          },
+          {
+            heading: 'Specific Consent: Each Activity Requires Permission',
+            content: 'Consent is not a blanket agreement. Just because someone consents to one thing doesn\'t mean they consent to everything.\n\nExamples:\n• Consenting to kissing ≠ consenting to sex\n• Consenting to soft play ≠ consenting to full swap\n• Consenting to photos in underwear ≠ consenting to nude photos\n• Consenting to a threesome ≠ consenting to a gangbang\n• Consenting Monday ≠ automatic consent on Tuesday\n\nEach escalation in activity requires explicit, verbal consent. Never assume.',
+            type: 'warning'
+          },
+          {
+            heading: 'The Art of Negotiation',
+            content: 'Before any lifestyle interaction, negotiation should happen. This is where you discuss:\n\n1. DESIRES & INTERESTS\n   What activities interest everyone?\n\n2. BOUNDARIES & LIMITS\n   What\'s off the table?\n\n3. SAFER SEX PRACTICES\n   What protection will be used?\n\n4. RELATIONSHIP RULES\n   Any relationship-specific boundaries?\n\n5. CHECK-IN SIGNALS\n   How will people communicate during play?\n\n6. AFTER-CARE NEEDS\n   What does everyone need afterward?\n\nThis conversation should happen before clothes come off and emotions run high.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Negotiation Framework: The Pre-Play Conversation',
+            content: 'Here\'s a practical framework for lifestyle negotiations:\n\nSTEP 1: ESTABLISH COMFORT\n"Let\'s take a few minutes to make sure we\'re all on the same page"\n\nSTEP 2: DISCUSS INTERESTS\n"What activities sound fun to everyone?"\n\nSTEP 3: CLARIFY BOUNDARIES\n"Is there anything that\'s off-limits or that you need us to know?"\n\nSTEP 4: AGREE ON SAFER SEX\n"Let\'s talk about protection and safer sex practices"\n\nSTEP 5: CONFIRM ONGOING CONSENT\n"Remember, anyone can pause or stop at any time"\n\nSTEP 6: ESTABLISH SIGNALS\n"How should we check in with each other during play?"\n\nThis may feel formal, but it prevents 99% of consent issues.',
+            type: 'tip'
+          },
+          {
+            heading: 'Body Language and Nonverbal Cues',
+            content: 'While verbal consent is required, pay attention to body language:\n\nENGAGED & CONSENTING:\n• Relaxed posture\n• Making eye contact\n• Smiling and laughing\n• Leaning in\n• Active participation\n• Reciprocating touch\n\nUNCOMFORTABLE OR UNSURE:\n• Tense body\n• Avoiding eye contact\n• Fake smiling\n• Pulling away\n• Passive or frozen\n• Distracted or distant\n\nIf you notice discomfort, STOP and check in verbally. Don\'t proceed based on assumptions.',
+            type: 'normal'
+          },
+          {
+            heading: 'Check-Ins During Play',
+            content: 'Consent isn\'t just for the beginning—it\'s ongoing throughout. Check in regularly:\n\n💬 "Is this still feeling good?"\n💬 "Are you comfortable with this?"\n💬 "Should we keep going or pause?"\n💬 "How are you doing?"\n💬 "Do you want to continue?"\n\nThese micro-check-ins:\n• Ensure ongoing consent\n• Show you care about their experience\n• Create opportunities to adjust or stop\n• Build trust\n• Enhance the experience for everyone\n\nRegular check-ins don\'t ruin the mood—they enhance it by ensuring everyone is present and engaged.',
+            type: 'tip'
+          },
+          {
+            heading: 'Safe Words and Signals',
+            content: 'Establish clear communication tools before play:\n\n🟢 GREEN: "I\'m good, keep going"\n🟡 YELLOW: "Slow down, I need a moment"\n🔴 RED: "Stop immediately"\n\nOr use a simple safe word that anyone can say to stop everything immediately.\n\nIMPORTANT:\n• Everyone must know and agree to the safe word/signals\n• Safe words must be respected IMMEDIATELY\n• Never shame someone for using a safe word\n• Check in if someone goes quiet or seems off\n\nSafe words are a critical safety tool—treat them seriously.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Consent and Substances',
+            content: 'Alcohol and substances complicate consent significantly:\n\n⚠️ GOLDEN RULE:\nIf someone is intoxicated, they cannot give valid consent to new activities or new partners.\n\n✅ SAFER APPROACH:\n• Negotiate while sober\n• Keep alcohol consumption light\n• Never initiate new activities when drunk\n• If someone is clearly intoxicated, decline respectfully\n• Wait for a sober encounter\n\nMany lifestyle venues have strict rules about intoxication for this exact reason. Your reputation depends on making safe choices.',
+            type: 'warning'
+          },
+          {
+            heading: 'What To Do If Consent Is Unclear',
+            content: 'When in doubt, STOP and clarify:\n\n"Hey, I want to make sure you\'re comfortable. Are you good with this?"\n\n"You seem hesitant. Do you want to pause and talk?"\n\n"I\'m not sure if you\'re into this. Can we check in?"\n\nIt\'s better to break the momentum than to proceed without clear consent. Always err on the side of caution.\n\nIf someone can\'t give clear, enthusiastic consent, the answer is no—even if they\'re not explicitly saying no.',
+            type: 'normal'
+          },
+          {
+            heading: 'After-Play: The Debrief',
+            content: 'After lifestyle interactions, debrief with your partner and, if appropriate, with play partners:\n\n✅ What went well?\n✅ What could be improved?\n✅ Did anyone feel uncomfortable at any point?\n✅ Were boundaries respected?\n✅ Is everyone feeling good emotionally?\n✅ What would you want to do differently next time?\n\nThis debrief:\n• Processes the experience\n• Identifies any issues\n• Strengthens communication\n• Improves future encounters\n• Ensures everyone is okay\n\nMake debriefing a standard practice.',
+            type: 'normal'
+          },
+          {
+            heading: 'Consent Violations: What They Look Like',
+            content: '🚩 Proceeding after someone said no or seems uncertain\n🚩 Pressuring or guilting someone into activities\n🚩 Ignoring safe words or signals to stop\n🚩 Escalating activities without asking\n🚩 Removing protection without consent\n🚩 Including others without prior consent\n🚩 Recording or photographing without explicit permission\n🚩 Continuing when someone is clearly uncomfortable\n🚩 Taking advantage of intoxication\n🚩 Lying or withholding information\n\nAny of these is serious and disqualifying. Report violations to event organizers or community leaders.',
+            type: 'warning'
+          },
+          {
+            heading: 'If Your Consent Is Violated',
+            content: 'If someone violates your consent:\n\n1. PRIORITIZE YOUR SAFETY\n   Leave the situation immediately if needed\n\n2. TELL YOUR PARTNER\n   Share what happened with your partner or trusted friend\n\n3. DOCUMENT\n   Write down what happened while it\'s fresh\n\n4. REPORT IF APPROPRIATE\n   Tell event organizers, venue owners, or community leaders\n\n5. SEEK SUPPORT\n   Process with your partner, friends, or a therapist\n\n6. CUT CONTACT\n   Block the person who violated your consent\n\nYou are not overreacting. Consent violations are serious and it\'s okay to take action.',
+            type: 'normal'
+          },
+          {
+            heading: 'Building a Consent Culture',
+            content: 'You contribute to consent culture by:\n\n✅ Always asking explicitly for consent\n✅ Respecting "no" immediately and gracefully\n✅ Checking in during activities\n✅ Calling out consent violations when you see them\n✅ Supporting people who report violations\n✅ Educating others about consent\n✅ Making consent sexy and normal\n✅ Setting a good example\n\nEvery positive interaction strengthens the community. Every violation weakens it. Choose to be part of the solution.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Consent is mandatory—no exceptions\n✅ Use FRIES model: Freely given, Reversible, Informed, Enthusiastic, Specific\n✅ Each activity requires explicit consent\n✅ Negotiate before play—discuss desires, boundaries, safety\n✅ Check in regularly during activities\n✅ Use safe words and respect them immediately\n✅ Intoxication invalidates consent\n✅ When unclear, stop and clarify\n✅ Debrief after interactions\n✅ Report violations and support survivors\n\nMastering consent makes you a safe, trusted community member.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Final Reflection',
+            content: 'Before the quiz, consider:\n\n• Have you ever proceeded without enthusiastic consent?\n• How will you negotiate before your next interaction?\n• What will you do if you notice someone seems uncomfortable?\n• Are you prepared to stop immediately if needed?\n\nConsent is the foundation of everything. Take it seriously.',
+            type: 'tip'
           }
         ]
       }
