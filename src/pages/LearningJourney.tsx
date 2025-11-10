@@ -448,9 +448,13 @@ export const LearningJourneyPage: React.FC = () => {
                   </CardTitle>
                   <p className="text-white/70 text-sm mb-3">{path.description}</p>
                   <div className="flex items-center gap-4 text-xs text-white/60">
-                    <span>{path.completedModules}/{path.totalModules} modules</span>
+                    <span>
+                      {path.modules.filter(m => getModuleStatus(m.id) === 'completed').length}/{path.totalModules} modules
+                    </span>
                     <span>•</span>
-                    <span>{Math.round((path.completedModules / path.totalModules) * 100)}% complete</span>
+                    <span>
+                      {Math.round((path.modules.filter(m => getModuleStatus(m.id) === 'completed').length / path.totalModules) * 100)}% complete
+                    </span>
                   </div>
                 </div>
               </div>
