@@ -630,56 +630,7 @@ export const EventDetailPage: React.FC = () => {
           </div>
         </Card>
 
-        {/* Database Setup Notice (Host Only) */}
-        {isAuthor && attendees.length === 0 && (
-          <Card className={`${spiceTheme.components.card} animate-fade-in border-2 border-yellow-500/50 bg-yellow-500/5`}>
-            <div className="p-6 space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="bg-yellow-500/20 p-3 rounded-lg">
-                  <Shield className="h-6 w-6 text-yellow-400" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-yellow-400 font-bold text-xl mb-2">
-                    ⚠️ Database Setup Required
-                  </h3>
-                  <p className="text-white/90 mb-3">
-                    RSVP approval features need a database update. This is a one-time setup (takes 2 minutes).
-                  </p>
-                </div>
-              </div>
-              
-              <div className="bg-black/40 p-4 rounded-lg border border-yellow-500/30 space-y-2">
-                <p className="text-white font-semibold text-sm">Quick Setup Steps:</p>
-                <ol className="text-white/80 text-sm space-y-1 list-decimal list-inside">
-                  <li>Open Supabase Dashboard → SQL Editor</li>
-                  <li>Copy contents from <code className="text-pink-400 bg-black/40 px-1">/app/EVENT_ATTENDEE_APPROVAL_SCHEMA.sql</code></li>
-                  <li>Paste and run the script</li>
-                  <li>Refresh this page</li>
-                </ol>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => window.open('https://supabase.com/dashboard', '_blank')}
-                  className="flex-1 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 border-yellow-500/50 font-semibold"
-                >
-                  Open Supabase Dashboard →
-                </Button>
-                <Button
-                  onClick={() => window.open('/app/QUICK_SETUP_GUIDE.md', '_blank')}
-                  variant="outline"
-                  className="text-white/70 hover:text-white border-white/20"
-                >
-                  View Guide
-                </Button>
-              </div>
-
-              <p className="text-xs text-white/50">
-                <strong>What this enables:</strong> RSVP approve/deny, pending requests list, accurate capacity tracking, attendee status
-              </p>
-            </div>
-          </Card>
-        )}
+        {/* Removed database setup notice - focusing on fixing the actual data loading issue */}
 
         {/* Pending RSVP Requests (Host Only) */}
         {isAuthor && pendingAttendeesCount > 0 && (
