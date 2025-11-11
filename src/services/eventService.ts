@@ -578,9 +578,26 @@ class EventService {
         .eq('user_id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
-      // Consider pending or confirmed as "attending"
-      return !!data && (data.status === 'pending' || data.status === 'confirmed');
+      if (error) {
+        // No rows found is okay
+        if (error.code === 'PGRST116') return false;
+        // 406 means status column doesn't exist - fallback to just checking if record exists
+        if (error.message?.includes('406')) {
+          console.warn('Status column not found, checking basic attendance');
+          const { data: basicData, error: basicError } = await supabase
+            .from('event_attendees')
+            .select('id')
+            .eq('event_id', eventId)
+            .eq('user_id', userId)
+            .single();
+          
+          if (basicError && basicError.code !== 'PGRST116') throw basicError;
+          return !!basicData;
+        }
+        throw error;
+      }
+      // If status column exists, consider pending or confirmed as "attending"
+      return !!data && (!data.status || data.status === 'pending' || data.status === 'confirmed');
     } catch (error) {
       console.error('Error checking attendance status:', error);
       return false;
