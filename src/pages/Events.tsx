@@ -288,8 +288,7 @@ export const EventsPage: React.FC = () => {
   };
 
   const handleEventClick = (eventId: string) => {
-    // TODO: Navigate to event detail page when implemented
-    console.log('Event clicked:', eventId);
+    navigate(`/events/${eventId}`);
   };
 
   const handleAuthorClick = (authorId: string) => {
