@@ -15,6 +15,12 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- 1. EVENTS TABLE
 -- =====================================================
 
+-- Drop existing table policies first
+DROP POLICY IF EXISTS "Anyone can view active future events" ON events;
+DROP POLICY IF EXISTS "Users can create their own events" ON events;
+DROP POLICY IF EXISTS "Users can update their own events" ON events;
+DROP POLICY IF EXISTS "Users can delete their own events" ON events;
+
 CREATE TABLE IF NOT EXISTS events (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     author_id UUID REFERENCES profiles(id) ON DELETE CASCADE NOT NULL,
