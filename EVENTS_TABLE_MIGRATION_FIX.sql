@@ -214,7 +214,7 @@ DROP POLICY IF EXISTS "Users can delete their own events" ON events;
 -- Recreate policies
 CREATE POLICY "Anyone can view active future events"
     ON events FOR SELECT
-    USING (is_active = true AND event_date >= CURRENT_DATE);
+    USING (is_active = true);
 
 CREATE POLICY "Users can create their own events"
     ON events FOR INSERT
