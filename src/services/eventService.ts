@@ -571,20 +571,21 @@ class EventService {
    */
   async hasUserAttendedEvent(eventId: string, userId: string): Promise<boolean> {
     try {
-      // Just check if record exists, don't query status column
       const { data, error } = await supabase
         .from('event_attendees')
-        .select('id')
+        .select('id, status')
         .eq('event_id', eventId)
         .eq('user_id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
-        console.warn('Error checking attendance:', error);
+      if (error) {
+        if (error.code === 'PGRST116') return false; // No record
+        console.warn('Error checking attendance (RLS policy issue?):', error);
         return false;
       }
       
-      return !!data;
+      // Consider pending or confirmed as attending
+      return !!data && (!data.status || data.status === 'pending' || data.status === 'confirmed');
     } catch (error) {
       console.error('Error checking attendance status:', error);
       return false;
