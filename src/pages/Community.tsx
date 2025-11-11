@@ -10,6 +10,7 @@ import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme, themeStyles } from '@/styles/theme';
 import { mockEvents, Event, User as EventUser } from '@/data/mockEvents';
 import { isoPostService, ISOPost } from '@/services/isoPostService';
+import { eventService, Event as RealEvent } from '@/services/eventService';
 
 // Mock data - will be replaced with real API calls
 const mockOnlineUsers = [
