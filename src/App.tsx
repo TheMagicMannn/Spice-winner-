@@ -151,6 +151,7 @@ const AppContent: React.FC = () => {
           <Routes>
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/events" element={<EventsPage />} />
+            <Route path="/events/:eventId" element={<EventDetailPage />} />
             <Route path="/iso" element={<ISOPage />} />
             <Route path="/iso/:postId" element={<ISOPostDetailPage />} />
             <Route path="/browse" element={<BrowsePage />} />
