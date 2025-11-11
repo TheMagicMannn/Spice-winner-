@@ -599,38 +599,51 @@ class EventService {
         throw error;
       }
 
-      const { data, error } = await supabase
+      // First get attendees
+      const { data: attendees, error: attendeesError } = await supabase
         .from('event_attendees')
-        .select(`
-          *,
-          profiles:user_id (
-            display_name,
-            display_name2,
-            account_type,
-            photos,
-            is_verified
-          )
-        `)
+        .select('*')
         .eq('event_id', eventId)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        if (error.message?.includes('JWT') || error.message?.includes('session')) {
+      if (attendeesError) {
+        if (attendeesError.message?.includes('JWT') || attendeesError.message?.includes('session')) {
           const authError: any = new Error('Session expired. Please log in again.');
           authError.status = 401;
           throw authError;
         }
-        throw error;
+        throw attendeesError;
       }
 
-      return (data || []).map(attendee => ({
-        ...attendee,
-        display_name: attendee.profiles?.display_name,
-        display_name2: attendee.profiles?.display_name2,
-        account_type: attendee.profiles?.account_type,
-        photos: attendee.profiles?.photos,
-        is_verified: attendee.profiles?.is_verified
-      }));
+      if (!attendees || attendees.length === 0) {
+        return [];
+      }
+
+      // Then get profile data for each attendee
+      const attendeesWithProfiles = await Promise.all(
+        attendees.map(async (attendee) => {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('display_name, display_name2, account_type, photos, is_verified')
+            .eq('id', attendee.user_id)
+            .single();
+
+          if (profileError) {
+            console.warn(`Could not fetch profile for user ${attendee.user_id}:`, profileError);
+          }
+
+          return {
+            ...attendee,
+            display_name: profile?.display_name,
+            display_name2: profile?.display_name2,
+            account_type: profile?.account_type,
+            photos: profile?.photos,
+            is_verified: profile?.is_verified
+          };
+        })
+      );
+
+      return attendeesWithProfiles;
     } catch (error) {
       console.error('Error fetching event attendees:', error);
       throw error;
