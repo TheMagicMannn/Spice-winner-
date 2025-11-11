@@ -18,6 +18,7 @@ import { ISOPostDetailPage } from './pages/ISOPostDetailPage';
 import { BrowsePage } from './pages/Browse';
 import { MatchesPage } from './pages/Matches';
 import { MessagesPage } from './pages/Messages';
+import { ChatPage } from './pages/ChatPage';
 import { ProfilePage } from './pages/Profile';
 import { SettingsPage } from './pages/Settings';
 import { AdminVerificationPage } from './pages/AdminVerification';
