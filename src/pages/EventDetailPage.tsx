@@ -333,7 +333,10 @@ export const EventDetailPage: React.FC = () => {
   };
 
   const isAuthor = user && event && user.id === event.author_id;
-  const spotsLeft = event ? event.max_capacity - (attendees.length || 0) : 0;
+  // Only count confirmed attendees for spots calculation
+  const confirmedAttendeesCount = attendees.filter(a => a.status === 'confirmed').length;
+  const pendingAttendeesCount = attendees.filter(a => a.status === 'pending').length;
+  const spotsLeft = event ? event.max_capacity - confirmedAttendeesCount : 0;
   const isEventFull = spotsLeft <= 0;
   const isAlmostFull = spotsLeft <= 10 && spotsLeft > 0;
 
