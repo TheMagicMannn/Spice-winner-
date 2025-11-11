@@ -277,6 +277,15 @@ class ISOPostService {
    */
   async getPostsByUser(userId: string): Promise<ISOPost[]> {
     try {
+      // Verify session before making API call
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        const error: any = new Error('Authentication required. Please log in again.');
+        error.status = 401;
+        throw error;
+      }
+
       const { data, error } = await supabase
         .from('iso_posts')
         .select(`
@@ -301,7 +310,14 @@ class ISOPostService {
         .eq('is_active', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message?.includes('JWT') || error.message?.includes('session')) {
+          const authError: any = new Error('Session expired. Please log in again.');
+          authError.status = 401;
+          throw authError;
+        }
+        throw error;
+      }
 
       // Get likes and comments count for each post
       const postsWithCounts = await Promise.all(
