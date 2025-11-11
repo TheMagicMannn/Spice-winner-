@@ -704,38 +704,51 @@ class EventService {
         throw error;
       }
 
-      const { data, error } = await supabase
+      // First get comments
+      const { data: comments, error: commentsError } = await supabase
         .from('event_comments')
-        .select(`
-          *,
-          profiles:user_id (
-            display_name,
-            display_name2,
-            account_type,
-            photos,
-            is_verified
-          )
-        `)
+        .select('*')
         .eq('event_id', eventId)
         .order('created_at', { ascending: true });
 
-      if (error) {
-        if (error.message?.includes('JWT') || error.message?.includes('session')) {
+      if (commentsError) {
+        if (commentsError.message?.includes('JWT') || commentsError.message?.includes('session')) {
           const authError: any = new Error('Session expired. Please log in again.');
           authError.status = 401;
           throw authError;
         }
-        throw error;
+        throw commentsError;
       }
 
-      return (data || []).map(comment => ({
-        ...comment,
-        display_name: comment.profiles?.display_name,
-        display_name2: comment.profiles?.display_name2,
-        account_type: comment.profiles?.account_type,
-        photos: comment.profiles?.photos,
-        is_verified: comment.profiles?.is_verified
-      }));
+      if (!comments || comments.length === 0) {
+        return [];
+      }
+
+      // Then get profile data for each commenter
+      const commentsWithProfiles = await Promise.all(
+        comments.map(async (comment) => {
+          const { data: profile, error: profileError } = await supabase
+            .from('profiles')
+            .select('display_name, display_name2, account_type, photos, is_verified')
+            .eq('id', comment.user_id)
+            .single();
+
+          if (profileError) {
+            console.warn(`Could not fetch profile for user ${comment.user_id}:`, profileError);
+          }
+
+          return {
+            ...comment,
+            display_name: profile?.display_name,
+            display_name2: profile?.display_name2,
+            account_type: profile?.account_type,
+            photos: profile?.photos,
+            is_verified: profile?.is_verified
+          };
+        })
+      );
+
+      return commentsWithProfiles;
     } catch (error) {
       console.error('Error fetching comments:', error);
       throw error;
