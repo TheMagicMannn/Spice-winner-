@@ -102,9 +102,14 @@ export const EventDetailPage: React.FC = () => {
         try {
           const userIsAttending = await eventService.hasUserAttendedEvent(eventId, user.id);
           setIsAttending(userIsAttending);
+          
+          // Get detailed status
+          const status = await eventService.getAttendeeStatus(eventId, user.id);
+          setAttendeeStatus(status);
         } catch (attendanceError) {
           console.warn('Could not check attendance status:', attendanceError);
           setIsAttending(false);
+          setAttendeeStatus(null);
         }
       }
     } catch (error: any) {
