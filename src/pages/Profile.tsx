@@ -725,7 +725,7 @@ export const ProfilePage: React.FC = () => {
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          </button>
                         ))}
                         {userEvents.length > 3 && (
                           <Button
