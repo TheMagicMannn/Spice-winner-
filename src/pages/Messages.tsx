@@ -45,25 +45,8 @@ export const MessagesPage: React.FC = () => {
     if ((e.target as HTMLElement).closest('.action-button')) {
       return;
     }
-    setSelectedConversation(conversation);
-  };
-
-  const handleCloseChat = () => {
-    setSelectedConversation(null);
-    // Reload conversations to update unread counts
-    loadConversations();
-  };
-
-  const handleProfileClick = async () => {
-    if (!selectedConversation) return;
-
-    try {
-      const profile = await ProfileService.getProfile(selectedConversation.otherUserId);
-      setSelectedProfile(profile);
-      setShowProfileModal(true);
-    } catch (error) {
-      console.error('Error loading profile:', error);
-    }
+    // Navigate to chat page
+    navigate(`/messages/${conversation.matchId}/${conversation.otherUserId}`);
   };
 
   const handlePinConversation = async (matchId: string, e: React.MouseEvent) => {
