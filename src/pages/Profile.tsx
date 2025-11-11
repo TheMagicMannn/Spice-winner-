@@ -569,16 +569,16 @@ export const ProfilePage: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Active ISO Posts Section */}
+            {/* Active ISO Posts & Events Section with Tabs */}
             <Card className={`${spiceTheme.components.card} animate-fade-in`}>
               <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-4">
                   <CardTitle className="text-white flex items-center">
                     <MessageSquare className="h-5 w-5 mr-2 text-pink-400" />
-                    My Active ISO Posts
+                    My Active Posts & Events
                   </CardTitle>
                   <Button
-                    onClick={() => navigate('/iso')}
+                    onClick={() => navigate(postsEventsTab === 'posts' ? '/iso' : '/events')}
                     variant="ghost"
                     size="sm"
                     className="text-pink-400 hover:bg-pink-500/10"
@@ -586,57 +586,158 @@ export const ProfilePage: React.FC = () => {
                     View All
                   </Button>
                 </div>
+                {/* Tabs */}
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setPostsEventsTab('posts')}
+                    className={`flex-1 px-4 py-2 rounded-lg transition-all ${
+                      postsEventsTab === 'posts'
+                        ? 'bg-pink-500 text-white'
+                        : 'bg-white/5 text-white/70 hover:bg-white/10'
+                    }`}
+                  >
+                    ISO Posts ({userIsoPosts.length})
+                  </button>
+                  <button
+                    onClick={() => setPostsEventsTab('events')}
+                    className={`flex-1 px-4 py-2 rounded-lg transition-all ${
+                      postsEventsTab === 'events'
+                        ? 'bg-pink-500 text-white'
+                        : 'bg-white/5 text-white/70 hover:bg-white/10'
+                    }`}
+                  >
+                    Events ({userEvents.length})
+                  </button>
+                </div>
               </CardHeader>
               <CardContent>
-                {isLoadingIsoPosts ? (
-                  <div className="text-center text-white/60 py-4">Loading...</div>
-                ) : userIsoPosts.length === 0 ? (
-                  <div className="text-center py-8">
-                    <MessageSquare className="h-12 w-12 text-pink-400/50 mx-auto mb-3" />
-                    <p className="text-white/60 mb-4">You haven't created any ISO posts yet</p>
-                    <Button
-                      onClick={() => navigate('/iso')}
-                      className={spiceTheme.components.button.gradient}
-                    >
-                      Create Your First Post
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {userIsoPosts.slice(0, 3).map((post) => (
-                      <button
-                        key={post.id}
-                        onClick={() => navigate(`/iso/${post.id}`)}
-                        className="w-full text-left p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all border border-white/10 hover:border-pink-500/50"
-                        data-testid={`profile-iso-post-${post.id}`}
-                      >
-                        <h4 className="text-white font-semibold mb-2 line-clamp-1">{post.title}</h4>
-                        <p className="text-white/70 text-sm mb-3 line-clamp-2">{post.content}</p>
-                        <div className="flex items-center justify-between text-xs text-white/60">
-                          <div className="flex items-center space-x-3">
-                            <span className="flex items-center">
-                              <Heart className="h-3 w-3 mr-1" />
-                              {post.likes_count || 0}
-                            </span>
-                            <span className="flex items-center">
-                              <MessageSquare className="h-3 w-3 mr-1" />
-                              {post.comments_count || 0}
-                            </span>
-                          </div>
-                          <span>{new Date(post.created_at).toLocaleDateString()}</span>
-                        </div>
-                      </button>
-                    ))}
-                    {userIsoPosts.length > 3 && (
-                      <Button
-                        onClick={() => navigate('/iso')}
-                        variant="ghost"
-                        className="w-full text-pink-400 hover:bg-pink-500/10"
-                      >
-                        View all {userIsoPosts.length} posts
-                      </Button>
+                {/* ISO Posts Tab Content */}
+                {postsEventsTab === 'posts' && (
+                  <>
+                    {isLoadingIsoPosts ? (
+                      <div className="text-center text-white/60 py-4">Loading...</div>
+                    ) : userIsoPosts.length === 0 ? (
+                      <div className="text-center py-8">
+                        <MessageSquare className="h-12 w-12 text-pink-400/50 mx-auto mb-3" />
+                        <p className="text-white/60 mb-4">You haven't created any ISO posts yet</p>
+                        <Button
+                          onClick={() => navigate('/iso')}
+                          className={spiceTheme.components.button.gradient}
+                        >
+                          Create Your First Post
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {userIsoPosts.slice(0, 3).map((post) => (
+                          <button
+                            key={post.id}
+                            onClick={() => navigate(`/iso/${post.id}`)}
+                            className="w-full text-left p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all border border-white/10 hover:border-pink-500/50"
+                            data-testid={`profile-iso-post-${post.id}`}
+                          >
+                            <h4 className="text-white font-semibold mb-2 line-clamp-1">{post.title}</h4>
+                            <p className="text-white/70 text-sm mb-3 line-clamp-2">{post.content}</p>
+                            <div className="flex items-center justify-between text-xs text-white/60">
+                              <div className="flex items-center space-x-3">
+                                <span className="flex items-center">
+                                  <Heart className="h-3 w-3 mr-1" />
+                                  {post.likes_count || 0}
+                                </span>
+                                <span className="flex items-center">
+                                  <MessageSquare className="h-3 w-3 mr-1" />
+                                  {post.comments_count || 0}
+                                </span>
+                              </div>
+                              <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                            </div>
+                          </button>
+                        ))}
+                        {userIsoPosts.length > 3 && (
+                          <Button
+                            onClick={() => navigate('/iso')}
+                            variant="ghost"
+                            className="w-full text-pink-400 hover:bg-pink-500/10"
+                          >
+                            View all {userIsoPosts.length} posts
+                          </Button>
+                        )}
+                      </div>
                     )}
-                  </div>
+                  </>
+                )}
+
+                {/* Events Tab Content */}
+                {postsEventsTab === 'events' && (
+                  <>
+                    {isLoadingEvents ? (
+                      <div className="text-center text-white/60 py-4">Loading...</div>
+                    ) : userEvents.length === 0 ? (
+                      <div className="text-center py-8">
+                        <Calendar className="h-12 w-12 text-pink-400/50 mx-auto mb-3" />
+                        <p className="text-white/60 mb-4">You haven't created any events yet</p>
+                        <Button
+                          onClick={() => navigate('/events')}
+                          className={spiceTheme.components.button.gradient}
+                        >
+                          Create Your First Event
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {userEvents.slice(0, 3).map((event) => (
+                          <div
+                            key={event.id}
+                            className="p-4 bg-white/5 rounded-lg border border-white/10 hover:border-pink-500/50 transition-all"
+                            data-testid={`profile-event-${event.id}`}
+                          >
+                            <div className="flex items-start space-x-3">
+                              {event.image_url && (
+                                <img
+                                  src={event.image_url}
+                                  alt={event.title}
+                                  className="w-20 h-20 rounded-lg object-cover"
+                                />
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-white font-semibold mb-1 line-clamp-1">{event.title}</h4>
+                                <div className="flex items-center text-xs text-white/60 mb-2">
+                                  <Calendar className="h-3 w-3 mr-1" />
+                                  <span>{new Date(event.event_date).toLocaleDateString()}</span>
+                                  <span className="mx-2">•</span>
+                                  <span>{event.category}</span>
+                                </div>
+                                <div className="flex items-center justify-between text-xs text-white/60">
+                                  <div className="flex items-center space-x-3">
+                                    <span className="flex items-center">
+                                      <User className="h-3 w-3 mr-1" />
+                                      {event.attendees_count || 0}
+                                    </span>
+                                    <span className="flex items-center">
+                                      <MessageSquare className="h-3 w-3 mr-1" />
+                                      {event.comments_count || 0}
+                                    </span>
+                                  </div>
+                                  {event.price > 0 && (
+                                    <span className="text-green-400">${event.price}</span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        {userEvents.length > 3 && (
+                          <Button
+                            onClick={() => navigate('/events')}
+                            variant="ghost"
+                            className="w-full text-pink-400 hover:bg-pink-500/10"
+                          >
+                            View all {userEvents.length} events
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </>
                 )}
               </CardContent>
             </Card>
