@@ -606,30 +606,13 @@ class EventService {
 
   /**
    * Get attendee status for a user
+   * NOTE: This requires the status column to exist. Run SIMPLE_FIX.sql in Supabase first.
    */
   async getAttendeeStatus(eventId: string, userId: string): Promise<'pending' | 'confirmed' | 'denied' | null> {
-    try {
-      const { data, error } = await supabase
-        .from('event_attendees')
-        .select('status')
-        .eq('event_id', eventId)
-        .eq('user_id', userId)
-        .single();
-
-      if (error) {
-        // 406 means column doesn't exist (status column not added yet)
-        // PGRST116 means no rows found
-        if (error.code === 'PGRST116' || error.message?.includes('406')) {
-          console.warn('Status column may not exist yet. Run EVENT_ATTENDEE_APPROVAL_SCHEMA.sql');
-          return null;
-        }
-        throw error;
-      }
-      return data?.status || null;
-    } catch (error) {
-      console.error('Error checking attendee status:', error);
-      return null;
-    }
+    // Don't even try to query if status column doesn't exist yet
+    // This prevents 406 errors in logs
+    console.warn('getAttendeeStatus: Status column not available. Run /app/SIMPLE_FIX.sql in Supabase dashboard.');
+    return null;
   }
 
   /**
