@@ -24,19 +24,32 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const fetchSessionAndProfile = async (session: Session | null) => {
       if (session?.user) {
-        const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .maybeSingle();
-        
-        if (error) {
-          console.error("Error fetching profile:", error);
+        try {
+          const { data: profile, error } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .maybeSingle();
+          
+          if (error) {
+            console.error("Error fetching profile:", error);
+            
+            // Check if it's an auth error
+            if (error.message?.includes('JWT') || error.message?.includes('session')) {
+              console.warn('Session expired, clearing user state');
+              setUser(null);
+              return;
+            }
+            
+            setUser({ ...session.user, profile: null });
+          } else {
+            // Transform database snake_case to frontend camelCase
+            const transformedProfile = profile ? profileFromDatabase(profile) : null;
+            setUser({ ...session.user, profile: transformedProfile });
+          }
+        } catch (error) {
+          console.error('Unexpected error during profile fetch:', error);
           setUser({ ...session.user, profile: null });
-        } else {
-          // Transform database snake_case to frontend camelCase
-          const transformedProfile = profile ? profileFromDatabase(profile) : null;
-          setUser({ ...session.user, profile: transformedProfile });
         }
       } else {
         setUser(null);
@@ -44,13 +57,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setIsLoading(false);
     };
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-        fetchSessionAndProfile(session);
+    // Initial session fetch with error handling
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('Error getting initial session:', error);
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+      fetchSessionAndProfile(session);
+    }).catch(error => {
+      console.error('Failed to get session:', error);
+      setUser(null);
+      setIsLoading(false);
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        fetchSessionAndProfile(session);
+      (event, session) => {
+        console.log('Auth state changed:', event);
+        
+        // Handle specific auth events
+        if (event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
+          console.log(`Auth event: ${event}`);
+        }
+        
+        if (event === 'USER_UPDATED' || event === 'TOKEN_REFRESHED') {
+          // Session was refreshed, update user
+          fetchSessionAndProfile(session);
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setIsLoading(false);
+        } else {
+          fetchSessionAndProfile(session);
+        }
       }
     );
 
