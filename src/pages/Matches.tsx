@@ -65,7 +65,7 @@ export const MatchesPage: React.FC = () => {
   const handleMessageClick = async (profile: Profile, e: React.MouseEvent) => {
     e.stopPropagation();
     
-    if (!user?.id) return;
+    if (!user?.id || !profile.id) return;
     
     // Get or find matchId between users
     const matchId = await MatchingService.getMatchIdBetweenUsers(user.id, profile.id);
