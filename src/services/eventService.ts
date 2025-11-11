@@ -655,6 +655,7 @@ class EventService {
    */
   async addComment(eventId: string, userId: string, content: string): Promise<EventComment> {
     try {
+      // Insert comment first
       const { data, error } = await supabase
         .from('event_comments')
         .insert({
@@ -662,27 +663,29 @@ class EventService {
           user_id: userId,
           content: content
         })
-        .select(`
-          *,
-          profiles:user_id (
-            display_name,
-            display_name2,
-            account_type,
-            photos,
-            is_verified
-          )
-        `)
+        .select('*')
         .single();
 
       if (error) throw error;
 
+      // Then fetch profile separately
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('display_name, display_name2, account_type, photos, is_verified')
+        .eq('id', userId)
+        .single();
+
+      if (profileError) {
+        console.warn(`Could not fetch profile for user ${userId}:`, profileError);
+      }
+
       return {
         ...data,
-        display_name: data.profiles?.display_name,
-        display_name2: data.profiles?.display_name2,
-        account_type: data.profiles?.account_type,
-        photos: data.profiles?.photos,
-        is_verified: data.profiles?.is_verified
+        display_name: profile?.display_name,
+        display_name2: profile?.display_name2,
+        account_type: profile?.account_type,
+        photos: profile?.photos,
+        is_verified: profile?.is_verified
       };
     } catch (error) {
       console.error('Error adding comment:', error);
