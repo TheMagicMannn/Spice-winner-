@@ -12,6 +12,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   auth: {
     persistSession: true,
-    autoRefreshToken: true
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    // Storage key with app-specific prefix for better isolation
+    storageKey: 'spice-dating-auth',
+    // Improved session detection for mobile browsers
+    flowType: 'pkce'
   }
 });
