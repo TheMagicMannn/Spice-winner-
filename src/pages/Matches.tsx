@@ -62,10 +62,21 @@ export const MatchesPage: React.FC = () => {
   };
 
   // Handle message button click
-  const handleMessageClick = (profile: Profile, e: React.MouseEvent) => {
+  const handleMessageClick = async (profile: Profile, e: React.MouseEvent) => {
     e.stopPropagation();
-    // Navigate to messages page - in future, can pass profile ID to open specific conversation
-    navigate('/messages');
+    
+    if (!user?.id) return;
+    
+    // Get or find matchId between users
+    const matchId = await MatchingService.getMatchIdBetweenUsers(user.id, profile.id);
+    
+    if (matchId) {
+      // Navigate to chat page with this user
+      navigate(`/messages/${matchId}/${profile.id}`);
+    } else {
+      // No match found, navigate to messages list
+      navigate('/messages');
+    }
   };
 
   // Handle profile card click to open detail modal
