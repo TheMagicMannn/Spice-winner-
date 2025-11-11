@@ -571,33 +571,20 @@ class EventService {
    */
   async hasUserAttendedEvent(eventId: string, userId: string): Promise<boolean> {
     try {
+      // Just check if record exists, don't query status column
       const { data, error } = await supabase
         .from('event_attendees')
-        .select('id, status')
+        .select('id')
         .eq('event_id', eventId)
         .eq('user_id', userId)
         .single();
 
-      if (error) {
-        // No rows found is okay
-        if (error.code === 'PGRST116') return false;
-        // 406 means status column doesn't exist - fallback to just checking if record exists
-        if (error.message?.includes('406')) {
-          console.warn('Status column not found, checking basic attendance');
-          const { data: basicData, error: basicError } = await supabase
-            .from('event_attendees')
-            .select('id')
-            .eq('event_id', eventId)
-            .eq('user_id', userId)
-            .single();
-          
-          if (basicError && basicError.code !== 'PGRST116') throw basicError;
-          return !!basicData;
-        }
-        throw error;
+      if (error && error.code !== 'PGRST116') {
+        console.warn('Error checking attendance:', error);
+        return false;
       }
-      // If status column exists, consider pending or confirmed as "attending"
-      return !!data && (!data.status || data.status === 'pending' || data.status === 'confirmed');
+      
+      return !!data;
     } catch (error) {
       console.error('Error checking attendance status:', error);
       return false;
