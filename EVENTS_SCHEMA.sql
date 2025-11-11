@@ -5,6 +5,13 @@
 -- to create and manage lifestyle events
 
 -- =====================================================
+-- 0. ENABLE REQUIRED EXTENSIONS
+-- =====================================================
+
+-- Enable UUID extension (if not already enabled)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- =====================================================
 -- 1. EVENTS TABLE
 -- =====================================================
 
