@@ -232,6 +232,10 @@ CREATE POLICY "Users can delete their own event comments"
 -- 6. HELPER FUNCTIONS
 -- =====================================================
 
+-- Drop existing triggers first
+DROP TRIGGER IF EXISTS update_events_updated_at ON events;
+DROP TRIGGER IF EXISTS update_event_comments_updated_at ON event_comments;
+
 -- Function to update updated_at timestamp
 CREATE OR REPLACE FUNCTION update_event_updated_at()
 RETURNS TRIGGER AS $$
