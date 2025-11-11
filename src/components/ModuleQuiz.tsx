@@ -239,6 +239,323 @@ export const ModuleQuiz: React.FC<ModuleQuizProps> = ({
           correctAnswer: 2,
           explanation: 'Comprehensive check-ins cover positives, improvements, boundary updates, desires, relationship health, and scheduling to maintain healthy connections.'
         }
+      ],
+      // Safety & Privacy Path Quizzes
+      'mod-7': [
+        {
+          question: 'What is the most important reason to create a separate email address for lifestyle activities?',
+          options: [
+            'It looks more professional',
+            'To keep your lifestyle and vanilla identities separate for privacy',
+            'Because lifestyle sites require it',
+            'To get more spam filtered'
+          ],
+          correctAnswer: 1,
+          explanation: 'Creating separate identities for lifestyle activities protects your privacy and prevents your lifestyle involvement from being connected to your professional or personal life.'
+        },
+        {
+          question: 'What should you assume about anything you send digitally?',
+          options: [
+            'It will be kept completely private',
+            'Only the recipient will see it',
+            'It could be captured, screenshot, and shared',
+            'It will automatically delete after viewing'
+          ],
+          correctAnswer: 2,
+          explanation: 'Always assume anything you send digitally can be captured and shared. This mindset helps you make thoughtful decisions about what to share and with whom.'
+        },
+        {
+          question: 'Why is reverse image search important for lifestyle privacy?',
+          options: [
+            'To find better photos',
+            'To check if your photos appear on other platforms, risking identity exposure',
+            'To verify other people\'s photos',
+            'To improve photo quality'
+          ],
+          correctAnswer: 1,
+          explanation: 'Reverse image search can reveal if your lifestyle photos appear on your vanilla social media or other platforms, which could expose your lifestyle involvement. Never use the same photos across both worlds.'
+        }
+      ],
+      'mod-8': [
+        {
+          question: 'What is the most critical rule for first meetings in the lifestyle?',
+          options: [
+            'Dress to impress',
+            'Always meet in a public, busy location',
+            'Bring gifts for the other couple',
+            'Meet at night for the best atmosphere'
+          ],
+          correctAnswer: 1,
+          explanation: 'Always meet new connections in public, busy locations for first meetings. This provides safety, easy exits, and the ability to assess compatibility in a neutral environment.'
+        },
+        {
+          question: 'What should you do before every first meeting?',
+          options: [
+            'Book a hotel room',
+            'Buy new clothes',
+            'Tell someone where you\'re going and schedule check-ins',
+            'Delete your profile after matching'
+          ],
+          correctAnswer: 2,
+          explanation: 'Always tell a trusted person where you\'re meeting, who you\'re meeting, and establish check-in times. This safety plan is essential for every first meeting.'
+        },
+        {
+          question: 'When is it appropriate to progress to private meetings?',
+          options: [
+            'Immediately if you feel attracted',
+            'After one public meeting',
+            'Only after multiple public meetings and established trust',
+            'Whenever they suggest it'
+          ],
+          correctAnswer: 2,
+          explanation: 'Progress to private settings only after multiple public meetings, video chats, verification, and establishing genuine trust. Never rush this progression.'
+        }
+      ],
+      'mod-9': [
+        {
+          question: 'What is the most important thing to do when you see red flags?',
+          options: [
+            'Ignore them and give the person a chance',
+            'Rationalize them away',
+            'Acknowledge them and assess severity',
+            'Immediately tell everyone in the community'
+          ],
+          correctAnswer: 2,
+          explanation: 'When you see red flags, acknowledge them rather than ignoring or rationalizing. Assess the severity and take appropriate action based on whether they\'re minor cautions or serious safety concerns.'
+        },
+        {
+          question: 'Which of the following is a serious red flag about someone\'s relationship status?',
+          options: [
+            'They have a primary partner',
+            'They say "My partner doesn\'t need to know"',
+            'They prefer separate room play',
+            'They\'re in a polyamorous relationship'
+          ],
+          correctAnswer: 1,
+          explanation: '"My partner doesn\'t need to know" or "don\'t ask, don\'t tell" indicates they may be cheating. Never participate in non-consensual activity—it harms the community and puts you at risk.'
+        },
+        {
+          question: 'What should you do when your gut feeling says something is wrong, even if you can\'t explain why?',
+          options: [
+            'Ignore it—gut feelings aren\'t logical',
+            'Trust your intuition and end the interaction',
+            'Ask permission to proceed anyway',
+            'Wait for concrete proof before acting'
+          ],
+          correctAnswer: 1,
+          explanation: 'Your gut feeling exists for a reason—your subconscious picks up on details you might not consciously notice. Trust your intuition even if you can\'t articulate exactly why. You don\'t need a logical reason to end an interaction.'
+        }
+      ],
+      'mod-10': [
+        {
+          question: 'How often should you get tested for STIs when active in the lifestyle?',
+          options: [
+            'Once a year',
+            'Every 3-6 months, or more frequently with multiple partners',
+            'Only when symptoms appear',
+            'Testing isn\'t necessary if you use condoms'
+          ],
+          correctAnswer: 1,
+          explanation: 'Regular testing every 3-6 months (or more frequently with multiple partners) is essential for sexual health in the lifestyle. Know your status and share it honestly with partners.'
+        },
+        {
+          question: 'What should happen if a condom breaks during play?',
+          options: [
+            'Continue and don\'t worry about it',
+            'Stop immediately, communicate with all parties, and consider emergency contraception and PEP',
+            'Just replace it and keep going',
+            'Wait and see if anything develops'
+          ],
+          correctAnswer: 1,
+          explanation: 'If a barrier fails, stop immediately, communicate with everyone involved, assess need for emergency contraception or PEP (for HIV), and plan appropriate testing. Immediate action is crucial.'
+        },
+        {
+          question: 'When someone uses a safe word during play, what should happen?',
+          options: [
+            'Pause briefly and then continue',
+            'Ask them why they used it',
+            'Stop immediately without question or negotiation',
+            'Finish the current activity then stop'
+          ],
+          correctAnswer: 2,
+          explanation: 'When anyone uses a safe word, everything stops IMMEDIATELY. No questions, no negotiations, no finishing current activities. Check in with the person and only resume if everyone enthusiastically agrees.'
+        }
+      ],
+      'mod-11': [
+        {
+          question: 'What is the most important principle of community safety standards?',
+          options: [
+            'Following venue dress codes',
+            'Enthusiastic consent for all activities',
+            'Being attractive and fit',
+            'Attending every event'
+          ],
+          correctAnswer: 1,
+          explanation: 'Consent is the absolute foundation of community safety. Everything in the lifestyle requires enthusiastic, ongoing consent. This is non-negotiable.'
+        },
+        {
+          question: 'What should you do if you see someone at a lifestyle event or venue?',
+          options: [
+            'Post about it on social media',
+            'Tell your vanilla friends who you saw',
+            'Protect their privacy—what happens in lifestyle spaces stays private',
+            'Message them to acknowledge you saw them there'
+          ],
+          correctAnswer: 2,
+          explanation: 'Discretion is paramount. Never share who you saw at lifestyle events or venues, post about others on social media, or "out" people as lifestyle participants. Protecting privacy protects people\'s lives.'
+        },
+        {
+          question: 'What is your role in maintaining community safety?',
+          options: [
+            'Nothing—it\'s the organizers\' job',
+            'Just worry about your own behavior',
+            'Be an active bystander—watch for violations, support survivors, report concerns',
+            'Only intervene if asked'
+          ],
+          correctAnswer: 2,
+          explanation: 'Everyone has responsibility for community safety. Be an active bystander by watching for consent violations, checking on people who seem uncomfortable, intervening when appropriate, reporting concerns, and supporting those who speak up.'
+        }
+      ],
+      // Relationship Dynamics Path Quizzes
+      'mod-12': [
+        {
+          question: 'What is the key difference between swinging and polyamory?',
+          options: [
+            'Swinging is illegal, polyamory is legal',
+            'Swinging focuses on sexual experiences while polyamory focuses on emotional connections',
+            'Swinging is for couples only, polyamory is for singles',
+            'There is no difference'
+          ],
+          correctAnswer: 1,
+          explanation: 'Swinging typically focuses on recreational sexual experiences with a couple-centric approach, while polyamory centers on building multiple emotional and romantic relationships. Both are valid but serve different needs.'
+        },
+        {
+          question: 'What does "full swap" mean in swinging terminology?',
+          options: [
+            'Exchanging phone numbers',
+            'Swapping houses',
+            'All sexual activities including intercourse are on the table (within personal boundaries)',
+            'Switching partners permanently'
+          ],
+          correctAnswer: 2,
+          explanation: 'Full swap means all sexual activities, including intercourse, are within the agreed boundaries. This is different from soft swap, which typically excludes intercourse but may include other activities.'
+        },
+        {
+          question: 'Why is it important to clearly communicate your relationship type?',
+          options: [
+            'To impress other people',
+            'Because it\'s required by law',
+            'To set appropriate expectations and find compatible connections',
+            'To prove you\'re experienced'
+          ],
+          correctAnswer: 2,
+          explanation: 'Clearly communicating your relationship structure (same-room couple, polyamorous, solo poly, etc.) helps set appropriate expectations, respect boundaries, and find compatible connections who want the same things.'
+        }
+      ],
+      'mod-13': [
+        {
+          question: 'What is compersion in polyamory?',
+          options: [
+            'A type of jealousy',
+            'Finding joy in your partner\'s happiness with others',
+            'A required feeling for polyamory',
+            'Compensation for sharing your partner'
+          ],
+          correctAnswer: 1,
+          explanation: 'Compersion is feeling joy in your partner\'s joy with other partners. While beautiful, it\'s not required for successful polyamory—it\'s a bonus that may develop over time, not a prerequisite.'
+        },
+        {
+          question: 'What is a "metamour"?',
+          options: [
+            'A type of relationship structure',
+            'Your partner\'s partner',
+            'A romantic feeling',
+            'A polyamory dating app'
+          ],
+          correctAnswer: 1,
+          explanation: 'A metamour is your partner\'s partner. If you\'re dating Alex and Alex is dating Sam, then Sam is your metamour. Metamour relationships can range from close friendship to parallel (no interaction).'
+        },
+        {
+          question: 'What is New Relationship Energy (NRE) and why does it matter?',
+          options: [
+            'Energy drinks for dates; they don\'t matter much',
+            'The exciting, intense feeling at the start of relationships that can lead to neglecting existing partners',
+            'A poly rule that must be followed',
+            'The first month of any relationship'
+          ],
+          correctAnswer: 1,
+          explanation: 'NRE is the intense, all-consuming excitement of new relationships. In polyamory, it requires conscious management to avoid neglecting existing partners, making rushed decisions, or breaking agreements during the dopamine high.'
+        }
+      ],
+      'mod-14': [
+        {
+          question: 'What is the difference between jealousy and envy?',
+          options: [
+            'They are the same thing',
+            'Jealousy is fear of losing something you have; envy is wanting something someone else has',
+            'Jealousy is worse than envy',
+            'Envy is fear of losing something; jealousy is wanting what others have'
+          ],
+          correctAnswer: 1,
+          explanation: 'Jealousy is fear of losing something you have (e.g., "I\'m afraid my partner will prefer them"). Envy is wanting something someone else has (e.g., "I wish I had as many dates"). Both are valid but require different processing approaches.'
+        },
+        {
+          question: 'What should you do first when feeling jealous?',
+          options: [
+            'Immediately confront your partner',
+            'Pause, breathe, and investigate the root cause before reacting',
+            'Ignore the feeling—jealousy is bad',
+            'End the relationship'
+          ],
+          correctAnswer: 1,
+          explanation: 'When jealousy hits, pause and breathe before reacting. Then investigate: What am I actually afraid of? What need isn\'t being met? This prevents reactive behavior and helps you address the real issue.'
+        },
+        {
+          question: 'How should a partner respond when you share jealous feelings?',
+          options: [
+            'Tell you you\'re being irrational',
+            'Immediately end other relationships',
+            'Listen without defensiveness, validate feelings, and ask what you need',
+            'Ignore the feelings and hope they go away'
+          ],
+          correctAnswer: 2,
+          explanation: 'When a partner shares jealousy, listen without defensiveness, validate their feelings, thank them for sharing, and ask what they need. Defensiveness or dismissal breaks trust and makes the situation worse.'
+        }
+      ],
+      'mod-15': [
+        {
+          question: 'What is trust built on in lifestyle relationships?',
+          options: [
+            'Just time together',
+            'Physical attraction',
+            'Honesty, reliability, consistency, transparency, and respect over time',
+            'Hope and luck'
+          ],
+          correctAnswer: 2,
+          explanation: 'Trust is built through consistent honesty, reliability, transparency, respect for boundaries, and demonstrated care over time. It requires all these components working together through countless small actions.'
+        },
+        {
+          question: 'If trust is broken, what must the person who violated it do?',
+          options: [
+            'Just apologize and move on',
+            'Blame the other person',
+            'Take full accountability, show genuine remorse, answer questions honestly, and demonstrate changed behavior over time',
+            'Wait for the hurt to fade naturally'
+          ],
+          correctAnswer: 2,
+          explanation: 'Rebuilding trust requires full accountability without excuses, genuine remorse, complete transparency, and consistently changed behavior over time. Trust rebuilds slowly through actions, not just words.'
+        },
+        {
+          question: 'What is the relationship between trust and control?',
+          options: [
+            'More control builds more trust',
+            'Trust requires letting go of control',
+            'Control and trust are the same thing',
+            'Trust means you should control everything'
+          ],
+          correctAnswer: 1,
+          explanation: 'Trust requires letting go of control. Control behaviors (tracking, reading messages, forbidding connections) actually break trust. Real trust is choosing to believe in your partner\'s good choices despite the inability to control outcomes.'
+        }
       ]
     };
 
