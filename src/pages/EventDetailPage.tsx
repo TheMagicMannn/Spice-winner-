@@ -46,6 +46,8 @@ export const EventDetailPage: React.FC = () => {
   const [isSubmittingRSVP, setIsSubmittingRSVP] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [attendeeStatus, setAttendeeStatus] = useState<'pending' | 'confirmed' | 'denied' | null>(null);
+  const [isProcessingApproval, setIsProcessingApproval] = useState<string | null>(null);
 
   useEffect(() => {
     if (eventId) {
