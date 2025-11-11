@@ -477,10 +477,13 @@ export const CommunityPage: React.FC = () => {
   const [showEventDetail, setShowEventDetail] = useState(false);
   const [isoPosts, setIsoPosts] = useState<ISOPost[]>([]);
   const [isLoadingIsoPosts, setIsLoadingIsoPosts] = useState(true);
+  const [realEvents, setRealEvents] = useState<RealEvent[]>([]);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
 
-  // Load ISO posts on mount
+  // Load ISO posts and real events on mount
   useEffect(() => {
     loadIsoPosts();
+    loadRealEvents();
   }, []);
 
   const loadIsoPosts = async () => {
@@ -495,6 +498,18 @@ export const CommunityPage: React.FC = () => {
     }
   };
 
+  const loadRealEvents = async () => {
+    setIsLoadingEvents(true);
+    try {
+      const events = await eventService.getAllEvents();
+      setRealEvents(events.slice(0, 4)); // Only show first 4
+    } catch (error) {
+      console.error('Error loading events:', error);
+    } finally {
+      setIsLoadingEvents(false);
+    }
+  };
+
   const handleUserClick = (user: OnlineUser) => {
     setSelectedUser(user);
     setShowUserDetail(true);
@@ -503,6 +518,10 @@ export const CommunityPage: React.FC = () => {
   const handleEventClick = (event: Event) => {
     setSelectedEvent(event);
     setShowEventDetail(true);
+  };
+
+  const handleRealEventClick = (eventId: string) => {
+    navigate(`/events/${eventId}`);
   };
 
   const handleISOPostClick = (postId: string) => {
