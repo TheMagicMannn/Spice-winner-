@@ -599,7 +599,15 @@ class EventService {
         .eq('user_id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) {
+        // 406 means column doesn't exist (status column not added yet)
+        // PGRST116 means no rows found
+        if (error.code === 'PGRST116' || error.message?.includes('406')) {
+          console.warn('Status column may not exist yet. Run EVENT_ATTENDEE_APPROVAL_SCHEMA.sql');
+          return null;
+        }
+        throw error;
+      }
       return data?.status || null;
     } catch (error) {
       console.error('Error checking attendee status:', error);
