@@ -74,6 +74,11 @@ CREATE INDEX IF NOT EXISTS idx_events_future ON events(event_date) WHERE event_d
 -- 2. EVENT ATTENDEES TABLE (RSVP tracking)
 -- =====================================================
 
+-- Drop existing policies
+DROP POLICY IF EXISTS "Anyone can view event attendees" ON event_attendees;
+DROP POLICY IF EXISTS "Users can RSVP to events" ON event_attendees;
+DROP POLICY IF EXISTS "Users can cancel their RSVP" ON event_attendees;
+
 CREATE TABLE IF NOT EXISTS event_attendees (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     event_id UUID REFERENCES events(id) ON DELETE CASCADE NOT NULL,
