@@ -12,6 +12,7 @@ import { DashboardPage } from './pages/Dashboard';
 import { HeroPage } from './pages/Hero';
 import { CommunityPage } from './pages/Community';
 import { EventsPage } from './pages/Events';
+import { EventDetailPage } from './pages/EventDetailPage';
 import { ISOPage } from './pages/ISOPage';
 import { ISOPostDetailPage } from './pages/ISOPostDetailPage';
 import { BrowsePage } from './pages/Browse';
