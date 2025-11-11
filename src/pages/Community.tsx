@@ -172,7 +172,7 @@ function UserCard({ user, onClick }: { user: OnlineUser; onClick: () => void }) 
   );
 }
 
-// Event Preview Card Component
+// Event Preview Card Component (for mock data)
 function EventPreviewCard({ event, onClick }: { event: Event; onClick: () => void }) {
   const spotsLeft = event.maxCapacity - event.attendees;
 
@@ -220,6 +220,60 @@ function EventPreviewCard({ event, onClick }: { event: Event; onClick: () => voi
         <div className="flex items-center justify-between pt-2 border-t border-white/10">
           <span className="text-sm font-bold text-pink-400">${event.price}</span>
           <span className="text-xs text-white/60">{event.attendees} attending</span>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+// Real Event Preview Card Component (for real event data)
+function RealEventPreviewCard({ event, onClick }: { event: RealEvent; onClick: () => void }) {
+  const spotsLeft = event.max_capacity - (event.attendees_count || 0);
+
+  return (
+    <Card
+      className={`${spiceTheme.components.card} min-w-[280px] overflow-hidden cursor-pointer hover:scale-105 transform transition-all duration-300 animate-glow`}
+      onClick={onClick}
+      data-testid={`real-event-preview-${event.id}`}
+    >
+      <div className="relative h-40">
+        <img
+          src={event.image_url || 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800'}
+          alt={event.title}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+        {event.membership_tier === 'vip' && (
+          <Badge className="absolute top-2 right-2 bg-yellow-500/90 text-black font-semibold text-xs">
+            <Crown className="h-3 w-3 mr-1" />
+            VIP
+          </Badge>
+        )}
+        <div className="absolute bottom-2 left-2 right-2">
+          <h3 className="text-white font-bold text-sm mb-1 line-clamp-1">{event.title}</h3>
+          <Badge className={`${spiceTheme.components.badge.pink} text-xs`}>{event.category}</Badge>
+        </div>
+      </div>
+
+      <div className="p-3 space-y-2">
+        <div className="flex items-center text-xs text-white/80">
+          <Calendar className="h-3 w-3 mr-1 text-pink-400" />
+          <span>{new Date(event.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+        </div>
+
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center text-white/80">
+            <MapPin className="h-3 w-3 mr-1 text-pink-400" />
+            <span className="line-clamp-1">{event.location}</span>
+          </div>
+          <Badge className={spotsLeft <= 10 ? 'bg-orange-500/20 text-orange-400 border-orange-500/50 text-xs' : 'bg-green-500/20 text-green-400 border-green-500/50 text-xs'}>
+            {spotsLeft} spots
+          </Badge>
+        </div>
+
+        <div className="flex items-center justify-between pt-2 border-t border-white/10">
+          <span className="text-sm font-bold text-pink-400">${event.price}</span>
+          <span className="text-xs text-white/60">{event.attendees_count || 0} attending</span>
         </div>
       </div>
     </Card>
