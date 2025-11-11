@@ -28,6 +28,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { eventService, Event, EventComment, EventAttendee } from '@/services/eventService';
 import { CreateEventModal } from '@/components/CreateEventModal';
 import { Textarea } from '@/components/ui/textarea';
+import { supabase } from '@/services/supabase';
 
 export const EventDetailPage: React.FC = () => {
   const navigate = useNavigate();
