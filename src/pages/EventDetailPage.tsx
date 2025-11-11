@@ -68,11 +68,8 @@ export const EventDetailPage: React.FC = () => {
         return;
       }
 
-      const [eventData, commentsData, attendeesData] = await Promise.all([
-        eventService.getEventById(eventId),
-        eventService.getEventComments(eventId),
-        eventService.getEventAttendees(eventId)
-      ]);
+      // Load event data - this is critical
+      const eventData = await eventService.getEventById(eventId);
       
       if (!eventData) {
         navigate('/events');
@@ -80,13 +77,33 @@ export const EventDetailPage: React.FC = () => {
       }
       
       setEvent(eventData);
-      setComments(commentsData);
-      setAttendees(attendeesData);
+      
+      // Load comments and attendees - these are non-critical
+      // If they fail due to RLS issues, page still loads with empty lists
+      try {
+        const [commentsData, attendeesData] = await Promise.all([
+          eventService.getEventComments(eventId),
+          eventService.getEventAttendees(eventId)
+        ]);
+        
+        setComments(commentsData || []);
+        setAttendees(attendeesData || []);
+      } catch (secondaryError) {
+        console.warn('Could not load attendees/comments (non-critical):', secondaryError);
+        // Set empty arrays so page still works
+        setComments([]);
+        setAttendees([]);
+      }
       
       // Check if current user is attending
       if (user) {
-        const userIsAttending = await eventService.hasUserAttendedEvent(eventId, user.id);
-        setIsAttending(userIsAttending);
+        try {
+          const userIsAttending = await eventService.hasUserAttendedEvent(eventId, user.id);
+          setIsAttending(userIsAttending);
+        } catch (attendanceError) {
+          console.warn('Could not check attendance status:', attendanceError);
+          setIsAttending(false);
+        }
       }
     } catch (error: any) {
       console.error('Error loading event data:', error);
