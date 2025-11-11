@@ -42,6 +42,7 @@ import { isoPostService, ISOPost } from '@/services/isoPostService';
 import { eventService, Event } from '@/services/eventService';
 import { KinkQuiz } from '@/components/KinkQuiz';
 import { KinkQuizPrompt } from '@/components/KinkQuizPrompt';
+import { supabase } from '@/services/supabase';
 
 // Sliding Carousel Component
 interface SlideCarouselProps {
