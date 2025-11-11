@@ -621,15 +621,78 @@ export const EventDetailPage: React.FC = () => {
           </div>
         </Card>
 
-        {/* Attendees */}
-        {attendees.length > 0 && (
+        {/* Pending RSVP Requests (Host Only) */}
+        {isAuthor && pendingAttendeesCount > 0 && (
+          <Card className={`${spiceTheme.components.card} animate-fade-in border-yellow-500/30`}>
+            <div className="p-6 space-y-4">
+              <h3 className="text-yellow-400 font-semibold text-xl flex items-center">
+                <Clock className="h-5 w-5 mr-2" />
+                Pending Requests ({pendingAttendeesCount})
+              </h3>
+              <div className="space-y-3">
+                {attendees.filter(a => a.status === 'pending').map((attendee) => (
+                  <div
+                    key={attendee.id}
+                    className="flex items-center justify-between bg-white/5 p-3 rounded-lg"
+                  >
+                    <button
+                      onClick={() => navigate(`/user/${attendee.user_id}`)}
+                      className="flex items-center space-x-3 hover:opacity-80 transition-opacity flex-1"
+                    >
+                      <div className="relative">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={attendee.photos?.[0]} />
+                          <AvatarFallback className="bg-pink-500/20 text-pink-400">
+                            {attendee.display_name?.[0] || 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                        {attendee.is_verified && (
+                          <CheckCircle className="absolute -bottom-0.5 -right-0.5 h-4 w-4 text-blue-400 bg-black rounded-full" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-white font-medium text-sm">
+                          {attendee.account_type === 'couple' && attendee.display_name2
+                            ? `${attendee.display_name} & ${attendee.display_name2}`
+                            : attendee.display_name}
+                        </p>
+                      </div>
+                    </button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => handleApproveAttendee(attendee.id)}
+                        disabled={isProcessingApproval === attendee.id}
+                        className="bg-green-500/20 hover:bg-green-500/30 text-green-400 border-green-500/50 text-xs"
+                      >
+                        {isProcessingApproval === attendee.id ? '...' : '✓ Approve'}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleDenyAttendee(attendee.id)}
+                        disabled={isProcessingApproval === attendee.id}
+                        className="text-red-400 hover:bg-red-500/10 text-xs"
+                      >
+                        ✗ Deny
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Confirmed Attendees */}
+        {confirmedAttendeesCount > 0 && (
           <Card className={`${spiceTheme.components.card} animate-fade-in`}>
             <div className="p-6 space-y-4">
               <h3 className="text-white font-semibold text-xl">
-                Attendees ({attendees.length})
+                Confirmed Attendees ({confirmedAttendeesCount})
               </h3>
               <div className="space-y-3">
-                {attendees.map((attendee) => (
+                {attendees.filter(a => a.status === 'confirmed').map((attendee) => (
                   <button
                     key={attendee.id}
                     onClick={() => navigate(`/user/${attendee.user_id}`)}
