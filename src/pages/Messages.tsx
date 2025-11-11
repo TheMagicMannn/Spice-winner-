@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, Pin, Trash2, RotateCcw, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/Spinner';
-import { ChatModal } from '@/components/ChatModal';
-import { ProfileDetailModal } from '@/components/ProfileDetailModal';
 import { MessageService, Conversation } from '@/services/messageService';
-import { ProfileService } from '@/services/profileService';
 import { useAuth } from '@/hooks/useAuth';
-import { Profile } from '@/types';
 import { formatDistanceToNow } from 'date-fns';
 
 type FilterType = 'all' | 'unread' | 'sent' | 'deleted';
