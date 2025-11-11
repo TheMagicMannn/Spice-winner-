@@ -682,6 +682,15 @@ class EventService {
    */
   async getEventComments(eventId: string): Promise<EventComment[]> {
     try {
+      // Verify session before making API call
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        const error: any = new Error('Authentication required. Please log in again.');
+        error.status = 401;
+        throw error;
+      }
+
       const { data, error } = await supabase
         .from('event_comments')
         .select(`
@@ -697,7 +706,14 @@ class EventService {
         .eq('event_id', eventId)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        if (error.message?.includes('JWT') || error.message?.includes('session')) {
+          const authError: any = new Error('Session expired. Please log in again.');
+          authError.status = 401;
+          throw authError;
+        }
+        throw error;
+      }
 
       return (data || []).map(comment => ({
         ...comment,
