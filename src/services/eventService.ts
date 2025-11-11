@@ -286,7 +286,8 @@ class EventService {
 
       // Get attendees and comments count
       const [attendeesResult, commentsResult] = await Promise.all([
-        supabase.from('event_attendees').select('id', { count: 'exact', head: true }).eq('event_id', eventId),
+        // Only count confirmed attendees
+        supabase.from('event_attendees').select('id', { count: 'exact', head: true }).eq('event_id', eventId).eq('status', 'confirmed'),
         supabase.from('event_comments').select('id', { count: 'exact', head: true }).eq('event_id', eventId)
       ]);
 
