@@ -221,10 +221,25 @@ export const ProfilePage: React.FC = () => {
     
     setIsLoadingEvents(true);
     try {
+      // Verify authentication session exists before making API calls
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        console.error('No valid session found when loading events:', sessionError);
+        setUserEvents([]);
+        return;
+      }
+
       const events = await eventService.getEventsByUser(user.id);
       setUserEvents(events);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading user events:', error);
+      
+      // Handle authentication errors silently on profile page
+      if (error?.message?.includes('JWT') || error?.message?.includes('session') || error?.status === 401) {
+        console.warn('Session expired while loading events');
+        setUserEvents([]);
+      }
     } finally {
       setIsLoadingEvents(false);
     }
