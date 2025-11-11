@@ -579,6 +579,738 @@ export const ModuleContent: React.FC<ModuleContentProps> = ({
             type: 'key-point'
           }
         ]
+      },
+      // Safety & Privacy Path Modules
+      'mod-7': {
+        estimatedTime: '20 minutes',
+        sections: [
+          {
+            heading: 'Welcome to Digital Privacy Basics',
+            content: 'In the lifestyle community, protecting your privacy and digital identity is paramount. This module will teach you essential strategies to maintain your anonymity, protect your personal information, and navigate the digital lifestyle world safely.\n\nWhether you\'re concerned about professional discretion, family privacy, or general safety, mastering digital privacy will give you confidence and peace of mind as you explore the lifestyle.',
+            type: 'normal'
+          },
+          {
+            heading: 'Why Digital Privacy Matters in the Lifestyle',
+            content: 'The lifestyle community requires a unique level of discretion. Many participants:\n\n• Have professional careers that require privacy\n• Have family situations that necessitate discretion\n• Live in communities where lifestyle participation could cause issues\n• Value their privacy as a fundamental right\n• Want to control who knows about their lifestyle involvement\n\nPoor digital privacy can lead to unwanted exposure, professional consequences, relationship complications, or safety concerns.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Five Pillars of Digital Privacy',
+            content: '1. SEPARATION: Keep lifestyle and vanilla identities separate\n2. ANONYMITY: Use privacy-focused practices in all lifestyle platforms\n3. SECURITY: Protect accounts with strong passwords and 2FA\n4. DISCRETION: Be mindful of what you share and where\n5. CONTROL: Manage your digital footprint actively\n\nThese five pillars work together to create a comprehensive privacy strategy.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Creating Your Lifestyle Identity',
+            content: 'Establish a separate identity for lifestyle activities:\n\n📧 EMAIL: Create a dedicated email address for lifestyle sites\n• Use a privacy-focused provider (ProtonMail, Tutanota)\n• Never use your work or primary personal email\n• Choose a username unrelated to your real identity\n\n📱 PHONE NUMBER: Consider a separate number\n• Use Google Voice, Burner app, or similar services\n• Gives you control over who has your real number\n• Can be easily changed if needed\n\n👤 USERNAME: Choose carefully\n• No connection to your real name\n• Don\'t reuse usernames from other platforms\n• Avoid identifying details (city, profession, birth year)',
+            type: 'example'
+          },
+          {
+            heading: 'Profile Photo Privacy',
+            content: 'Your photos can reveal more than you think:\n\n🚫 AVOID:\n• Photos used on other social media accounts\n• Images with identifiable backgrounds (your home, workplace)\n• Photos with visible tattoos, unique jewelry, or distinguishing features\n• Images that show your car license plate or house number\n• Pictures with other people without their consent\n\n✅ SAFE PRACTICES:\n• Use photos taken specifically for lifestyle profiles\n• Crop out identifying backgrounds\n• Consider blurring faces until you\'re comfortable\n• Use lifestyle-specific photos that don\'t appear elsewhere\n• Be mindful of EXIF data (location info embedded in photos)\n\nMany apps strip EXIF data automatically, but verify this.',
+            type: 'warning'
+          },
+          {
+            heading: 'Location Privacy',
+            content: 'Never share your exact location publicly:\n\n• List your city or region, not specific neighborhoods\n• Meet in public places for first meetings, never at home\n• Be vague about where you work\n• Don\'t post geo-tagged photos from home\n• Turn off location services for lifestyle apps\n• Use general descriptors ("north side of the city")\n\nThe lifestyle community is often smaller than you think—specific location details make it easy to identify you.',
+            type: 'normal'
+          },
+          {
+            heading: 'Password Security Essentials',
+            content: 'Protect your accounts with strong security:\n\n🔐 PASSWORD RULES:\n• Use unique passwords for each lifestyle site\n• Minimum 12 characters, mix of letters, numbers, symbols\n• Never use personal information (names, birthdays)\n• Use a password manager (1Password, Bitwarden, LastPass)\n• Change passwords if you suspect any compromise\n\n🔐 TWO-FACTOR AUTHENTICATION (2FA):\n• Enable 2FA on all lifestyle accounts that offer it\n• Use authenticator apps (Google Authenticator, Authy)\n• Avoid SMS-based 2FA if possible (less secure)\n\nYour accounts contain private conversations, photos, and connections—protect them.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Social Media Separation',
+            content: 'Keep your vanilla and lifestyle worlds separate:\n\n❌ DON\'T:\n• Connect your lifestyle profiles to Facebook/Instagram\n• Use "Login with Facebook/Google" on lifestyle sites\n• Friend lifestyle connections on personal social media\n• Post lifestyle content on vanilla accounts\n• Use the same profile pictures across platforms\n\n✅ DO:\n• Keep accounts completely separate\n• Use different email addresses\n• Maintain distinct online personas\n• Be cautious about what you "like" or comment on\n• Consider separate devices if you\'re very privacy-conscious',
+            type: 'warning'
+          },
+          {
+            heading: 'Reverse Image Search Awareness',
+            content: 'Anyone can reverse search your photos to find other accounts:\n\n🔍 HOW IT WORKS:\nSomeone can take your lifestyle photo and search Google Images, TinEye, or other services to see if it appears elsewhere online.\n\n🛡️ PROTECTION:\n• Never use the same photos across lifestyle and vanilla platforms\n• Take separate photos specifically for lifestyle use\n• Regularly check your photos using reverse image search yourself\n• If you find your photos appearing where they shouldn\'t, take action\n\nThis is one of the most common ways people\'s lifestyle involvement is discovered.',
+            type: 'tip'
+          },
+          {
+            heading: 'Digital Communication Security',
+            content: 'When chatting with lifestyle connections:\n\n💬 SECURE MESSAGING:\n• Use apps with end-to-end encryption (Signal, Telegram)\n• Be cautious with photos and videos sent via message\n• Assume anything you send could be screenshot\n• Use disappearing messages when available\n• Don\'t share intimate content until you trust someone\n\n📧 EMAIL SAFETY:\n• Use your dedicated lifestyle email only\n• Be cautious about clicking links in emails\n• Watch for phishing attempts\n• Never send sensitive info via unencrypted email',
+            type: 'normal'
+          },
+          {
+            heading: 'The Screenshot Reality',
+            content: 'CRITICAL TRUTH: Anything you send digitally can be captured and shared.\n\n• Messages can be screenshot\n• Photos can be saved\n• Videos can be recorded\n• Voice messages can be recorded\n\nBefore sending anything ask yourself: "Would I be okay if this was shared beyond this person?" If the answer is no, don\'t send it.\n\nThis doesn\'t mean don\'t trust anyone—it means be thoughtful about what you share and with whom.',
+            type: 'warning'
+          },
+          {
+            heading: 'Managing Your Digital Footprint',
+            content: 'Actively manage what\'s out there about you:\n\n🔍 REGULAR AUDITS:\n• Google your lifestyle username periodically\n• Search your photos using reverse image search\n• Check if your information appears on lifestyle forums\n• Monitor where your profile might be linked\n\n🧹 CLEANUP:\n• Delete old profiles you no longer use\n• Remove photos from sites you\'ve left\n• Request removal from forums if your info appears without consent\n• Update privacy settings regularly\n\nYour digital footprint grows over time—regular maintenance is essential.',
+            type: 'tip'
+          },
+          {
+            heading: 'Device Security',
+            content: 'Your devices contain your lifestyle activity:\n\n📱 PHONE SECURITY:\n• Use strong passcode/biometric lock\n• Enable "require password immediately" after lock\n• Use private browsing for lifestyle sites\n• Clear browser history regularly\n• Use separate apps for lifestyle email/messaging\n• Consider app-locking sensitive apps (AppLock, Norton App Lock)\n\n💻 COMPUTER SECURITY:\n• Use private/incognito browsing mode\n• Clear cookies and cache regularly\n• Don\'t save passwords in shared browsers\n• Log out of lifestyle sites when done\n• Use encrypted folders for sensitive files\n\nIf you share devices, be extra cautious.',
+            type: 'example'
+          },
+          {
+            heading: 'Public Wi-Fi Risks',
+            content: 'Public Wi-Fi is convenient but risky:\n\n⚠️ DANGERS:\n• Unencrypted networks allow others to see your activity\n• "Man-in-the-middle" attacks can intercept data\n• Fake Wi-Fi networks can steal information\n\n🛡️ PROTECTION:\n• Avoid accessing lifestyle sites on public Wi-Fi\n• Use a VPN (Virtual Private Network) if you must\n• Stick to cellular data for sensitive activities\n• Never enter passwords on public networks\n\nWait until you\'re on a secure network for lifestyle activities.',
+            type: 'warning'
+          },
+          {
+            heading: 'VPN Basics for Lifestyle Privacy',
+            content: 'A VPN (Virtual Private Network) adds an extra layer of privacy:\n\n✅ BENEFITS:\n• Hides your IP address and location\n• Encrypts your internet traffic\n• Prevents ISP from seeing your browsing\n• Useful when traveling or on public networks\n\n🔍 CHOOSING A VPN:\n• Use reputable paid services (ExpressVPN, NordVPN, ProtonVPN)\n• Avoid free VPNs (often sell your data)\n• Check for no-logs policy\n• Ensure it works on all your devices\n\nVPNs aren\'t perfect, but they significantly increase privacy.',
+            type: 'tip'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Separate your lifestyle and vanilla digital identities completely\n✅ Use dedicated email and phone number for lifestyle activities\n✅ Never reuse photos across lifestyle and vanilla platforms\n✅ Protect accounts with strong passwords and 2FA\n✅ Be mindful of location information in profiles and photos\n✅ Assume anything you send digitally can be captured\n✅ Regularly audit your digital footprint\n✅ Secure your devices with locks and private browsing\n✅ Avoid public Wi-Fi for lifestyle activities\n✅ Consider using a VPN for additional privacy\n\nDigital privacy requires ongoing attention, but these practices will protect your identity and give you confidence to enjoy the lifestyle safely.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-8': {
+        estimatedTime: '25 minutes',
+        sections: [
+          {
+            heading: 'Meeting Safely: Your Essential Guide',
+            content: 'First meetings in the lifestyle are exciting but require careful safety planning. This module covers best practices for meeting new connections safely, from initial contact through the first face-to-face encounter.\n\nYour safety is non-negotiable. Following these guidelines significantly reduces risk while allowing you to explore connections with confidence.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Three Phases of Safe Meeting',
+            content: '🔹 PHASE 1: Digital Vetting (Before Meeting)\nThorough conversation and verification online\n\n🔹 PHASE 2: Public First Meeting (The Meet & Greet)\nMeeting in a safe public location\n\n🔹 PHASE 3: Private Encounters (Only After Trust)\nProgressing to private settings once safety is established\n\nNever skip phases—each builds trust and assesses safety.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Phase 1: Digital Vetting',
+            content: 'Before agreeing to meet, thoroughly vet potential connections:\n\n✅ ADEQUATE CONVERSATION:\n• Exchange messages over several days/weeks\n• Have multiple conversations on different topics\n• Ask questions about their lifestyle experience\n• Discuss expectations, boundaries, and interests\n• Video chat before meeting in person\n\n✅ VERIFICATION:\n• Request a live video chat (not just photos)\n• Ask for a "verification photo" with specific pose/sign\n• Check if their profile seems authentic vs. catfish\n• Trust your instincts—if something feels off, it probably is\n\n🚩 RED FLAGS DURING VETTING:\n• Rushing to meet in person\n• Refusing video verification\n• Inconsistent stories or information\n• Pressuring for explicit content\n• Unwilling to discuss boundaries or safety',
+            type: 'example'
+          },
+          {
+            heading: 'Setting Up the First Meeting',
+            content: 'When planning your first in-person meeting:\n\n📍 LOCATION CHOICE:\n• Always meet in PUBLIC first\n• Choose busy, well-lit venues (restaurant, coffee shop, bar)\n• Pick neutral territory (not near anyone\'s home/work)\n• Familiar location where you know the area\n• Place with easy exits and parking\n\n⏰ TIMING:\n• Daytime or early evening preferred for first meetings\n• Avoid late night meetings initially\n• Choose a time when the venue will be reasonably busy\n\n🚗 TRANSPORTATION:\n• Drive yourself or use your own transportation\n• Never get in someone\'s car on first meeting\n• Park in well-lit, visible areas\n• Have a clear exit strategy',
+            type: 'key-point'
+          },
+          {
+            heading: 'The Safety Plan: Essential Steps',
+            content: 'EVERY first meeting should include a safety plan:\n\n1️⃣ TELL SOMEONE:\n• Share who you\'re meeting (name, photos, profile)\n• Provide the location and time\n• Share license plate number if you have it\n• Give expected return time\n\n2️⃣ SCHEDULED CHECK-INS:\n• Arrange to text a friend at specific times\n• Use code words for "I\'m fine" vs "I need help"\n• Set up "if you don\'t hear from me by X time" protocol\n\n3️⃣ KEEP YOUR PHONE:\n• Fully charged before the meeting\n• Keep it on you at all times\n• Have emergency contacts easily accessible\n• Location sharing turned on with trusted friend\n\n4️⃣ PLAN YOUR EXIT:\n• Have a pre-planned excuse to leave if needed\n• Keep your car keys accessible\n• Know where exits are located\n• Have backup transportation option',
+            type: 'warning'
+          },
+          {
+            heading: 'The Meet & Greet: Best Practices',
+            content: 'During your first face-to-face meeting:\n\n✅ ARRIVAL:\n• Arrive separately (don\'t be picked up)\n• Get there a few minutes early to scope the venue\n• Let your safety contact know you\'ve arrived\n• Sit in a visible, central area\n\n✅ DURING:\n• Stay in the public space—don\'t go to cars, homes, or private areas\n• Keep your drink in sight at all times\n• Watch your alcohol consumption\n• Pay attention to your instincts\n• Watch for red flag behaviors\n\n✅ DEPARTURE:\n• Leave separately\n• Don\'t share which car is yours initially\n• Let your safety contact know you\'re leaving\n• Don\'t invite them to follow you home',
+            type: 'normal'
+          },
+          {
+            heading: 'Substance Safety',
+            content: 'Alcohol and substances require extra caution:\n\n🍷 ALCOHOL AWARENESS:\n• Set a limit before you arrive and stick to it\n• Never leave your drink unattended\n• Order drinks yourself directly from staff\n• Decline drinks that you didn\'t see poured\n• Watch for signs your drink may be tampered with (unexpected effects)\n\n🚫 DRUGS:\n• Never accept recreational drugs from people you just met\n• Be aware that impairment affects judgment and safety\n• If you choose to use substances, ensure you\'re with trusted people\n• Have a sober safety person with you\n\nImpairment makes you vulnerable—stay in control, especially on first meetings.',
+            type: 'warning'
+          },
+          {
+            heading: 'Reading the Room: Safety Intuition',
+            content: 'Trust your instincts—your gut feeling exists for a reason:\n\n🚩 CONCERNING BEHAVIORS:\n• They seem very different from their online persona\n• Inappropriate touching or boundary testing\n• Pressuring you to drink more or go somewhere private\n• Getting aggressive or overly sexual in public\n• Disrespecting your boundaries or requests\n• Making you feel uncomfortable or unsafe\n• Talking badly about previous partners\n• Showing signs of jealousy or possessiveness\n\nIf something feels off, trust that feeling and end the meeting. You don\'t owe anyone an explanation.',
+            type: 'warning'
+          },
+          {
+            heading: 'Ending a Meeting Safely',
+            content: 'How to conclude a first meeting:\n\n👍 IF IT WENT WELL:\n• Thank them for the meeting\n• Discuss next steps if interested\n• Exchange additional contact info if comfortable\n• Plan future meetings appropriately\n• Still leave separately\n\n👎 IF YOU\'RE NOT INTERESTED:\n• Be polite but clear\n• "Thank you for meeting me, but I don\'t think we\'re the right match"\n• Don\'t make false promises or leave hope\n• It\'s okay to be direct—honesty is respectful\n\n🚨 IF YOU FEEL UNSAFE:\n• Make an excuse and leave immediately\n• "I\'m not feeling well, I need to go"\n• Go to staff if you need help\n• Call your safety contact\n• Don\'t worry about being rude—prioritize your safety',
+            type: 'example'
+          },
+          {
+            heading: 'After the First Meeting',
+            content: 'Once you\'re home safely:\n\n✅ CHECK IN:\n• Text your safety contact that you\'re home\n• Debrief with your partner about the meeting\n• Process your impressions and feelings\n\n✅ FOLLOW UP:\n• Send a polite message thanking them\n• Be honest about your interest level\n• If you\'re interested, plan next steps\n• If not interested, communicate clearly\n\n✅ DOCUMENT:\n• Keep records of conversations\n• Note any red flags or concerns\n• Save their contact info and profile details\n• Trust your gut on whether to proceed',
+            type: 'normal'
+          },
+          {
+            heading: 'Progressing to Private Meetings',
+            content: 'Only progress to private settings after establishing trust:\n\n⏳ TIMELINE:\n• Meet multiple times in public first\n• Video chat between public meetings\n• Verify they are who they claim to be\n• Ensure no red flags have appeared\n• Feel genuinely comfortable and safe\n\n🏠 PRIVATE MEETING SAFETY:\n• Still tell someone where you\'ll be\n• Share the address with your safety contact\n• Maintain check-in schedule\n• Have transportation arranged\n• Meet at a hotel for first private meeting (neutral ground)\n• Don\'t host at your home initially\n• Keep your safety plan active',
+            type: 'key-point'
+          },
+          {
+            heading: 'Hotel Safety for Lifestyle Meets',
+            content: 'If meeting at a hotel:\n\n✅ BOOKING:\n• Book the room yourself when possible\n• Use a hotel in a safe area\n• Choose reputable hotel chains\n• Don\'t share the room number until you\'re there\n\n✅ ARRIVAL:\n• Check in yourself\n• Have your safety contact know the hotel and room number\n• Do a quick check of the room when you arrive\n• Keep phone charged and accessible\n• Know where exits are located\n\n✅ SAFETY MEASURES:\n• Keep the door unlocked if it makes you feel safer (know exit path)\n• Maintain your check-in schedule\n• Don\'t be afraid to end things if uncomfortable\n• Have your own transportation',
+            type: 'example'
+          },
+          {
+            heading: 'Couple Safety Dynamics',
+            content: 'For couples in the lifestyle:\n\n👫 TOGETHER IS SAFER:\n• Meet as a couple when possible\n• Look out for each other\n• Have private check-in signals between you\n• Discuss boundaries before meeting\n• Debrief together afterward\n\n🚨 SEPARATION CONCERNS:\n• If playing separately, use all the same safety measures\n• More frequent check-ins with partner\n• Clear boundaries about timing and contact\n• Immediate communication if anything feels wrong\n\nYour partner is your built-in safety person—utilize that.',
+            type: 'normal'
+          },
+          {
+            heading: 'When Things Go Wrong',
+            content: 'If you experience a safety issue:\n\n🚨 IMMEDIATE DANGER:\n• Leave immediately\n• Go to a safe public place\n• Call 911 if threatened or assaulted\n• Contact your safety person\n• Don\'t worry about being polite\n\n📢 AFTER THE FACT:\n• Report to lifestyle event organizers/site admins\n• Document everything that happened\n• Block the person on all platforms\n• Warn trusted community members if appropriate\n• Consider reporting to authorities if laws were broken\n• Seek support from community or professionals\n\nYour experience matters, and reporting helps protect others.',
+            type: 'warning'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Never skip the digital vetting phase—verify before meeting\n✅ First meetings always in public, busy locations\n✅ Create and follow a safety plan for every meeting\n✅ Tell someone where you\'re going and check in regularly\n✅ Control your alcohol/substance intake\n✅ Trust your instincts—leave if something feels off\n✅ Take your own transportation\n✅ Progress slowly to private meetings only after trust is built\n✅ Use hotels for first private encounters\n✅ Report safety concerns to protect yourself and others\n\nSafe meeting practices protect you while allowing you to explore connections with confidence.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-9': {
+        estimatedTime: '20 minutes',
+        sections: [
+          {
+            heading: 'Recognizing Red Flags: Your Early Warning System',
+            content: 'Red flags are warning signs that someone may be unsafe, dishonest, or problematic. Learning to recognize these signs early can prevent uncomfortable situations, bad experiences, or even dangerous encounters.\n\nThis module teaches you to identify red flags at every stage of interaction—from online profiles through in-person meetings—so you can make informed decisions about who to trust.',
+            type: 'normal'
+          },
+          {
+            heading: 'Why Red Flag Recognition Matters',
+            content: 'The lifestyle community is generally wonderful, but like any community, it has people who:\n\n• Don\'t respect boundaries\n• Are dishonest about their situation\n• Have harmful intentions\n• Lack emotional maturity\n• Are unreliable or inconsistent\n\nRecognizing red flags early allows you to:\n✅ Avoid unsafe situations\n✅ Save time and emotional energy\n✅ Protect yourself and your partner\n✅ Focus on positive connections\n✅ Build a better lifestyle experience',
+            type: 'normal'
+          },
+          {
+            heading: 'Profile Red Flags',
+            content: 'Warning signs in online profiles:\n\n🚩 VAGUE OR INCOMPLETE PROFILES:\n• No face photo or all blurry photos\n• Very little written information\n• Contradictory information\n• No mention of boundaries or expectations\n\n🚩 SEXUAL AGGRESSION:\n• Overtly sexual profile without substance\n• Crude or disrespectful language\n• Focus solely on physical acts\n• No mention of connection or compatibility\n\n🚩 UNREALISTIC PHOTOS:\n• All photos look professional/model quality\n• Photos appear stolen from internet\n• Inconsistent appearance across photos\n• Only group photos (unclear who they are)',
+            type: 'warning'
+          },
+          {
+            heading: 'Initial Communication Red Flags',
+            content: '🚩 RUSHING THE PROCESS:\n"Let\'s meet tonight"\n"Send me nude photos right away"\n"I don\'t do video calls, let\'s just meet"\n\n🚩 BOUNDARY TESTING:\n• Asking personal questions too soon\n• Requesting explicit content immediately\n• Pushing against stated boundaries\n• Getting upset when you maintain boundaries\n\n🚩 COMMUNICATION PATTERNS:\n• Only available at odd hours (may be hiding from partner)\n• Sporadic responses with no explanation\n• Avoiding direct answers to questions\n• Becoming defensive when asked reasonable questions\n• Love bombing (excessive flattery immediately)\n\n🚩 REFUSING VERIFICATION:\n• Won\'t video chat\n• Won\'t send verification photo\n• Makes excuses about why they can\'t verify\n• Gets angry when asked to verify',
+            type: 'warning'
+          },
+          {
+            heading: 'Relationship Status Red Flags',
+            content: '🚩 DISHONESTY ABOUT RELATIONSHIP STATUS:\n"My partner doesn\'t need to know"\n"We have a don\'t ask, don\'t tell arrangement"\n"I\'m working on getting permission"\n"My partner is okay with it, I just can\'t prove it"\n\n🚩 CHEATING INDICATORS:\n• Only available at specific times\n• Reluctant to introduce you to their partner\n• Partner never appears in photos or conversations\n• Asks you to keep the connection secret\n• Can\'t meet during normal hours\n• Becomes defensive about partner questions\n\nNEVER participate in cheating—it harms the community and puts you at risk.',
+            type: 'warning'
+          },
+          {
+            heading: 'Behavioral Red Flags',
+            content: '🚩 DISRESPECT:\n• Rude to service staff (shows true character)\n• Makes derogatory comments about others\n• Speaks badly about previous partners\n• Displays racist, sexist, or discriminatory attitudes\n• Dismissive of your opinions or feelings\n\n🚩 AGGRESSION:\n• Quick to anger\n• Aggressive communication style\n• Intimidating behavior\n• Punching walls, throwing objects\n• "Jokes" about violence\n• Road rage or similar outbursts\n\n🚩 JEALOUSY/POSSESSIVENESS:\n• Uncomfortable with you talking to others\n• Wants to know where you are constantly\n• Makes possessive comments\n• Displays jealousy in swinging context (ironic but problematic)\n• Tries to isolate you from others',
+            type: 'warning'
+          },
+          {
+            heading: 'Consent and Boundary Red Flags',
+            content: '🚩 BOUNDARY VIOLATIONS:\n• Touching without permission\n• Escalating activities without asking\n• "Accidentally" crossing stated boundaries\n• Trying to negotiate boundaries\n• Making you feel bad for having boundaries\n• Testing limits to see what they can get away with\n\n🚩 CONSENT ISSUES:\n• Pressuring for activities after you\'ve said no\n• "Just this once" or "You\'ll like it"\n• Continuing after you\'ve asked to stop\n• Ignoring safe words\n• Proceeding when you\'re intoxicated\n• Assuming silence means yes\n\nThese are SERIOUS red flags—end the interaction immediately.',
+            type: 'warning'
+          },
+          {
+            heading: 'Financial Red Flags',
+            content: '🚩 MONEY REQUESTS:\n• Asking for money\n• Wanting you to pay for everything\n• "Can you help me with rent/bills?"\n• Selling content or services (if you\'re not seeking that)\n• MLM or business pitches\n• "Investment opportunities"\n\n🚩 SCAM INDICATORS:\n• Story seems rehearsed or familiar\n• Sudden emergency requiring money\n• Asks for gift cards or wire transfers\n• Too good to be true\n• Pressures for quick decisions\n\nThe lifestyle isn\'t transactional—legitimate connections don\'t involve money requests.',
+            type: 'warning'
+          },
+          {
+            heading: 'Safety and Health Red Flags',
+            content: '🚩 SAFER SEX RESISTANCE:\n• Reluctant to use protection\n• "I\'m clean, don\'t worry"\n• Pressures for unprotected activities\n• Removes condom without consent (stealthing)\n• Unclear about STI testing status\n• Dismissive of sexual health discussions\n\n🚩 SUBSTANCE ISSUES:\n• Excessive drinking\n• Pressure you to drink or use substances\n• Impaired judgment\n• Substance use affecting behavior\n• Can\'t enjoy lifestyle without substances\n\n🚩 PHYSICAL SAFETY CONCERNS:\n• Suggests isolated meeting locations\n• Wants to pick you up (control of transportation)\n• Tries to get you alone quickly\n• Makes you feel physically unsafe\n• Aggressive physicality',
+            type: 'warning'
+          },
+          {
+            heading: 'Online Scams and Catfishing',
+            content: '🚩 CATFISH INDICATORS:\n• Photos look too perfect or model-like\n• Reverse image search finds photos elsewhere\n• Refuses to video chat\n• Stories don\'t add up\n• Always has excuses for not meeting\n• Asks for explicit content but won\'t reciprocate\n\n🚩 COMMON SCAMS:\n• "Verification fee" scams\n• "I need you to sign up on this site"\n• Phishing links\n• Blackmail attempts\n• Identity theft attempts\n\nLegitimate lifestyle members don\'t ask for money, fees, or personal information like SSN.',
+            type: 'warning'
+          },
+          {
+            heading: 'Social and Community Red Flags',
+            content: '🚩 REPUTATION ISSUES:\n• Other community members warn about them\n• Banned from events or sites\n• Multiple people have had problems with them\n• Dismissive of community concerns\n• "Everyone else is the problem"\n\n🚩 DRAMA PATTERNS:\n• Constant conflict with others\n• Always has drama or crisis\n• Speaks badly about entire community\n• Burned bridges everywhere\n• Takes no responsibility for conflicts\n\nPay attention when the community warns you—they\'re often protecting you.',
+            type: 'warning'
+          },
+          {
+            heading: 'Gut Feeling: The Ultimate Red Flag',
+            content: 'Your intuition is powerful:\n\n🎯 TRUST YOUR GUT:\n"Something feels off but I can\'t explain it"\n"I feel uncomfortable around them"\n"This doesn\'t feel right"\n"I\'m making excuses for their behavior"\n"I feel pressured or anxious"\n\nYour subconscious picks up on details you might not consciously notice. If something feels wrong, honor that feeling—even if you can\'t articulate exactly why.\n\nYou don\'t need a logical reason to end an interaction. "I\'m not comfortable" is enough.',
+            type: 'key-point'
+          },
+          {
+            heading: 'What to Do When You See Red Flags',
+            content: '1️⃣ ACKNOWLEDGE IT:\nDon\'t ignore or rationalize red flags away\n\n2️⃣ ASSESS SEVERITY:\n• Minor flag: Proceed cautiously, watch for more\n• Major flag: End the interaction\n• Safety flag: End immediately and protect yourself\n\n3️⃣ COMMUNICATE:\n• Tell your partner\n• Discuss concerns with trusted friends\n• Report serious issues to site admins/event organizers\n\n4️⃣ TAKE ACTION:\n• End communication if appropriate\n• Block on all platforms\n• Warn others if it\'s a safety concern\n• Report to authorities if laws broken\n\n5️⃣ DON\'T SECOND-GUESS:\n• You don\'t owe anyone a chance\n• Better safe than sorry\n• Your safety > their feelings',
+            type: 'example'
+          },
+          {
+            heading: 'Green Flags: What to Look For',
+            content: 'Positive signs of safe, healthy connections:\n\n✅ RESPECT:\n• Respects boundaries immediately\n• Communicates clearly and honestly\n• Values consent\n• Treats everyone well\n\n✅ TRANSPARENCY:\n• Open about their situation\n• Partner is aware and involved\n• Willing to verify identity\n• Consistent information\n\n✅ PATIENCE:\n• Willing to take time to build trust\n• No pressure or rushing\n• Understanding of safety concerns\n• Respects your pace\n\n✅ COMMUNITY STANDING:\n• Good reputation in community\n• Referenced positively by others\n• Active in lifestyle events\n• Long-term presence\n\nGreen flags indicate someone worth investing time in.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Red flags are warning signs—don\'t ignore them\n✅ Watch for profile inconsistencies and vague information\n✅ Rushing, boundary testing, and consent issues are serious red flags\n✅ Relationship dishonesty puts you at risk—avoid it\n✅ Behavioral issues like aggression and jealousy are disqualifying\n✅ Financial requests and scams are common—never send money\n✅ Trust your gut feeling even if you can\'t explain it\n✅ End interactions when you see red flags—you don\'t owe anyone a chance\n✅ Report serious safety concerns to protect the community\n✅ Look for green flags that indicate healthy connections\n\nRecognizing red flags early protects you and helps you focus energy on positive, safe connections.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-10': {
+        estimatedTime: '30 minutes',
+        sections: [
+          {
+            heading: 'Physical Safety Protocols: Your Comprehensive Guide',
+            content: 'Physical safety in the lifestyle requires preparation, awareness, and clear protocols. This module covers everything from safer sex practices to personal safety during encounters, ensuring you can enjoy the lifestyle while minimizing physical risks.\n\nThese protocols should become second nature—automatic practices that protect you in every lifestyle interaction.',
+            type: 'normal'
+          },
+          {
+            heading: 'The Foundation: Sexual Health and Safer Sex',
+            content: 'Sexual health is the cornerstone of physical safety:\n\n🎯 REGULAR TESTING:\n• Get tested for STIs every 3-6 months\n• More frequent if you have multiple partners\n• Test after any unprotected exposure\n• Full panel: HIV, Syphilis, Gonorrhea, Chlamydia, Hepatitis\n• Know your status and share honestly\n\n🎯 KNOWING YOUR STATUS:\n• Keep dated test results accessible\n• Share status with potential partners before play\n• Update regularly\n• Disclose any positive results immediately\n\nHonesty about sexual health protects everyone and is required in the lifestyle community.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Barrier Protection: Essential Practices',
+            content: '🛡️ CONDOM USE:\n• Use condoms for all penetrative activities\n• New condom for each partner and each act\n• Check expiration dates\n• Store properly (not in wallet or hot car)\n• Bring your own—don\'t rely on others\n• Know how to use properly\n\n🛡️ OTHER BARRIERS:\n• Dental dams for oral-vaginal or oral-anal contact\n• Female condoms as alternative\n• Gloves for manual stimulation\n• Consider barriers even for oral sex\n\n🛡️ PROPER USAGE:\n• Check for damage before use\n• Use water or silicone-based lube (not oil)\n• Hold base when removing\n• Dispose properly after single use\n\nBarrier protection significantly reduces STI transmission.',
+            type: 'example'
+          },
+          {
+            heading: 'When Barriers Fail',
+            content: 'Despite best efforts, condoms can break or slip:\n\n🚨 IMMEDIATE STEPS:\n1. STOP immediately\n2. Inspect for breakage\n3. Communicate with all parties\n4. Assess need for emergency contraception\n5. Consider PEP (Post-Exposure Prophylaxis) for HIV if high risk\n6. Get tested at appropriate intervals\n7. Inform other partners\n\n⏰ TESTING TIMELINE AFTER EXPOSURE:\n• 2 weeks: Early STI screening\n• 4-6 weeks: HIV antibody test\n• 3 months: Confirmatory HIV test\n• Follow medical advice for specific concerns\n\nKnow where to access emergency services in advance.',
+            type: 'warning'
+          },
+          {
+            heading: 'Substance Safety in Lifestyle Settings',
+            content: '🍷 ALCOHOL GUIDELINES:\n• Set a limit before you arrive\n• Alternate alcoholic and non-alcoholic drinks\n• Eat before and during drinking\n• Stay hydrated with water\n• Never leave drinks unattended\n• Don\'t accept drinks you didn\'t see prepared\n• Know your limits and stick to them\n\n🚫 DRUGS AND CONSENT:\n• Impairment affects consent capacity\n• Never accept drugs from strangers\n• If you choose to use, know what you\'re taking\n• Have a sober safety person\n• Start with small amounts\n• Know signs of overdose and how to respond\n\nIMPORTANT: Consent cannot be given when significantly impaired. Impairment also increases all other risks.',
+            type: 'warning'
+          },
+          {
+            heading: 'Physical Boundaries During Play',
+            content: 'Maintain physical safety through clear boundaries:\n\n✅ BEFORE PLAY:\n• Discuss hard limits (activities you absolutely won\'t do)\n• Establish soft limits (maybes, proceed with caution)\n• Agree on safe words/signals\n• Discuss intensity preferences\n• Clarify who can touch where\n• Set time boundaries\n\n✅ DURING PLAY:\n• Check in regularly\n• Watch for non-verbal discomfort\n• Respect safe words immediately\n• Adjust intensity based on response\n• Stop if anyone seems distressed\n• Maintain awareness of surroundings\n\n✅ PHYSICAL SAFETY CHECKS:\n• Adequate space for activities\n• No sharp objects or hazards nearby\n• Comfortable temperature\n• Access to water\n• First aid kit available\n• Clear path to exit',
+            type: 'key-point'
+          },
+          {
+            heading: 'Safe Words and Communication Systems',
+            content: 'Establish clear communication before any physical activity:\n\n🚦 TRAFFIC LIGHT SYSTEM:\n• GREEN: "I\'m good, continue"\n• YELLOW: "Slow down, approaching my limit"\n• RED: "Stop immediately"\n\n📢 VERBAL SAFE WORDS:\n• Choose an unusual word ("pineapple," "Nebraska")\n• Easy to remember and say\n• Something you wouldn\'t say normally\n• All participants must know it\n\n🤝 NON-VERBAL SIGNALS:\n• Important if mouth is occupied\n• Hand signals (three taps, specific gesture)\n• Dropping a held object\n• Shaking head vigorously\n\n⚠️ SAFE WORD RULES:\n• Anyone can use it at any time\n• Everything stops IMMEDIATELY\n• No questions or negotiations\n• Check in with the person who used it\n• Only resume if everyone agrees\n• Never shame someone for using safe words',
+            type: 'key-point'
+          },
+          {
+            heading: 'Personal Safety During Group Activities',
+            content: 'Group play has additional safety considerations:\n\n👥 BEFORE GROUP PLAY:\n• Know who will be present\n• Discuss everyone\'s boundaries\n• Establish group safe word\n• Assign someone to monitor safety\n• Agree on safer sex protocols\n• Know where exits are\n• Have clear end time\n\n👥 DURING GROUP PLAY:\n• Stay aware of your surroundings\n• Keep belongings secure\n• Know where your partner is\n• Check in with partner regularly\n• Watch for boundary violations (yours or others\')  \n• Don\'t be afraid to speak up\n• Help enforce others\' boundaries\n\n👥 AFTER GROUP PLAY:\n• Account for all your belongings\n• Check in with partner\n• Debrief the experience\n• Address any concerns immediately',
+            type: 'example'
+          },
+          {
+            heading: 'Physical Safety in Lifestyle Venues',
+            content: '🏢 AT CLUBS AND PARTIES:\n• Tour the venue when you arrive\n• Locate all exits\n• Know where security/staff are\n• Stay aware of who\'s around you\n• Keep valuables secure\n• Stay in well-lit areas\n• Use buddy system\n• Don\'t go to isolated areas alone\n• Watch your drinks\n• Know the venue\'s rules and safety protocols\n\n🚨 VENUE RED FLAGS:\n• No visible staff or security\n• Poor lighting\n• Dirty or unsanitary\n• No clear safety rules\n• Staff doesn\'t enforce boundaries\n• No safe words respected\n• Pressure to participate\n• Can\'t easily leave\n\nTrust your comfort level—leave if a venue feels unsafe.',
+            type: 'warning'
+          },
+          {
+            heading: 'Hotel and Private Location Safety',
+            content: '🏨 HOTEL SAFETY:\n• Book your own room when possible\n• Choose reputable hotels\n• Check room upon arrival\n• Know emergency exits\n• Keep door unlocked if preferred (know exit route)\n• Keep phone charged and accessible\n• Have car keys ready\n• Maintain check-in schedule with safety contact\n\n🏠 PRIVATE HOME SAFETY:\n• Only visit after multiple public meetings\n• Tell someone exact address\n• Share check-in schedule\n• Scout exit routes when you arrive\n• Keep shoes on for quick exit\n• Stay near exits\n• Have your own transportation\n• Meet partners at the location (don\'t get picked up)\n• Consider neutral location for first private meetings',
+            type: 'example'
+          },
+          {
+            heading: 'Handling Physical Emergencies',
+            content: '🚑 MEDICAL EMERGENCIES:\n• Stop all activity immediately\n• Assess the situation\n• Call 911 if serious\n• Provide first aid if trained\n• Don\'t move someone with possible injury\n• Stay calm and supportive\n• Follow emergency responders\' instructions\n\n💊 WHAT TO KEEP ACCESSIBLE:\n• First aid kit (bandages, antiseptic, etc.)\n• Emergency contacts\n• List of allergies/medical conditions\n• Current medications\n• EpiPen if allergies present\n• Naloxone (Narcan) if drugs may be present\n\n📱 EMERGENCY INFO:\n• Know location address\n• Have phone fully charged\n• Know nearest hospital\n• Have emergency contact numbers\n• Don\'t be afraid to call 911\n• Honesty with responders (helps treatment)',
+            type: 'warning'
+          },
+          {
+            heading: 'Aftercare: Physical and Emotional',
+            content: 'Aftercare is crucial for physical and emotional well-being:\n\n💚 PHYSICAL AFTERCARE:\n• Rehydrate (water, electrolyte drinks)\n• Eat light snacks (blood sugar recovery)\n• Temperature regulation (blankets if cold)\n• Tend to any physical marks or soreness\n• Rest and recovery time\n• Gentle movement or stretching\n• Shower/clean up when ready\n\n💚 EMOTIONAL AFTERCARE:\n• Check in verbally\n• Provide comfort and reassurance\n• Process the experience together\n• Address any concerns\n• Cuddle or physical comfort if desired\n• Respect need for space if preferred\n• Follow up in the following days\n\n💚 SUB-DROP/TOP-DROP AWARENESS:\nAfter intense experiences, hormones drop and can cause:\n• Emotional sensitivity\n• Sadness or anxiety\n• Physical exhaustion\n• Need for reassurance\n\nThis is normal—provide extra care and check-ins.',
+            type: 'normal'
+          },
+          {
+            heading: 'Self-Defense and De-Escalation',
+            content: '🥊 BASIC SELF-DEFENSE AWARENESS:\n• Take a self-defense class\n• Practice awareness of surroundings\n• Trust your instincts about danger\n• Know vulnerable points if needed\n• Carry personal safety items if legal (alarm, pepper spray)\n• Primary goal is always escape, not fight\n\n🗣️ DE-ESCALATION TECHNIQUES:\n• Stay calm and speak calmly\n• Use non-threatening body language\n• Create physical distance\n• Look for exits\n• Call for help if needed\n• Prioritize getting away safely\n\n🚨 WHEN TO ESCALATE:\nIf you feel immediately threatened:\n• Make noise/yell for help\n• Use your phone to call 911\n• Use self-defense only as last resort\n• Get to safety as quickly as possible\n• Report to authorities',
+            type: 'warning'
+          },
+          {
+            heading: 'Documentation and Reporting',
+            content: 'If a physical safety incident occurs:\n\n📝 DOCUMENT:\n• Write down what happened immediately\n• Include dates, times, locations\n• Note witnesses\n• Take photos of any injuries\n• Save all messages and communications\n• Get medical examination if needed (preserves evidence)\n\n📢 REPORT:\n• Tell your partner immediately\n• Report to venue management if applicable\n• File police report for assault or serious violations\n• Report to lifestyle site/event organizers\n• Warn trusted community members\n• Seek medical attention and documentation\n\n🆘 SUPPORT:\n• Talk to trusted friends\n• Consider professional counseling\n• Join support groups\n• Don\'t blame yourself\n• Take time to process\n• Focus on your healing',
+            type: 'normal'
+          },
+          {
+            heading: 'Building a Physical Safety Culture',
+            content: 'Everyone\'s responsibility to maintain safety:\n\n✅ PERSONAL RESPONSIBILITY:\n• Follow all safety protocols\n• Respect everyone\'s boundaries\n• Speak up when you see violations\n• Take care of your health\n• Be honest about status and limits\n• Support others\' safety needs\n\n✅ COMMUNITY RESPONSIBILITY:\n• Call out unsafe behavior\n• Support people who report issues\n• Share safety information\n• Maintain standards\n• Exclude people who violate safety\n• Educate newcomers\n• Lead by example\n\nA strong safety culture protects everyone and makes the lifestyle better for all.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Get tested regularly and know your STI status\n✅ Use barrier protection consistently and correctly\n✅ Set clear limits and stay within your comfort zone\n✅ Establish and respect safe words/signals\n✅ Control alcohol/substance use—impairment affects safety\n✅ Maintain situational awareness in all settings\n✅ Keep emergency contacts and supplies accessible\n✅ Provide proper aftercare for physical and emotional well-being\n✅ Document and report safety violations\n✅ Support community safety culture\n\nPhysical safety protocols protect you and everyone you interact with. Make them automatic.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-11': {
+        estimatedTime: '15 minutes',
+        sections: [
+          {
+            heading: 'Understanding Community Safety Standards',
+            content: 'The lifestyle community thrives when everyone follows shared safety standards and expectations. These community norms exist to protect all participants and create an environment where people can explore safely.\n\nThis module covers the unwritten and written rules that govern lifestyle spaces and how you can contribute to a safer community.',
+            type: 'normal'
+          },
+          {
+            heading: 'Core Community Values',
+            content: 'The lifestyle community is built on fundamental values:\n\n🎯 CONSENT: Everything requires enthusiastic consent\n🎯 RESPECT: All people and boundaries are respected\n🎯 DISCRETION: Privacy is protected\n🎯 HONESTY: Transparency about status and intentions\n🎯 SAFETY: Physical and emotional well-being prioritized\n🎯 INCLUSION: Welcoming of diverse people and expressions\n🎯 RESPONSIBILITY: Accountability for actions\n\nThese values guide all interactions and expectations.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Standard Community Expectations',
+            content: '✅ WHAT\'S EXPECTED OF EVERYONE:\n\n• Obtain clear consent before any activity\n• Respect "no" immediately without question\n• Honor stated boundaries\n• Practice safer sex\n• Know and disclose STI status\n• Be honest about relationship arrangements\n• Maintain discretion about others\n• Follow venue rules\n• Treat everyone with respect\n• Report safety concerns\n• Support survivors of violations\n• Welcome and educate newcomers\n• Take responsibility for mistakes\n\nThese aren\'t optional—they\'re requirements for community participation.',
+            type: 'normal'
+          },
+          {
+            heading: 'Venue-Specific Rules',
+            content: 'Different lifestyle venues have specific rules:\n\n🏢 COMMON CLUB RULES:\n• Dress code requirements\n• No photography without explicit consent\n• Consent culture (ask before touching)\n• Designated play areas\n• No single males (at some venues)\n• Alcohol policies\n• Drug prohibitions\n• Age verification required\n• Respect for staff and security\n• Cleanliness standards\n\n📋 ALWAYS:\n• Read venue rules before attending\n• Ask questions if anything is unclear\n• Follow rules even if you disagree\n• Respect that each venue sets their own standards\n• Leave if you\'re uncomfortable with venue practices',
+            type: 'example'
+          },
+          {
+            heading: 'Online Community Standards',
+            content: '💻 LIFESTYLE SITE/APP EXPECTATIONS:\n\n• Authentic profiles (real photos, honest information)\n• Respectful communication\n• No harassment or unwanted contact\n• Report violations to site administrators\n• No solicitation (prostitution, trafficking)\n• Respect privacy settings\n• Follow site-specific rules\n• Don\'t screenshot/share private messages\n• Age verification compliance\n• Appropriate content in public areas\n\n🚫 BEHAVIORS THAT GET YOU BANNED:\n• Fake profiles or catfishing\n• Harassment\n• Sharing others\' information\n• Revenge porn or non-consensual sharing\n• Spam or commercial activity\n• Violating consent\n• Threatening behavior\n• Underage content',
+            type: 'warning'
+          },
+          {
+            heading: 'Consent Culture in Practice',
+            content: 'How consent culture works in lifestyle spaces:\n\n✅ THE ASK:\n• "May I touch you?"\n• "Would you like to dance?"\n• "Are you interested in joining us?"\n• Always ask, never assume\n\n✅ THE RESPONSE:\n• "Yes" means yes (and can be withdrawn)\n• "No" means no (and doesn\'t require explanation)\n• "Maybe" means no (don\'t pressure)\n• Silence means no\n\n✅ THE RESPECT:\n• Accept answers gracefully\n• Don\'t ask repeatedly\n• Don\'t try to negotiate a "no"\n• Thank them for being clear\n• Move on without resentment\n\nThis creates an environment where everyone feels safe to participate honestly.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Discretion and Privacy Standards',
+            content: '🤫 COMMUNITY DISCRETION RULES:\n\n• What happens in lifestyle spaces stays private\n• Don\'t share who you saw at events/venues\n• Don\'t gossip about others\' lifestyle involvement\n• Don\'t post about others on social media\n• Protect real identities of lifestyle connections\n• Don\'t "out" people as lifestyle participants\n• Respect privacy boundaries\n• Delete/don\'t share others\' photos without permission\n\n⚖️ WHY THIS MATTERS:\nMany people face serious consequences if their lifestyle involvement is exposed:\n• Job loss\n• Family estrangement\n• Custody battles\n• Social stigma\n• Housing discrimination\n\nProtecting privacy protects people\'s lives.',
+            type: 'warning'
+          },
+          {
+            heading: 'Supporting Newcomers',
+            content: 'Experienced members help create a welcoming community:\n\n🤝 HOW TO SUPPORT NEWCOMERS:\n• Be friendly and welcoming\n• Offer to answer questions\n• Share resources and information\n• Introduce them to others\n• Respect that they\'re learning\n• Don\'t pressure or take advantage\n• Model good behavior\n• Protect them from predatory people\n• Be patient with mistakes\n• Celebrate their growth\n\n🚫 DON\'T:\n• Assume they\'re "easy targets"\n• Pressure them into activities\n• Mock their nervousness\n• Share their information\n• Treat them as lesser members\n\nHow we treat newcomers determines the community\'s future.',
+            type: 'normal'
+          },
+          {
+            heading: 'Handling Conflicts and Concerns',
+            content: '⚖️ WHEN CONFLICTS ARISE:\n\n1. ADDRESS DIRECTLY (when safe):\n"I felt uncomfortable when..."\n"That crossed my boundary..."\n"I need this to stop..."\n\n2. INVOLVE VENUE STAFF:\n• Report to management\n• Ask for assistance\n• They\'re trained to handle issues\n\n3. DOCUMENT:\n• Write down what happened\n• Note witnesses\n• Save messages\n• Take photos if relevant\n\n4. REPORT TO ORGANIZERS:\n• Event coordinators\n• Website administrators\n• Community leaders\n• They need to know to protect others\n\n5. SERIOUS VIOLATIONS:\n• Contact law enforcement if applicable\n• Seek support from community\n• Don\'t minimize what happened',
+            type: 'example'
+          },
+          {
+            heading: 'Community Accountability',
+            content: 'The community self-regulates through accountability:\n\n✅ WHEN SOMEONE VIOLATES STANDARDS:\n• Call out the behavior\n• Report to appropriate people\n• Support the person harmed\n• Don\'t make excuses for violators\n• Remove them from community if serious\n• Believe reporters, investigate claims\n• Take action to prevent repeat incidents\n\n✅ WHEN YOU MAKE A MISTAKE:\n• Acknowledge it immediately\n• Apologize sincerely\n• Make amends\n• Change your behavior\n• Accept consequences\n• Learn from it\n• Don\'t make excuses\n\nAccountability maintains community standards.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Your Role in Community Safety',
+            content: 'Every member contributes to community safety:\n\n👁️ BE AN ACTIVE BYSTANDER:\n• Watch for consent violations\n• Check on people who seem uncomfortable\n• Intervene when you see problems\n• Report concerning behavior\n• Support people who speak up\n• Don\'t ignore red flags\n\n🗣️ SPEAK UP:\n• Call out inappropriate behavior\n• Share safety information\n• Report violations\n• Support safety initiatives\n• Advocate for better standards\n• Educate others\n\n🤝 BE THE CHANGE:\n• Model excellent behavior\n• Treat everyone with respect\n• Follow all safety protocols\n• Support community leaders\n• Mentor newcomers\n• Contribute positively\n\nSafety is everyone\'s responsibility.',
+            type: 'normal'
+          },
+          {
+            heading: 'Building Reputation and Trust',
+            content: 'Your community reputation matters:\n\n✅ BUILD POSITIVE REPUTATION:\n• Consistent respectful behavior\n• Following through on commitments\n• Respecting boundaries\n• Being honest and transparent\n• Supporting community values\n• Handling conflicts maturely\n• Being vouched for by others\n\n📈 REPUTATION IMPACTS:\n• Who wants to connect with you\n• Invitations to events\n• Trust from community\n• Quality of connections\n• Access to venues/groups\n\n⚠️ PROTECT YOUR REPUTATION:\n• One serious violation can end it\n• Gossip spreads quickly\n• The community has a long memory\n• Recovery from mistakes is possible but difficult\n\nYour reputation is your most valuable asset in the lifestyle.',
+            type: 'tip'
+          },
+          {
+            heading: 'Contributing to Positive Culture',
+            content: '🌟 CREATE THE COMMUNITY YOU WANT:\n\n• Be kind and welcoming\n• Share knowledge generously\n• Support community events\n• Volunteer when possible\n• Give constructive feedback\n• Celebrate others\' successes\n• Advocate for improvements\n• Lead by example\n• Foster inclusivity\n• Maintain high standards\n\nEvery positive interaction strengthens the community. Every violation weakens it. Choose to be a positive force.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Community is built on consent, respect, discretion, and honesty\n✅ Follow venue-specific rules and community expectations\n✅ Practice consent culture in all interactions\n✅ Protect others\' privacy and discretion always\n✅ Welcome and support newcomers to the community\n✅ Report violations and support those harmed\n✅ Hold yourself and others accountable\n✅ Be an active bystander—intervene when needed\n✅ Build positive reputation through consistent good behavior\n✅ Contribute to the culture you want to see\n\nCommunity safety standards protect everyone. Follow them, enforce them, and help others understand them.',
+            type: 'key-point'
+          }
+        ]
+      },
+      // Relationship Dynamics Path Modules
+      'mod-12': {
+        estimatedTime: '20 minutes',
+        sections: [
+          {
+            heading: 'Welcome to Understanding Relationship Types',
+            content: 'The lifestyle encompasses a diverse range of relationship structures, each with unique dynamics, expectations, and boundaries. This module introduces you to the various types of relationships you\'ll encounter, helping you understand your own preferences and respect others\' choices.\n\nUnderstanding different relationship types is essential for navigating the lifestyle successfully and finding connections that align with your values and desires.',
+            type: 'normal'
+          },
+          {
+            heading: 'Why Relationship Structure Matters',
+            content: 'In the lifestyle, relationship structures affect:\n\n• Expectations and boundaries\n• Available time and energy\n• Emotional availability\n• Decision-making processes\n• Jealousy and insecurity management\n• Communication patterns\n• Long-term possibilities\n\nUnderstanding someone\'s relationship type helps you:\n✅ Set appropriate expectations\n✅ Respect their boundaries\n✅ Communicate effectively\n✅ Avoid misunderstandings\n✅ Find compatible connections',
+            type: 'normal'
+          },
+          {
+            heading: 'Traditional Swinging: Same Room Play',
+            content: '👫 DEFINITION:\nCouples who play together, in the same space, with mutual awareness and participation.\n\n✅ CHARACTERISTICS:\n• Both partners always present\n• Visual contact maintained\n• Shared experiences\n• Strong couple bond emphasis\n• Lower jealousy triggers for many\n• Feels like "doing it together"\n\n🎯 TYPICAL BOUNDARIES:\n• No separate play\n• Check-ins during play\n• Either can stop at any time\n• Emotional connection stays primary\n\n💭 BEST FOR:\nCouples who want to explore together while maintaining constant connection and reassurance.',
+            type: 'example'
+          },
+          {
+            heading: 'Separate Room Play',
+            content: '🚪 DEFINITION:\nCouples who are comfortable playing with others in separate spaces or at different times.\n\n✅ CHARACTERISTICS:\n• Trust in partner without visual supervision\n• More individual freedom\n• Requires higher trust and communication\n• Each partner has autonomous experiences\n• Jealousy management is crucial\n\n🎯 TYPICAL BOUNDARIES:\n• Pre-agreed time limits\n• Check-ins via text\n• Certain activities may be off-limits\n• Post-play debriefs\n• Right to stop at any time\n\n💭 BEST FOR:\nCouples with solid trust, minimal jealousy, and desire for more independent experiences.',
+            type: 'example'
+          },
+          {
+            heading: 'Soft Swap vs Full Swap',
+            content: '🔄 SOFT SWAP:\nLimited sexual activities with others, typically excluding intercourse.\n\n• Kissing, touching, oral sex ✅\n• Intercourse ❌\n• Allows exploration with boundaries\n• Common starting point for new swingers\n\n🔄 FULL SWAP:\nAll sexual activities are on the table (within personal boundaries).\n\n• All activities including intercourse ✅\n• Requires strong trust and communication\n• More common with experienced swingers\n• Individual boundaries still apply\n\n📊 THE SPECTRUM:\nMany couples exist between soft and full swap, with personalized boundaries about specific acts.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Polyamory: Multiple Loving Relationships',
+            content: '💕 DEFINITION:\nThe practice of having multiple romantic and/or sexual relationships simultaneously, with the knowledge and consent of everyone involved.\n\n✅ KEY PRINCIPLES:\n• Emotional connections encouraged\n• Multiple committed relationships possible\n• Everyone knows about everyone\n• Focus on love, not just sex\n• Long-term orientation\n• Relationship autonomy\n\n🎯 DIFFERS FROM SWINGING:\n• Emotional connections are central (not just physical)\n• Longer-term relationships\n• May involve dating, romance, love\n• More complex time management\n• Different jealousy dynamics\n\n💭 COMMON STRUCTURES:\n• "V" relationships (one person dating two who aren\'t dating each other)\n• Triads/Throuples (three people all together)\n• Polycules (complex interconnected networks)\n• Parallel poly (partners don\'t interact much)\n• Kitchen table poly (everyone\'s friendly)',
+            type: 'normal'
+          },
+          {
+            heading: 'Open Relationships',
+            content: '🌐 DEFINITION:\nA primary committed relationship with permission for sexual or romantic connections with others.\n\n✅ CHARACTERISTICS:\n• Primary partnership remains central\n• Outside connections are secondary\n• Rules negotiated by primary couple\n• Can include emotions or be sex-only\n• Varies widely in structure\n\n🎯 COMMON VARIATIONS:\n• Monogamish (mostly monogamous with occasional exceptions)\n• One-sided open (only one partner dates others)\n• Open with restrictions (specific rules about outside partners)\n• Fully open (minimal restrictions)\n\n⚖️ BOUNDARIES VARY:\n• Who you can see (friends? strangers?)\n• What activities are allowed\n• How much information is shared\n• Time limitations\n• Veto power\n\nOpen relationships require crystal-clear communication.',
+            type: 'example'
+          },
+          {
+            heading: 'Relationship Anarchy',
+            content: '🔓 DEFINITION:\nRejecting traditional relationship hierarchies and labels, allowing each connection to develop naturally without prescribed rules.\n\n✅ PRINCIPLES:\n• No primary/secondary hierarchy\n• Each relationship stands on its own\n• Minimal predetermined rules\n• Autonomy is paramount\n• No relationship "escalator" (progression assumptions)\n• Customized agreements per relationship\n\n💭 PHILOSOPHY:\n"This relationship is what we make it, not what society expects it to be."\n\n⚠️ CHALLENGES:\n• Requires exceptional communication\n• No built-in structure\n• Everything must be negotiated\n• Can feel unstable\n• Not compatible with people who need hierarchy\n\n✅ BENEFITS:\n• Maximum freedom and flexibility\n• Authentic to individual needs\n• No prescribed expectations\n• Each relationship is unique',
+            type: 'normal'
+          },
+          {
+            heading: 'Hierarchical vs Non-Hierarchical',
+            content: '📊 HIERARCHICAL:\nRelationships have clear rankings (primary, secondary, tertiary).\n\n• Primary relationship has priority\n• Primary has veto power\n• Primary\'s needs come first\n• Secondary partners have limitations\n• Clear structure and security\n• Common in lifestyle\n\n🤝 NON-HIERARCHICAL:\nAll relationships are valued equally based on their unique qualities.\n\n• No ranking system\n• Each relationship develops naturally\n• No built-in veto power\n• Time and energy allocated by needs, not rank\n• More complex to manage\n• Requires high autonomy\n\n💭 NEITHER IS BETTER:\nBoth work for different people. Know which you\'re practicing and be honest about it.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Solo Polyamory',
+            content: '🏠 DEFINITION:\nPolyamorous individuals who don\'t have or want a primary partner.\n\n✅ CHARACTERISTICS:\n• Independent living (don\'t cohabitate)\n• Self as primary\n• Multiple connections without hierarchy\n• Autonomy is key\n• May have serious relationships without "primary" label\n• Own life is the center\n\n💭 PHILOSOPHY:\n"I\'m complete on my own, and I have multiple meaningful connections."\n\n🎯 CONSIDERATIONS FOR COUPLES:\n• Solo poly individuals won\'t prioritize you\n• They have their own autonomy\n• Don\'t expect traditional escalation\n• Respect their independence\n• Good for casual-to-moderate connections',
+            type: 'normal'
+          },
+          {
+            heading: 'Closed vs Open Structures',
+            content: '🔒 CLOSED (POLYFIDELITY):\nA group of people in a committed, closed relationship together.\n\n• Example: A triad where all three are exclusive to each other\n• No outside partners\n• Like monogamy, but with more than two\n• High security, lower variety\n• All members must agree to new people\n\n🔓 OPEN:\nFreedom to add new partners as desired.\n\n• Ongoing ability to meet new people\n• More variety, less security\n• Requires constant communication\n• Compersion becomes important\n• More common in lifestyle\n\n⚖️ SEMI-CLOSED:\nOpen to new people but with restrictions or slow additions.',
+            type: 'example'
+          },
+          {
+            heading: 'Identifying Your Relationship Type',
+            content: '🤔 QUESTIONS TO ASK YOURSELF:\n\n1. Do I want my partner present for all encounters?\n2. Am I comfortable with emotional connections outside my primary relationship?\n3. How much time do I want to invest in additional relationships?\n4. What level of autonomy do I need/want?\n5. How do I handle jealousy?\n6. What structure provides me security?\n7. What are my non-negotiables?\n8. What am I hoping to gain from the lifestyle?\n\n💡 YOUR ANSWERS GUIDE YOUR PATH:\nThere\'s no "right" relationship type—only what works for you and your partners.',
+            type: 'tip'
+          },
+          {
+            heading: 'Communicating Your Relationship Type',
+            content: '📢 BE CLEAR IN PROFILES AND CONVERSATIONS:\n\n"We\'re a same-room couple looking for soft swap"\n"I practice solo polyamory and am open to ongoing connections"\n"We\'re full swap but prefer to play together"\n"I\'m in an open relationship; my partner isn\'t involved"\n\n✅ INCLUDE:\n• Your structure\n• Your boundaries\n• Your expectations\n• Your availability\n• Your flexibility (or lack thereof)\n\n⚠️ AVOID ASSUMPTIONS:\n• "Lifestyle" means different things to different people\n• "Open" is vague\n• "Poly" has many interpretations\n• Always clarify specifics',
+            type: 'key-point'
+          },
+          {
+            heading: 'Respecting Different Relationship Types',
+            content: '✅ BEST PRACTICES:\n\n• Don\'t judge others\' choices\n• Don\'t pressure people to change their structure\n• Respect boundaries even if you don\'t understand them\n• Don\'t claim your way is "better"\n• Accept incompatibility gracefully\n• Learn about structures you\'re unfamiliar with\n• Ask questions respectfully\n• Understand that different structures have different needs\n\n🚫 DON\'T:\n• "You\'re not REALLY poly if..."\n• "Why don\'t you just..."\n• "That\'s too restrictive/too open"\n• "My way is more evolved"\n\nDiversity of relationship types strengthens the community.',
+            type: 'normal'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Multiple valid relationship structures exist in the lifestyle\n✅ Swinging, polyamory, and open relationships have key differences\n✅ Same room vs separate room is about trust and comfort\n✅ Soft swap vs full swap defines physical boundaries\n✅ Hierarchical vs non-hierarchical affects priorities\n✅ Solo poly individuals prioritize their autonomy\n✅ Clearly communicate your relationship type\n✅ Respect all relationship structures\n✅ Find what works for you—there\'s no "right" way\n✅ Your structure may evolve over time\n\nUnderstanding relationship types helps you navigate the lifestyle with clarity and respect.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-13': {
+        estimatedTime: '30 minutes',
+        sections: [
+          {
+            heading: 'Polyamory Fundamentals: Introduction to Ethical Non-Monogamy',
+            content: 'Polyamory—the practice of having multiple loving, committed relationships simultaneously with the knowledge and consent of everyone involved—represents a growing relationship paradigm. This module explores the foundations, challenges, and rewards of polyamorous relationships.\n\nWhether you\'re considering polyamory, currently practicing it, or connecting with polyamorous individuals, understanding these fundamentals will help you navigate this landscape with confidence and respect.',
+            type: 'normal'
+          },
+          {
+            heading: 'What Polyamory Is (and Isn\'t)',
+            content: '✅ POLYAMORY IS:\n• Multiple consensual relationships\n• Emotional connections welcomed\n• Honest and transparent\n• Ethical and above-board\n• Based on communication\n• Long-term oriented\n• Commitment to multiple people\n\n❌ POLYAMORY IS NOT:\n• Cheating (everyone knows and consents)\n• Inability to commit (deep commitments to multiple people)\n• Just about sex (emotional bonds are central)\n• A phase (for many, it\'s an orientation)\n• Easier than monogamy (often requires more work)\n• Avoiding relationship problems (problems still exist)\n• For everyone (not universal)',
+            type: 'key-point'
+          },
+          {
+            heading: 'Polyamory vs Swinging',
+            content: 'Understanding the distinction:\n\n🎯 SWINGING:\n• Primary focus on sexual experiences\n• Recreational approach\n• "Us plus them" mentality\n• Couple-centric\n• Often event/encounter based\n• Emotional connections usually discouraged\n\n💕 POLYAMORY:\n• Emotional connections central\n• Relationship-building focus\n• Individual relationship autonomy\n• Can be single or coupled\n• Ongoing relationships expected\n• Love and romance encouraged\n\n🤝 OVERLAP:\nMany people enjoy both! Polyamorous people may swing, and swingers may develop emotional connections. The categories aren\'t exclusive.',
+            type: 'example'
+          },
+          {
+            heading: 'Core Polyamory Principles',
+            content: '1️⃣ CONSENT:\nAll parties knowledgeable and agreeing\n\n2️⃣ COMMUNICATION:\nOpen, honest, frequent dialogue\n\n3️⃣ COMPERSION:\nFinding joy in your partner\'s happiness with others\n\n4️⃣ AUTONOMY:\nEach person has relationship agency\n\n5️⃣ ABUNDANCE MINDSET:\nLove is not a finite resource\n\n6️⃣ INTENTIONALITY:\nThoughtful relationship design\n\n7️⃣ RESPONSIBILITY:\nOwning your choices and their impact\n\n8️⃣ HONESTY:\nTransparency in all relationships\n\nThese principles guide ethical polyamorous practice.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Common Polyamory Structures',
+            content: '🔺 HIERARCHICAL POLYAMORY:\n• Primary/secondary/tertiary rankings\n• Primary relationship has priority and veto power\n• Clear structure and security\n• Common for couples opening up\n• Can feel limiting to secondary partners\n\n🟰 NON-HIERARCHICAL (EGALITARIAN):\n• All relationships valued equally\n• No ranking system\n• Each relationship develops naturally\n• More complex scheduling\n• High autonomy required\n\n👥 RELATIONSHIP ANARCHY:\n• No prescribed structure\n• Each connection defines itself\n• No automatic hierarchy\n• Maximum flexibility\n• Requires exceptional communication\n\n🏠 KITCHEN TABLE POLYAMORY:\n• All partners/metamours are friendly\n• Regular group interactions\n• "We could all sit at a kitchen table together"\n• Integrated social lives\n• Requires everyone to get along\n\n📱 PARALLEL POLYAMORY:\n• Partners don\'t interact with metamours\n• Separate relationships\n• Minimal information sharing\n• Less potential for conflict\n• Can feel isolating',
+            type: 'example'
+          },
+          {
+            heading: 'Understanding Metamours',
+            content: '👥 METAMOUR: Your partner\'s partner.\n\nExample: If you\'re dating Alex, and Alex is dating Sam, then Sam is your metamour.\n\n🤝 METAMOUR RELATIONSHIPS VARY:\n• Best friends (close, integrated)\n• Friendly (cordial, occasional interaction)\n• Cordial (polite, minimal interaction)\n• Parallel (don\'t interact)\n• Difficult (conflict or avoidance)\n\n✅ HEALTHY METAMOUR DYNAMICS:\n• Respect for each other\'s relationship\n• Clear boundaries\n• No jealousy-based competition\n• Mutual support\n• Recognition that you both care for the same person\n• Optional friendship\n\n💡 TIP:\nYou don\'t have to be best friends with metamours, but basic respect is essential.',
+            type: 'normal'
+          },
+          {
+            heading: 'Compersion: The Opposite of Jealousy',
+            content: '💚 COMPERSION: Finding joy in your partner\'s joy with other partners.\n\nExample: Your partner goes on a wonderful date and comes home happy. Instead of feeling jealous, you feel happy for them.\n\n🎯 COMPERSION IS:\n• Not automatic (develops over time)\n• Not required (poly works without it)\n• A bonus, not a necessity\n• Separate from jealousy (can feel both)\n• A skill that can be cultivated\n\n🌱 CULTIVATING COMPERSION:\n• Process your insecurities\n• Focus on abundance, not scarcity\n• Celebrate your partner\'s happiness\n• Remember: their joy doesn\'t diminish yours\n• Practice gratitude\n• Build your own connections\n• Work through jealousy\n\nCompersion is beautiful but not mandatory for successful polyamory.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Time Management in Polyamory',
+            content: '⏰ THE CHALLENGE:\nTime is finite. Energy is finite. Love may be infinite, but hours in the day are not.\n\n📅 TIME MANAGEMENT STRATEGIES:\n\n• COLOR-CODED CALENDARS:\nShared calendars showing commitments\n\n• SCHEDULED DATES:\nPre-planned time for each partner\n\n• FLEXIBILITY:\nSome spontaneity balanced with structure\n\n• ALONE TIME:\nDon\'t forget self-care!\n\n• REALISTIC EXPECTATIONS:\nYou can\'t be everywhere\n\n• QUALITY OVER QUANTITY:\nMake time count\n\n• COMMUNICATION:\nDiscuss needs and availability\n\n• BUFFER TIME:\nSchedule transition periods\n\n💡 REALITY:\nTime constraints are one of the biggest polyamory challenges. Be realistic about how many relationships you can maintain.',
+            type: 'warning'
+          },
+          {
+            heading: 'Communication in Polyamory',
+            content: 'Polyamory requires exceptional communication:\n\n🗣️ WHAT TO COMMUNICATE:\n• Scheduling and availability\n• Feelings and insecurities\n• Boundaries and needs\n• Safer sex practices\n• Relationship changes\n• NRE (New Relationship Energy) awareness\n• Conflicts or concerns\n• Appreciation and affirmations\n\n📱 HOW TO COMMUNICATE:\n• Regular check-ins with each partner\n• Scheduled relationship talks\n• Immediate communication for urgent issues\n• Proactive, not just reactive\n• Clear, specific language\n• Active listening\n• Written communication for complex topics\n• Group chats for relevant info\n\n⏰ WHEN TO COMMUNICATE:\n• Before problems escalate\n• Regularly, not just during crises\n• When agreements need updating\n• When feelings change\n• Before making relationship decisions\n\nCommunication is the backbone of polyamory.',
+            type: 'key-point'
+          },
+          {
+            heading: 'New Relationship Energy (NRE)',
+            content: '✨ NRE: The exciting, all-consuming feeling at the start of a new relationship.\n\n🎢 CHARACTERISTICS:\n• Intense focus on new partner\n• Overlooking flaws\n• Constant thoughts about them\n• Dopamine high\n• Time distortion\n• Decreased attention to existing partners\n• Lasts weeks to months\n\n⚠️ NRE CHALLENGES IN POLYAMORY:\n• Neglecting existing partners\n• Making rushed decisions\n• Ignoring red flags\n• Spending disproportionate time\n• Breaking agreements\n• Energy crash when NRE fades\n\n🛡️ MANAGING NRE:\n• Acknowledge it exists\n• Maintain commitments to existing partners\n• Don\'t make major decisions during NRE\n• Check in with yourself and partners\n• Schedule dates with existing partners first\n• Remember: NRE is temporary\n• Be honest about your state\n\nNRE is normal but requires conscious management.',
+            type: 'warning'
+          },
+          {
+            heading: 'Jealousy in Polyamory',
+            content: '💔 TRUTH: Polyamorous people still feel jealous.\n\n🎯 COMMON JEALOUSY TRIGGERS:\n• Time scarcity\n• Comparison\n• Fear of replacement\n• Unmet needs\n• Insecurity\n• Lack of communication\n• Broken agreements\n\n🔍 PROCESSING JEALOUSY:\n\n1. FEEL IT:\nDon\'t suppress; acknowledge the emotion\n\n2. INVESTIGATE:\nWhat\'s the root cause?\n\n3. COMMUNICATE:\nShare with partners (without blame)\n\n4. ADDRESS NEEDS:\nWhat do you need to feel secure?\n\n5. SELF-SOOTHE:\nUse coping strategies\n\n6. REASSESS:\nDo boundaries need adjustment?\n\n💡 REMEMBER:\nJealousy is information, not a failure. It tells you what you need.',
+            type: 'normal'
+          },
+          {
+            heading: 'Agreements vs Rules',
+            content: '⚖️ THE DISTINCTION:\n\n📋 RULES:\n• Imposed restrictions\n• "You can\'t..."\n• Control-based\n• Often fear-driven\n• Can breed resentment\n• Example: "You can\'t see them alone"\n\n🤝 AGREEMENTS:\n• Mutually negotiated\n• "We agree to..."\n• Consent-based\n• Needs-focused\n• Collaborative\n• Example: "We\'ll check in before overnight dates"\n\n✅ HEALTHY AGREEMENTS:\n• Made together\n• Based on needs, not fear\n• Revisable as relationships evolve\n• Respectful of everyone\n• Specific and clear\n• Actually followed\n\n🔄 AGREEMENTS EVOLVE:\nRegularly review and update as you grow.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Safer Sex in Polyamory',
+            content: '🔐 THE CHALLENGE:\nMore partners = more potential exposure.\n\n✅ SAFER SEX STRATEGIES:\n\n• FLUID BONDING DECISIONS:\nWho do you have unprotected sex with?\n\n• BARRIER USE:\nCondoms/dental dams with some/all partners\n\n• TESTING SCHEDULES:\nRegular STI testing for all partners\n\n• DISCLOSURE:\nShare testing status and safer sex practices\n\n• INFORMED CONSENT:\nEveryone knows the risk network\n\n• AGREEMENTS:\nClear protocols for all partners\n\n📊 RISK NETWORK:\nYou\'re in a sexual health network with:\n• Your partners\n• Your partners\' partners\n• Their partners\' partners\n\nEveryone\'s practices affect everyone. Radical honesty is essential.',
+            type: 'warning'
+          },
+          {
+            heading: 'Coming Out as Polyamorous',
+            content: '🗣️ THE DECISION:\nComing out is personal and has real consequences.\n\n⚖️ CONSIDERATIONS:\n• Professional risks\n• Family reactions\n• Custody concerns\n• Housing/living situation\n• Social circles\n• Geographic location\n• Personal safety\n\n✅ IF YOU CHOOSE TO COME OUT:\n• Start with supportive people\n• Educate them about polyamory\n• Set boundaries about questions\n• Don\'t justify or defend excessively\n• Connect them with resources\n• Be patient with adjustment\n• Stay firm in your identity\n\n🔒 IF YOU STAY CLOSETED:\n• That\'s valid and sometimes necessary\n• Maintain privacy carefully\n• Find poly-friendly spaces\n• Connect with poly community\n• Don\'t feel guilty\n\nYour safety and well-being come first.',
+            type: 'normal'
+          },
+          {
+            heading: 'Common Polyamory Challenges',
+            content: '⚠️ TYPICAL STRUGGLES:\n\n• TIME MANAGEMENT:\nNever enough hours\n\n• JEALOUSY/INSECURITY:\nStill human, still feel it\n\n• COMMUNICATION OVERLOAD:\nConstant processing\n\n• SOCIAL STIGMA:\nJudgment from others\n\n• DIFFERENT POLY STYLES:\nPartners want different structures\n\n• UNEQUAL INTEREST:\nOne partner has more/easier connections\n\n• PARTNER CONFLICT:\nMetamour drama\n\n• LEGAL/FINANCIAL COMPLEXITY:\nNo legal recognition of multiple partners\n\n• BURNOUT:\nEmotional labor of multiple relationships\n\n💪 ADDRESSING CHALLENGES:\n• Professional therapy\n• Poly-friendly community support\n• Regular relationship check-ins\n• Self-care and boundaries\n• Honest communication\n• Flexibility and growth\n\nChallenges are normal; they don\'t mean you\'re doing it wrong.',
+            type: 'warning'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Polyamory is multiple consensual loving relationships\n✅ Different from swinging in focus on emotional connections\n✅ Multiple valid poly structures exist (hierarchical, non-hierarchical, etc.)\n✅ Metamours are your partner\'s partners\n✅ Compersion is finding joy in your partner\'s joy with others\n✅ Time management is crucial and challenging\n✅ Communication is the foundation of successful polyamory\n✅ NRE (New Relationship Energy) requires conscious management\n✅ Jealousy still happens—process it, don\'t suppress it\n✅ Agreements (not rules) guide poly relationships\n✅ Safer sex practices are essential with multiple partners\n✅ Coming out is personal—prioritize your safety\n\nPolyamory requires work, communication, and emotional maturity, but offers the potential for multiple deep, loving connections.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-14': {
+        estimatedTime: '25 minutes',
+        sections: [
+          {
+            heading: 'Managing Jealousy: A Practical Guide',
+            content: 'Jealousy is one of the most challenging emotions in the lifestyle and non-monogamous relationships. Contrary to popular belief, jealousy doesn\'t disappear just because you choose an open relationship structure—but it can be understood, managed, and even transformed.\n\nThis module provides practical tools for recognizing, processing, and managing jealousy in healthy ways.',
+            type: 'normal'
+          },
+          {
+            heading: 'Understanding Jealousy',
+            content: '💭 WHAT IS JEALOUSY?\nA complex emotion combining fear, insecurity, and possessiveness, usually triggered by perceived threat to a valued relationship.\n\n🧠 JEALOUSY IS:\n• Natural and normal (evolutionary response)\n• Information about your needs\n• NOT a moral failing\n• Manageable with tools\n• Different in intensity for everyone\n• Influenced by past experiences\n• Valid even if "irrational"\n\n❌ JEALOUSY IS NOT:\n• A sign you\'re not "poly enough"\n• Proof the relationship is doomed\n• Something to be ashamed of\n• A reason to give up\n\n💡 KEY INSIGHT:\nEven people in successful non-monogamous relationships for years still experience jealousy sometimes. The goal isn\'t to eliminate it, but to manage it effectively.',
+            type: 'normal'
+          },
+          {
+            heading: 'Jealousy vs Envy',
+            content: '🎯 THE DIFFERENCE:\n\n💔 JEALOUSY:\nFear of losing something you have\n"I\'m afraid my partner will prefer them over me"\n\n💚 ENVY:\nWanting something someone else has\n"I wish I had as many dates as my partner does"\n\nBoth are valid emotions but require different approaches to process.\n\n🔍 WHY IT MATTERS:\n• Jealousy needs reassurance and connection\n• Envy needs self-reflection and action\n• Misidentifying the emotion leads to wrong solutions\n\nAsk yourself: "Am I afraid of losing something, or do I want something I don\'t have?"',
+            type: 'key-point'
+          },
+          {
+            heading: 'Common Jealousy Triggers in the Lifestyle',
+            content: '⚠️ TYPICAL TRIGGERS:\n\n⏰ TIME SCARCITY:\n"They\'re spending more time with them than me"\n\n📊 COMPARISON:\n"They\'re more attractive/fun/interesting than me"\n\n🔥 SEXUAL PERFORMANCE:\n"What if they\'re better in bed?"\n\n💕 EMOTIONAL CONNECTION:\n"What if they fall in love with someone else?"\n\n🎁 SPECIAL EXPERIENCES:\n"They\'re doing things with them that we haven\'t done"\n\n🚫 BROKEN AGREEMENTS:\n"They didn\'t follow our rules"\n\n👻 NEW RELATIONSHIP ENERGY:\n"They\'re so excited about this new person"\n\n🏆 INSECURITY:\n"What if I\'m not enough?"\n\n📱 COMMUNICATION GAPS:\n"I don\'t know what\'s happening"\n\n💭 FEAR OF REPLACEMENT:\n"What if they leave me for someone else?"\n\nRecognizing your specific triggers is the first step to managing them.',
+            type: 'warning'
+          },
+          {
+            heading: 'The Jealousy Processing Framework',
+            content: 'A step-by-step approach to working through jealousy:\n\n1️⃣ PAUSE & BREATHE:\n• Don\'t react immediately\n• Take deep breaths\n• Create space before responding\n\n2️⃣ NAME THE FEELING:\n"I\'m feeling jealous right now"\n\n3️⃣ INVESTIGATE THE ROOT:\n"What am I actually afraid of?"\n"What need isn\'t being met?"\n"What story am I telling myself?"\n\n4️⃣ REALITY CHECK:\n"Is this fear based on evidence or assumption?"\n"What do I actually know?"\n\n5️⃣ IDENTIFY THE NEED:\n"What do I need to feel secure?"\n"What would help right now?"\n\n6️⃣ COMMUNICATE:\nShare your feelings and needs (without blame)\n\n7️⃣ TAKE ACTION:\nAddress the underlying need\n\n8️⃣ SELF-SOOTHE:\nUse coping strategies while processing',
+            type: 'key-point'
+          },
+          {
+            heading: 'The HALT Check',
+            content: '🛑 Before assuming jealousy is about your partner, check if you\'re:\n\nH - HUNGRY\nLow blood sugar affects emotions\n\nA - ANGRY\nDisplaced anger can manifest as jealousy\n\nL - LONELY\nUnmet connection needs amplify jealousy\n\nT - TIRED\nFatigue reduces emotional regulation\n\n✅ THE FIX:\n• Eat something nutritious\n• Address the real source of anger\n• Schedule quality time with partner\n• Get adequate rest\n\nOften "jealousy" disappears when basic needs are met. Check HALT first before having a difficult conversation.',
+            type: 'tip'
+          },
+          {
+            heading: 'Communicating Jealousy Effectively',
+            content: '🗣️ HOW TO SHARE JEALOUS FEELINGS:\n\n❌ BLAME APPROACH:\n"You\'re spending too much time with them!"\n"You care about them more than me!"\n"You\'re making me feel jealous!"\n\n✅ OWNERSHIP APPROACH:\n"I\'m feeling jealous about the time you\'re spending with them. I think I need more quality time with you."\n\n"I\'m feeling insecure and comparing myself to your new partner. Can we talk about what makes our relationship special?"\n\n"I\'m noticing jealousy coming up. I need some reassurance about our connection."\n\n📋 EFFECTIVE COMMUNICATION FORMULA:\n1. NAME the emotion: "I\'m feeling jealous"\n2. IDENTIFY the trigger: "When I see you text them"\n3. EXPRESS the underlying fear: "I worry that I\'m being replaced"\n4. STATE the need: "I need more verbal affirmation of our connection"\n5. REQUEST specific action: "Could we have a weekly date night just us?"',
+            type: 'example'
+          },
+          {
+            heading: 'Self-Soothing Strategies',
+            content: 'What to do when jealousy hits:\n\n🧘 IMMEDIATE COPING:\n• Deep breathing exercises\n• Physical movement (walk, exercise)\n• Journaling your feelings\n• Call a supportive friend (not to bash partner)\n• Engage in a distracting activity\n• Meditation or mindfulness\n• Self-compassion mantras\n• Progressive muscle relaxation\n\n💭 COGNITIVE STRATEGIES:\n• Challenge catastrophic thinking\n• Remind yourself of your value\n• Focus on gratitude for what you have\n• Remember past times you felt jealous that resolved\n• Distinguish facts from stories\n• Recognize jealousy as temporary\n\n🎯 LONG-TERM PRACTICES:\n• Regular therapy\n• Journaling practice\n• Meditation routine\n• Building self-esteem\n• Cultivating your own life/hobbies\n• Strengthening friendship network\n• Physical self-care\n• Processing past wounds',
+            type: 'tip'
+          },
+          {
+            heading: 'Partner Response to Jealousy',
+            content: 'If your partner shares jealousy with you:\n\n✅ DO:\n• Listen without defensiveness\n• Thank them for sharing\n• Validate their feelings\n• Ask what they need\n• Provide reassurance\n• Follow through on agreements\n• Check in regularly\n• Be patient with the process\n• Show appreciation for them\n\n❌ DON\'T:\n• Dismiss their feelings\n• Get angry or defensive\n• Blame them for feeling jealous\n• Minimize the issue\n• Make them feel broken\n• Threaten to end other relationships immediately\n• Solve without listening first\n• Make promises you can\'t keep\n\n💡 REMEMBER:\nYour partner is trusting you with vulnerability. Honor that.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Reassurance Strategies',
+            content: '💕 WAYS TO PROVIDE REASSURANCE:\n\n📱 COMMUNICATION:\n• Regular check-ins\n• "Thinking of you" texts\n• Sharing highlights of your day\n• Verbal affirmations\n• "I love you" messages\n\n⏰ TIME:\n• Protected date nights\n• Quality over quantity\n• Undivided attention\n• Special rituals or traditions\n• Making plans together\n\n💑 PHYSICAL:\n• Affection and touch\n• Sexual connection\n• Holding hands\n• Cuddling\n• Intimate moments\n\n🎁 ACTIONS:\n• Small thoughtful gestures\n• Following through on commitments\n• Prioritizing important events\n• Remembering details\n• Showing up consistently\n\n💭 WORDS:\n• "You\'re irreplaceable"\n• "No one could take your place"\n• "I choose you every day"\n• "Our relationship is special because..."\n• "Here\'s what I love about you..."',
+            type: 'example'
+          },
+          {
+            heading: 'When Jealousy Reveals Real Problems',
+            content: '⚠️ SOMETIMES JEALOUSY IS VALID:\n\nJealousy can signal legitimate concerns:\n\n🚩 BROKEN AGREEMENTS:\nPartner isn\'t following agreed boundaries\n\n🚩 NEGLECT:\nActual decrease in time, attention, or intimacy\n\n🚩 DISHONESTY:\nPartner is lying or withholding information\n\n🚩 DISRESPECT:\nPartner dismisses your feelings consistently\n\n🚩 NRE IMBALANCE:\nNew partner consuming all energy\n\n🚩 INCOMPATIBLE NEEDS:\nYour needs genuinely aren\'t being met\n\n✅ WHAT TO DO:\n• Identify the specific problem\n• Communicate clearly\n• Request specific changes\n• Renegotiate agreements if needed\n• Consider couples therapy\n• Assess if needs can be met\n• Make difficult decisions if necessary\n\nTrust your jealousy as information—investigate what it\'s telling you.',
+            type: 'warning'
+          },
+          {
+            heading: 'Compersion: The Jealousy Antidote',
+            content: '💚 COMPERSION: Joy in your partner\'s joy.\n\n🌱 CULTIVATING COMPERSION:\n\n1. PROCESS YOUR JEALOUSY FIRST:\nCan\'t force compersion over unresolved jealousy\n\n2. FOCUS ON ABUNDANCE:\nLove multiplies, doesn\'t divide\n\n3. CELEBRATE THEIR HAPPINESS:\nTheir joy doesn\'t diminish yours\n\n4. REFRAME:\nInstead of "They\'re replacing me" → "They have more love in their life"\n\n5. PRACTICE GRATITUDE:\nAppreciate what you have\n\n6. BUILD YOUR OWN LIFE:\nFulfillment comes from multiple sources\n\n7. START SMALL:\nNotice tiny moments of compersion\n\n💡 IMPORTANT:\nCompersion isn\'t required for successful non-monogamy. It\'s a bonus, not a necessity. Don\'t feel guilty if it doesn\'t come naturally.',
+            type: 'normal'
+          },
+          {
+            heading: 'Jealousy in Different Contexts',
+            content: '🎯 CONTEXT MATTERS:\n\n👫 NEW TO LIFESTYLE:\n• Jealousy often intense initially\n• Learning what triggers you\n• Testing boundaries\n• Building trust through experiences\n• Normal and expected\n\n🏆 EXPERIENCED BUT NEW RELATIONSHIP:\n• Jealousy can resurface\n• Different partners trigger different things\n• Past experiences inform current feelings\n• New dynamics require adjustment\n\n⚖️ UNEQUAL OPPORTUNITY:\n• One partner has more connections\n• Creates envy and inadequacy\n• Requires honest communication\n• May need to address underlying issues\n\n👥 GROUP DYNAMICS:\n• Jealousy among metamours\n• Complex comparison traps\n• Requires strong communication all around\n\nAdjust your strategies based on your specific context.',
+            type: 'example'
+          },
+          {
+            heading: 'When to Seek Professional Help',
+            content: '🆘 CONSIDER THERAPY IF:\n\n• Jealousy is overwhelming and constant\n• You can\'t function normally\n• It\'s destroying your relationships\n• Self-help strategies aren\'t working\n• Past trauma is being triggered\n• You\'re having intrusive thoughts\n• Physical symptoms (can\'t eat/sleep)\n• Self-harm or extreme reactions\n• Relationship is in crisis\n\n💼 FIND:\n• Poly/CNM-friendly therapist\n• Someone who won\'t try to "fix" your relationship structure\n• Specialist in attachment or relationship issues\n• Both individual and couples therapy options\n\n🌐 RESOURCES:\n• AASECT (American Association of Sexuality Educators)\n• Psychology Today therapist finder\n• Poly-friendly therapy directories\n• Sliding scale options\n\nProfessional support is strength, not weakness.',
+            type: 'warning'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Jealousy is normal, natural, and doesn\'t mean you\'re doing it wrong\n✅ Distinguish between jealousy (fear of loss) and envy (wanting what others have)\n✅ Common triggers include time scarcity, comparison, NRE, and insecurity\n✅ Use the processing framework: pause, name, investigate, communicate, act\n✅ Check HALT (Hungry, Angry, Lonely, Tired) before assuming relationship issue\n✅ Communicate jealousy with ownership, not blame\n✅ Self-soothing strategies help manage immediate intensity\n✅ Partners should respond with validation and reassurance, not defensiveness\n✅ Sometimes jealousy reveals real problems that need addressing\n✅ Compersion is lovely but not required\n✅ Seek professional help if jealousy is overwhelming\n\nJealousy doesn\'t disappear, but it can be understood, managed, and even transformed into opportunities for growth and deeper connection.',
+            type: 'key-point'
+          }
+        ]
+      },
+      'mod-15': {
+        estimatedTime: '20 minutes',
+        sections: [
+          {
+            heading: 'Building Trust: The Foundation of Lifestyle Relationships',
+            content: 'Trust is the bedrock of all successful relationships, but it\'s especially crucial in the lifestyle and non-monogamous contexts. When you\'re opening your relationship to others, trust in your primary partnership and with new connections becomes paramount.\n\nThis module explores how trust is built, maintained, and repaired in lifestyle relationships.',
+            type: 'normal'
+          },
+          {
+            heading: 'What Is Trust?',
+            content: '🤝 TRUST DEFINED:\nThe firm belief in the reliability, truth, ability, or strength of someone.\n\n💭 IN RELATIONSHIPS, TRUST MEANS:\n• Believing your partner has your best interests at heart\n• Confidence they\'ll honor agreements\n• Security that they\'ll be honest\n• Faith they\'ll respect your boundaries\n• Assurance they won\'t intentionally harm you\n• Belief in their commitment to the relationship\n\n🎯 TRUST IN LIFESTYLE CONTEXTS:\n• Your partner will follow agreed boundaries\n• They\'ll communicate important information\n• They\'ll prioritize your wellbeing\n• They\'ll be honest about their experiences\n• They\'ll come back to you emotionally\n• They\'ll practice safer sex as agreed\n• They\'ll handle your vulnerability with care',
+            type: 'normal'
+          },
+          {
+            heading: 'The Components of Trust',
+            content: 'Trust is built on multiple foundations:\n\n1️⃣ HONESTY:\nConsistent truthfulness, even when difficult\n\n2️⃣ RELIABILITY:\nFollowing through on commitments and promises\n\n3️⃣ CONSISTENCY:\nPredictable behavior over time\n\n4️⃣ TRANSPARENCY:\nOpenness about thoughts, feelings, and actions\n\n5️⃣ COMPETENCE:\nAbility to handle the lifestyle responsibly\n\n6️⃣ CARE:\nDemonstrated concern for your wellbeing\n\n7️⃣ RESPECT:\nHonoring boundaries and feelings\n\n8️⃣ ACCOUNTABILITY:\nTaking responsibility for mistakes\n\nAll components must be present for solid trust.',
+            type: 'key-point'
+          },
+          {
+            heading: 'How Trust Is Built',
+            content: '🏗️ TRUST IS BUILT THROUGH:\n\n⏰ TIME:\n• Consistent behavior over extended periods\n• Proving reliability repeatedly\n• No shortcuts—trust takes time\n\n✅ SMALL ACTIONS:\n• Keeping small promises\n• Following through on minor commitments\n• Being on time\n• Responding when you say you will\n• Each small action builds or erodes trust\n\n💬 COMMUNICATION:\n• Sharing honestly, even when hard\n• Discussing difficult topics\n• Keeping partner informed\n• Being vulnerable\n\n🎯 BOUNDARY RESPECT:\n• Honoring stated limits consistently\n• Not testing or pushing boundaries\n• Asking when unsure\n• Respecting "no" immediately\n\n🔍 TRANSPARENCY:\n• Sharing relevant information\n• No secrets or hidden activities\n• Open phone/email policies (if agreed)\n• Honesty about feelings and experiences\n\n💡 KEY INSIGHT:\nTrust is built slowly through countless small actions but can be destroyed quickly through one major breach.',
+            type: 'example'
+          },
+          {
+            heading: 'Trust-Building Practices for Couples',
+            content: '💑 STRENGTHEN TRUST IN YOUR PRIMARY RELATIONSHIP:\n\n📅 REGULAR CHECK-INS:\n• Weekly relationship talks\n• Discuss how lifestyle activities are affecting you\n• Address concerns before they grow\n• Celebrate what\'s working\n\n🤝 KEEP AGREEMENTS:\n• Follow your established boundaries\n• Renegotiate if boundaries need changing\n• Don\'t unilaterally change rules\n• Honor your word consistently\n\n💕 PRIORITIZE PRIMARY RELATIONSHIP:\n• Protected time together\n• Special rituals or traditions\n• Choose your partner in big moments\n• Maintain intimacy and connection\n\n📱 APPROPRIATE TRANSPARENCY:\n• Share relevant information about lifestyle activities\n• Don\'t hide connections or experiences\n• Balance transparency with metamour privacy\n• Be honest about feelings\n\n🎯 SHOW UP:\n• Be present for important events\n• Support through difficult times\n• Celebrate successes\n• Consistent emotional availability',
+            type: 'tip'
+          },
+          {
+            heading: 'Trust with New Connections',
+            content: '🆕 BUILDING TRUST WITH LIFESTYLE PARTNERS:\n\n🐢 START SLOW:\n• Don\'t rush into deep trust\n• Let it develop naturally\n• Multiple interactions over time\n• Public meetings first\n\n🎯 OBSERVE CONSISTENCY:\n• Do their words match actions?\n• Are they reliable?\n• Do they follow through?\n• How do they handle boundaries?\n\n💬 CLEAR COMMUNICATION:\n• Discuss expectations explicitly\n• Share boundaries clearly\n• Ask about their agreements with their partner(s)\n• Verify stories and information\n\n🚩 WATCH FOR RED FLAGS:\n• Dishonesty about relationship status\n• Pressuring boundaries\n• Inconsistent information\n• Disrespecting your relationship\n• Drama with previous partners\n\n✅ VERIFY:\n• Video chat before meeting\n• Talk to their partner if possible\n• Check their standing in community\n• Trust but verify information',
+            type: 'example'
+          },
+          {
+            heading: 'Common Trust Violations in the Lifestyle',
+            content: '⚠️ BEHAVIORS THAT BREAK TRUST:\n\n🚫 BOUNDARY VIOLATIONS:\n• Doing activities that were agreed off-limits\n• Pushing beyond stated boundaries\n• "Forgetting" important agreements\n\n🚫 DISHONESTY:\n• Lying about activities or connections\n• Hiding relationships\n• Misrepresenting your relationship status\n• Omitting important information\n\n🚫 SAFER SEX BREACHES:\n• Not using agreed protection\n• Hiding STI exposure\n• Removing condoms without consent (stealthing)\n\n🚫 EMOTIONAL BETRAYAL:\n• Sharing intimate details without permission\n• Comparing partners negatively\n• Prioritizing new partners over agreements\n• Emotional affairs without transparency\n\n🚫 BROKEN COMMITMENTS:\n• Canceling plans repeatedly\n• Not following through on promises\n• Prioritizing lifestyle over primary relationship\n\n🚫 PRIVACY VIOLATIONS:\n• Sharing private information\n• Posting photos without consent\n• Discussing your relationship publicly\n\nEven small violations erode trust over time.',
+            type: 'warning'
+          },
+          {
+            heading: 'When Trust Is Broken',
+            content: '💔 IF TRUST IS VIOLATED:\n\n1️⃣ IMMEDIATE RESPONSE:\n• Stop lifestyle activities if needed\n• Create space to process\n• Seek support (friends, therapist)\n• Don\'t make permanent decisions in crisis\n\n2️⃣ ASSESS THE DAMAGE:\n• How serious was the violation?\n• Was it intentional or accidental?\n• Is this a pattern or isolated incident?\n• Does the person take responsibility?\n• Are you safe (physically, emotionally, sexually)?\n\n3️⃣ COMMUNICATION:\n• Express how the violation affected you\n• Listen to their explanation (not excuse)\n• Discuss what needs to happen for repair\n• Set clear expectations going forward\n\n4️⃣ DECIDE ON PATH FORWARD:\n• Can trust be rebuilt?\n• What needs to change?\n• What accountability is required?\n• Is professional help needed?\n• Is the relationship salvageable?',
+            type: 'key-point'
+          },
+          {
+            heading: 'Rebuilding Trust After a Breach',
+            content: '🔨 TRUST REPAIR REQUIRES:\n\n👤 FROM THE VIOLATOR:\n• FULL ACCOUNTABILITY: Own the violation completely\n• GENUINE REMORSE: Show true understanding of harm caused\n• NO EXCUSES: Don\'t minimize or blame others\n• TRANSPARENCY: Answer all questions honestly\n• CHANGED BEHAVIOR: Demonstrate concrete changes\n• PATIENCE: Accept it takes time\n• CONSISTENCY: Prove reliability over time\n• AMENDS: Take actions to repair harm\n\n👤 FROM THE HURT PARTNER:\n• WILLINGNESS: Choose to work toward rebuilding\n• COMMUNICATION: Express needs and feelings\n• BOUNDARIES: Set clear expectations\n• PATIENCE: Allow time for healing\n• VERIFICATION: It\'s okay to need proof\n• SELF-CARE: Process your feelings\n• PROFESSIONAL HELP: Therapy can guide the process\n• DECISION POWER: You decide if/when trust is rebuilt\n\n⏰ TIMELINE:\n• Trust rebuilds slowly\n• Often takes longer to rebuild than initial building\n• Months to years, not days or weeks\n• Requires consistent positive actions\n• Some trust may never fully return',
+            type: 'example'
+          },
+          {
+            heading: 'Trust and Vulnerability',
+            content: '💭 THE RELATIONSHIP:\nTrust enables vulnerability; vulnerability deepens trust.\n\n🎯 VULNERABILITY IN LIFESTYLE:\n• Sharing jealous feelings\n• Admitting insecurities\n• Expressing needs\n• Discussing fears\n• Acknowledging mistakes\n• Asking for reassurance\n• Being honest about struggles\n\n✅ WHEN YOU\'RE VULNERABLE:\nYour partner\'s response either strengthens or weakens trust.\n\n💕 TRUST-BUILDING RESPONSES:\n• Listening without judgment\n• Validating feelings\n• Providing reassurance\n• Taking concerns seriously\n• Following through on solutions\n• Showing appreciation for honesty\n\n💔 TRUST-BREAKING RESPONSES:\n• Dismissing feelings\n• Mocking vulnerability\n• Using shared information against you\n• Becoming defensive or angry\n• Minimizing concerns\n• Breaking confidence\n\nHow you handle vulnerability determines relationship depth.',
+            type: 'normal'
+          },
+          {
+            heading: 'Self-Trust in the Lifestyle',
+            content: '🪞 TRUSTING YOURSELF:\n\nBefore you can fully trust others, trust yourself:\n\n✅ TRUST YOUR INSTINCTS:\n• Listen to your gut feelings\n• Honor discomfort\n• Recognize red flags\n• Trust your "no"\n\n✅ TRUST YOUR BOUNDARIES:\n• Know your limits\n• Enforce them consistently\n• Don\'t compromise for approval\n• Adjust as you learn\n\n✅ TRUST YOUR RESILIENCE:\n• You can handle difficult emotions\n• You\'ll survive if things go wrong\n• You have the strength to leave if needed\n• You can rebuild after setbacks\n\n✅ TRUST YOUR JUDGMENT:\n• You can assess character\n• You can make good decisions\n• You learn from mistakes\n• You know what\'s right for you\n\nSelf-trust is the foundation for trusting others.',
+            type: 'key-point'
+          },
+          {
+            heading: 'Trust and Control',
+            content: '⚖️ THE PARADOX:\nTrust requires letting go of control.\n\n🚫 CONTROL BEHAVIORS (BREAK TRUST):\n• Tracking partner\'s location constantly\n• Reading all messages\n• Forbidding certain connections\n• Demanding constant updates\n• Making unilateral rules\n• Threatening to leave if they do X\n\n✅ TRUST BEHAVIORS:\n• Allowing autonomy\n• Believing they\'ll follow agreements\n• Accepting you can\'t control outcomes\n• Focusing on communication, not surveillance\n• Setting boundaries, not restrictions\n• Choosing trust despite risk\n\n💭 THE SHIFT:\nFrom "How can I control them?" to "Can I trust them to make good choices?"\n\nIf the answer is no, address the trust issue—not with more control, but with honest conversation.',
+            type: 'warning'
+          },
+          {
+            heading: 'Signs of Healthy Trust',
+            content: '✅ YOU HAVE HEALTHY TRUST WHEN:\n\n💚 PEACE:\n• You feel secure in the relationship\n• Minimal anxiety when apart\n• Confidence in their commitment\n• Calm about lifestyle activities\n\n💚 OPENNESS:\n• Comfortable sharing feelings\n• Honest about struggles\n• Transparent about activities\n• Open communication flows naturally\n\n💚 AUTONOMY:\n• Both partners have independence\n• No need for constant checking in\n• Trust in each other\'s judgment\n• Freedom without anxiety\n\n💚 RESILIENCE:\n• Conflicts don\'t destroy trust\n• You work through issues together\n• Trust strengthens over time\n• Recovery from setbacks\n\n💚 CONSISTENCY:\n• Reliable behavior over time\n• Kept promises and commitments\n• Aligned words and actions\n• Predictable integrity\n\nHealthy trust feels secure but not suffocating, open but not anxious.',
+            type: 'key-point'
+          },
+          {
+            heading: 'When Trust Can\'t Be Rebuilt',
+            content: '💔 SOMETIMES TRUST IS IRREPARABLE:\n\n⚠️ SIGNS TO END THE RELATIONSHIP:\n• Repeated violations despite promises\n• No genuine remorse or accountability\n• Patterns of lying continue\n• You don\'t feel safe\n• Your mental health is suffering\n• They blame you for their violations\n• Changes are superficial, not real\n• You\'ve lost respect for them\n• The relationship causes more pain than joy\n• Your gut says it\'s over\n\n✅ IT\'S OKAY TO:\n• Decide trust can\'t be rebuilt\n• End the relationship\n• Protect yourself\n• Choose your wellbeing\n• Walk away from someone who repeatedly breaks trust\n\n💪 MOVING FORWARD:\n• Process the grief\n• Learn from the experience\n• Don\'t let it destroy your ability to trust others\n• Seek support\n• Take time to heal\n• Trust yourself to choose better next time',
+            type: 'normal'
+          },
+          {
+            heading: 'Module Summary: Key Takeaways',
+            content: '✅ Trust is the foundation of all successful lifestyle relationships\n✅ Trust is built through time, consistency, honesty, and kept promises\n✅ Small actions build or erode trust daily\n✅ Trust in your primary relationship must be solid before opening up\n✅ Build trust slowly with new connections—verify, don\'t just trust\n✅ Common violations include boundary breaches, dishonesty, and broken agreements\n✅ Trust can be rebuilt after violations, but requires work from both partners\n✅ Rebuilding trust takes time and consistent positive actions\n✅ Vulnerability deepens trust when met with supportive responses\n✅ Trust yourself and your instincts\n✅ Control behaviors break trust; autonomy within boundaries builds it\n✅ Sometimes trust can\'t be repaired—it\'s okay to end the relationship\n\nTrust is earned slowly, lost quickly, and rebuilt even slower. Protect it like the precious resource it is.',
+            type: 'key-point'
+          }
+        ]
       }
     };
 
