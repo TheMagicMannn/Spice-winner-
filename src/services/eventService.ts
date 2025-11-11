@@ -239,6 +239,15 @@ class EventService {
    */
   async getEventById(eventId: string): Promise<Event | null> {
     try {
+      // Verify session before making API call
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        const error: any = new Error('Authentication required. Please log in again.');
+        error.status = 401;
+        throw error;
+      }
+
       const { data, error } = await supabase
         .from('events')
         .select(`
@@ -263,7 +272,14 @@ class EventService {
         .eq('is_active', true)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        if (error.message?.includes('JWT') || error.message?.includes('session')) {
+          const authError: any = new Error('Session expired. Please log in again.');
+          authError.status = 401;
+          throw authError;
+        }
+        throw error;
+      }
       if (!data) return null;
 
       // Get attendees and comments count
