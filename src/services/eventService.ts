@@ -573,16 +573,97 @@ class EventService {
     try {
       const { data, error } = await supabase
         .from('event_attendees')
-        .select('id')
+        .select('id, status')
         .eq('event_id', eventId)
         .eq('user_id', userId)
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
-      return !!data;
+      // Consider pending or confirmed as "attending"
+      return !!data && (data.status === 'pending' || data.status === 'confirmed');
     } catch (error) {
       console.error('Error checking attendance status:', error);
       return false;
+    }
+  }
+
+  /**
+   * Get attendee status for a user
+   */
+  async getAttendeeStatus(eventId: string, userId: string): Promise<'pending' | 'confirmed' | 'denied' | null> {
+    try {
+      const { data, error } = await supabase
+        .from('event_attendees')
+        .select('status')
+        .eq('event_id', eventId)
+        .eq('user_id', userId)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      return data?.status || null;
+    } catch (error) {
+      console.error('Error checking attendee status:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Approve an attendee (host only)
+   */
+  async approveAttendee(eventId: string, attendeeId: string, hostId: string): Promise<void> {
+    try {
+      // Verify host owns the event
+      const { data: event, error: eventError } = await supabase
+        .from('events')
+        .select('author_id')
+        .eq('id', eventId)
+        .single();
+
+      if (eventError) throw eventError;
+      if (event.author_id !== hostId) {
+        throw new Error('Only the event host can approve attendees');
+      }
+
+      const { error } = await supabase
+        .from('event_attendees')
+        .update({ status: 'confirmed' })
+        .eq('id', attendeeId)
+        .eq('event_id', eventId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error approving attendee:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Deny an attendee (host only)
+   */
+  async denyAttendee(eventId: string, attendeeId: string, hostId: string): Promise<void> {
+    try {
+      // Verify host owns the event
+      const { data: event, error: eventError } = await supabase
+        .from('events')
+        .select('author_id')
+        .eq('id', eventId)
+        .single();
+
+      if (eventError) throw eventError;
+      if (event.author_id !== hostId) {
+        throw new Error('Only the event host can deny attendees');
+      }
+
+      const { error } = await supabase
+        .from('event_attendees')
+        .update({ status: 'denied' })
+        .eq('id', attendeeId)
+        .eq('event_id', eventId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error denying attendee:', error);
+      throw error;
     }
   }
 
