@@ -686,9 +686,10 @@ export const ProfilePage: React.FC = () => {
                     ) : (
                       <div className="space-y-3">
                         {userEvents.slice(0, 3).map((event) => (
-                          <div
+                          <button
                             key={event.id}
-                            className="p-4 bg-white/5 rounded-lg border border-white/10 hover:border-pink-500/50 transition-all"
+                            onClick={() => navigate(`/events/${event.id}`)}
+                            className="w-full text-left p-4 bg-white/5 rounded-lg border border-white/10 hover:border-pink-500/50 transition-all cursor-pointer"
                             data-testid={`profile-event-${event.id}`}
                           >
                             <div className="flex items-start space-x-3">
