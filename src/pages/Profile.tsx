@@ -179,6 +179,9 @@ export const ProfilePage: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [userIsoPosts, setUserIsoPosts] = useState<ISOPost[]>([]);
   const [isLoadingIsoPosts, setIsLoadingIsoPosts] = useState(true);
+  const [userEvents, setUserEvents] = useState<Event[]>([]);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(true);
+  const [postsEventsTab, setPostsEventsTab] = useState<'posts' | 'events'>('posts');
 
   // Enhanced error boundary logging
   React.useEffect(() => {
