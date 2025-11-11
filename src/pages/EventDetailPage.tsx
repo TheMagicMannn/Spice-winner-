@@ -480,7 +480,12 @@ export const EventDetailPage: React.FC = () => {
               <div className="flex items-center space-x-4 text-white/70">
                 <div className="flex items-center">
                   <Users className="h-5 w-5 mr-2 text-pink-400" />
-                  <span className="font-medium">{attendees.length} attending</span>
+                  <span className="font-medium">{confirmedAttendeesCount} confirmed</span>
+                  {isAuthor && pendingAttendeesCount > 0 && (
+                    <span className="ml-2 text-xs text-yellow-400">
+                      ({pendingAttendeesCount} pending)
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center">
                   <MessageSquare className="h-5 w-5 mr-2 text-pink-400" />
