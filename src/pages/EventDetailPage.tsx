@@ -298,6 +298,40 @@ export const EventDetailPage: React.FC = () => {
     }
   };
 
+  const handleApproveAttendee = async (attendeeId: string) => {
+    if (!user || !eventId) return;
+    
+    setIsProcessingApproval(attendeeId);
+    try {
+      await eventService.approveAttendee(eventId, attendeeId, user.id);
+      // Reload attendees
+      const attendeesData = await eventService.getEventAttendees(eventId);
+      setAttendees(attendeesData || []);
+    } catch (error) {
+      console.error('Error approving attendee:', error);
+      alert('Failed to approve attendee. Please try again.');
+    } finally {
+      setIsProcessingApproval(null);
+    }
+  };
+
+  const handleDenyAttendee = async (attendeeId: string) => {
+    if (!user || !eventId) return;
+    
+    setIsProcessingApproval(attendeeId);
+    try {
+      await eventService.denyAttendee(eventId, attendeeId, user.id);
+      // Reload attendees
+      const attendeesData = await eventService.getEventAttendees(eventId);
+      setAttendees(attendeesData || []);
+    } catch (error) {
+      console.error('Error denying attendee:', error);
+      alert('Failed to deny attendee. Please try again.');
+    } finally {
+      setIsProcessingApproval(null);
+    }
+  };
+
   const isAuthor = user && event && user.id === event.author_id;
   const spotsLeft = event ? event.max_capacity - (attendees.length || 0) : 0;
   const isEventFull = spotsLeft <= 0;
