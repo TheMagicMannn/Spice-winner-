@@ -13,11 +13,9 @@ type FilterType = 'all' | 'unread' | 'sent' | 'deleted';
 
 export const MessagesPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState<Profile | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
 
