@@ -198,6 +198,7 @@ export const ProfilePage: React.FC = () => {
     if (user) {
       verificationService.isAdmin(user.id).then(setIsAdmin);
       loadUserIsoPosts();
+      loadUserEvents();
     }
   }, [user]);
 
@@ -212,6 +213,20 @@ export const ProfilePage: React.FC = () => {
       console.error('Error loading user ISO posts:', error);
     } finally {
       setIsLoadingIsoPosts(false);
+    }
+  };
+
+  const loadUserEvents = async () => {
+    if (!user) return;
+    
+    setIsLoadingEvents(true);
+    try {
+      const events = await eventService.getEventsByUser(user.id);
+      setUserEvents(events);
+    } catch (error) {
+      console.error('Error loading user events:', error);
+    } finally {
+      setIsLoadingEvents(false);
     }
   };
 
