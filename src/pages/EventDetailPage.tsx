@@ -622,6 +622,35 @@ export const EventDetailPage: React.FC = () => {
           </div>
         </Card>
 
+        {/* Database Setup Notice (Host Only) */}
+        {isAuthor && attendees.length === 0 && (
+          <Card className={`${spiceTheme.components.card} animate-fade-in border-blue-500/30`}>
+            <div className="p-6 space-y-4">
+              <h3 className="text-blue-400 font-semibold text-xl flex items-center">
+                <Shield className="h-5 w-5 mr-2" />
+                Setup Required: RSVP Management
+              </h3>
+              <div className="text-white/80 space-y-3">
+                <p>To enable RSVP approval features, run this SQL in your Supabase dashboard:</p>
+                <div className="bg-black/40 p-4 rounded-lg border border-white/10 text-sm font-mono">
+                  <p className="text-green-400 mb-2">-- Step 1: Go to Supabase Dashboard → SQL Editor</p>
+                  <p className="text-yellow-400 mb-2">-- Step 2: Copy script from /app/EVENT_ATTENDEE_APPROVAL_SCHEMA.sql</p>
+                  <p className="text-pink-400">-- Step 3: Run the script</p>
+                </div>
+                <p className="text-xs text-white/60">
+                  This will enable: RSVP approval/denial, attendee lists, capacity tracking
+                </p>
+                <Button
+                  onClick={() => window.open('https://supabase.com/dashboard', '_blank')}
+                  className="bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 border-blue-500/50"
+                >
+                  Open Supabase Dashboard →
+                </Button>
+              </div>
+            </div>
+          </Card>
+        )}
+
         {/* Pending RSVP Requests (Host Only) */}
         {isAuthor && pendingAttendeesCount > 0 && (
           <Card className={`${spiceTheme.components.card} animate-fade-in border-yellow-500/30`}>
