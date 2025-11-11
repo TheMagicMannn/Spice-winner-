@@ -58,6 +58,15 @@ export const EventDetailPage: React.FC = () => {
   const loadEventData = async () => {
     if (!eventId) return;
     
+    // Validate UUID format
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(eventId)) {
+      console.error('Invalid event ID format:', eventId);
+      alert('Invalid event ID. Please check the URL.');
+      navigate('/events');
+      return;
+    }
+    
     setIsLoading(true);
     try {
       // Verify authentication session exists before making API calls
