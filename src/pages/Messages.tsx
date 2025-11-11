@@ -299,31 +299,6 @@ export const MessagesPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* Chat Modal */}
-      {selectedConversation && (
-        <ChatModal
-          matchId={selectedConversation.matchId}
-          otherUserId={selectedConversation.otherUserId}
-          otherUserName={selectedConversation.otherUserName}
-          otherUserPhoto={selectedConversation.otherUserPhoto}
-          isOpen={!!selectedConversation}
-          onClose={handleCloseChat}
-          onProfileClick={handleProfileClick}
-        />
-      )}
-
-      {/* Profile Modal */}
-      {selectedProfile && (
-        <ProfileDetailModal
-          profile={selectedProfile}
-          isOpen={showProfileModal}
-          onClose={() => {
-            setShowProfileModal(false);
-            setSelectedProfile(null);
-          }}
-        />
-      )}
     </div>
   );
 };
