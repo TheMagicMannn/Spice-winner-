@@ -104,9 +104,14 @@ export const EventDetailPage: React.FC = () => {
           const userIsAttending = await eventService.hasUserAttendedEvent(eventId, user.id);
           setIsAttending(userIsAttending);
           
-          // Get detailed status
-          const status = await eventService.getAttendeeStatus(eventId, user.id);
-          setAttendeeStatus(status);
+          // Only try to get status if attendees were loaded successfully
+          // (which means the status column exists)
+          if (attendeesData && attendeesData.length > 0) {
+            const status = await eventService.getAttendeeStatus(eventId, user.id);
+            setAttendeeStatus(status);
+          } else {
+            setAttendeeStatus(null);
+          }
         } catch (attendanceError) {
           console.warn('Could not check attendance status:', attendanceError);
           setIsAttending(false);
