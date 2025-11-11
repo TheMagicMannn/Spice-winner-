@@ -88,6 +88,7 @@ export const EventDetailPage: React.FC = () => {
           eventService.getEventAttendees(eventId)
         ]);
         
+        console.log('Loaded attendees:', attendeesData); // Debug log
         setComments(commentsData || []);
         setAttendees(attendeesData || []);
       } catch (secondaryError) {
