@@ -368,7 +368,8 @@ class EventService {
       const eventsWithCounts = await Promise.all(
         (data || []).map(async (event) => {
           const [attendeesResult, commentsResult] = await Promise.all([
-            supabase.from('event_attendees').select('id', { count: 'exact', head: true }).eq('event_id', event.id),
+            // Only count confirmed attendees
+            supabase.from('event_attendees').select('id', { count: 'exact', head: true }).eq('event_id', event.id).eq('status', 'confirmed'),
             supabase.from('event_comments').select('id', { count: 'exact', head: true }).eq('event_id', event.id)
           ]);
 
