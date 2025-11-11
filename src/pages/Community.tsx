@@ -574,7 +574,7 @@ export const CommunityPage: React.FC = () => {
             <Button
               variant="ghost"
               className="text-pink-400 hover:bg-pink-500/10 p-2"
-              onClick={() => window.location.hash = '/events'}
+              onClick={() => navigate('/events')}
             >
               <span className="text-sm">View All</span>
               <ArrowRight className="h-4 w-4 ml-1" />
@@ -582,15 +582,21 @@ export const CommunityPage: React.FC = () => {
           </div>
 
           <div className="flex space-x-4 overflow-x-auto pb-2 scrollbar-hide snap-x snap-mandatory">
-            {mockEvents.slice(0, 4).map((event, index) => (
-              <div 
-                key={event.id} 
-                className="animate-fade-in snap-start"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <EventPreviewCard event={event} onClick={() => handleEventClick(event)} />
-              </div>
-            ))}
+            {isLoadingEvents ? (
+              <div className="text-white/60 text-sm">Loading events...</div>
+            ) : realEvents.length === 0 ? (
+              <div className="text-white/60 text-sm">No upcoming events</div>
+            ) : (
+              realEvents.map((event, index) => (
+                <div 
+                  key={event.id} 
+                  className="animate-fade-in snap-start"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <RealEventPreviewCard event={event} onClick={() => handleRealEventClick(event.id)} />
+                </div>
+              ))
+            )}
           </div>
         </section>
 
