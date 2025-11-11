@@ -196,7 +196,7 @@ CREATE INDEX IF NOT EXISTS idx_events_author ON events(author_id);
 CREATE INDEX IF NOT EXISTS idx_events_date ON events(event_date ASC);
 CREATE INDEX IF NOT EXISTS idx_events_category ON events(category);
 CREATE INDEX IF NOT EXISTS idx_events_active ON events(is_active) WHERE is_active = true;
-CREATE INDEX IF NOT EXISTS idx_events_future ON events(event_date) WHERE event_date >= CURRENT_DATE;
+-- Note: Removed idx_events_future because CURRENT_DATE is not immutable and can't be used in index predicates
 
 -- =====================================================
 -- STEP 7: Update or create RLS policies
