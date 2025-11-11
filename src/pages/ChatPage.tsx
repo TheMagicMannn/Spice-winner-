@@ -139,9 +139,11 @@ export const ChatPage: React.FC = () => {
     if (!otherUserId) return;
     try {
       const profile = await ProfileService.getProfile(otherUserId);
-      setOtherUserProfile(profile);
-      setOtherUserName(profile.displayName || 'Unknown User');
-      setOtherUserPhoto(profile.photos?.[0] || '');
+      if (profile) {
+        setOtherUserProfile(profile);
+        setOtherUserName(profile.displayName || 'Unknown User');
+        setOtherUserPhoto(profile.photos?.[0] || '');
+      }
     } catch (error) {
       console.error('Error loading user profile:', error);
     }
