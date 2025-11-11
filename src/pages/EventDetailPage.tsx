@@ -50,13 +50,23 @@ export const EventDetailPage: React.FC = () => {
     if (eventId) {
       loadEventData();
     }
-  }, [eventId]);
+  }, [eventId, user]);
 
   const loadEventData = async () => {
     if (!eventId) return;
     
     setIsLoading(true);
     try {
+      // Verify authentication session exists before making API calls
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError || !session) {
+        console.error('No valid session found:', sessionError);
+        alert('Your session has expired. Please log in again.');
+        navigate('/login');
+        return;
+      }
+
       const [eventData, commentsData, attendeesData] = await Promise.all([
         eventService.getEventById(eventId),
         eventService.getEventComments(eventId),
@@ -77,8 +87,16 @@ export const EventDetailPage: React.FC = () => {
         const userIsAttending = await eventService.hasUserAttendedEvent(eventId, user.id);
         setIsAttending(userIsAttending);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading event data:', error);
+      
+      // Handle authentication errors
+      if (error?.message?.includes('JWT') || error?.message?.includes('session') || error?.status === 401) {
+        alert('Your session has expired. Please log in again.');
+        navigate('/login');
+        return;
+      }
+      
       navigate('/events');
     } finally {
       setIsLoading(false);
