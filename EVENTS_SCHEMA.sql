@@ -97,6 +97,12 @@ CREATE INDEX IF NOT EXISTS idx_event_attendees_user ON event_attendees(user_id);
 -- 3. EVENT COMMENTS TABLE
 -- =====================================================
 
+-- Drop existing policies
+DROP POLICY IF EXISTS "Anyone can view event comments" ON event_comments;
+DROP POLICY IF EXISTS "Users can create event comments" ON event_comments;
+DROP POLICY IF EXISTS "Users can update their own event comments" ON event_comments;
+DROP POLICY IF EXISTS "Users can delete their own event comments" ON event_comments;
+
 CREATE TABLE IF NOT EXISTS event_comments (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     event_id UUID REFERENCES events(id) ON DELETE CASCADE NOT NULL,
