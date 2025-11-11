@@ -803,5 +803,25 @@ export class MessageService {
       throw error;
     }
   }
+
+  /**
+   * Get matchId between two users
+   */
+  static async getMatchIdBetweenUsers(userId1: string, userId2: string): Promise<string | null> {
+    try {
+      const { data, error } = await supabase
+        .from('matches')
+        .select('id')
+        .eq('status', 'matched')
+        .or(`and(user1_id.eq.${userId1},user2_id.eq.${userId2}),and(user1_id.eq.${userId2},user2_id.eq.${userId1})`)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data?.id || null;
+    } catch (error) {
+      console.error('Error getting match ID:', error);
+      return null;
+    }
+  }
 }
 
