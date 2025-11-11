@@ -530,7 +530,7 @@ class EventService {
   }
 
   /**
-   * Attend an event (RSVP)
+   * Add current user as attendee (pending approval)
    */
   async attendEvent(eventId: string, userId: string): Promise<void> {
     try {
@@ -538,7 +538,8 @@ class EventService {
         .from('event_attendees')
         .insert({
           event_id: eventId,
-          user_id: userId
+          user_id: userId,
+          status: 'pending' // Default to pending, host must approve
         });
 
       if (error) throw error;
