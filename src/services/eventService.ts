@@ -682,6 +682,13 @@ class EventService {
    */
   async getEventAttendees(eventId: string): Promise<EventAttendee[]> {
     try {
+      // Validate UUID format
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!eventId || !uuidRegex.test(eventId)) {
+        console.error('Invalid eventId format:', eventId);
+        return [];
+      }
+
       // Verify session before making API call
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
@@ -691,16 +698,22 @@ class EventService {
       }
 
       // First get attendees
+      console.log('Fetching attendees for event:', eventId);
       const { data: attendees, error: attendeesError } = await supabase
         .from('event_attendees')
         .select('*')
         .eq('event_id', eventId)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false});
 
       if (attendeesError) {
-        // Log the error but don't break the page
-        console.warn('Could not fetch attendees (likely RLS policy issue):', attendeesError);
-        // Return empty array - page will still load, just without attendees
+        // Log detailed error information
+        console.error('Error fetching attendees:', {
+          code: attendeesError.code,
+          message: attendeesError.message,
+          details: attendeesError.details,
+          hint: attendeesError.hint,
+          eventId: eventId
+        });
         return [];
       }
 
