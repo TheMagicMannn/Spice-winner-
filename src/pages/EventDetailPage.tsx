@@ -505,32 +505,49 @@ export const EventDetailPage: React.FC = () => {
 
             {/* RSVP Button */}
             {user && !isAuthor && (
-              <Button
-                onClick={handleRSVP}
-                disabled={isSubmittingRSVP || (isEventFull && !isAttending)}
-                className={`w-full ${
-                  isAttending 
-                    ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400 border-red-500/50' 
-                    : spiceTheme.components.button.gradient
-                }`}
-                data-testid="rsvp-button"
-              >
-                {isSubmittingRSVP ? (
-                  'Processing...'
-                ) : isAttending ? (
-                  <>
-                    <UserMinus className="h-5 w-5 mr-2" />
-                    Cancel RSVP
-                  </>
-                ) : isEventFull ? (
-                  'Event Full'
-                ) : (
-                  <>
-                    <UserPlus className="h-5 w-5 mr-2" />
-                    RSVP to Attend
-                  </>
+              <>
+                <Button
+                  onClick={handleRSVP}
+                  disabled={isSubmittingRSVP || (isEventFull && !isAttending)}
+                  className={`w-full ${
+                    isAttending 
+                      ? 'bg-red-500/20 hover:bg-red-500/30 text-red-400 border-red-500/50' 
+                      : spiceTheme.components.button.gradient
+                  }`}
+                  data-testid="rsvp-button"
+                >
+                  {isSubmittingRSVP ? (
+                    'Processing...'
+                  ) : isAttending ? (
+                    <>
+                      <UserMinus className="h-5 w-5 mr-2" />
+                      Cancel RSVP
+                    </>
+                  ) : isEventFull ? (
+                    'Event Full'
+                  ) : (
+                    <>
+                      <UserPlus className="h-5 w-5 mr-2" />
+                      RSVP to Attend
+                    </>
+                  )}
+                </Button>
+                
+                {/* Show status indicator */}
+                {attendeeStatus && (
+                  <div className={`text-center text-sm mt-2 p-2 rounded-lg ${
+                    attendeeStatus === 'confirmed' 
+                      ? 'bg-green-500/10 text-green-400 border border-green-500/30'
+                      : attendeeStatus === 'pending'
+                      ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/30'
+                      : 'bg-red-500/10 text-red-400 border border-red-500/30'
+                  }`}>
+                    {attendeeStatus === 'confirmed' && '✓ Your RSVP is confirmed'}
+                    {attendeeStatus === 'pending' && '⏳ Awaiting host approval'}
+                    {attendeeStatus === 'denied' && '✗ Your RSVP was declined'}
+                  </div>
                 )}
-              </Button>
+              </>
             )}
 
             {isAuthor && (
