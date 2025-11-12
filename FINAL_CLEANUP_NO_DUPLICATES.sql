@@ -19,13 +19,7 @@ BEGIN
         EXECUTE format('DROP POLICY IF EXISTS %I ON messages', pol.policyname);
         RAISE NOTICE 'Dropped policy: %', pol.policyname;
     END LOOP;
-END $$;
-
--- Step 2: Drop conversation-related policies (if they exist)
-DO $$ 
-DECLARE
-    pol RECORD;
-BEGIN
+    
     -- Drop all policies on conversation_participants
     FOR pol IN 
         SELECT policyname 
@@ -35,12 +29,7 @@ BEGIN
         EXECUTE format('DROP POLICY IF EXISTS %I ON conversation_participants', pol.policyname);
         RAISE NOTICE 'Dropped conversation_participants policy: %', pol.policyname;
     END LOOP;
-END $$;
-
-DO $$ 
-DECLARE
-    pol RECORD;
-BEGIN
+    
     -- Drop all policies on conversations
     FOR pol IN 
         SELECT policyname 
