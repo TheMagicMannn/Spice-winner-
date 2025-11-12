@@ -73,6 +73,8 @@ USING (
 -- VERIFICATION
 -- =====================================================
 DO $$ 
+DECLARE
+    rec RECORD;
 BEGIN
     RAISE NOTICE '=== Complete Cleanup Done ===';
     RAISE NOTICE '';
