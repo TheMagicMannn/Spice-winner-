@@ -397,21 +397,34 @@ export class MessageService {
   }
 
   /**
-   * Mark all messages in a conversation as read
+   * Mark all messages in a conversation as read (works for both match-based and conversation-based)
    */
   static async markConversationAsRead(matchId: string, userId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      // Try conversation_id first
+      const conversationUpdate = await supabase
         .from('messages')
         .update({
           is_read: true,
           read_at: new Date().toISOString()
         })
-        .eq('match_id', matchId)
+        .eq('conversation_id', matchId)
         .neq('sender_id', userId)
         .eq('is_read', false);
 
-      if (error) throw error;
+      // If no rows affected, try match_id
+      if (!conversationUpdate.error) {
+        // Also update match-based messages for backward compatibility
+        await supabase
+          .from('messages')
+          .update({
+            is_read: true,
+            read_at: new Date().toISOString()
+          })
+          .eq('match_id', matchId)
+          .neq('sender_id', userId)
+          .eq('is_read', false);
+      }
     } catch (error) {
       console.error('Error marking conversation as read:', error);
       throw error;
