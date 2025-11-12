@@ -260,17 +260,52 @@ export const ChatPage: React.FC = () => {
     
     try {
       let newMessage;
-      if (replyingTo) {
-        newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
-        setReplyingTo(null);
+      
+      // Check if this is a conversation-based chat
+      if (conversationDetails) {
+        // Use conversation-based messaging
+        if (replyingTo) {
+          // For replies, still use match-based system for now
+          newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
+          setReplyingTo(null);
+        } else {
+          newMessage = await MessageService.sendMessageInConversation(matchId, user.id, messageText);
+        }
+      } else if (otherUserId) {
+        // Direct chat but no conversation yet - create one first
+        try {
+          const conversationId = await MessageService.getOrCreateDirectConversation(user.id, otherUserId);
+          // Load conversation details
+          await loadConversationDetails();
+          // Send message in the new conversation
+          newMessage = await MessageService.sendMessageInConversation(conversationId, user.id, messageText);
+        } catch (convError) {
+          console.log('Conversation system not available, using match-based system');
+          // Fallback to match-based
+          if (replyingTo) {
+            newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
+            setReplyingTo(null);
+          } else {
+            newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+          }
+        }
       } else {
-        newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+        // Match-based messaging (legacy/fallback)
+        if (replyingTo) {
+          newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
+          setReplyingTo(null);
+        } else {
+          newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+        }
       }
+      
       handleNewMessage(newMessage);
       handleTyping(false);
     } catch (error) {
       console.error('Error sending message:', error);
       setInputText(messageText);
+      setUploadError('Failed to send message');
+      setTimeout(() => setUploadError(null), 3000);
     } finally {
       setIsSending(false);
     }
