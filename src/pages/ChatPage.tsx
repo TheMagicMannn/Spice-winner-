@@ -147,30 +147,40 @@ export const ChatPage: React.FC = () => {
   }, [messages]);
 
   const loadConversationDetails = async () => {
-    if (!matchId) return;
+    if (!chatId) return;
     try {
-      // Try to get conversation details (for group chats)
-      const details = await ConversationService.getConversationDetails(matchId);
-      if (details && details.conversationType === 'group') {
+      // Try to get conversation details (for group chats and new conversation system)
+      const details = await ConversationService.getConversationDetails(chatId);
+      if (details) {
         setConversationDetails(details);
-        setIsGroupChat(true);
-        setOtherUserName(details.groupName || 'Group Chat');
-        setOtherUserPhoto(details.groupPhoto || '');
+        
+        if (details.conversationType === 'group') {
+          setIsGroupChat(true);
+          setOtherUserName(details.groupName || 'Group Chat');
+          setOtherUserPhoto(details.groupPhoto || '');
+        } else {
+          // Direct conversation - get other user
+          setIsGroupChat(false);
+          const otherParticipant = details.participants.find(p => p.userId !== user?.id);
+          if (otherParticipant?.profile) {
+            setOtherUserName(otherParticipant.profile.displayName || 'User');
+            setOtherUserPhoto(otherParticipant.profile.photos?.[0] || '');
+            setOtherUserProfile(otherParticipant.profile);
+          }
+        }
       } else {
-        // It's a direct chat
+        // Fallback to match-based system (legacy direct chats)
         setIsGroupChat(false);
         setConversationDetails(null);
-        // Load the other user's profile for direct chats
         if (otherUserId) {
           loadOtherUserProfile();
         }
       }
     } catch (error) {
-      // Fallback: assume it's a direct chat if conversation details not available
-      console.log('Using direct chat mode');
+      // Fallback: assume it's a match-based direct chat
+      console.log('Using match-based direct chat mode');
       setIsGroupChat(false);
       setConversationDetails(null);
-      // Load the other user's profile for direct chats
       if (otherUserId) {
         loadOtherUserProfile();
       }
