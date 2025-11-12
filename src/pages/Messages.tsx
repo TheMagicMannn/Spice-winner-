@@ -51,10 +51,13 @@ export const MessagesPage: React.FC = () => {
     
     setIsLoading(true);
     try {
+      // Map filter types for conversation service (it doesn't support 'sent')
+      const conversationFilter = activeFilter === 'sent' ? 'all' : activeFilter;
+      
       // Load both match-based and conversation-based threads
       const [matchConvos, conversationThreads] = await Promise.all([
         MessageService.getConversations(user.id, activeFilter).catch(() => []),
-        ConversationService.getUserConversations(user.id, activeFilter).catch(() => [])
+        ConversationService.getUserConversations(user.id, conversationFilter as 'all' | 'unread' | 'groups' | 'direct' | 'deleted').catch(() => [])
       ]);
 
       // Convert match-based conversations to unified format
