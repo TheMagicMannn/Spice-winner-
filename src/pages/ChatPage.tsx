@@ -86,12 +86,19 @@ export const ChatPage: React.FC = () => {
   const isInitialLoadRef = useRef(true);
   const previousMessageCountRef = useRef(0);
 
-  // Load other user's profile
+  // Load conversation details (determines if group or direct chat)
   useEffect(() => {
-    if (otherUserId) {
+    if (matchId) {
+      loadConversationDetails();
+    }
+  }, [matchId]);
+
+  // Load other user's profile (for direct chats)
+  useEffect(() => {
+    if (otherUserId && !isGroupChat) {
       loadOtherUserProfile();
     }
-  }, [otherUserId]);
+  }, [otherUserId, isGroupChat]);
 
   // Load messages
   useEffect(() => {
