@@ -181,6 +181,7 @@ export const ChatPage: React.FC = () => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(otherUserId)) {
       console.log('Skipping profile load - not a valid user ID:', otherUserId);
+      setOtherUserName('Chat');
       return;
     }
     
@@ -190,9 +191,12 @@ export const ChatPage: React.FC = () => {
         setOtherUserProfile(profile);
         setOtherUserName(profile.displayName || 'Unknown User');
         setOtherUserPhoto(profile.photos?.[0] || '');
+      } else {
+        setOtherUserName('User');
       }
     } catch (error) {
       console.error('Error loading user profile:', error);
+      setOtherUserName('User');
     }
   };
 
