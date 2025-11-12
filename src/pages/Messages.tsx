@@ -101,7 +101,14 @@ export const MessagesPage: React.FC = () => {
       });
 
       // Merge and deduplicate (prefer conversation-based over match-based for same chat)
-      const merged = [...unifiedConversationThreads, ...unifiedMatchConvos];
+      let merged = [...unifiedConversationThreads, ...unifiedMatchConvos];
+      
+      // Additional client-side filtering for 'sent' (conversations don't support it natively)
+      if (activeFilter === 'sent') {
+        // For conversation threads, we can't easily determine if last message was sent by user
+        // So we keep only match-based conversations that were already filtered
+        merged = unifiedMatchConvos;
+      }
       
       // Sort: pinned first, then by last message time
       const sorted = merged.sort((a, b) => {
