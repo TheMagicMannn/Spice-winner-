@@ -265,7 +265,7 @@ export const ChatPage: React.FC = () => {
   };
 
   const handleSendMessage = async () => {
-    if (!inputText.trim() || !user || isSending || !matchId) return;
+    if (!inputText.trim() || !user || isSending || !chatId) return;
 
     setIsSending(true);
     const messageText = inputText;
@@ -274,41 +274,39 @@ export const ChatPage: React.FC = () => {
     try {
       let newMessage;
       
-      // Check if this is a conversation-based chat
+      // Check if this is a conversation-based chat (group or new direct)
       if (conversationDetails) {
         // Use conversation-based messaging
         if (replyingTo) {
-          // For replies, still use match-based system for now
-          newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
+          // For replies in conversation system, we still need to implement reply support
+          // For now, send as regular message
+          console.log('Reply feature not yet implemented for conversation system');
+          newMessage = await MessageService.sendMessageInConversation(chatId, user.id, messageText);
           setReplyingTo(null);
         } else {
-          newMessage = await MessageService.sendMessageInConversation(matchId, user.id, messageText);
+          newMessage = await MessageService.sendMessageInConversation(chatId, user.id, messageText);
         }
       } else if (otherUserId) {
-        // Direct chat but no conversation yet - create one first
-        try {
-          const conversationId = await MessageService.getOrCreateDirectConversation(user.id, otherUserId);
-          // Load conversation details
-          await loadConversationDetails();
-          // Send message in the new conversation
-          newMessage = await MessageService.sendMessageInConversation(conversationId, user.id, messageText);
-        } catch (convError) {
-          console.log('Conversation system not available, using match-based system');
-          // Fallback to match-based
-          if (replyingTo) {
-            newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
-            setReplyingTo(null);
-          } else {
-            newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
-          }
-        }
-      } else {
-        // Match-based messaging (legacy/fallback)
+        // Legacy match-based direct chat with otherUserId
         if (replyingTo) {
-          newMessage = await MessageService.sendReplyMessage(matchId, user.id, messageText, replyingTo.id);
+          newMessage = await MessageService.sendReplyMessage(chatId, user.id, messageText, replyingTo.id);
           setReplyingTo(null);
         } else {
-          newMessage = await MessageService.sendMessage(matchId, user.id, messageText);
+          newMessage = await MessageService.sendMessage(chatId, user.id, messageText);
+        }
+      } else {
+        // Try to detect if this is a conversation or match by attempting conversation-based first
+        try {
+          newMessage = await MessageService.sendMessageInConversation(chatId, user.id, messageText);
+        } catch (convError) {
+          // Fallback to match-based
+          console.log('Falling back to match-based messaging');
+          if (replyingTo) {
+            newMessage = await MessageService.sendReplyMessage(chatId, user.id, messageText, replyingTo.id);
+            setReplyingTo(null);
+          } else {
+            newMessage = await MessageService.sendMessage(chatId, user.id, messageText);
+          }
         }
       }
       
