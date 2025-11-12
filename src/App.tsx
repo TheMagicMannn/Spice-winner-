@@ -118,6 +118,9 @@ const isProfileComplete = (profile: Profile | null | undefined, accountType?: st
 const AppContent: React.FC = () => {
   const { user, isLoading } = useAuth();
   const location = useLocation();
+  
+  // Check if current route is chat page
+  const isChatPage = location.pathname.startsWith('/messages/') && location.pathname.split('/').length > 2;
 
   useEffect(() => {
     // This effect ensures the view scrolls to the top on route changes.
