@@ -457,10 +457,15 @@ export const ChatPage: React.FC = () => {
         const fileExt = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
         const audioFile = new File([audioBlob], `voice-${Date.now()}.${fileExt}`, { type: mimeType });
         
-        if (user && matchId) {
+        if (user && chatId) {
           setIsSending(true);
           try {
-            const newMessage = await MessageService.sendMediaMessage(matchId, user.id, audioFile, 'voice');
+            let newMessage;
+            if (conversationDetails) {
+              newMessage = await MessageService.sendMediaMessageInConversation(chatId, user.id, audioFile, 'voice');
+            } else {
+              newMessage = await MessageService.sendMediaMessage(chatId, user.id, audioFile, 'voice');
+            }
             handleNewMessage(newMessage);
           } catch (error) {
             console.error('Error sending voice message:', error);
