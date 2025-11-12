@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Pin, Trash2, RotateCcw, Filter, Plus } from 'lucide-react';
+import { MessageSquare, Pin, Trash2, RotateCcw, Filter, Plus, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/Spinner';
 import { MessageService, Conversation } from '@/services/messageService';
 import { NewMessageModal } from '@/components/NewMessageModal';
+import { CreateGroupChat } from '@/components/CreateGroupChat';
 import { useAuth } from '@/hooks/useAuth';
 import { formatDistanceToNow } from 'date-fns';
 
