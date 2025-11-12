@@ -413,6 +413,52 @@ export class ProfileService {
       throw error;
     }
   }
+
+  /**
+   * Get matched profiles for a user
+   * Returns profiles of users who have matched with the current user
+   */
+  static async getMatchedProfiles(userId: string): Promise<Profile[]> {
+    try {
+      // Get all matches for the user
+      const { data: matches, error: matchError } = await supabase
+        .from('matches')
+        .select('id, user1_id, user2_id')
+        .or(`user1_id.eq.${userId},user2_id.eq.${userId}`)
+        .eq('status', 'matched');
+
+      if (matchError) {
+        console.error('Error fetching matches:', matchError);
+        throw matchError;
+      }
+
+      if (!matches || matches.length === 0) {
+        return [];
+      }
+
+      // Extract IDs of matched users (excluding current user)
+      const matchedUserIds = matches.map((match: any) => 
+        match.user1_id === userId ? match.user2_id : match.user1_id
+      );
+
+      // Fetch profiles of matched users
+      const { data: profiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', matchedUserIds)
+        .eq('is_active', true);
+
+      if (profileError) {
+        console.error('Error fetching matched profiles:', profileError);
+        throw profileError;
+      }
+
+      return (profiles || []).map(profileFromDatabase);
+    } catch (error) {
+      console.error('ProfileService.getMatchedProfiles error:', error);
+      throw error;
+    }
+  }
 }
 
 export default ProfileService;
