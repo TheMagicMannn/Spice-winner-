@@ -137,8 +137,19 @@ export const MessagesPage: React.FC = () => {
             Messages
           </h1>
           
-          {/* Filter Button */}
-          <div className="relative">
+          <div className="flex items-center gap-2">
+            {/* New Message Button */}
+            <Button
+              onClick={() => setShowNewMessageModal(true)}
+              className="bg-pink-600 hover:bg-pink-700 text-white"
+              size="sm"
+            >
+              <Plus className="h-5 w-5 mr-1" />
+              New
+            </Button>
+            
+            {/* Filter Button */}
+            <div className="relative">
             <Button
               variant="ghost"
               size="sm"
