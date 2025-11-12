@@ -25,6 +25,8 @@ export interface ConversationDetails {
   lastMessage?: string;
   lastMessageAt?: string;
   unreadCount: number;
+  isPinned?: boolean;
+  isDeleted?: boolean;
 }
 
 export class ConversationService {
