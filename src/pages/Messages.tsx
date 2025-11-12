@@ -21,6 +21,7 @@ export const MessagesPage: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
 
   // Load conversations
   useEffect(() => {
