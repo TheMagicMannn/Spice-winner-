@@ -78,8 +78,8 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
         participantIds
       );
 
-      // Navigate to the new group chat
-      navigate(`/chat/${conversationId}/group`);
+      // Navigate to the new group chat using unified route
+      navigate(`/messages/${conversationId}`);
       onClose();
     } catch (error) {
       console.error('Error creating group:', error);
