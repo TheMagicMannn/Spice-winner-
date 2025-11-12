@@ -1,7 +1,7 @@
 {
-  "name": "spi-profile-app",
+  "name": "SPICE-The Real Way to Heat Things Up",
   "version": "1.0.0",
-  "description": "Frontend for SPI Profile Setup",
+  "description": "SPICE-The Real Lifestyle Connection Community",
   "private": true,
   "type": "module",
   "scripts": {
