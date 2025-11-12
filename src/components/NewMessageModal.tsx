@@ -79,12 +79,22 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
     try {
       if (selectedUsers.length === 1) {
         // Create direct conversation
-        const conversationId = await ConversationService.getOrCreateDirectConversation(
-          user.id,
-          selectedUsers[0].id!
-        );
-        navigate(`/messages/${conversationId}/${selectedUsers[0].id}`);
-        handleClose();
+        try {
+          const conversationId = await ConversationService.getOrCreateDirectConversation(
+            user.id,
+            selectedUsers[0].id!
+          );
+          navigate(`/messages/${conversationId}/${selectedUsers[0].id}`);
+          handleClose();
+        } catch (error: any) {
+          // If conversation system not ready, show helpful message
+          if (error.message?.includes('No match found')) {
+            alert('You must be matched with this user to start a conversation.');
+          } else {
+            console.error('Error creating conversation:', error);
+            alert('Unable to start conversation. Please make sure you have an active match with this user.');
+          }
+        }
       } else {
         // Create group conversation
         if (!showGroupNameInput) {
@@ -99,15 +109,20 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
           return;
         }
 
-        const participantIds = selectedUsers.map(u => u.id!).filter(Boolean);
-        const conversationId = await ConversationService.createGroupConversation(
-          user.id,
-          groupName,
-          participantIds
-        );
-        
-        navigate(`/messages/${conversationId}/group`);
-        handleClose();
+        try {
+          const participantIds = selectedUsers.map(u => u.id!).filter(Boolean);
+          const conversationId = await ConversationService.createGroupConversation(
+            user.id,
+            groupName,
+            participantIds
+          );
+          
+          navigate(`/messages/${conversationId}/group`);
+          handleClose();
+        } catch (error) {
+          console.error('Error creating group conversation:', error);
+          alert('Group chat feature requires database update. Please ask the developer to run GROUP_CHAT_SCHEMA.sql in Supabase.');
+        }
       }
     } catch (error) {
       console.error('Error creating conversation:', error);
