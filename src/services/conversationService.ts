@@ -195,6 +195,82 @@ export class ConversationService {
   }
 
   /**
+   * Get details of a specific conversation by ID
+   */
+  static async getConversationDetails(conversationId: string): Promise<ConversationDetails | null> {
+    try {
+      // Get conversation
+      const { data: conversation, error: convError } = await supabase
+        .from('conversations')
+        .select('*')
+        .eq('id', conversationId)
+        .maybeSingle();
+
+      if (convError) throw convError;
+      if (!conversation) return null;
+
+      // Get all participants
+      const { data: participants, error: partError } = await supabase
+        .from('conversation_participants')
+        .select('*')
+        .eq('conversation_id', conversationId);
+
+      if (partError) throw partError;
+
+      // Get profile data for all participants
+      const userIds = participants?.map(p => p.user_id) || [];
+      const { data: profiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .in('id', userIds);
+
+      if (profileError) throw profileError;
+
+      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+
+      // Build participant details
+      const participantDetails: ConversationParticipant[] = (participants || []).map((p: any) => ({
+        id: p.id,
+        userId: p.user_id,
+        conversationId: p.conversation_id,
+        joinedAt: p.joined_at,
+        isAdmin: p.is_admin,
+        isActive: p.is_active,
+        isPinned: p.is_pinned,
+        isDeleted: p.is_deleted,
+        profile: profileMap.get(p.user_id)
+      }));
+
+      // Get last message
+      const { data: lastMessage } = await supabase
+        .from('messages')
+        .select('content, message_type, created_at')
+        .eq('conversation_id', conversationId)
+        .eq('is_deleted', false)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      return {
+        id: conversation.id,
+        conversationType: conversation.conversation_type,
+        groupName: conversation.group_name,
+        groupPhoto: conversation.group_photo,
+        createdBy: conversation.created_by,
+        createdAt: conversation.created_at,
+        updatedAt: conversation.updated_at,
+        participants: participantDetails,
+        lastMessage: lastMessage?.content,
+        lastMessageAt: lastMessage?.created_at,
+        unreadCount: 0 // This would need additional query per user
+      };
+    } catch (error) {
+      console.error('Error getting conversation details:', error);
+      return null;
+    }
+  }
+
+  /**
    * Get all conversations for a user
    */
   static async getUserConversations(
