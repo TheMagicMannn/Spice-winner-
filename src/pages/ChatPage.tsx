@@ -172,6 +172,14 @@ export const ChatPage: React.FC = () => {
 
   const loadOtherUserProfile = async () => {
     if (!otherUserId) return;
+    
+    // Skip if otherUserId is not a valid UUID (e.g., "group" for group chats)
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(otherUserId)) {
+      console.log('Skipping profile load - not a valid user ID:', otherUserId);
+      return;
+    }
+    
     try {
       const profile = await ProfileService.getProfile(otherUserId);
       if (profile) {
