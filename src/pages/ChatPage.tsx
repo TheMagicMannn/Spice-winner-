@@ -214,9 +214,9 @@ export const ChatPage: React.FC = () => {
   };
 
   const loadMessages = async () => {
-    if (!matchId) return;
+    if (!chatId) return;
     try {
-      const loadedMessages = await MessageService.getMessages(matchId);
+      const loadedMessages = await MessageService.getMessages(chatId);
       setMessages(loadedMessages);
       setTimeout(() => scrollToBottom('auto'), 100);
     } catch (error) {
@@ -225,8 +225,8 @@ export const ChatPage: React.FC = () => {
   };
 
   const markAsRead = async () => {
-    if (user && matchId) {
-      await MessageService.markConversationAsRead(matchId, user.id);
+    if (user && chatId) {
+      await MessageService.markConversationAsRead(chatId, user.id);
     }
   };
 
