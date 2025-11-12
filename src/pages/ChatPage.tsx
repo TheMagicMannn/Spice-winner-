@@ -171,11 +171,21 @@ export const ChatPage: React.FC = () => {
       } else {
         // It's a direct chat
         setIsGroupChat(false);
+        setConversationDetails(null);
+        // Load the other user's profile for direct chats
+        if (otherUserId) {
+          loadOtherUserProfile();
+        }
       }
     } catch (error) {
       // Fallback: assume it's a direct chat if conversation details not available
       console.log('Using direct chat mode');
       setIsGroupChat(false);
+      setConversationDetails(null);
+      // Load the other user's profile for direct chats
+      if (otherUserId) {
+        loadOtherUserProfile();
+      }
     }
   };
 
