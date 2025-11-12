@@ -140,6 +140,17 @@ export const MessagesPage: React.FC = () => {
           </h1>
           
           <div className="flex items-center gap-2">
+            {/* Create Group Button */}
+            <Button
+              onClick={() => setShowCreateGroupModal(true)}
+              className="bg-purple-600 hover:bg-purple-700 text-white"
+              size="sm"
+              data-testid="create-group-button"
+            >
+              <Users className="h-5 w-5 mr-1" />
+              Group
+            </Button>
+            
             {/* New Message Button */}
             <Button
               onClick={() => setShowNewMessageModal(true)}
