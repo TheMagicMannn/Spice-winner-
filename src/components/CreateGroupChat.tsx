@@ -69,7 +69,9 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
     setError(null);
 
     try {
-      const participantIds = selectedUsers.map(u => u.id);
+      const participantIds = selectedUsers
+        .map(u => u.id)
+        .filter((id): id is string => id !== undefined);
       const conversationId = await MessageService.createGroupConversation(
         user.id,
         groupName.trim(),
