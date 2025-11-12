@@ -824,5 +824,231 @@ export class MessageService {
       return null;
     }
   }
+
+  // ============================================
+  // CONVERSATION-BASED MESSAGING (Group Chat Support)
+  // ============================================
+
+  /**
+   * Get or create a direct conversation with another user
+   * Creates NEW conversation if old one was deleted
+   */
+  static async getOrCreateDirectConversation(
+    currentUserId: string,
+    otherUserId: string
+  ): Promise<string> {
+    try {
+      const { data, error } = await supabase
+        .rpc('get_or_create_direct_conversation', {
+          user1_id: currentUserId,
+          user2_id: otherUserId
+        });
+
+      if (error) throw error;
+      return data; // Returns conversation_id
+    } catch (error) {
+      console.error('Error getting/creating conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send message in a conversation (group or direct)
+   */
+  static async sendMessageInConversation(
+    conversationId: string,
+    senderId: string,
+    content: string,
+    messageType: 'text' | 'image' | 'video' | 'voice' | 'gif' = 'text'
+  ): Promise<Message> {
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .insert({
+          conversation_id: conversationId,
+          sender_id: senderId,
+          content,
+          message_type: messageType,
+          match_id: null // Important: set to null for conversation messages
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return this.transformMessage(data);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Send media message in a conversation
+   */
+  static async sendMediaMessageInConversation(
+    conversationId: string,
+    senderId: string,
+    file: File,
+    messageType: 'image' | 'video' | 'voice',
+    selfDestructSeconds?: number
+  ): Promise<Message> {
+    try {
+      // Upload file to storage
+      const mediaUrl = await this.uploadMedia(senderId, conversationId, file, messageType);
+
+      // Create message with media
+      let content = '';
+      switch (messageType) {
+        case 'image':
+          content = 'Photo';
+          break;
+        case 'video':
+          content = 'Video';
+          break;
+        case 'voice':
+          content = 'Voice message';
+          break;
+        default:
+          content = 'Media';
+      }
+
+      const { data, error } = await supabase
+        .from('messages')
+        .insert({
+          conversation_id: conversationId,
+          sender_id: senderId,
+          content,
+          message_type: messageType,
+          media_url: mediaUrl,
+          self_destruct_seconds: selfDestructSeconds,
+          match_id: null
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return this.transformMessage(data);
+    } catch (error) {
+      console.error('Error sending media message:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Load messages by conversation ID
+   */
+  static async getMessagesByConversation(
+    conversationId: string,
+    limit: number = 50
+  ): Promise<Message[]> {
+    try {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*, reply_to_message:reply_to_id(id, content, message_type, sender_id)')
+        .eq('conversation_id', conversationId)
+        .eq('is_deleted', false)
+        .order('created_at', { ascending: true })
+        .limit(limit);
+
+      if (error) throw error;
+      return (data || []).map(this.transformMessage);
+    } catch (error) {
+      console.error('Error loading conversation messages:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Delete conversation for current user (soft delete)
+   */
+  static async deleteConversationForUser(
+    conversationId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      const { error } = await supabase
+        .rpc('delete_conversation_for_user', {
+          conversation_id_param: conversationId,
+          user_id_param: userId
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Restore deleted conversation for current user
+   */
+  static async restoreConversationForUser(
+    conversationId: string,
+    userId: string
+  ): Promise<void> {
+    try {
+      const { error } = await supabase
+        .rpc('restore_conversation_for_user', {
+          conversation_id_param: conversationId,
+          user_id_param: userId
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error restoring conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Create a group conversation
+   */
+  static async createGroupConversation(
+    creatorId: string,
+    groupName: string,
+    participantIds: string[]
+  ): Promise<string> {
+    try {
+      const { data, error } = await supabase
+        .rpc('create_group_conversation', {
+          creator_id: creatorId,
+          group_name_param: groupName,
+          participant_ids: participantIds
+        });
+
+      if (error) throw error;
+      return data; // Returns conversation_id
+    } catch (error) {
+      console.error('Error creating group:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Transform conversation_id in message data
+   */
+  private static transformMessage(data: any): Message {
+    return {
+      id: data.id,
+      matchId: data.match_id,
+      conversationId: data.conversation_id,
+      senderId: data.sender_id,
+      content: data.content,
+      messageType: data.message_type,
+      mediaUrl: data.media_url,
+      selfDestructSeconds: data.self_destruct_seconds,
+      firstViewedAt: data.first_viewed_at,
+      expiresAt: data.expires_at,
+      isRead: data.is_read,
+      readAt: data.read_at,
+      isDeleted: data.is_deleted,
+      deletedAt: data.deleted_at,
+      replyToId: data.reply_to_id,
+      replyToMessage: data.reply_to_message ? this.transformMessage(data.reply_to_message) : undefined,
+      reactions: data.reactions ? JSON.parse(data.reactions) : [],
+      createdAt: data.created_at,
+      updatedAt: data.updated_at,
+    };
+  }
 }
 
