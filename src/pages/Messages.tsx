@@ -6,12 +6,28 @@ import { MessageSquare, Pin, Trash2, RotateCcw, Filter, Plus, Users } from 'luci
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/Spinner';
 import { MessageService, Conversation } from '@/services/messageService';
+import { ConversationService, ConversationDetails } from '@/services/conversationService';
 import { NewMessageModal } from '@/components/NewMessageModal';
 import { CreateGroupChat } from '@/components/CreateGroupChat';
 import { useAuth } from '@/hooks/useAuth';
 import { formatDistanceToNow } from 'date-fns';
 
 type FilterType = 'all' | 'unread' | 'sent' | 'deleted';
+
+// Unified conversation type for UI
+interface UnifiedConversation {
+  id: string; // This will be matchId or conversationId
+  type: 'direct' | 'group';
+  name: string;
+  photo: string;
+  lastMessage?: string;
+  lastMessageAt?: string;
+  unreadCount: number;
+  isOnline?: boolean;
+  isPinned: boolean;
+  isDeleted: boolean;
+  participantCount?: number;
+}
 
 export const MessagesPage: React.FC = () => {
   const { user } = useAuth();
