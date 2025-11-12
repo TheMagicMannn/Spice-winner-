@@ -523,24 +523,40 @@ export class MessageService {
   }
 
   /**
-   * Set typing indicator
+   * Set typing indicator (supports both match_id and conversation_id)
    */
-  static async setTyping(matchId: string, userId: string, isTyping: boolean): Promise<void> {
+  static async setTyping(chatId: string, userId: string, isTyping: boolean): Promise<void> {
     try {
       if (isTyping) {
+        // Try conversation_id first, then fall back to match_id
+        const upsertData: any = {
+          user_id: userId,
+          is_typing: true,
+          updated_at: new Date().toISOString()
+        };
+        
+        // Check if this is a UUID (conversation) or match
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(chatId);
+        
+        if (isUUID) {
+          // Try as conversation_id
+          upsertData.conversation_id = chatId;
+          upsertData.match_id = null;
+        } else {
+          // Use as match_id
+          upsertData.match_id = chatId;
+          upsertData.conversation_id = null;
+        }
+        
         await supabase
           .from('typing_indicators')
-          .upsert({
-            match_id: matchId,
-            user_id: userId,
-            is_typing: true,
-            updated_at: new Date().toISOString()
-          });
+          .upsert(upsertData);
       } else {
+        // Delete typing indicator for both match_id and conversation_id
         await supabase
           .from('typing_indicators')
           .delete()
-          .eq('match_id', matchId)
+          .or(`match_id.eq.${chatId},conversation_id.eq.${chatId}`)
           .eq('user_id', userId);
       }
     } catch (error) {
