@@ -742,7 +742,7 @@ export const ChatPage: React.FC = () => {
       )}
 
       {/* Input Bar - Instagram Style */}
-      <div className="border-t border-pink-500/30 bg-black/95 backdrop-blur-sm">
+      <div className="border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0">
         <div className="px-4 py-3 flex items-center gap-2">
           <input
             ref={fileInputRef}
