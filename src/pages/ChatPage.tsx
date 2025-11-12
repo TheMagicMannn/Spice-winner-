@@ -359,13 +359,28 @@ export const ChatPage: React.FC = () => {
     setIsSending(true);
     setUploadError(null);
     try {
-      const newMessage = await MessageService.sendMediaMessage(
-        matchId,
-        user.id,
-        selectedMedia,
-        mediaType,
-        selectedSelfDestruct
-      );
+      let newMessage;
+      
+      // Check if using conversation-based system
+      if (conversationDetails) {
+        newMessage = await MessageService.sendMediaMessageInConversation(
+          matchId,
+          user.id,
+          selectedMedia,
+          mediaType,
+          selectedSelfDestruct
+        );
+      } else {
+        // Fallback to match-based
+        newMessage = await MessageService.sendMediaMessage(
+          matchId,
+          user.id,
+          selectedMedia,
+          mediaType,
+          selectedSelfDestruct
+        );
+      }
+      
       handleNewMessage(newMessage);
       clearMediaSelection();
     } catch (error: any) {
