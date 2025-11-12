@@ -151,7 +151,7 @@ const AppContent: React.FC = () => {
     
     return (
       <>
-        <main className="pb-16">
+        <main className={isChatPage ? '' : 'pb-16'}>
           <Routes>
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/events" element={<EventsPage />} />
@@ -173,7 +173,7 @@ const AppContent: React.FC = () => {
             <Route path="*" element={<Navigate to="/community" />} />
           </Routes>
         </main>
-        <BottomNav />
+        {!isChatPage && <BottomNav />}
       </>
     );
   }
