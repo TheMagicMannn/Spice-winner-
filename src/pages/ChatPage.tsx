@@ -70,6 +70,10 @@ export const ChatPage: React.FC = () => {
   const [otherUserName, setOtherUserName] = useState('');
   const [otherUserPhoto, setOtherUserPhoto] = useState('');
   
+  // Group chat state
+  const [conversationDetails, setConversationDetails] = useState<ConversationDetails | null>(null);
+  const [isGroupChat, setIsGroupChat] = useState(false);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messageChannelRef = useRef<RealtimeChannel | null>(null);
