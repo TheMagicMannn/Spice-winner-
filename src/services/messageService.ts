@@ -4,6 +4,7 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 export interface Message {
   id: string;
   matchId: string;
+  conversationId?: string; // Added for conversation-based messaging
   senderId: string;
   content: string;
   messageType: 'text' | 'image' | 'video' | 'voice' | 'gif';
