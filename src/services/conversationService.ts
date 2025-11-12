@@ -30,21 +30,57 @@ export interface ConversationDetails {
 export class ConversationService {
   /**
    * Get or create a direct conversation between two users
+   * Falls back to match-based system if conversation schema not yet deployed
    */
   static async getOrCreateDirectConversation(
     userId1: string,
     userId2: string
   ): Promise<string> {
     try {
+      // Try new conversation system first
       const { data, error } = await supabase.rpc('get_or_create_direct_conversation', {
         user1_id: userId1,
         user2_id: userId2
       });
 
-      if (error) throw error;
+      if (error) {
+        // If function doesn't exist, fall back to match-based system
+        console.log('Conversation system not deployed yet, using match-based system');
+        return await this.getMatchIdFallback(userId1, userId2);
+      }
+      
       return data;
     } catch (error) {
       console.error('Error getting/creating direct conversation:', error);
+      // Try fallback
+      return await this.getMatchIdFallback(userId1, userId2);
+    }
+  }
+
+  /**
+   * Fallback: Get matchId between two users (legacy system)
+   */
+  private static async getMatchIdFallback(
+    userId1: string,
+    userId2: string
+  ): Promise<string> {
+    try {
+      const { data, error } = await supabase
+        .from('matches')
+        .select('id')
+        .eq('status', 'matched')
+        .or(`and(user1_id.eq.${userId1},user2_id.eq.${userId2}),and(user1_id.eq.${userId2},user2_id.eq.${userId1})`)
+        .maybeSingle();
+
+      if (error) throw error;
+      
+      if (data) {
+        return data.id;
+      } else {
+        throw new Error('No match found between these users');
+      }
+    } catch (error) {
+      console.error('Error getting match ID:', error);
       throw error;
     }
   }
