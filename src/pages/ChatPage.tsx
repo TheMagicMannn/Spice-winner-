@@ -46,9 +46,12 @@ const FILE_SIZE_LIMITS = {
 };
 
 export const ChatPage: React.FC = () => {
-  const { matchId, otherUserId } = useParams<{ matchId: string; otherUserId: string }>();
+  const { conversationId, matchId, otherUserId } = useParams<{ conversationId?: string; matchId?: string; otherUserId?: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  
+  // Determine the actual conversation/match ID to use
+  const chatId = conversationId || matchId;
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
