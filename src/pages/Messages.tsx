@@ -302,22 +302,28 @@ export const MessagesPage: React.FC = () => {
       <div className="p-4 space-y-2">
         {conversations.map((conversation) => (
           <Card
-            key={conversation.matchId}
+            key={conversation.id}
             onClick={(e) => handleConversationClick(conversation, e)}
             className={`bg-black/50 border-pink-500/30 hover:border-pink-500/60 transition-all cursor-pointer ${
               conversation.isPinned ? 'border-pink-500/60' : ''
             }`}
-            data-testid={`conversation-${conversation.matchId}`}
+            data-testid={`conversation-${conversation.id}`}
           >
             <CardContent className="p-4">
               <div className="flex gap-3">
                 {/* Profile Image with Online Indicator */}
                 <div className="relative">
-                  <img
-                    src={conversation.otherUserPhoto || 'https://via.placeholder.com/150'}
-                    alt={conversation.otherUserName}
-                    className="w-14 h-14 rounded-full object-cover"
-                  />
+                  {conversation.type === 'group' ? (
+                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
+                      <Users className="h-7 w-7 text-white" />
+                    </div>
+                  ) : (
+                    <img
+                      src={conversation.photo || 'https://via.placeholder.com/150'}
+                      alt={conversation.name}
+                      className="w-14 h-14 rounded-full object-cover"
+                    />
+                  )}
                   {conversation.isOnline && (
                     <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-black rounded-full" />
                   )}
@@ -328,10 +334,13 @@ export const MessagesPage: React.FC = () => {
                   <div className="flex items-start justify-between mb-1">
                     <div className="flex items-center gap-2">
                       <h3 className="text-white font-semibold truncate">
-                        {conversation.otherUserName}
+                        {conversation.name}
                       </h3>
                       {conversation.isPinned && (
                         <Pin className="h-4 w-4 text-pink-500 fill-pink-500" />
+                      )}
+                      {conversation.type === 'group' && conversation.participantCount && (
+                        <span className="text-white/40 text-xs">({conversation.participantCount})</span>
                       )}
                     </div>
                     <span className="text-white/50 text-xs whitespace-nowrap ml-2">
@@ -357,7 +366,7 @@ export const MessagesPage: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={(e) => handleRestoreConversation(conversation.matchId, e)}
+                      onClick={(e) => handleRestoreConversation(conversation, e)}
                       className="text-green-500 hover:bg-green-500/10 h-8 w-8 p-0"
                       title="Restore conversation"
                     >
@@ -368,7 +377,7 @@ export const MessagesPage: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={(e) => handlePinConversation(conversation.matchId, e)}
+                        onClick={(e) => handlePinConversation(conversation, e)}
                         className={`h-8 w-8 p-0 ${
                           conversation.isPinned
                             ? 'text-pink-500 hover:bg-pink-500/10'
@@ -381,7 +390,7 @@ export const MessagesPage: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={(e) => handleDeleteConversation(conversation.matchId, e)}
+                        onClick={(e) => handleDeleteConversation(conversation, e)}
                         className="text-red-500 hover:bg-red-500/10 h-8 w-8 p-0"
                         title="Delete conversation"
                       >
