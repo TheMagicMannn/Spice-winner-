@@ -313,6 +313,12 @@ export const MessagesPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* New Message Modal */}
+      <NewMessageModal
+        isOpen={showNewMessageModal}
+        onClose={() => setShowNewMessageModal(false)}
+      />
     </div>
   );
 };
