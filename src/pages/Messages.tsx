@@ -127,25 +127,35 @@ export const MessagesPage: React.FC = () => {
     navigate(`/messages/${conversation.id}`);
   };
 
-  const handlePinConversation = async (matchId: string, e: React.MouseEvent) => {
+  const handlePinConversation = async (conversation: UnifiedConversation, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
 
     try {
-      await MessageService.togglePinConversation(user.id, matchId);
+      if (conversation.type === 'group' || conversation.type === 'direct') {
+        // Try conversation-based system first
+        await ConversationService.togglePinConversation(user.id, conversation.id);
+      } else {
+        // Fallback to match-based system
+        await MessageService.togglePinConversation(user.id, conversation.id);
+      }
       loadConversations();
     } catch (error) {
       console.error('Error pinning conversation:', error);
     }
   };
 
-  const handleDeleteConversation = async (matchId: string, e: React.MouseEvent) => {
+  const handleDeleteConversation = async (conversation: UnifiedConversation, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
 
     if (confirm('Delete this conversation? You can restore it later from deleted messages.')) {
       try {
-        await MessageService.deleteConversation(user.id, matchId);
+        if (conversation.type === 'group' || conversation.type === 'direct') {
+          await ConversationService.deleteConversation(user.id, conversation.id);
+        } else {
+          await MessageService.deleteConversation(user.id, conversation.id);
+        }
         loadConversations();
       } catch (error) {
         console.error('Error deleting conversation:', error);
@@ -153,12 +163,16 @@ export const MessagesPage: React.FC = () => {
     }
   };
 
-  const handleRestoreConversation = async (matchId: string, e: React.MouseEvent) => {
+  const handleRestoreConversation = async (conversation: UnifiedConversation, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
 
     try {
-      await MessageService.restoreConversation(user.id, matchId);
+      if (conversation.type === 'group' || conversation.type === 'direct') {
+        await ConversationService.restoreConversation(user.id, conversation.id);
+      } else {
+        await MessageService.restoreConversation(user.id, conversation.id);
+      }
       loadConversations();
     } catch (error) {
       console.error('Error restoring conversation:', error);
