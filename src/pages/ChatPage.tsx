@@ -323,19 +323,19 @@ export const ChatPage: React.FC = () => {
   };
 
   const handleTyping = (typing: boolean) => {
-    if (!user || !matchId) return;
+    if (!user || !chatId) return;
 
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
     }
 
     if (typing) {
-      MessageService.setTyping(matchId, user.id, true);
+      MessageService.setTyping(chatId, user.id, true);
       typingTimeoutRef.current = setTimeout(() => {
-        MessageService.setTyping(matchId, user.id, false);
+        MessageService.setTyping(chatId, user.id, false);
       }, 3000);
     } else {
-      MessageService.setTyping(matchId, user.id, false);
+      MessageService.setTyping(chatId, user.id, false);
     }
   };
 
