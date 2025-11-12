@@ -15,15 +15,18 @@ import {
   CheckCheck,
   Phone,
   VideoIcon,
-  Info
+  Info,
+  Users
 } from 'lucide-react';
 import { MessageService, Message } from '@/services/messageService';
 import { ProfileService } from '@/services/profileService';
+import { ConversationService, ConversationDetails } from '@/services/conversationService';
 import { useAuth } from '@/hooks/useAuth';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { MessageContextMenu } from '@/components/MessageContextMenu';
 import { EmojiPicker } from '@/components/EmojiPicker';
 import { ProfileDetailModal } from '@/components/ProfileDetailModal';
+import { GroupAvatar } from '@/components/GroupAvatar';
 import { Profile } from '@/types';
 
 const SELF_DESTRUCT_OPTIONS = [
