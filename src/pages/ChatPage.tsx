@@ -93,12 +93,21 @@ export const ChatPage: React.FC = () => {
     }
   }, [matchId]);
 
-  // Load other user's profile (for direct chats)
+  // Load other user's profile (for direct chats only, after we know if it's a group)
   useEffect(() => {
-    if (otherUserId && !isGroupChat) {
+    // Only load profile if we have a valid otherUserId and it's not a group chat
+    if (otherUserId && !isGroupChat && conversationDetails === null) {
+      // Wait a bit to ensure conversation details are loaded first
+      const timer = setTimeout(() => {
+        if (!isGroupChat) {
+          loadOtherUserProfile();
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    } else if (otherUserId && conversationDetails !== null && !isGroupChat) {
       loadOtherUserProfile();
     }
-  }, [otherUserId, isGroupChat]);
+  }, [otherUserId, isGroupChat, conversationDetails]);
 
   // Load messages
   useEffect(() => {
