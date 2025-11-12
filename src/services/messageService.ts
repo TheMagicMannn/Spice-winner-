@@ -581,32 +581,6 @@ export class MessageService {
   }
 
   /**
-   * Transform database message to app format
-   */
-  private static transformMessage(dbMessage: any): Message {
-    return {
-      id: dbMessage.id,
-      matchId: dbMessage.match_id,
-      senderId: dbMessage.sender_id,
-      content: dbMessage.content || '',
-      messageType: dbMessage.message_type,
-      mediaUrl: dbMessage.media_url,
-      selfDestructSeconds: dbMessage.self_destruct_seconds,
-      firstViewedAt: dbMessage.first_viewed_at,
-      expiresAt: dbMessage.expires_at,
-      isRead: dbMessage.is_read,
-      readAt: dbMessage.read_at,
-      isDeleted: dbMessage.is_deleted,
-      deletedAt: dbMessage.deleted_at,
-      replyToId: dbMessage.reply_to_id,
-      replyToMessage: dbMessage.reply_to_message,
-      reactions: dbMessage.reactions || [],
-      createdAt: dbMessage.created_at,
-      updatedAt: dbMessage.updated_at
-    };
-  }
-
-  /**
    * Get other user's profile from match
    */
   static async getOtherUserFromMatch(matchId: string, currentUserId: string): Promise<any> {
