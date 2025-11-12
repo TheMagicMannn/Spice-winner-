@@ -118,13 +118,13 @@ export const MessagesPage: React.FC = () => {
     }
   };
 
-  const handleConversationClick = (conversation: Conversation, e: React.MouseEvent) => {
+  const handleConversationClick = (conversation: UnifiedConversation, e: React.MouseEvent) => {
     // Prevent opening chat if clicking on action buttons
     if ((e.target as HTMLElement).closest('.action-button')) {
       return;
     }
-    // Navigate to chat page
-    navigate(`/messages/${conversation.matchId}/${conversation.otherUserId}`);
+    // Navigate to unified chat page
+    navigate(`/messages/${conversation.id}`);
   };
 
   const handlePinConversation = async (matchId: string, e: React.MouseEvent) => {
