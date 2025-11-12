@@ -459,7 +459,7 @@ export class MessageService {
   }
 
   /**
-   * Subscribe to new messages in a conversation
+   * Subscribe to new messages in a conversation (supports both match_id and conversation_id)
    */
   static subscribeToMessages(
     matchId: string,
@@ -467,6 +467,32 @@ export class MessageService {
   ): RealtimeChannel {
     const channel = supabase
       .channel(`messages:${matchId}`)
+      // Subscribe to conversation-based messages
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'messages',
+          filter: `conversation_id=eq.${matchId}`
+        },
+        (payload) => {
+          onMessage(this.transformMessage(payload.new));
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'messages',
+          filter: `conversation_id=eq.${matchId}`
+        },
+        (payload) => {
+          onMessage(this.transformMessage(payload.new));
+        }
+      )
+      // Also subscribe to match-based messages for backward compatibility
       .on(
         'postgres_changes',
         {
