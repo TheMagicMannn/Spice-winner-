@@ -645,14 +645,37 @@ export const ChatPage: React.FC = () => {
               onClick={handleProfileClick}
               className="flex items-center gap-3 hover:opacity-80 transition-opacity flex-1"
             >
-              <Avatar className="h-10 w-10 border-2 border-pink-500/30">
-                <AvatarImage src={otherUserPhoto} alt={otherUserName} />
-                <AvatarFallback className="bg-pink-600 text-white">
-                  {otherUserName[0] || '?'}
-                </AvatarFallback>
-              </Avatar>
+              {isGroupChat && conversationDetails ? (
+                // Group chat - show grouped avatars
+                <GroupAvatar
+                  participants={conversationDetails.participants
+                    .filter(p => p.isActive)
+                    .map(p => ({
+                      id: p.userId,
+                      name: p.profile?.displayName || 'User',
+                      photo: p.profile?.photos?.[0]
+                    }))}
+                  size="md"
+                  maxDisplay={3}
+                />
+              ) : (
+                // Direct chat - show single avatar
+                <Avatar className="h-10 w-10 border-2 border-pink-500/30">
+                  <AvatarImage src={otherUserPhoto} alt={otherUserName} />
+                  <AvatarFallback className="bg-pink-600 text-white">
+                    {otherUserName[0] || '?'}
+                  </AvatarFallback>
+                </Avatar>
+              )}
               <div className="text-left">
-                <h3 className="text-white font-semibold text-base">{otherUserName}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-white font-semibold text-base">{otherUserName}</h3>
+                  {isGroupChat && conversationDetails && (
+                    <span className="text-white/60 text-xs">
+                      ({conversationDetails.participants.filter(p => p.isActive).length} members)
+                    </span>
+                  )}
+                </div>
                 {isTyping && (
                   <p className="text-xs text-pink-400 animate-pulse">typing...</p>
                 )}
@@ -661,6 +684,15 @@ export const ChatPage: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-2">
+            {isGroupChat && (
+              <button
+                onClick={handleProfileClick}
+                className="text-white hover:text-pink-400 transition-colors p-2"
+                title="Group info"
+              >
+                <Users className="h-6 w-6" />
+              </button>
+            )}
             <button
               onClick={handleProfileClick}
               className="text-white hover:text-pink-400 transition-colors p-2"
