@@ -565,25 +565,42 @@ export class MessageService {
   }
 
   /**
-   * Subscribe to typing indicators
+   * Subscribe to typing indicators (supports both match_id and conversation_id)
    */
   static subscribeToTyping(
-    matchId: string,
+    chatId: string,
     currentUserId: string,
     onTypingChange: (isTyping: boolean) => void
   ): RealtimeChannel {
     const channel = supabase
-      .channel(`typing:${matchId}`)
+      .channel(`typing:${chatId}`)
+      // Subscribe to match-based typing
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'typing_indicators',
-          filter: `match_id=eq.${matchId}`
+          filter: `match_id=eq.${chatId}`
         },
         (payload: any) => {
-          // Only notify if it's the other user typing
+          if (payload.new && payload.new.user_id && payload.new.user_id !== currentUserId) {
+            onTypingChange(payload.new.is_typing || false);
+          } else if (payload.eventType === 'DELETE' && payload.old && payload.old.user_id !== currentUserId) {
+            onTypingChange(false);
+          }
+        }
+      )
+      // Subscribe to conversation-based typing
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'typing_indicators',
+          filter: `conversation_id=eq.${chatId}`
+        },
+        (payload: any) => {
           if (payload.new && payload.new.user_id && payload.new.user_id !== currentUserId) {
             onTypingChange(payload.new.is_typing || false);
           } else if (payload.eventType === 'DELETE' && payload.old && payload.old.user_id !== currentUserId) {
