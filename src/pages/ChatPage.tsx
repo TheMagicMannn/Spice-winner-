@@ -365,7 +365,7 @@ export const ChatPage: React.FC = () => {
   };
 
   const handleSendMedia = async () => {
-    if (!selectedMedia || !mediaType || !user || !matchId) return;
+    if (!selectedMedia || !mediaType || !user || !chatId) return;
 
     setIsSending(true);
     setUploadError(null);
@@ -375,7 +375,7 @@ export const ChatPage: React.FC = () => {
       // Check if using conversation-based system
       if (conversationDetails) {
         newMessage = await MessageService.sendMediaMessageInConversation(
-          matchId,
+          chatId,
           user.id,
           selectedMedia,
           mediaType,
@@ -384,7 +384,7 @@ export const ChatPage: React.FC = () => {
       } else {
         // Fallback to match-based
         newMessage = await MessageService.sendMediaMessage(
-          matchId,
+          chatId,
           user.id,
           selectedMedia,
           mediaType,
