@@ -92,29 +92,29 @@ export const ChatPage: React.FC = () => {
   // Load conversation details (determines if group or direct chat)
   // This also loads profile for direct chats
   useEffect(() => {
-    if (matchId) {
+    if (chatId) {
       loadConversationDetails();
     }
-  }, [matchId]);
+  }, [chatId]);
 
   // Load messages
   useEffect(() => {
-    if (matchId) {
+    if (chatId) {
       loadMessages();
       markAsRead();
     }
-  }, [matchId]);
+  }, [chatId]);
 
   // Subscribe to real-time messages
   useEffect(() => {
-    if (matchId && user) {
+    if (chatId && user) {
       messageChannelRef.current = MessageService.subscribeToMessages(
-        matchId,
+        chatId,
         handleNewMessage
       );
 
       typingChannelRef.current = MessageService.subscribeToTyping(
-        matchId,
+        chatId,
         user.id,
         setIsTyping
       );
@@ -124,7 +124,7 @@ export const ChatPage: React.FC = () => {
         typingChannelRef.current?.unsubscribe();
       };
     }
-  }, [matchId, user]);
+  }, [chatId, user]);
 
   // Auto-scroll to bottom
   useEffect(() => {
