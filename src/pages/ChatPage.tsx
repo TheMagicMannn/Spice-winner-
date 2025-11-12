@@ -594,9 +594,9 @@ export const ChatPage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-b from-gray-900 via-black to-black pb-16">
+    <div className="flex flex-col fixed inset-0 bg-gradient-to-b from-gray-900 via-black to-black">
       {/* Instagram-style Header */}
-      <div className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-pink-500/30">
+      <div className="sticky top-0 z-50 bg-black/95 backdrop-blur-sm border-b border-pink-500/30 flex-shrink-0">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3 flex-1">
             <button
