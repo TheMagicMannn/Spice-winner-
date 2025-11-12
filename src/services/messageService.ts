@@ -190,11 +190,14 @@ export class MessageService {
   }
 
   /**
-   * Get messages for a conversation
+   * Get messages for a conversation (works for both match-based and conversation-based)
    */
   static async getMessages(matchId: string, limit: number = 50): Promise<Message[]> {
     try {
-      const { data, error } = await supabase
+      // Try conversation_id first (for group chats and new direct chats)
+      let data, error;
+      
+      const conversationQuery = await supabase
         .from('messages')
         .select(`
           *,
@@ -205,10 +208,35 @@ export class MessageService {
             sender_id
           )
         `)
-        .eq('match_id', matchId)
+        .eq('conversation_id', matchId)
         .eq('is_deleted', false)
         .order('created_at', { ascending: true })
         .limit(limit);
+
+      if (conversationQuery.data && conversationQuery.data.length > 0) {
+        data = conversationQuery.data;
+        error = conversationQuery.error;
+      } else {
+        // Fallback to match_id (for legacy direct messages)
+        const matchQuery = await supabase
+          .from('messages')
+          .select(`
+            *,
+            reply_to_message:reply_to_id (
+              id,
+              content,
+              message_type,
+              sender_id
+            )
+          `)
+          .eq('match_id', matchId)
+          .eq('is_deleted', false)
+          .order('created_at', { ascending: true })
+          .limit(limit);
+        
+        data = matchQuery.data;
+        error = matchQuery.error;
+      }
 
       if (error) throw error;
 
