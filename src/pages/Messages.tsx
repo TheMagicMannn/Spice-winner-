@@ -332,6 +332,11 @@ export const MessagesPage: React.FC = () => {
         isOpen={showNewMessageModal}
         onClose={() => setShowNewMessageModal(false)}
       />
+
+      {/* Create Group Modal */}
+      {showCreateGroupModal && (
+        <CreateGroupChat onClose={() => setShowCreateGroupModal(false)} />
+      )}
     </div>
   );
 };
