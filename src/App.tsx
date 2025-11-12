@@ -161,6 +161,7 @@ const AppContent: React.FC = () => {
             <Route path="/browse" element={<BrowsePage />} />
             <Route path="/matches" element={<MatchesPage />} />
             <Route path="/messages" element={<MessagesPage />} />
+            <Route path="/messages/:conversationId" element={<ChatPage />} />
             <Route path="/messages/:matchId/:otherUserId" element={<ChatPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/learning-journey" element={<LearningJourneyPage />} />
