@@ -32,7 +32,7 @@ interface UnifiedConversation {
 export const MessagesPage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<UnifiedConversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [showFilterMenu, setShowFilterMenu] = useState(false);
@@ -51,8 +51,66 @@ export const MessagesPage: React.FC = () => {
     
     setIsLoading(true);
     try {
-      const convos = await MessageService.getConversations(user.id, activeFilter);
-      setConversations(convos);
+      // Load both match-based and conversation-based threads
+      const [matchConvos, conversationThreads] = await Promise.all([
+        MessageService.getConversations(user.id, activeFilter).catch(() => []),
+        ConversationService.getUserConversations(user.id, activeFilter).catch(() => [])
+      ]);
+
+      // Convert match-based conversations to unified format
+      const unifiedMatchConvos: UnifiedConversation[] = matchConvos.map((conv: Conversation) => ({
+        id: conv.matchId,
+        type: 'direct' as const,
+        name: conv.otherUserName,
+        photo: conv.otherUserPhoto,
+        lastMessage: conv.lastMessage,
+        lastMessageAt: conv.lastMessageAt,
+        unreadCount: conv.unreadCount,
+        isOnline: conv.isOnline,
+        isPinned: conv.isPinned,
+        isDeleted: conv.isDeleted
+      }));
+
+      // Convert conversation-based threads to unified format
+      const unifiedConversationThreads: UnifiedConversation[] = conversationThreads.map((conv: ConversationDetails) => {
+        // For direct chats in conversation system, get the other user's name
+        let name = conv.groupName || 'Chat';
+        let photo = conv.groupPhoto || '';
+        
+        if (conv.conversationType === 'direct') {
+          const otherParticipant = conv.participants.find(p => p.userId !== user.id);
+          name = otherParticipant?.profile?.displayName || 'User';
+          photo = otherParticipant?.profile?.photos?.[0] || '';
+        }
+
+        return {
+          id: conv.id,
+          type: conv.conversationType,
+          name,
+          photo,
+          lastMessage: conv.lastMessage,
+          lastMessageAt: conv.lastMessageAt,
+          unreadCount: conv.unreadCount,
+          isPinned: conv.isPinned || false,
+          isDeleted: conv.isDeleted || false,
+          participantCount: conv.participants.filter(p => p.isActive).length
+        };
+      });
+
+      // Merge and deduplicate (prefer conversation-based over match-based for same chat)
+      const merged = [...unifiedConversationThreads, ...unifiedMatchConvos];
+      
+      // Sort: pinned first, then by last message time
+      const sorted = merged.sort((a, b) => {
+        if (a.isPinned && !b.isPinned) return -1;
+        if (!a.isPinned && b.isPinned) return 1;
+        
+        if (!a.lastMessageAt) return 1;
+        if (!b.lastMessageAt) return -1;
+        return new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime();
+      });
+
+      setConversations(sorted);
     } catch (error) {
       console.error('Error loading conversations:', error);
     } finally {
