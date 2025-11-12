@@ -94,6 +94,7 @@ USING (
 DO $$ 
 DECLARE
     policy_count INTEGER;
+    pol RECORD;
 BEGIN
     -- Count policies on messages table
     SELECT COUNT(*) INTO policy_count
