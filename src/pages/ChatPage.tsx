@@ -149,6 +149,27 @@ export const ChatPage: React.FC = () => {
     previousMessageCountRef.current = messages.length;
   }, [messages]);
 
+  const loadConversationDetails = async () => {
+    if (!matchId) return;
+    try {
+      // Try to get conversation details (for group chats)
+      const details = await ConversationService.getConversationDetails(matchId);
+      if (details && details.conversationType === 'group') {
+        setConversationDetails(details);
+        setIsGroupChat(true);
+        setOtherUserName(details.groupName || 'Group Chat');
+        setOtherUserPhoto(details.groupPhoto || '');
+      } else {
+        // It's a direct chat
+        setIsGroupChat(false);
+      }
+    } catch (error) {
+      // Fallback: assume it's a direct chat if conversation details not available
+      console.log('Using direct chat mode');
+      setIsGroupChat(false);
+    }
+  };
+
   const loadOtherUserProfile = async () => {
     if (!otherUserId) return;
     try {
