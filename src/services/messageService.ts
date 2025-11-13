@@ -44,9 +44,6 @@ export interface Conversation {
 }
 
 export class MessageService {
-  // Request deduplication map to prevent duplicate inserts
-  private static pendingRequests = new Map<string, Promise<Message>>();
-  
   /**
    * Get all conversations for a user with optional filtering
    */
@@ -197,6 +194,8 @@ export class MessageService {
    */
   static async getMessages(matchId: string, limit: number = 50): Promise<Message[]> {
     try {
+      console.log("[v0] getMessages called with matchId:", matchId);
+      
       // Try conversation_id first (for group chats and new direct chats)
       let data, error;
       
@@ -215,6 +214,11 @@ export class MessageService {
         .eq('is_deleted', false)
         .order('created_at', { ascending: true })
         .limit(limit);
+
+      console.log("[v0] Conversation query result:", { 
+        dataLength: conversationQuery.data?.length, 
+        error: conversationQuery.error 
+      });
 
       if (conversationQuery.data && conversationQuery.data.length > 0) {
         data = conversationQuery.data;
@@ -237,15 +241,25 @@ export class MessageService {
           .order('created_at', { ascending: true })
           .limit(limit);
         
+        console.log("[v0] Match query result:", { 
+          dataLength: matchQuery.data?.length, 
+          error: matchQuery.error 
+        });
+
         data = matchQuery.data;
         error = matchQuery.error;
       }
 
-      if (error) throw error;
+      if (error) {
+        console.error("[v0] Error fetching messages:", error);
+        throw error;
+      }
 
-      return (data || []).map(this.transformMessage);
-    } catch (error) {
-      console.error('Error getting messages:', error);
+      const messages = (data || []).map(this.transformMessage);
+      console.log("[v0] Successfully loaded", messages.length, "messages");
+      return messages;
+    } catch (error: any) {
+      console.error("[v0] Error in getMessages:", error?.message || error);
       throw error;
     }
   }
@@ -258,75 +272,29 @@ export class MessageService {
     senderId: string,
     content: string
   ): Promise<Message> {
-    // Create request key for deduplication
-    const requestKey = `msg-${matchId}-${senderId}-${content}-${Date.now()}`;
-    
-    // Check if identical request is already pending
-    if (this.pendingRequests.has(requestKey)) {
-      console.log('Duplicate request detected, returning existing promise');
-      return this.pendingRequests.get(requestKey)!;
-    }
-    
-    // Create the promise and store it
-    const promise = this.executeSendMessage(matchId, senderId, content);
-    this.pendingRequests.set(requestKey, promise);
-    
-    // Clean up after completion
-    promise.finally(() => {
-      this.pendingRequests.delete(requestKey);
-    });
-    
-    return promise;
-  }
-  
-  private static async executeSendMessage(
-    matchId: string,
-    senderId: string,
-    content: string
-  ): Promise<Message> {
     try {
-      // Create clean payload using ONLY allowed fields
-      // DO NOT spread or clone any objects that might contain an 'id'
-      const payload = {
-        match_id: matchId,
-        sender_id: senderId,
-        content: content,
-        message_type: 'text' as const
-      };
-      
-      // Verify payload has exactly the fields we expect
-      const payloadKeys = Object.keys(payload);
-      console.log('[MESSAGE_INSERT] Payload keys:', payloadKeys);
-      console.log('[MESSAGE_INSERT] Payload size:', JSON.stringify(payload).length, 'bytes');
-      console.log('[MESSAGE_INSERT] Payload:', JSON.stringify(payload));
-      
-      // Extra defensive check
-      if ('id' in payload) {
-        console.error('[MESSAGE_INSERT] WARNING: id field detected in payload!');
-        // @ts-ignore
-        delete payload.id;
-      }
+      console.log("[v0] sendMessage called with matchId:", matchId, "senderId:", senderId);
       
       const { data, error } = await supabase
         .from('messages')
-        .insert(payload)
+        .insert({
+          match_id: matchId,
+          sender_id: senderId,
+          content,
+          message_type: 'text'
+        })
         .select()
         .single();
 
       if (error) {
-        console.error('[MESSAGE_INSERT] Supabase error:', error);
-        console.error('[MESSAGE_INSERT] Error code:', error.code);
-        console.error('[MESSAGE_INSERT] Error message:', error.message);
-        console.error('[MESSAGE_INSERT] Error details:', error.details);
-        console.error('[MESSAGE_INSERT] Error hint:', error.hint);
-        console.error('[MESSAGE_INSERT] Final payload sent:', JSON.stringify(payload));
-        throw error;
+        console.error("[v0] Error sending message:", error);
+        throw new Error(`Failed to send message: ${error.message}`);
       }
 
-      console.log('[MESSAGE_INSERT] Success! Message ID:', data.id);
+      console.log("[v0] Message sent successfully:", data.id);
       return this.transformMessage(data);
-    } catch (error) {
-      console.error('[MESSAGE_INSERT] Exception:', error);
+    } catch (error: any) {
+      console.error("[v0] Error in sendMessage:", error?.message || error);
       throw error;
     }
   }
@@ -362,30 +330,20 @@ export class MessageService {
           content = 'Media';
       }
 
-      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
-      const payload: any = {
-        match_id: matchId,
-        sender_id: senderId,
-        content: content,
-        message_type: messageType,
-        media_url: mediaUrl,
-        self_destruct_seconds: selfDestructSeconds
-      };
-      
-      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
-      delete payload.id;
-
       const { data, error } = await supabase
         .from('messages')
-        .insert(payload)
+        .insert({
+          match_id: matchId,
+          sender_id: senderId,
+          content: content,
+          message_type: messageType,
+          media_url: mediaUrl,
+          self_destruct_seconds: selfDestructSeconds
+        })
         .select()
         .single();
 
-      if (error) {
-        console.error('Supabase insert error:', error);
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        throw error;
-      }
+      if (error) throw error;
 
       return this.transformMessage(data);
     } catch (error) {
@@ -530,6 +488,8 @@ export class MessageService {
     matchId: string,
     onMessage: (message: Message) => void
   ): RealtimeChannel {
+    console.log("[v0] Setting up message subscription for:", matchId);
+
     const channel = supabase
       .channel(`messages:${matchId}`)
       // Subscribe to conversation-based messages
@@ -542,6 +502,7 @@ export class MessageService {
           filter: `conversation_id=eq.${matchId}`
         },
         (payload) => {
+          console.log("[v0] New message received (conversation):", payload.new.id);
           onMessage(this.transformMessage(payload.new));
         }
       )
@@ -554,6 +515,7 @@ export class MessageService {
           filter: `conversation_id=eq.${matchId}`
         },
         (payload) => {
+          console.log("[v0] Message updated (conversation):", payload.new.id);
           onMessage(this.transformMessage(payload.new));
         }
       )
@@ -567,6 +529,7 @@ export class MessageService {
           filter: `match_id=eq.${matchId}`
         },
         (payload) => {
+          console.log("[v0] New message received (match):", payload.new.id);
           onMessage(this.transformMessage(payload.new));
         }
       )
@@ -579,49 +542,39 @@ export class MessageService {
           filter: `match_id=eq.${matchId}`
         },
         (payload) => {
+          console.log("[v0] Message updated (match):", payload.new.id);
           onMessage(this.transformMessage(payload.new));
         }
       )
-      .subscribe();
+      .on('error', (error) => {
+        console.error("[v0] Realtime subscription error:", error);
+      })
+      .subscribe((status, err) => {
+        console.log("[v0] Subscription status:", status, "Error:", err);
+      });
 
     return channel;
   }
 
   /**
-   * Set typing indicator (supports both match_id and conversation_id)
+   * Set typing indicator
    */
-  static async setTyping(chatId: string, userId: string, isTyping: boolean): Promise<void> {
+  static async setTyping(matchId: string, userId: string, isTyping: boolean): Promise<void> {
     try {
       if (isTyping) {
-        // Try conversation_id first, then fall back to match_id
-        const upsertData: any = {
-          user_id: userId,
-          is_typing: true,
-          updated_at: new Date().toISOString()
-        };
-        
-        // Check if this is a UUID (conversation) or match
-        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(chatId);
-        
-        if (isUUID) {
-          // Try as conversation_id
-          upsertData.conversation_id = chatId;
-          upsertData.match_id = null;
-        } else {
-          // Use as match_id
-          upsertData.match_id = chatId;
-          upsertData.conversation_id = null;
-        }
-        
         await supabase
           .from('typing_indicators')
-          .upsert(upsertData);
+          .upsert({
+            match_id: matchId,
+            user_id: userId,
+            is_typing: true,
+            updated_at: new Date().toISOString()
+          });
       } else {
-        // Delete typing indicator for both match_id and conversation_id
         await supabase
           .from('typing_indicators')
           .delete()
-          .or(`match_id.eq.${chatId},conversation_id.eq.${chatId}`)
+          .eq('match_id', matchId)
           .eq('user_id', userId);
       }
     } catch (error) {
@@ -630,42 +583,25 @@ export class MessageService {
   }
 
   /**
-   * Subscribe to typing indicators (supports both match_id and conversation_id)
+   * Subscribe to typing indicators
    */
   static subscribeToTyping(
-    chatId: string,
+    matchId: string,
     currentUserId: string,
     onTypingChange: (isTyping: boolean) => void
   ): RealtimeChannel {
     const channel = supabase
-      .channel(`typing:${chatId}`)
-      // Subscribe to match-based typing
+      .channel(`typing:${matchId}`)
       .on(
         'postgres_changes',
         {
           event: '*',
           schema: 'public',
           table: 'typing_indicators',
-          filter: `match_id=eq.${chatId}`
+          filter: `match_id=eq.${matchId}`
         },
         (payload: any) => {
-          if (payload.new && payload.new.user_id && payload.new.user_id !== currentUserId) {
-            onTypingChange(payload.new.is_typing || false);
-          } else if (payload.eventType === 'DELETE' && payload.old && payload.old.user_id !== currentUserId) {
-            onTypingChange(false);
-          }
-        }
-      )
-      // Subscribe to conversation-based typing
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'typing_indicators',
-          filter: `conversation_id=eq.${chatId}`
-        },
-        (payload: any) => {
+          // Only notify if it's the other user typing
           if (payload.new && payload.new.user_id && payload.new.user_id !== currentUserId) {
             onTypingChange(payload.new.is_typing || false);
           } else if (payload.eventType === 'DELETE' && payload.old && payload.old.user_id !== currentUserId) {
@@ -804,21 +740,15 @@ export class MessageService {
     replyToId: string
   ): Promise<Message> {
     try {
-      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
-      const payload: any = {
-        match_id: matchId,
-        sender_id: senderId,
-        content,
-        message_type: 'text',
-        reply_to_id: replyToId
-      };
-      
-      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
-      delete payload.id;
-      
       const { data, error } = await supabase
         .from('messages')
-        .insert(payload)
+        .insert({
+          match_id: matchId,
+          sender_id: senderId,
+          content,
+          message_type: 'text',
+          reply_to_id: replyToId
+        })
         .select(`
           *,
           reply_to_message:reply_to_id (
@@ -830,11 +760,7 @@ export class MessageService {
         `)
         .single();
 
-      if (error) {
-        console.error('Supabase insert error:', error);
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        throw error;
-      }
+      if (error) throw error;
 
       return this.transformMessage(data);
     } catch (error) {
@@ -1011,33 +937,40 @@ export class MessageService {
     messageType: 'text' | 'image' | 'video' | 'voice' | 'gif' = 'text'
   ): Promise<Message> {
     try {
-      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
-      const payload: any = {
-        conversation_id: conversationId,
-        sender_id: senderId,
-        content,
-        message_type: messageType,
-        match_id: null // Important: set to null for conversation messages
-      };
-      
-      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
-      delete payload.id;
-      
+      console.log("[v0] sendMessageInConversation called with conversationId:", conversationId);
+
+      const { data: convData, error: convError } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('id', conversationId)
+        .single();
+
+      if (convError || !convData) {
+        console.error("[v0] Conversation not found or no access:", convError);
+        throw new Error('Conversation not found or you do not have access');
+      }
+
       const { data, error } = await supabase
         .from('messages')
-        .insert(payload)
+        .insert({
+          conversation_id: conversationId,
+          sender_id: senderId,
+          content,
+          message_type: messageType,
+          match_id: null
+        })
         .select()
         .single();
 
       if (error) {
-        console.error('Supabase insert error:', error);
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        throw error;
+        console.error("[v0] Error sending conversation message:", error);
+        throw new Error(`Failed to send message: ${error.message}`);
       }
-      
+
+      console.log("[v0] Conversation message sent successfully:", data.id);
       return this.transformMessage(data);
-    } catch (error) {
-      console.error('Error sending message:', error);
+    } catch (error: any) {
+      console.error("[v0] Error in sendMessageInConversation:", error?.message || error);
       throw error;
     }
   }
@@ -1053,6 +986,8 @@ export class MessageService {
     selfDestructSeconds?: number
   ): Promise<Message> {
     try {
+      console.log("[v0] Uploading media for conversation:", conversationId);
+
       // Upload file to storage
       const mediaUrl = await this.uploadMedia(senderId, conversationId, file, messageType);
 
@@ -1072,35 +1007,29 @@ export class MessageService {
           content = 'Media';
       }
 
-      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
-      const payload: any = {
-        conversation_id: conversationId,
-        sender_id: senderId,
-        content,
-        message_type: messageType,
-        media_url: mediaUrl,
-        self_destruct_seconds: selfDestructSeconds,
-        match_id: null
-      };
-      
-      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
-      delete payload.id;
-
       const { data, error } = await supabase
         .from('messages')
-        .insert(payload)
+        .insert({
+          conversation_id: conversationId,
+          sender_id: senderId,
+          content,
+          message_type: messageType,
+          media_url: mediaUrl,
+          self_destruct_seconds: selfDestructSeconds,
+          match_id: null
+        })
         .select()
         .single();
 
       if (error) {
-        console.error('Supabase insert error:', error);
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        throw error;
+        console.error("[v0] Error creating media message:", error);
+        throw new Error(`Failed to send media: ${error.message}`);
       }
-      
+
+      console.log("[v0] Media message sent successfully:", data.id);
       return this.transformMessage(data);
-    } catch (error) {
-      console.error('Error sending media message:', error);
+    } catch (error: any) {
+      console.error("[v0] Error in sendMediaMessageInConversation:", error?.message || error);
       throw error;
     }
   }
@@ -1222,4 +1151,3 @@ export class MessageService {
     };
   }
 }
-
