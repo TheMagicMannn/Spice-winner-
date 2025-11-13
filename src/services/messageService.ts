@@ -258,6 +258,32 @@ export class MessageService {
     senderId: string,
     content: string
   ): Promise<Message> {
+    // Create request key for deduplication
+    const requestKey = `msg-${matchId}-${senderId}-${content}-${Date.now()}`;
+    
+    // Check if identical request is already pending
+    if (this.pendingRequests.has(requestKey)) {
+      console.log('Duplicate request detected, returning existing promise');
+      return this.pendingRequests.get(requestKey)!;
+    }
+    
+    // Create the promise and store it
+    const promise = this.executeSendMessage(matchId, senderId, content);
+    this.pendingRequests.set(requestKey, promise);
+    
+    // Clean up after completion
+    promise.finally(() => {
+      this.pendingRequests.delete(requestKey);
+    });
+    
+    return promise;
+  }
+  
+  private static async executeSendMessage(
+    matchId: string,
+    senderId: string,
+    content: string
+  ): Promise<Message> {
     try {
       // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
       const payload: any = {
@@ -270,6 +296,8 @@ export class MessageService {
       // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
       delete payload.id;
       
+      console.log('Sending message payload:', JSON.stringify(payload));
+      
       const { data, error } = await supabase
         .from('messages')
         .insert(payload)
@@ -280,9 +308,11 @@ export class MessageService {
         console.error('Supabase insert error:', error);
         // Log full error details for debugging
         console.error('Error details:', JSON.stringify(error, null, 2));
+        console.error('Payload that caused error:', JSON.stringify(payload));
         throw error;
       }
 
+      console.log('Message sent successfully:', data.id);
       return this.transformMessage(data);
     } catch (error) {
       console.error('Error sending message:', error);
