@@ -967,19 +967,30 @@ export class MessageService {
     messageType: 'text' | 'image' | 'video' | 'voice' | 'gif' = 'text'
   ): Promise<Message> {
     try {
+      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
+      const payload: any = {
+        conversation_id: conversationId,
+        sender_id: senderId,
+        content,
+        message_type: messageType,
+        match_id: null // Important: set to null for conversation messages
+      };
+      
+      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
+      delete payload.id;
+      
       const { data, error } = await supabase
         .from('messages')
-        .insert({
-          conversation_id: conversationId,
-          sender_id: senderId,
-          content,
-          message_type: messageType,
-          match_id: null // Important: set to null for conversation messages
-        })
+        .insert(payload)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase insert error:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        throw error;
+      }
+      
       return this.transformMessage(data);
     } catch (error) {
       console.error('Error sending message:', error);
