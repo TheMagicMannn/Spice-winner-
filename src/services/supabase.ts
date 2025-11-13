@@ -18,5 +18,34 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     storageKey: 'spice-dating-auth',
     // Improved session detection for mobile browsers
     flowType: 'pkce'
+  },
+  global: {
+    fetch: (url, options) => {
+      // Debug logging for message inserts
+      if (url.includes('/messages') && options?.method === 'POST') {
+        console.log('[SUPABASE_FETCH] POST to /messages');
+        console.log('[SUPABASE_FETCH] URL:', url);
+        console.log('[SUPABASE_FETCH] Headers:', options.headers);
+        console.log('[SUPABASE_FETCH] Body:', options.body);
+        console.log('[SUPABASE_FETCH] Body length:', options.body?.toString().length, 'bytes');
+        
+        // Parse and log the actual JSON being sent
+        try {
+          const bodyObj = JSON.parse(options.body as string);
+          console.log('[SUPABASE_FETCH] Parsed body:', bodyObj);
+          console.log('[SUPABASE_FETCH] Body keys:', Object.keys(bodyObj));
+          
+          // CRITICAL CHECK: Is 'id' in the body?
+          if ('id' in bodyObj) {
+            console.error('[SUPABASE_FETCH] ⚠️ WARNING: id field detected in HTTP body!');
+            console.error('[SUPABASE_FETCH] ID value:', bodyObj.id);
+          }
+        } catch (e) {
+          console.log('[SUPABASE_FETCH] Could not parse body:', e);
+        }
+      }
+      
+      return fetch(url, options);
+    }
   }
 });
