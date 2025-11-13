@@ -546,11 +546,12 @@ export class MessageService {
           onMessage(this.transformMessage(payload.new));
         }
       )
-      .on('error', (error) => {
-        console.error("[v0] Realtime subscription error:", error);
-      })
-      .subscribe((status, err) => {
-        console.log("[v0] Subscription status:", status, "Error:", err);
+      .subscribe((status: string, err?: Error) => {
+        if (status === 'SUBSCRIBED') {
+          console.log("[v0] Realtime subscription established for match:", matchId);
+        } else if (err) {
+          console.error("[v0] Realtime subscription error:", err);
+        }
       });
 
     return channel;
