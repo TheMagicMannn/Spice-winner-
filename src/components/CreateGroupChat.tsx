@@ -72,18 +72,31 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
       const participantIds = selectedUsers
         .map(u => u.id)
         .filter((id): id is string => id !== undefined);
-      const conversationId = await MessageService.createGroupConversation(
-        user.id,
-        groupName.trim(),
-        participantIds
+      
+      console.log('[v0] Creating group with:', { groupName, participantIds, userId: user.id });
+      
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Group creation timed out')), 30000)
       );
 
-      // Navigate to the new group chat using unified route
-      navigate(`/messages/${conversationId}`);
+      const conversationId = await Promise.race([
+        MessageService.createGroupConversation(
+          user.id,
+          groupName.trim(),
+          participantIds
+        ),
+        timeoutPromise
+      ]) as string;
+
+      console.log('[v0] Group created successfully:', conversationId);
+      
+      // Navigate to the new group chat
+      navigate(`/chat/${conversationId}/group`);
       onClose();
-    } catch (error) {
-      console.error('Error creating group:', error);
-      setError('Failed to create group. Please try again.');
+    } catch (error: any) {
+      console.error('[v0] Error creating group:', error);
+      const errorMessage = error?.message || 'Failed to create group. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsCreating(false);
     }
@@ -140,7 +153,7 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
                   className="flex items-center gap-2 bg-pink-500/20 rounded-full px-3 py-1"
                 >
                   <Avatar className="h-6 w-6">
-                    <AvatarImage src={user.photos?.[0]} alt={user.displayName} />
+                    <AvatarImage src={user.photos?.[0] || "/placeholder.svg"} alt={user.displayName} />
                     <AvatarFallback className="bg-pink-600 text-white text-xs">
                       {user.displayName?.[0] || '?'}
                     </AvatarFallback>
@@ -183,7 +196,7 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
                     data-testid={`contact-${match.id}`}
                   >
                     <Avatar className="h-12 w-12">
-                      <AvatarImage src={match.photos?.[0]} alt={match.displayName} />
+                      <AvatarImage src={match.photos?.[0] || "/placeholder.svg"} alt={match.displayName} />
                       <AvatarFallback className="bg-pink-600 text-white">
                         {match.displayName?.[0] || '?'}
                       </AvatarFallback>
