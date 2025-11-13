@@ -285,18 +285,27 @@ export class MessageService {
     content: string
   ): Promise<Message> {
     try {
-      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
-      const payload: any = {
+      // Create clean payload using ONLY allowed fields
+      // DO NOT spread or clone any objects that might contain an 'id'
+      const payload = {
         match_id: matchId,
         sender_id: senderId,
-        content,
-        message_type: 'text'
+        content: content,
+        message_type: 'text' as const
       };
       
-      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
-      delete payload.id;
+      // Verify payload has exactly the fields we expect
+      const payloadKeys = Object.keys(payload);
+      console.log('[MESSAGE_INSERT] Payload keys:', payloadKeys);
+      console.log('[MESSAGE_INSERT] Payload size:', JSON.stringify(payload).length, 'bytes');
+      console.log('[MESSAGE_INSERT] Payload:', JSON.stringify(payload));
       
-      console.log('Sending message payload:', JSON.stringify(payload));
+      // Extra defensive check
+      if ('id' in payload) {
+        console.error('[MESSAGE_INSERT] WARNING: id field detected in payload!');
+        // @ts-ignore
+        delete payload.id;
+      }
       
       const { data, error } = await supabase
         .from('messages')
@@ -305,17 +314,19 @@ export class MessageService {
         .single();
 
       if (error) {
-        console.error('Supabase insert error:', error);
-        // Log full error details for debugging
-        console.error('Error details:', JSON.stringify(error, null, 2));
-        console.error('Payload that caused error:', JSON.stringify(payload));
+        console.error('[MESSAGE_INSERT] Supabase error:', error);
+        console.error('[MESSAGE_INSERT] Error code:', error.code);
+        console.error('[MESSAGE_INSERT] Error message:', error.message);
+        console.error('[MESSAGE_INSERT] Error details:', error.details);
+        console.error('[MESSAGE_INSERT] Error hint:', error.hint);
+        console.error('[MESSAGE_INSERT] Final payload sent:', JSON.stringify(payload));
         throw error;
       }
 
-      console.log('Message sent successfully:', data.id);
+      console.log('[MESSAGE_INSERT] Success! Message ID:', data.id);
       return this.transformMessage(data);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('[MESSAGE_INSERT] Exception:', error);
       throw error;
     }
   }
