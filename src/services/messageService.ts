@@ -318,20 +318,30 @@ export class MessageService {
           content = 'Media';
       }
 
+      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
+      const payload: any = {
+        match_id: matchId,
+        sender_id: senderId,
+        content: content,
+        message_type: messageType,
+        media_url: mediaUrl,
+        self_destruct_seconds: selfDestructSeconds
+      };
+      
+      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
+      delete payload.id;
+
       const { data, error } = await supabase
         .from('messages')
-        .insert({
-          match_id: matchId,
-          sender_id: senderId,
-          content: content,
-          message_type: messageType,
-          media_url: mediaUrl,
-          self_destruct_seconds: selfDestructSeconds
-        })
+        .insert(payload)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase insert error:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        throw error;
+      }
 
       return this.transformMessage(data);
     } catch (error) {
