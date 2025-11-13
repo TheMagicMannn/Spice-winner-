@@ -44,6 +44,9 @@ export interface Conversation {
 }
 
 export class MessageService {
+  // Request deduplication map to prevent duplicate inserts
+  private static pendingRequests = new Map<string, Promise<Message>>();
+  
   /**
    * Get all conversations for a user with optional filtering
    */
