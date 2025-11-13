@@ -1,90 +1,39 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Spinner } from './Spinner';
 
-interface ButtonProps {
-  onPress: () => void;
-  title: string;
+interface ButtonProps extends React.ComponentProps<typeof TouchableOpacity> {
   isLoading?: boolean;
-  disabled?: boolean;
-  variant?: 'primary' | 'outline';
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  onPress,
-  title,
-  isLoading = false,
-  disabled = false,
-  variant = 'primary',
-}) => {
-  const getButtonStyles = () => {
-    switch (variant) {
-      case 'primary':
-        return [styles.base, styles.primary];
-      case 'outline':
-        return [styles.base, styles.outline];
-      default:
-        return [styles.base, styles.primary];
-    }
-  };
-
-  const getTextStyles = () => {
-    switch (variant) {
-      case 'primary':
-        return [styles.text, styles.primaryText];
-      case 'outline':
-        return [styles.text, styles.outlineText];
-      default:
-        return [styles.text, styles.primaryText];
-    }
-  };
-
-  const buttonStyles = getButtonStyles();
-  const textStyles = getTextStyles();
-
-  if (disabled || isLoading) {
-    buttonStyles.push(styles.disabled);
-  }
-
+export const Button: React.FC<ButtonProps> = ({ children, style, isLoading, disabled, ...props }) => {
   return (
     <TouchableOpacity
-      style={buttonStyles}
-      onPress={onPress}
+      style={[styles.button, style, (disabled || isLoading) && styles.disabled]}
       disabled={disabled || isLoading}
+      {...props}
     >
-      {isLoading ? <ActivityIndicator color="#ffffff" /> : <Text style={textStyles}>{title}</Text>}
+      {isLoading ? <Spinner /> : <Text style={styles.buttonText}>{children}</Text>}
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  base: {
+  button: {
+    padding: 18,
+    backgroundColor: '#1a1a1a',
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 20, 147, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    transition: 'all 0.2s ease-in-out',
   },
-  primary: {
-    backgroundColor: '#FF69B4', // Gradient approximation
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
-    borderColor: '#333333',
-  },
-  disabled: {
-    backgroundColor: '#cccccc',
-    opacity: 0.5,
-  },
-  text: {
-    fontSize: 16,
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
     fontWeight: 'bold',
   },
-  primaryText: {
-    color: '#ffffff',
-  },
-  outlineText: {
-    color: '#333333',
+  disabled: {
+    opacity: 0.5,
   },
 });

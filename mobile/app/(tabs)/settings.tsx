@@ -1,17 +1,29 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
+import { useAuth } from '../../../src/hooks/useAuth';
 
 export default function Settings() {
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handlePress = (setting: string) => {
+    router.push({ pathname: 'modal', params: { title: setting } });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings</Text>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => handlePress('Account')}>
         <Text style={styles.buttonText}>Account</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => handlePress('Notifications')}>
         <Text style={styles.buttonText}>Notifications</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => handlePress('Privacy')}>
         <Text style={styles.buttonText}>Privacy</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.button, styles.logoutButton]} onPress={logout}>
+        <Text style={[styles.buttonText, styles.logoutButtonText]}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -41,5 +53,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  logoutButton: {
+    backgroundColor: '#e74c3c',
+  },
+  logoutButtonText: {
+    color: 'white',
   },
 });
