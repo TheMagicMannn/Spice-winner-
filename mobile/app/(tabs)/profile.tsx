@@ -83,6 +83,7 @@ export default function ProfilePage() {
         <Text style={styles.cardTitle}>Quick Actions</Text>
         <QuickActionButton icon={User} label="Edit Profile" onPress={() => {}} />
         <QuickActionButton icon={Heart} label="BDSM/Kink Quiz" onPress={() => {}} />
+        <QuickActionButton icon={Settings} label="Settings" onPress={() => router.push('/(tabs)/settings')} />
         <QuickActionButton icon={Settings} label="Match Preferences" onPress={() => {}} />
         <QuickActionButton icon={BookOpen} label="My Learning Journey" onPress={() => {}} />
         <QuickActionButton icon={Award} label="Achievements" onPress={() => {}} />
