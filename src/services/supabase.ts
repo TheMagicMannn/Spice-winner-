@@ -21,10 +21,13 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   },
   global: {
     fetch: (url, options) => {
+      // Convert url to string for checking
+      const urlString = typeof url === 'string' ? url : url instanceof URL ? url.toString() : url.url;
+      
       // Debug logging for message inserts
-      if (url.includes('/messages') && options?.method === 'POST') {
+      if (urlString.includes('/messages') && options?.method === 'POST') {
         console.log('[SUPABASE_FETCH] POST to /messages');
-        console.log('[SUPABASE_FETCH] URL:', url);
+        console.log('[SUPABASE_FETCH] URL:', urlString);
         console.log('[SUPABASE_FETCH] Headers:', options.headers);
         console.log('[SUPABASE_FETCH] Body:', options.body);
         console.log('[SUPABASE_FETCH] Body length:', options.body?.toString().length, 'bytes');
