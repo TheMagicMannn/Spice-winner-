@@ -760,15 +760,21 @@ export class MessageService {
     replyToId: string
   ): Promise<Message> {
     try {
+      // Create clean payload - explicitly exclude 'id' to prevent 409 conflicts
+      const payload: any = {
+        match_id: matchId,
+        sender_id: senderId,
+        content,
+        message_type: 'text',
+        reply_to_id: replyToId
+      };
+      
+      // Defensive: Ensure no 'id' field exists (prevents 409 conflicts)
+      delete payload.id;
+      
       const { data, error } = await supabase
         .from('messages')
-        .insert({
-          match_id: matchId,
-          sender_id: senderId,
-          content,
-          message_type: 'text',
-          reply_to_id: replyToId
-        })
+        .insert(payload)
         .select(`
           *,
           reply_to_message:reply_to_id (
@@ -780,7 +786,11 @@ export class MessageService {
         `)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase insert error:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        throw error;
+      }
 
       return this.transformMessage(data);
     } catch (error) {
