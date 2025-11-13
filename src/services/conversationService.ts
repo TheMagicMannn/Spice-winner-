@@ -283,7 +283,7 @@ export class ConversationService {
       // Get user's active conversations
       const { data: participantData, error: partError } = await supabase
         .from('conversation_participants')
-        .select('conversation_id, is_pinned, is_deleted')
+        .select('conversation_id,is_pinned,is_deleted')
         .eq('user_id', userId);
 
       if (partError) throw partError;
