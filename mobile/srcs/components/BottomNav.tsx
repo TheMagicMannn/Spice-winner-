@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Link, useSegments } from 'expo-router';
 import { Users, Heart, Search, MessageSquare, User } from 'lucide-react-native';
+import { spiceTheme } from '../styles/theme';
 
 const navItems = [
   { icon: Search, label: 'Browse', path: '/' },
@@ -24,7 +25,7 @@ export const BottomNav: React.FC = () => {
         return (
           <Link key={item.path} href={item.path} style={styles.navItem}>
             <View style={styles.navItemContent}>
-              <Icon color={isActive ? '#FF69B4' : '#FFFFFF'} size={24} />
+              <Icon color={isActive ? spiceTheme.colors.primary : spiceTheme.colors.text} size={24} />
               <Text style={[styles.navLabel, isActive && styles.activeLabel]}>{item.label}</Text>
             </View>
           </Link>
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     height: 80,
     backgroundColor: 'rgba(0,0,0,0.9)',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 105, 180, 0.3)',
+    borderTopColor: spiceTheme.colors.border,
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingBottom: 10,
@@ -54,10 +55,10 @@ const styles = StyleSheet.create({
   },
   navLabel: {
     fontSize: 12,
-    color: '#FFFFFF',
+    color: spiceTheme.colors.text,
     marginTop: 4,
   },
   activeLabel: {
-    color: '#FF69B4',
+    color: spiceTheme.colors.primary,
   },
 });

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Animated } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
-const backgroundImage = require('../../assets/images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png');
+const backgroundImage = require('../../../assets/images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png');
 
 const headlineWords = ['Start', 'your', 'dating', 'journey', 'today'];
 const subtext = 'Join thousands of adventurous singles\nand couples exploring connections in a\nsafe, premium environment.';
 
-export const HeroPage: React.FC = () => {
-  const navigation = useNavigation();
+export default function HeroPage() {
+  const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -39,10 +39,10 @@ export const HeroPage: React.FC = () => {
           {subtext}
         </Animated.Text>
         <Animated.View style={[styles.buttonContainer, { opacity: fadeAnim }]}>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push('/login')}>
             <Text style={styles.buttonText}>Sign In</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Signup')}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push('/signup')}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
         </Animated.View>

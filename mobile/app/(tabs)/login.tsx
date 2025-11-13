@@ -8,18 +8,17 @@ import {
   ImageBackground,
   ActivityIndicator,
   Switch,
+  Alert,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react-native';
+import { useAuth } from '../../../src/hooks/useAuth';
 
-const backgroundImage = require('../../assets/images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png');
-// import { useAuth } from '../hooks/useAuth'; // To be implemented
-// import { useToast } from '../hooks/useToast'; // To be implemented
+const backgroundImage = require('../../../assets/images/Pink_silhouettes_dark_background_fd06a0c6_1758731816680.png');
 
-export const LoginPage: React.FC = () => {
-  const navigation = useNavigation();
-  // const { login } = useAuth();
-  // const { toast } = useToast();
+export default function LoginPage() {
+  const router = useRouter();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -28,12 +27,12 @@ export const LoginPage: React.FC = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    // const { error } = await login(email, password); // To be implemented
-    // if (error) {
-    //   toast({ title: "Login Failed", description: error.message, variant: "destructive" });
-    // }
-    console.log('Logging in with:', email, password);
-    setTimeout(() => setIsLoading(false), 1500); // Mock async
+    const { error } = await login(email, password);
+    if (error) {
+      Alert.alert("Login Failed", error.message);
+    }
+    // On success, the useAuth hook will handle navigation.
+    setIsLoading(false);
   };
 
   return (
@@ -84,7 +83,7 @@ export const LoginPage: React.FC = () => {
                 />
                 <Text style={styles.rememberText}>Remember me</Text>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+            <TouchableOpacity onPress={() => router.push('/forgot-password')}>
               <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
@@ -102,7 +101,7 @@ export const LoginPage: React.FC = () => {
           </TouchableOpacity>
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>New to SPICE? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
+            <TouchableOpacity onPress={() => router.push('/signup')}>
                 <Text style={styles.signupLink}>Create Account</Text>
             </TouchableOpacity>
           </View>

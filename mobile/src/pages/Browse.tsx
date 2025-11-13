@@ -7,53 +7,31 @@ import Animated, {
   withSpring,
   runOnJS,
 } from 'react-native-reanimated';
-import { ProfileCard } from '../../src/components/ProfileCard';
-import { Spinner } from '../../src/components/Spinner';
-import { useAuth } from '../../src/hooks/useAuth';
-import { MatchingService, MatchedProfile } from '../../src/services/matchingService';
+import { ProfileCard } from '../components/ProfileCard';
+import { Spinner } from '../components/Spinner';
+// import { useAuth } from '../hooks/useAuth';
+// import { MatchingService } from '../services/matchingService';
 
 const { width: screenWidth } = Dimensions.get('window');
 const swipeThreshold = screenWidth * 0.4;
 
-export default function BrowsePage() {
-  const { user } = useAuth();
-  const [profiles, setProfiles] = useState<MatchedProfile[]>([]);
+const mockProfiles = [
+  { id: '1', displayName: 'Alice', age: 28, photos: ['https://randomuser.me/api/portraits/women/1.jpg'], bio: 'Frontend Developer', location: 'New York', interests: ['Coding', 'Hiking'] },
+  { id: '2', displayName: 'Bob', age: 32, photos: ['https://randomuser.me/api/portraits/men/2.jpg'], bio: 'Backend Developer', location: 'San Francisco', interests: ['Gaming', 'Cooking'] },
+  { id: '3', displayName: 'Charlie', age: 25, photos: ['https://randomuser.me/api/portraits/men/3.jpg'], bio: 'Designer', location: 'Austin', interests: ['Art', 'Music'] },
+];
+
+export const BrowsePage: React.FC = () => {
+  // const { user } = useAuth();
+  const [profiles, setProfiles] = useState(mockProfiles);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (user) {
-      loadProfiles();
-    }
-  }, [user]);
-
-  const loadProfiles = async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      const matchedProfiles = await MatchingService.getMatchedProfiles(user.id);
-      setProfiles(matchedProfiles);
-    } catch (error) {
-      console.error('Failed to load profiles:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   const translateX = useSharedValue(0);
   const rotate = useSharedValue(0);
 
-  const handleSwipe = async (direction: 'like' | 'pass') => {
-    if (!user) return;
-    const profile = profiles[currentIndex];
-    if (!profile) return;
-
-    try {
-      await MatchingService.recordSwipe(user.id, profile.id, direction);
-    } catch (error) {
-      console.error(`Failed to record ${direction}:`, error);
-    }
-
+  const handleSwipe = (direction: 'like' | 'pass') => {
+    console.log(`Swiped ${direction}`);
     setCurrentIndex(prev => prev + 1);
     translateX.value = 0;
     rotate.value = 0;
