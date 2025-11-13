@@ -39,6 +39,8 @@ export class ConversationService {
     userId2: string
   ): Promise<string> {
     try {
+      console.log("[v0] getOrCreateDirectConversation called with users:", userId1, userId2);
+      
       // Try new conversation system first
       const { data, error } = await supabase.rpc('get_or_create_direct_conversation', {
         user1_id: userId1,
@@ -46,14 +48,16 @@ export class ConversationService {
       });
 
       if (error) {
+        console.error("[v0] Conversation RPC error:", error.message);
         // If function doesn't exist, fall back to match-based system
-        console.log('Conversation system not deployed yet, using match-based system');
+        console.log('[v0] Conversation system not fully deployed yet, using match-based system');
         return await this.getMatchIdFallback(userId1, userId2);
       }
       
+      console.log("[v0] Direct conversation created/retrieved:", data);
       return data;
-    } catch (error) {
-      console.error('Error getting/creating direct conversation:', error);
+    } catch (error: any) {
+      console.error('[v0] Error getting/creating direct conversation:', error?.message || error);
       // Try fallback
       return await this.getMatchIdFallback(userId1, userId2);
     }
@@ -67,6 +71,8 @@ export class ConversationService {
     userId2: string
   ): Promise<string> {
     try {
+      console.log("[v0] Using match-based fallback for users:", userId1, userId2);
+      
       const { data, error } = await supabase
         .from('matches')
         .select('id')
@@ -74,15 +80,20 @@ export class ConversationService {
         .or(`and(user1_id.eq.${userId1},user2_id.eq.${userId2}),and(user1_id.eq.${userId2},user2_id.eq.${userId1})`)
         .maybeSingle();
 
-      if (error) throw error;
+      if (error) {
+        console.error("[v0] Match lookup error:", error);
+        throw error;
+      }
       
       if (data) {
+        console.log("[v0] Match found:", data.id);
         return data.id;
       } else {
+        console.warn("[v0] No match found between users");
         throw new Error('No match found between these users');
       }
-    } catch (error) {
-      console.error('Error getting match ID:', error);
+    } catch (error: any) {
+      console.error('[v0] Error in getMatchIdFallback:', error?.message || error);
       throw error;
     }
   }
@@ -97,6 +108,8 @@ export class ConversationService {
     groupPhoto?: string
   ): Promise<string> {
     try {
+      console.log("[v0] Creating group conversation:", groupName, "with participants:", participantIds.length);
+      
       // First create the group using the database function
       const { data: conversationId, error: funcError } = await supabase.rpc(
         'create_group_conversation',
@@ -107,7 +120,12 @@ export class ConversationService {
         }
       );
 
-      if (funcError) throw funcError;
+      if (funcError) {
+        console.error("[v0] Group creation RPC error:", funcError.message);
+        throw new Error(`Failed to create group: ${funcError.message}`);
+      }
+
+      console.log("[v0] Group conversation created:", conversationId);
 
       // Update group photo if provided
       if (groupPhoto && conversationId) {
@@ -116,12 +134,15 @@ export class ConversationService {
           .update({ group_photo: groupPhoto })
           .eq('id', conversationId);
 
-        if (updateError) console.error('Error updating group photo:', updateError);
+        if (updateError) {
+          console.error('[v0] Error updating group photo:', updateError);
+          // Don't fail - photo is optional
+        }
       }
 
       return conversationId;
-    } catch (error) {
-      console.error('Error creating group conversation:', error);
+    } catch (error: any) {
+      console.error('[v0] Error creating group conversation:', error?.message || error);
       throw error;
     }
   }
@@ -135,6 +156,8 @@ export class ConversationService {
     additionalParticipantIds: string[]
   ): Promise<void> {
     try {
+      console.log("[v0] Converting conversation to group:", conversationId);
+      
       // Update conversation type and name
       const { error: updateError } = await supabase
         .from('conversations')
@@ -144,14 +167,19 @@ export class ConversationService {
         })
         .eq('id', conversationId);
 
-      if (updateError) throw updateError;
+      if (updateError) {
+        console.error("[v0] Error updating conversation type:", updateError);
+        throw updateError;
+      }
 
       // Add new participants
       for (const userId of additionalParticipantIds) {
         await this.addParticipantToGroup(conversationId, userId);
       }
-    } catch (error) {
-      console.error('Error converting to group conversation:', error);
+
+      console.log("[v0] Conversation converted to group");
+    } catch (error: any) {
+      console.error('[v0] Error converting to group conversation:', error?.message || error);
       throw error;
     }
   }
@@ -164,14 +192,21 @@ export class ConversationService {
     userId: string
   ): Promise<void> {
     try {
+      console.log("[v0] Adding participant to group:", userId);
+      
       const { error } = await supabase.rpc('add_user_to_group', {
         conversation_id_param: conversationId,
         user_id_param: userId
       });
 
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error adding participant to group:', error);
+      if (error) {
+        console.error("[v0] Error adding participant:", error);
+        throw error;
+      }
+
+      console.log("[v0] Participant added successfully");
+    } catch (error: any) {
+      console.error('[v0] Error adding participant to group:', error?.message || error);
       throw error;
     }
   }
@@ -184,14 +219,21 @@ export class ConversationService {
     userId: string
   ): Promise<void> {
     try {
+      console.log("[v0] Removing participant from group:", userId);
+      
       const { error } = await supabase.rpc('remove_user_from_group', {
         conversation_id_param: conversationId,
         user_id_param: userId
       });
 
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error removing participant from group:', error);
+      if (error) {
+        console.error("[v0] Error removing participant:", error);
+        throw error;
+      }
+
+      console.log("[v0] Participant removed successfully");
+    } catch (error: any) {
+      console.error('[v0] Error removing participant from group:', error?.message || error);
       throw error;
     }
   }
@@ -201,6 +243,8 @@ export class ConversationService {
    */
   static async getConversationDetails(conversationId: string): Promise<ConversationDetails | null> {
     try {
+      console.log("[v0] Getting conversation details:", conversationId);
+      
       // Get conversation
       const { data: conversation, error: convError } = await supabase
         .from('conversations')
@@ -208,16 +252,27 @@ export class ConversationService {
         .eq('id', conversationId)
         .maybeSingle();
 
-      if (convError) throw convError;
-      if (!conversation) return null;
+      if (convError) {
+        console.error("[v0] Error fetching conversation:", convError);
+        throw convError;
+      }
+
+      if (!conversation) {
+        console.log("[v0] Conversation not found:", conversationId);
+        return null;
+      }
 
       // Get all participants
       const { data: participants, error: partError } = await supabase
         .from('conversation_participants')
         .select('*')
-        .eq('conversation_id', conversationId);
+        .eq('conversation_id', conversationId)
+        .eq('is_active', true);
 
-      if (partError) throw partError;
+      if (partError) {
+        console.error("[v0] Error fetching participants:", partError);
+        throw partError;
+      }
 
       // Get profile data for all participants
       const userIds = participants?.map(p => p.user_id) || [];
@@ -226,7 +281,10 @@ export class ConversationService {
         .select('*')
         .in('id', userIds);
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error("[v0] Error fetching profiles:", profileError);
+        throw profileError;
+      }
 
       const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 
@@ -253,7 +311,7 @@ export class ConversationService {
         .limit(1)
         .maybeSingle();
 
-      return {
+      const details: ConversationDetails = {
         id: conversation.id,
         conversationType: conversation.conversation_type,
         groupName: conversation.group_name,
@@ -264,10 +322,13 @@ export class ConversationService {
         participants: participantDetails,
         lastMessage: lastMessage?.content,
         lastMessageAt: lastMessage?.created_at,
-        unreadCount: 0 // This would need additional query per user
+        unreadCount: 0
       };
-    } catch (error) {
-      console.error('Error getting conversation details:', error);
+
+      console.log("[v0] Conversation details retrieved successfully");
+      return details;
+    } catch (error: any) {
+      console.error('[v0] Error getting conversation details:', error?.message || error);
       return null;
     }
   }
@@ -280,14 +341,25 @@ export class ConversationService {
     filter: 'all' | 'unread' | 'groups' | 'direct' | 'deleted' = 'all'
   ): Promise<ConversationDetails[]> {
     try {
+      console.log("[v0] Getting user conversations with filter:", filter);
+      
       // Get user's active conversations
       const { data: participantData, error: partError } = await supabase
         .from('conversation_participants')
-        .select('conversation_id,is_pinned,is_deleted')
+        .select('conversation_id, is_pinned, is_deleted')
         .eq('user_id', userId);
 
-      if (partError) throw partError;
-      if (!participantData || participantData.length === 0) return [];
+      if (partError) {
+        console.error("[v0] Error fetching participant data:", partError);
+        throw partError;
+      }
+
+      if (!participantData || participantData.length === 0) {
+        console.log("[v0] User has no conversations");
+        return [];
+      }
+
+      console.log("[v0] Found", participantData.length, "participant records");
 
       // Filter based on deleted status
       let conversationIds: string[];
@@ -301,7 +373,12 @@ export class ConversationService {
           .map(p => p.conversation_id);
       }
 
-      if (conversationIds.length === 0) return [];
+      if (conversationIds.length === 0) {
+        console.log("[v0] No conversations found after filtering");
+        return [];
+      }
+
+      console.log("[v0] Fetching details for", conversationIds.length, "conversations");
 
       // Get conversation details
       const { data: conversations, error: convError } = await supabase
@@ -310,7 +387,10 @@ export class ConversationService {
         .in('id', conversationIds)
         .order('updated_at', { ascending: false });
 
-      if (convError) throw convError;
+      if (convError) {
+        console.error("[v0] Error fetching conversations:", convError);
+        throw convError;
+      }
 
       // Get all participants for these conversations
       const { data: allParticipants, error: allPartError } = await supabase
@@ -319,7 +399,10 @@ export class ConversationService {
         .in('conversation_id', conversationIds)
         .eq('is_active', true);
 
-      if (allPartError) throw allPartError;
+      if (allPartError) {
+        console.error("[v0] Error fetching all participants:", allPartError);
+        throw allPartError;
+      }
 
       // Get profile data for all participants
       const allUserIds = Array.from(
@@ -331,7 +414,10 @@ export class ConversationService {
         .select('*')
         .in('id', allUserIds);
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error("[v0] Error fetching profiles:", profileError);
+        throw profileError;
+      }
 
       const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 
@@ -409,7 +495,7 @@ export class ConversationService {
       }
 
       // Sort: pinned first, then by last message time
-      return filtered.sort((a, b) => {
+      const sorted = filtered.sort((a, b) => {
         const aPinned = participantData.find(p => p.conversation_id === a.id)?.is_pinned;
         const bPinned = participantData.find(p => p.conversation_id === b.id)?.is_pinned;
         
@@ -420,8 +506,11 @@ export class ConversationService {
         if (!b.lastMessageAt) return -1;
         return new Date(b.lastMessageAt).getTime() - new Date(a.lastMessageAt).getTime();
       });
-    } catch (error) {
-      console.error('Error getting user conversations:', error);
+
+      console.log("[v0] Returning", sorted.length, "conversations after filtering and sorting");
+      return sorted;
+    } catch (error: any) {
+      console.error('[v0] Error getting user conversations:', error?.message || error);
       throw error;
     }
   }
@@ -431,14 +520,23 @@ export class ConversationService {
    */
   static async getConversationById(conversationId: string): Promise<ConversationDetails | null> {
     try {
+      console.log("[v0] Getting conversation by ID:", conversationId);
+      
       const { data: conversation, error: convError } = await supabase
         .from('conversations')
         .select('*')
         .eq('id', conversationId)
         .single();
 
-      if (convError) throw convError;
-      if (!conversation) return null;
+      if (convError) {
+        console.error("[v0] Error fetching conversation:", convError);
+        throw convError;
+      }
+
+      if (!conversation) {
+        console.log("[v0] Conversation not found");
+        return null;
+      }
 
       // Get participants
       const { data: participants, error: partError } = await supabase
@@ -447,7 +545,10 @@ export class ConversationService {
         .eq('conversation_id', conversationId)
         .eq('is_active', true);
 
-      if (partError) throw partError;
+      if (partError) {
+        console.error("[v0] Error fetching participants:", partError);
+        throw partError;
+      }
 
       // Get profiles
       const userIds = participants?.map(p => p.user_id) || [];
@@ -456,7 +557,10 @@ export class ConversationService {
         .select('*')
         .in('id', userIds);
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error("[v0] Error fetching profiles:", profileError);
+        throw profileError;
+      }
 
       const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
 
@@ -472,6 +576,8 @@ export class ConversationService {
         profile: profileMap.get(p.user_id)
       }));
 
+      console.log("[v0] Conversation retrieved successfully");
+
       return {
         id: conversation.id,
         conversationType: conversation.conversation_type,
@@ -483,8 +589,8 @@ export class ConversationService {
         participants: participantDetails,
         unreadCount: 0
       };
-    } catch (error) {
-      console.error('Error getting conversation by ID:', error);
+    } catch (error: any) {
+      console.error('[v0] Error getting conversation by ID:', error?.message || error);
       return null;
     }
   }
@@ -507,8 +613,10 @@ export class ConversationService {
         .eq('id', conversationId);
 
       if (error) throw error;
-    } catch (error) {
-      console.error('Error updating group conversation:', error);
+
+      console.log("[v0] Group conversation updated successfully");
+    } catch (error: any) {
+      console.error('[v0] Error updating group conversation:', error?.message || error);
       throw error;
     }
   }
@@ -537,9 +645,11 @@ export class ConversationService {
         .eq('conversation_id', conversationId);
 
       if (error) throw error;
+
+      console.log("[v0] Pin state toggled to:", newPinnedState);
       return newPinnedState;
-    } catch (error) {
-      console.error('Error toggling pin conversation:', error);
+    } catch (error: any) {
+      console.error('[v0] Error toggling pin conversation:', error?.message || error);
       throw error;
     }
   }
@@ -562,8 +672,10 @@ export class ConversationService {
         .eq('conversation_id', conversationId);
 
       if (error) throw error;
-    } catch (error) {
-      console.error('Error deleting conversation:', error);
+
+      console.log("[v0] Conversation deleted successfully");
+    } catch (error: any) {
+      console.error('[v0] Error deleting conversation:', error?.message || error);
       throw error;
     }
   }
@@ -586,8 +698,10 @@ export class ConversationService {
         .eq('conversation_id', conversationId);
 
       if (error) throw error;
-    } catch (error) {
-      console.error('Error restoring conversation:', error);
+
+      console.log("[v0] Conversation restored successfully");
+    } catch (error: any) {
+      console.error('[v0] Error restoring conversation:', error?.message || error);
       throw error;
     }
   }
@@ -601,8 +715,9 @@ export class ConversationService {
   ): Promise<void> {
     try {
       await this.removeParticipantFromGroup(conversationId, userId);
-    } catch (error) {
-      console.error('Error leaving group conversation:', error);
+      console.log("[v0] Left group conversation");
+    } catch (error: any) {
+      console.error('[v0] Error leaving group conversation:', error?.message || error);
       throw error;
     }
   }
