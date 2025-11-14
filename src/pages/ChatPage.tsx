@@ -863,21 +863,61 @@ export const ChatPage: React.FC = () => {
           </div>
           
           <div className="flex items-center gap-2">
-            {isGroupChat && (
+            {/* Menu Button */}
+            <div className="relative">
               <button
-                onClick={handleProfileClick}
+                onClick={() => setShowMenu(!showMenu)}
                 className="text-white hover:text-pink-400 transition-colors p-2"
-                title="Group info"
               >
-                <Users className="h-6 w-6" />
+                <MoreVertical className="h-6 w-6" />
               </button>
-            )}
-            <button
-              onClick={handleProfileClick}
-              className="text-white hover:text-pink-400 transition-colors p-2"
-            >
-              <Info className="h-6 w-6" />
-            </button>
+
+              {/* Dropdown Menu */}
+              {showMenu && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowMenu(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 bg-gray-900 border border-pink-500/30 rounded-lg shadow-xl z-50 min-w-[200px]">
+                    {isGroupChat && (
+                      <>
+                        <button
+                          onClick={handleAddParticipants}
+                          className="w-full px-4 py-3 text-left text-white hover:bg-pink-500/10 flex items-center gap-3 transition-colors"
+                        >
+                          <UserPlus className="h-5 w-5" />
+                          <span>Add Participants</span>
+                        </button>
+                        <button
+                          onClick={handleLeaveGroup}
+                          className="w-full px-4 py-3 text-left text-white hover:bg-pink-500/10 flex items-center gap-3 transition-colors"
+                        >
+                          <LogOut className="h-5 w-5" />
+                          <span>Leave Group</span>
+                        </button>
+                        <div className="border-t border-gray-800 my-1" />
+                      </>
+                    )}
+                    <button
+                      onClick={handleReport}
+                      className="w-full px-4 py-3 text-left text-white hover:bg-pink-500/10 flex items-center gap-3 transition-colors"
+                    >
+                      <Flag className="h-5 w-5" />
+                      <span>Report {isGroupChat ? 'Conversation' : 'User'}</span>
+                    </button>
+                    <div className="border-t border-gray-800 my-1" />
+                    <button
+                      onClick={handleDeleteChat}
+                      className="w-full px-4 py-3 text-left text-red-400 hover:bg-red-500/10 flex items-center gap-3 transition-colors rounded-b-lg"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                      <span>Delete Chat</span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
