@@ -171,6 +171,7 @@ const AppContent: React.FC = () => {
             <Route path="/about-spice" element={<AboutSpicePage />} />
             <Route path="/user/:userId" element={<UserProfilePage />} />
             <Route path="/admin/verification" element={<AdminVerificationPage />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="*" element={<Navigate to="/community" />} />
           </Routes>
