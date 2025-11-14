@@ -597,14 +597,22 @@ export class MessageService {
   static async setTyping(matchId: string, userId: string, isTyping: boolean): Promise<void> {
     try {
       if (isTyping) {
-        await supabase
+        // Use upsert with onConflict to handle the unique constraint on (match_id, user_id)
+        const { error } = await supabase
           .from('typing_indicators')
           .upsert({
             match_id: matchId,
             user_id: userId,
             is_typing: true,
             updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'match_id,user_id',
+            ignoreDuplicates: false
           });
+
+        if (error) {
+          console.error('Error upserting typing indicator:', error);
+        }
       } else {
         await supabase
           .from('typing_indicators')
