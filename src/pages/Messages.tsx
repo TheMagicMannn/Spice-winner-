@@ -176,16 +176,33 @@ export const MessagesPage: React.FC = () => {
     e.stopPropagation();
     if (!user) return;
 
-    if (confirm('Delete this conversation? You can restore it later from deleted messages.')) {
-      try {
-        if (conversation.type === 'group' || conversation.type === 'direct') {
-          await ConversationService.deleteConversation(user.id, conversation.id);
-        } else {
-          await MessageService.deleteConversation(user.id, conversation.id);
+    // If already deleted, permanently delete
+    if (conversation.isDeleted || activeFilter === 'deleted') {
+      if (confirm('Permanently delete this conversation? This cannot be undone.')) {
+        try {
+          if (conversation.type === 'group' || conversation.type === 'direct') {
+            await ConversationService.permanentlyDeleteConversation(conversation.id);
+          } else {
+            await MessageService.permanentlyDeleteConversation(conversation.id);
+          }
+          loadConversations();
+        } catch (error) {
+          console.error('Error permanently deleting conversation:', error);
         }
-        loadConversations();
-      } catch (error) {
-        console.error('Error deleting conversation:', error);
+      }
+    } else {
+      // Soft delete
+      if (confirm('Delete this conversation? You can restore it later from deleted messages.')) {
+        try {
+          if (conversation.type === 'group' || conversation.type === 'direct') {
+            await ConversationService.deleteConversation(user.id, conversation.id);
+          } else {
+            await MessageService.deleteConversation(user.id, conversation.id);
+          }
+          loadConversations();
+        } catch (error) {
+          console.error('Error deleting conversation:', error);
+        }
       }
     }
   };
