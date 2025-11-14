@@ -2,9 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/Input';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/Spinner';
 import { adminService, UserManagement } from '@/services/adminService';
+import { supabase } from '@/services/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import {
   CreditCard,
@@ -13,14 +15,27 @@ import {
   Calendar,
   TrendingUp,
   Users,
-  CheckCircle2
+  CheckCircle2,
+  Edit2,
+  Save,
+  X as XIcon,
+  RefreshCw
 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
+
+interface EditMembership {
+  userId: string;
+  level: 'free' | 'premium' | 'vip' | 'platinum';
+  expiresAt?: string;
+  autoRenew: boolean;
+}
 
 export const MembershipsTab: React.FC = () => {
   const { user } = useAuth();
   const [users, setUsers] = useState<UserManagement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [editingMembership, setEditingMembership] = useState<EditMembership | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [stats, setStats] = useState({
     free: 0,
     premium: 0,
@@ -30,6 +45,45 @@ export const MembershipsTab: React.FC = () => {
 
   useEffect(() => {
     loadMemberships();
+
+    // Setup realtime subscription for user_memberships table
+    const membershipsSubscription = supabase
+      .channel('admin-memberships-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_memberships'
+        },
+        (payload) => {
+          console.log('Membership change detected:', payload);
+          loadMemberships();
+        }
+      )
+      .subscribe();
+
+    // Also subscribe to profiles for membership_level changes
+    const profilesSubscription = supabase
+      .channel('admin-profiles-membership')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'profiles'
+        },
+        (payload) => {
+          console.log('Profile membership change:', payload);
+          loadMemberships();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(membershipsSubscription);
+      supabase.removeChannel(profilesSubscription);
+    };
   }, []);
 
   const loadMemberships = async () => {
@@ -54,23 +108,76 @@ export const MembershipsTab: React.FC = () => {
     }
   };
 
-  const handleUpdateMembership = async (
+  const startEditing = (userData: UserManagement) => {
+    setEditingMembership({
+      userId: userData.id,
+      level: (userData.membership_level || 'free') as any,
+      expiresAt: '',
+      autoRenew: false
+    });
+  };
+
+  const cancelEditing = () => {
+    setEditingMembership(null);
+  };
+
+  const saveMembership = async () => {
+    if (!user || !editingMembership) return;
+
+    setIsUpdating(true);
+    try {
+      const expiresAt = editingMembership.level !== 'free' && editingMembership.expiresAt
+        ? editingMembership.expiresAt
+        : editingMembership.level !== 'free'
+        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        : undefined;
+
+      // Update membership
+      await adminService.updateMembershipLevel(
+        editingMembership.userId,
+        editingMembership.level,
+        expiresAt,
+        user.id
+      );
+
+      // Update auto_renew if membership exists
+      if (editingMembership.level !== 'free') {
+        await supabase
+          .from('user_memberships')
+          .update({ auto_renew: editingMembership.autoRenew })
+          .eq('user_id', editingMembership.userId);
+      }
+
+      alert('Membership updated successfully!');
+      cancelEditing();
+      loadMemberships();
+    } catch (error) {
+      console.error('Error updating membership:', error);
+      alert('Failed to update membership.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleQuickUpdate = async (
     userId: string,
     level: 'free' | 'premium' | 'vip' | 'platinum'
   ) => {
     if (!user || !confirm(`Update membership level to ${level}?`)) return;
 
+    setIsUpdating(true);
     try {
       const expiresAt = level !== 'free'
         ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         : undefined;
 
       await adminService.updateMembershipLevel(userId, level, expiresAt, user.id);
-      alert('Membership level updated successfully!');
       loadMemberships();
     } catch (error) {
       console.error('Error updating membership:', error);
       alert('Failed to update membership level.');
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -155,16 +262,38 @@ export const MembershipsTab: React.FC = () => {
             <CreditCard className="h-5 w-5" />
             All Memberships
           </CardTitle>
-          <CardDescription className="text-white/70">
-            Manage user membership levels and subscriptions
+          <CardDescription className="text-white/70 flex items-center gap-2">
+            Manage user membership levels and subscriptions •
+            <span className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Live sync enabled
+            </span>
           </CardDescription>
         </CardHeader>
+        <CardContent>
+          <Button
+            onClick={loadMemberships}
+            variant="outline"
+            size="sm"
+            className="border-pink-500/30 text-white hover:bg-pink-500/10"
+            disabled={isUpdating}
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${isUpdating ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </CardContent>
       </Card>
 
       <div className="space-y-4">
-        {users
-          .filter((u) => u.membership_level && u.membership_level !== 'free')
-          .map((userData) => (
+        <div className="text-white/70 text-sm flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+          Showing {users.length} users (Auto-updating)
+        </div>
+
+        {users.map((userData) => {
+          const isEditing = editingMembership?.userId === userData.id;
+
+          return (
             <Card key={userData.id} className="bg-gray-900/50 border-pink-500/30">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
@@ -175,7 +304,7 @@ export const MembershipsTab: React.FC = () => {
                       </h3>
                       <Badge className={getMembershipColor(userData.membership_level)}>
                         <Crown className="h-3 w-3 mr-1" />
-                        {userData.membership_level}
+                        {userData.membership_level || 'free'}
                       </Badge>
                       {userData.is_verified && (
                         <Badge className="bg-blue-500/20 text-blue-300">
@@ -195,31 +324,121 @@ export const MembershipsTab: React.FC = () => {
                         Joined {format(new Date(userData.created_at), 'MMM d, yyyy')}
                       </div>
                     </div>
+
+                    {/* Edit Form */}
+                    {isEditing && editingMembership && (
+                      <div className="mt-4 p-4 bg-gray-800/50 rounded-lg space-y-3">
+                        <div>
+                          <label className="text-sm text-white/70 mb-1 block">Membership Level</label>
+                          <select
+                            value={editingMembership.level}
+                            onChange={(e) => setEditingMembership({
+                              ...editingMembership,
+                              level: e.target.value as any
+                            })}
+                            className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 text-white"
+                          >
+                            <option value="free">Free</option>
+                            <option value="premium">Premium</option>
+                            <option value="vip">VIP</option>
+                            <option value="platinum">Platinum</option>
+                          </select>
+                        </div>
+
+                        {editingMembership.level !== 'free' && (
+                          <>
+                            <div>
+                              <label className="text-sm text-white/70 mb-1 block">Expires At</label>
+                              <Input
+                                type="date"
+                                value={editingMembership.expiresAt}
+                                onChange={(e) => setEditingMembership({
+                                  ...editingMembership,
+                                  expiresAt: e.target.value
+                                })}
+                                className="bg-gray-800 border-gray-700 text-white"
+                                placeholder="Leave empty for 30 days from now"
+                              />
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                id={`autorenew-${userData.id}`}
+                                checked={editingMembership.autoRenew}
+                                onChange={(e) => setEditingMembership({
+                                  ...editingMembership,
+                                  autoRenew: e.target.checked
+                                })}
+                                className="rounded border-gray-700"
+                              />
+                              <label htmlFor={`autorenew-${userData.id}`} className="text-sm text-white/70">
+                                Auto-renew subscription
+                              </label>
+                            </div>
+                          </>
+                        )}
+
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={saveMembership}
+                            disabled={isUpdating}
+                            className="bg-green-600 hover:bg-green-700"
+                          >
+                            <Save className="h-4 w-4 mr-1" />
+                            Save Changes
+                          </Button>
+                          <Button
+                            onClick={cancelEditing}
+                            variant="outline"
+                            disabled={isUpdating}
+                            className="border-gray-700 text-white hover:bg-gray-800"
+                          >
+                            <XIcon className="h-4 w-4 mr-1" />
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  <div>
-                    <select
-                      value={userData.membership_level || 'free'}
-                      onChange={(e) =>
-                        handleUpdateMembership(userData.id, e.target.value as any)
-                      }
-                      className="px-4 py-2 rounded-md bg-gray-800 border border-gray-700 text-white"
-                    >
-                      <option value="free">Free</option>
-                      <option value="premium">Premium</option>
-                      <option value="vip">VIP</option>
-                      <option value="platinum">Platinum</option>
-                    </select>
+                  {/* Action Buttons */}
+                  <div className="flex flex-col gap-2">
+                    {!isEditing ? (
+                      <>
+                        <Button
+                          onClick={() => startEditing(userData)}
+                          size="sm"
+                          disabled={isUpdating}
+                          className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                        >
+                          <Edit2 className="h-3 w-3 mr-1" />
+                          Edit
+                        </Button>
+                        <select
+                          value={userData.membership_level || 'free'}
+                          onChange={(e) => handleQuickUpdate(userData.id, e.target.value as any)}
+                          disabled={isUpdating}
+                          className="px-3 py-1.5 text-sm rounded-md bg-gray-800 border border-gray-700 text-white"
+                        >
+                          <option value="free">Free</option>
+                          <option value="premium">Premium</option>
+                          <option value="vip">VIP</option>
+                          <option value="platinum">Platinum</option>
+                        </select>
+                      </>
+                    ) : null}
                   </div>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          );
+        })}
 
-        {users.filter((u) => u.membership_level && u.membership_level !== 'free').length === 0 && (
+        {users.length === 0 && (
           <Card className="bg-gray-900/50 border-pink-500/30">
             <CardContent className="p-8 text-center">
-              <p className="text-white/60">No paid memberships found</p>
+              <p className="text-white/60">No users found</p>
             </CardContent>
           </Card>
         )}
