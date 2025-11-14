@@ -473,17 +473,23 @@ class AdminService {
    */
   async getDailyReport(date: string): Promise<DailyReport | null> {
     try {
+      console.log('[AdminService] Fetching daily report for date:', date);
+
       const { data, error } = await supabase
         .from('daily_activity_reports')
         .select('*')
         .eq('report_date', date)
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) {
+        console.error('[AdminService] Daily report error:', error);
+        return null;
+      }
 
+      console.log('[AdminService] Daily report data:', data);
       return data;
     } catch (error) {
-      console.error('Error fetching daily report:', error);
+      console.error('[AdminService] Error fetching daily report:', error);
       return null;
     }
   }
