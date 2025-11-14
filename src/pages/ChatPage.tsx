@@ -595,6 +595,91 @@ export const ChatPage: React.FC = () => {
     setShowProfileModal(true);
   };
 
+  const handleDeleteChat = async () => {
+    if (!user || !chatId) return;
+
+    const confirmMessage = isGroupChat 
+      ? 'Delete this group chat? You can restore it later from deleted messages.'
+      : 'Delete this conversation? You can restore it later from deleted messages.';
+
+    if (confirm(confirmMessage)) {
+      try {
+        if (conversationDetails) {
+          await ConversationService.deleteConversation(user.id, chatId);
+        } else {
+          await MessageService.deleteConversation(user.id, chatId);
+        }
+        navigate('/messages');
+      } catch (error) {
+        console.error('Error deleting chat:', error);
+        alert('Failed to delete chat');
+      }
+    }
+  };
+
+  const handleLeaveGroup = async () => {
+    if (!user || !chatId || !isGroupChat) return;
+
+    if (confirm('Leave this group? You won\'t receive messages anymore.')) {
+      try {
+        await ConversationService.leaveGroupConversation(user.id, chatId);
+        navigate('/messages');
+      } catch (error) {
+        console.error('Error leaving group:', error);
+        alert('Failed to leave group');
+      }
+    }
+  };
+
+  const handleReport = () => {
+    setShowMenu(false);
+    setShowReportModal(true);
+  };
+
+  const handleReportSubmit = async (
+    reason: string,
+    additionalContext: string,
+    shouldBlock: boolean,
+    shouldHide: boolean
+  ) => {
+    if (!user || !chatId) return;
+
+    try {
+      if (isGroupChat) {
+        await MessageService.reportConversation(
+          user.id,
+          chatId,
+          reason,
+          additionalContext,
+          shouldHide
+        );
+      } else if (otherUserProfile) {
+        await MessageService.reportUser(
+          user.id,
+          otherUserProfile.id!,
+          chatId,
+          reason,
+          additionalContext,
+          shouldBlock,
+          shouldHide
+        );
+      }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      throw error;
+    }
+  };
+
+  const handleAddParticipants = () => {
+    setShowMenu(false);
+    setShowAddParticipantsModal(true);
+  };
+
+  const handleParticipantsAdded = () => {
+    // Reload conversation details to show new participants
+    loadConversationDetails();
+  };
+
   const renderMessage = (message: Message) => {
     try {
       const isMine = message.senderId === user?.id;
