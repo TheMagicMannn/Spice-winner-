@@ -67,15 +67,15 @@ class ReportService {
     try {
       console.log('[ReportService] Fetching reports with filters:', filters);
 
-      // Try with simplified foreign key syntax
+      // Use the correct foreign key relationship syntax
       let query = supabase
         .from('user_reports')
         .select(`
           *,
-          reporter:reporter_id (
+          reporter:profiles!user_reports_reporter_id_fkey (
             display_name
           ),
-          reported:reported_id (
+          reported:profiles!user_reports_reported_id_fkey (
             display_name
           )
         `)
