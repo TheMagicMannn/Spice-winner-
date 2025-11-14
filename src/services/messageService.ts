@@ -630,21 +630,36 @@ export class MessageService {
   static async setTypingConversation(conversationId: string, userId: string, isTyping: boolean): Promise<void> {
     try {
       if (isTyping) {
-        // Delete existing and insert new
-        await supabase
+        // Use upsert to avoid race conditions
+        const { error } = await supabase
           .from('typing_indicators')
-          .delete()
-          .eq('conversation_id', conversationId)
-          .eq('user_id', userId);
-
-        await supabase
-          .from('typing_indicators')
-          .insert({
+          .upsert({
             conversation_id: conversationId,
             user_id: userId,
+            match_id: null,
             is_typing: true,
             updated_at: new Date().toISOString()
           });
+
+        if (error) {
+          // If upsert fails, try delete then insert
+          await supabase
+            .from('typing_indicators')
+            .delete()
+            .eq('conversation_id', conversationId)
+            .eq('user_id', userId);
+
+          await new Promise(resolve => setTimeout(resolve, 50)); // Small delay
+
+          await supabase
+            .from('typing_indicators')
+            .insert({
+              conversation_id: conversationId,
+              user_id: userId,
+              is_typing: true,
+              updated_at: new Date().toISOString()
+            });
+        }
       } else {
         await supabase
           .from('typing_indicators')
