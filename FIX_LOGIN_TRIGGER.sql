@@ -1,16 +1,51 @@
 -- =====================================================
--- FIX FOR LOGIN ERROR: last_sign_in_ip field missing
+-- COMPLETE FIX FOR LOGIN ERROR
 -- =====================================================
--- This script fixes the database trigger that's causing login failures
--- Error: record "new" has no field "last_sign_in_ip"
+-- This script fixes the database trigger causing login failures
+-- Errors: 
+--   1. record "new" has no field "last_sign_in_ip"
+--   2. function log_user_activity does not exist
 --
--- Run this in your Supabase SQL Editor to fix the login issue
+-- Run this COMPLETE script in your Supabase SQL Editor
 -- =====================================================
 
--- Drop the existing broken trigger
+-- STEP 1: Create the log_user_activity function (if it doesn't exist)
+CREATE OR REPLACE FUNCTION log_user_activity(
+    p_user_id UUID,
+    p_activity_type TEXT,
+    p_activity_data JSONB DEFAULT NULL,
+    p_ip_address INET DEFAULT NULL,
+    p_user_agent TEXT DEFAULT NULL
+)
+RETURNS UUID
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    activity_id UUID;
+BEGIN
+    -- Only insert if user_activity_log table exists
+    IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'user_activity_log') THEN
+        INSERT INTO user_activity_log (user_id, activity_type, activity_data, ip_address, user_agent)
+        VALUES (p_user_id, p_activity_type, p_activity_data, p_ip_address, p_user_agent)
+        RETURNING id INTO activity_id;
+        
+        RETURN activity_id;
+    ELSE
+        -- If table doesn't exist, just return a dummy UUID and don't fail
+        RETURN gen_random_uuid();
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Silently handle any errors to prevent login failures
+        RETURN gen_random_uuid();
+END;
+$$;
+
+-- STEP 2: Drop the existing broken trigger
 DROP TRIGGER IF EXISTS trigger_track_login ON auth.users;
 
--- Update the function to NOT use last_sign_in_ip (which doesn't exist in auth.users)
+-- STEP 3: Create/update the trigger function (without last_sign_in_ip)
 CREATE OR REPLACE FUNCTION track_user_login()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -28,10 +63,14 @@ BEGIN
         );
     END IF;
     RETURN NEW;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Silently handle errors to prevent login failures
+        RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Recreate the trigger
+-- STEP 4: Recreate the trigger
 CREATE TRIGGER trigger_track_login
     AFTER UPDATE OF last_sign_in_at ON auth.users
     FOR EACH ROW
