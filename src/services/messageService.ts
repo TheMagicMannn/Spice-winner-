@@ -625,6 +625,39 @@ export class MessageService {
   }
 
   /**
+   * Set typing indicator for conversation-based chats
+   */
+  static async setTypingConversation(conversationId: string, userId: string, isTyping: boolean): Promise<void> {
+    try {
+      if (isTyping) {
+        // Delete existing and insert new
+        await supabase
+          .from('typing_indicators')
+          .delete()
+          .eq('conversation_id', conversationId)
+          .eq('user_id', userId);
+
+        await supabase
+          .from('typing_indicators')
+          .insert({
+            conversation_id: conversationId,
+            user_id: userId,
+            is_typing: true,
+            updated_at: new Date().toISOString()
+          });
+      } else {
+        await supabase
+          .from('typing_indicators')
+          .delete()
+          .eq('conversation_id', conversationId)
+          .eq('user_id', userId);
+      }
+    } catch (error) {
+      console.error('Error setting typing indicator for conversation:', error);
+    }
+  }
+
+  /**
    * Subscribe to typing indicators
    */
   static subscribeToTyping(
