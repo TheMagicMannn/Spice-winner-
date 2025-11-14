@@ -273,14 +273,16 @@ AS $$
 DECLARE
     conversation_id UUID;
     existing_conversation UUID;
+    v_user1_id UUID := user1_id;  -- Store in variable to avoid ambiguity
+    v_user2_id UUID := user2_id;
 BEGIN
     SELECT c.id INTO existing_conversation
     FROM conversations c
     INNER JOIN conversation_participants cp1 ON c.id = cp1.conversation_id
     INNER JOIN conversation_participants cp2 ON c.id = cp2.conversation_id
     WHERE c.conversation_type = 'direct'
-        AND cp1.user_id = user1_id
-        AND cp2.user_id = user2_id
+        AND cp1.user_id = v_user1_id
+        AND cp2.user_id = v_user2_id
         AND cp1.is_active = TRUE
         AND cp2.is_active = TRUE
         AND cp1.is_deleted = FALSE
@@ -294,20 +296,20 @@ BEGIN
     IF NOT EXISTS (
         SELECT 1 FROM matches
         WHERE status = 'matched'
-        AND ((matches.user1_id = user1_id AND matches.user2_id = user2_id) OR
-             (matches.user1_id = user2_id AND matches.user2_id = user1_id))
+        AND ((matches.user1_id = v_user1_id AND matches.user2_id = v_user2_id) OR
+             (matches.user1_id = v_user2_id AND matches.user2_id = v_user1_id))
     ) THEN
-        RAISE EXCEPTION 'Users must be mutually matched';
+        RAISE EXCEPTION 'Users must be mutually matched to create a conversation';
     END IF;
 
     INSERT INTO conversations (conversation_type, created_by)
-    VALUES ('direct', user1_id)
+    VALUES ('direct', v_user1_id)
     RETURNING id INTO conversation_id;
 
     INSERT INTO conversation_participants (conversation_id, user_id, is_admin)
     VALUES 
-        (conversation_id, user1_id, TRUE),
-        (conversation_id, user2_id, TRUE);
+        (conversation_id, v_user1_id, TRUE),
+        (conversation_id, v_user2_id, TRUE);
 
     RETURN conversation_id;
 END;
