@@ -427,6 +427,7 @@ export const MessagesPage: React.FC = () => {
               {activeFilter === 'deleted' && 'No deleted conversations'}
               {activeFilter === 'unread' && 'No unread messages'}
               {activeFilter === 'sent' && 'No sent messages'}
+              {activeFilter === 'groups' && 'No group chats yet'}
               {activeFilter === 'all' && 'No messages yet'}
             </h3>
             <p className="text-white/60 text-sm">
@@ -434,6 +435,7 @@ export const MessagesPage: React.FC = () => {
               {activeFilter === 'deleted' && 'Deleted conversations will appear here'}
               {activeFilter === 'unread' && 'All caught up!'}
               {activeFilter === 'sent' && 'Send your first message!'}
+              {activeFilter === 'groups' && 'Create a group chat to get started!'}
             </p>
           </div>
         )}
