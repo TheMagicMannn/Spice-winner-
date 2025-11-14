@@ -22,6 +22,7 @@ import { ChatPage } from './pages/ChatPage';
 import { ProfilePage } from './pages/Profile';
 import { SettingsPage } from './pages/Settings';
 import { AdminVerificationPage } from './pages/AdminVerification';
+import { AdminDashboard } from './pages/AdminDashboard';
 import { UserProfilePage } from './pages/UserProfile';
 import { HelpSupportPage } from './pages/HelpSupport';
 import { AboutSpicePage } from './pages/AboutSpice';
