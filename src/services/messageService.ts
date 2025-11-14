@@ -1167,6 +1167,129 @@ export class MessageService {
   }
 
   /**
+   * Report a user or conversation
+   */
+  static async reportUser(
+    reporterId: string,
+    reportedUserId: string,
+    conversationId: string,
+    reason: string,
+    additionalContext?: string,
+    shouldBlock?: boolean,
+    shouldHide?: boolean
+  ): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('user_reports')
+        .insert({
+          reporter_id: reporterId,
+          reported_user_id: reportedUserId,
+          conversation_id: conversationId,
+          report_type: 'user',
+          reason,
+          additional_context: additionalContext,
+          reporter_blocked_user: shouldBlock || false,
+          reporter_hidden_conversation: shouldHide || false
+        });
+
+      if (error) throw error;
+
+      // If user chose to block, update blocked_users table
+      if (shouldBlock) {
+        await supabase
+          .from('blocked_users')
+          .insert({
+            user_id: reporterId,
+            blocked_user_id: reportedUserId
+          })
+          .onConflict('user_id,blocked_user_id')
+          .ignore();
+      }
+
+      // If user chose to hide, soft delete conversation
+      if (shouldHide) {
+        await this.deleteConversationForUser(conversationId, reporterId);
+      }
+    } catch (error) {
+      console.error('Error reporting user:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Report a message
+   */
+  static async reportMessage(
+    reporterId: string,
+    messageId: string,
+    conversationId: string,
+    reason: string,
+    additionalContext?: string
+  ): Promise<void> {
+    try {
+      // Get message to find reported user
+      const { data: message } = await supabase
+        .from('messages')
+        .select('sender_id')
+        .eq('id', messageId)
+        .single();
+
+      if (!message) throw new Error('Message not found');
+
+      const { error } = await supabase
+        .from('user_reports')
+        .insert({
+          reporter_id: reporterId,
+          reported_user_id: message.sender_id,
+          conversation_id: conversationId,
+          message_id: messageId,
+          report_type: 'message',
+          reason,
+          additional_context: additionalContext
+        });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error reporting message:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Report a conversation
+   */
+  static async reportConversation(
+    reporterId: string,
+    conversationId: string,
+    reason: string,
+    additionalContext?: string,
+    shouldHide?: boolean
+  ): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('user_reports')
+        .insert({
+          reporter_id: reporterId,
+          conversation_id: conversationId,
+          report_type: 'conversation',
+          reason,
+          additional_context: additionalContext,
+          reporter_hidden_conversation: shouldHide || false
+        });
+
+      if (error) throw error;
+
+      // If user chose to hide, soft delete conversation
+      if (shouldHide) {
+        await this.deleteConversationForUser(conversationId, reporterId);
+      }
+    } catch (error) {
+      console.error('Error reporting conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Transform conversation_id in message data
    */
   private static transformMessage(data: any): Message {
