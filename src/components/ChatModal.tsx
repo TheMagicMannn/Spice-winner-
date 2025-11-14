@@ -327,7 +327,7 @@ export const ChatModal: React.FC<ChatModalProps> = ({
 
       // Block user if requested
       if (shouldBlock) {
-        await blockService.blockUser(user.id, otherUserId);
+        await settingsService.blockUser(otherUserId, reason);
       }
 
       // Hide/delete conversation if requested
