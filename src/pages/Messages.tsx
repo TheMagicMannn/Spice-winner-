@@ -95,11 +95,24 @@ export const MessagesPage: React.FC = () => {
         // For direct chats in conversation system, get the other user's name
         let name = conv.groupName || 'Chat';
         let photo = conv.groupPhoto || '';
+        let participantNames: string[] = [];
+        let participantPhotos: string[] = [];
         
         if (conv.conversationType === 'direct') {
           const otherParticipant = conv.participants.find(p => p.userId !== user.id);
           name = otherParticipant?.profile?.displayName || 'User';
           photo = otherParticipant?.profile?.photos?.[0] || '';
+        } else if (conv.conversationType === 'group') {
+          // For group chats, collect all participant names and photos
+          participantNames = conv.participants
+            .filter(p => p.isActive)
+            .map(p => p.profile?.displayName || 'Unknown')
+            .filter(Boolean);
+          
+          participantPhotos = conv.participants
+            .filter(p => p.isActive && p.profile?.photos?.[0])
+            .map(p => p.profile!.photos![0])
+            .slice(0, 4); // Show max 4 avatars
         }
 
         return {
@@ -112,7 +125,9 @@ export const MessagesPage: React.FC = () => {
           unreadCount: conv.unreadCount,
           isPinned: conv.isPinned || false,
           isDeleted: conv.isDeleted || false,
-          participantCount: conv.participants.filter(p => p.isActive).length
+          participantCount: conv.participants.filter(p => p.isActive).length,
+          participantNames,
+          participantPhotos
         };
       });
 
