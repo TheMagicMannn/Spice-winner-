@@ -488,15 +488,26 @@ export const MessagesPage: React.FC = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-1 action-button">
                   {activeFilter === 'deleted' ? (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => handleRestoreConversation(conversation, e)}
-                      className="text-green-500 hover:bg-green-500/10 h-8 w-8 p-0"
-                      title="Restore conversation"
-                    >
-                      <RotateCcw className="h-4 w-4" />
-                    </Button>
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => handleRestoreConversation(conversation, e)}
+                        className="text-green-500 hover:bg-green-500/10 h-8 w-8 p-0"
+                        title="Restore conversation"
+                      >
+                        <RotateCcw className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => handleDeleteConversation(conversation, e)}
+                        className="text-red-500 hover:bg-red-500/10 h-8 w-8 p-0"
+                        title="Delete permanently"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </>
                   ) : (
                     <>
                       <Button
