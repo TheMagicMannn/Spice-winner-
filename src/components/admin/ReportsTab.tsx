@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/Spinner';
 import { reportService, UserReport } from '@/services/reportService';
 import { adminService } from '@/services/adminService';
+import { supabase } from '@/services/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import {
   FileText,
