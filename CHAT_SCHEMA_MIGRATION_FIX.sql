@@ -202,9 +202,13 @@ DROP POLICY IF EXISTS "Group admins can update conversations" ON conversations;
 CREATE POLICY "Group admins can update conversations" ON conversations
     FOR UPDATE
     USING (
-        id IN (
-            SELECT conversation_id FROM conversation_participants
-            WHERE user_id = auth.uid() AND is_admin = TRUE AND is_active = TRUE
+        user_is_in_conversation(id, auth.uid())
+        AND EXISTS (
+            SELECT 1 FROM conversation_participants
+            WHERE conversation_id = id
+            AND user_id = auth.uid()
+            AND is_admin = TRUE
+            AND is_active = TRUE
         )
     );
 
