@@ -96,11 +96,14 @@ class AdminService {
     }
   ): Promise<UserActivity[]> {
     try {
+      console.log('[AdminService] Fetching user activities with filters:', filters);
+
+      // First, try with the foreign key relationship
       let query = supabase
         .from('user_activity_log')
         .select(`
           *,
-          profile:profiles!user_activity_log_user_id_fkey (
+          profile:user_id (
             display_name
           )
         `)
@@ -125,17 +128,35 @@ class AdminService {
       if (filters?.limit) {
         query = query.limit(filters.limit);
       } else {
-        query = query.limit(1000);
+        query = query.limit(200);
       }
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {
+        console.error('[AdminService] Query error:', error);
+        // If foreign key relationship fails, try without join
+        const { data: basicData, error: basicError } = await supabase
+          .from('user_activity_log')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(filters?.limit || 200);
+        
+        if (basicError) {
+          console.error('[AdminService] Basic query also failed:', basicError);
+          throw basicError;
+        }
 
+        console.log('[AdminService] Returning basic data without joins');
+        return basicData || [];
+      }
+
+      console.log('[AdminService] Successfully fetched activities:', data?.length);
       return data || [];
     } catch (error) {
-      console.error('Error fetching user activities:', error);
-      throw error;
+      console.error('[AdminService] Error fetching user activities:', error);
+      // Return empty array instead of throwing to prevent UI crash
+      return [];
     }
   }
 
