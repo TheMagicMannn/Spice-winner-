@@ -670,6 +670,35 @@ export const ChatModal: React.FC<ChatModalProps> = ({
               </div>
             </button>
           </div>
+
+          {/* Options Menu */}
+          <div className="relative">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowOptionsMenu(!showOptionsMenu)}
+              className="text-white hover:bg-pink-500/10"
+              data-testid="chat-options-button"
+            >
+              <MoreVertical className="h-5 w-5" />
+            </Button>
+
+            {showOptionsMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-pink-500/30 rounded-lg shadow-xl z-50">
+                <button
+                  onClick={() => {
+                    setShowOptionsMenu(false);
+                    setShowReportModal(true);
+                  }}
+                  className="w-full px-4 py-3 text-left text-white hover:bg-pink-500/10 flex items-center gap-2 rounded-lg transition-colors"
+                  data-testid="report-user-button"
+                >
+                  <Flag className="h-4 w-4 text-red-400" />
+                  Report User
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Messages */}
