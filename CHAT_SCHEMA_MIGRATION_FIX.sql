@@ -108,9 +108,25 @@ CREATE TABLE IF NOT EXISTS typing_indicators (
     CHECK (conversation_id IS NOT NULL OR match_id IS NOT NULL)
 );
 
--- Drop old unique constraints if they exist
-DROP INDEX IF EXISTS typing_indicators_conversation_id_user_id_key;
-DROP INDEX IF EXISTS typing_indicators_match_id_user_id_key;
+-- Drop old unique constraints if they exist (these are constraints, not just indexes)
+DO $$ 
+BEGIN
+    -- Drop conversation_id constraint if exists
+    IF EXISTS (
+        SELECT 1 FROM pg_constraint 
+        WHERE conname = 'typing_indicators_conversation_id_user_id_key'
+    ) THEN
+        ALTER TABLE typing_indicators DROP CONSTRAINT typing_indicators_conversation_id_user_id_key;
+    END IF;
+
+    -- Drop match_id constraint if exists
+    IF EXISTS (
+        SELECT 1 FROM pg_constraint 
+        WHERE conname = 'typing_indicators_match_id_user_id_key'
+    ) THEN
+        ALTER TABLE typing_indicators DROP CONSTRAINT typing_indicators_match_id_user_id_key;
+    END IF;
+END $$;
 
 -- Create new unique indexes
 CREATE UNIQUE INDEX IF NOT EXISTS idx_typing_conversation_user 
