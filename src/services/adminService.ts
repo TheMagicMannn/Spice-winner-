@@ -165,17 +165,25 @@ class AdminService {
    */
   async getActivitySummary(startDate: string, endDate: string): Promise<ActivitySummary[]> {
     try {
+      console.log('[AdminService] Fetching activity summary:', { startDate, endDate });
+
       const { data, error } = await supabase.rpc('get_activity_summary', {
         start_date: startDate,
         end_date: endDate
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('[AdminService] RPC error:', error);
+        // Return empty array if function doesn't exist
+        return [];
+      }
 
+      console.log('[AdminService] Activity summary data:', data);
       return data || [];
     } catch (error) {
-      console.error('Error fetching activity summary:', error);
-      throw error;
+      console.error('[AdminService] Error fetching activity summary:', error);
+      // Return empty array instead of throwing
+      return [];
     }
   }
 
