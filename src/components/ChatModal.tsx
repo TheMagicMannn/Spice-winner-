@@ -12,7 +12,9 @@ import {
   ChevronLeft,
   Clock,
   Check,
-  CheckCheck
+  CheckCheck,
+  Flag,
+  MoreVertical
 } from 'lucide-react';
 import { MessageService, Message } from '@/services/messageService';
 import { useAuth } from '@/hooks/useAuth';
@@ -20,6 +22,9 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { formatDistanceToNow } from 'date-fns';
 import { MessageContextMenu } from './MessageContextMenu';
 import { EmojiPicker } from './EmojiPicker';
+import { ReportModal } from './ReportModal';
+import { reportService } from '@/services/reportService';
+import { blockService } from '@/services/blockService';
 
 interface ChatModalProps {
   matchId: string;
