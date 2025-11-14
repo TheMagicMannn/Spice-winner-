@@ -1196,14 +1196,23 @@ export class MessageService {
 
       // If user chose to block, update blocked_users table
       if (shouldBlock) {
-        await supabase
+        // Check if block already exists
+        const { data: existingBlock } = await supabase
           .from('blocked_users')
-          .insert({
-            user_id: reporterId,
-            blocked_user_id: reportedUserId
-          })
-          .onConflict('user_id,blocked_user_id')
-          .ignore();
+          .select('id')
+          .eq('user_id', reporterId)
+          .eq('blocked_user_id', reportedUserId)
+          .maybeSingle();
+
+        // Only insert if doesn't exist
+        if (!existingBlock) {
+          await supabase
+            .from('blocked_users')
+            .insert({
+              user_id: reporterId,
+              blocked_user_id: reportedUserId
+            });
+        }
       }
 
       // If user chose to hide, soft delete conversation
