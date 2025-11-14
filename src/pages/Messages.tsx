@@ -100,24 +100,15 @@ export const MessagesPage: React.FC = () => {
         
         if (conv.conversationType === 'direct') {
           const otherParticipant = conv.participants.find(p => p.userId !== user.id);
-          // Better fallback: displayName → firstName lastName → email → User
+          // Fallback: displayName → 'Member' (if profile exists but no name)
           const profile = otherParticipant?.profile;
-          name = profile?.displayName || 
-                 (profile?.firstName && profile?.lastName ? `${profile.firstName} ${profile.lastName}` : '') ||
-                 profile?.email?.split('@')[0] || 
-                 'User';
+          name = profile?.displayName || (profile ? 'Member' : 'User');
           photo = profile?.photos?.[0] || '';
         } else if (conv.conversationType === 'group') {
-          // For group chats, collect all participant names and photos with better fallbacks
+          // For group chats, collect all participant names and photos
           participantNames = conv.participants
             .filter(p => p.isActive)
-            .map(p => {
-              const profile = p.profile;
-              return profile?.displayName || 
-                     (profile?.firstName && profile?.lastName ? `${profile.firstName} ${profile.lastName}` : '') ||
-                     profile?.email?.split('@')[0] ||
-                     'Member';
-            })
+            .map(p => p.profile?.displayName || 'Member')
             .filter(Boolean);
           
           participantPhotos = conv.participants
