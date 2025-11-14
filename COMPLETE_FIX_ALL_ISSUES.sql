@@ -480,6 +480,41 @@ END;
 $$;
 
 -- =====================================================
+-- STEP 6: Fix typing_indicators unique constraints
+-- =====================================================
+
+-- Drop old constraints if they exist
+DO $$ 
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM pg_constraint 
+        WHERE conname = 'typing_indicators_conversation_id_user_id_key'
+    ) THEN
+        ALTER TABLE typing_indicators DROP CONSTRAINT typing_indicators_conversation_id_user_id_key;
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM pg_constraint 
+        WHERE conname = 'typing_indicators_match_id_user_id_key'
+    ) THEN
+        ALTER TABLE typing_indicators DROP CONSTRAINT typing_indicators_match_id_user_id_key;
+    END IF;
+END $$;
+
+-- Drop old partial unique indexes if they exist
+DROP INDEX IF EXISTS idx_typing_conversation_user;
+DROP INDEX IF EXISTS idx_typing_match_user;
+
+-- Create new partial unique indexes
+CREATE UNIQUE INDEX IF NOT EXISTS idx_typing_conversation_user 
+    ON typing_indicators(conversation_id, user_id) 
+    WHERE conversation_id IS NOT NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_typing_match_user 
+    ON typing_indicators(match_id, user_id) 
+    WHERE match_id IS NOT NULL;
+
+-- =====================================================
 -- COMPLETE - All issues fixed
 -- =====================================================
 -- Run this script to fix:
@@ -487,4 +522,5 @@ $$;
 -- ✅ Infinite recursion
 -- ✅ All policies
 -- ✅ All functions
+-- ✅ Typing indicators unique constraint
 -- =====================================================
