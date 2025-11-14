@@ -24,7 +24,7 @@ import { MessageContextMenu } from './MessageContextMenu';
 import { EmojiPicker } from './EmojiPicker';
 import { ReportModal } from './ReportModal';
 import { reportService } from '@/services/reportService';
-import { blockService } from '@/services/blockService';
+import { settingsService } from '@/services/settingsService';
 
 interface ChatModalProps {
   matchId: string;
