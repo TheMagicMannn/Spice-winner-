@@ -299,6 +299,35 @@ export const ChatModal: React.FC<ChatModalProps> = ({
     }
   };
 
+  const handleReportUser = async (
+    reason: string,
+    additionalContext: string,
+    shouldBlock: boolean,
+    shouldHide: boolean
+  ) => {
+    if (!user) return;
+
+    try {
+      // Submit report
+      await reportService.submitReport(user.id, otherUserId, reason, additionalContext);
+
+      // Block user if requested
+      if (shouldBlock) {
+        await blockService.blockUser(user.id, otherUserId);
+      }
+
+      // Hide/delete conversation if requested
+      if (shouldHide) {
+        // This would call a conversation delete/hide service
+        // For now, just close the modal
+        onClose();
+      }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      throw error;
+    }
+  };
+
   const clearMediaSelection = () => {
     setSelectedMedia(null);
     setMediaPreview(null);
