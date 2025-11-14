@@ -98,15 +98,21 @@ CREATE INDEX IF NOT EXISTS idx_participants_active ON conversation_participants(
 CREATE INDEX IF NOT EXISTS idx_participants_deleted ON conversation_participants(user_id, is_deleted) WHERE is_deleted = TRUE;
 
 -- Ensure typing_indicators table has both conversation_id and match_id
-CREATE TABLE IF NOT EXISTS typing_indicators (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
-    match_id UUID REFERENCES matches(id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    is_typing BOOLEAN DEFAULT TRUE,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    CHECK (conversation_id IS NOT NULL OR match_id IS NOT NULL)
-);
+DO $$
+BEGIN
+    -- Create table if not exists
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'typing_indicators') THEN
+        CREATE TABLE typing_indicators (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            conversation_id UUID REFERENCES conversations(id) ON DELETE CASCADE,
+            match_id UUID REFERENCES matches(id) ON DELETE CASCADE,
+            user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+            is_typing BOOLEAN DEFAULT TRUE,
+            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+            CHECK (conversation_id IS NOT NULL OR match_id IS NOT NULL)
+        );
+    END IF;
+END $$;
 
 -- Drop old unique constraints if they exist (these are constraints, not just indexes)
 DO $$ 
@@ -128,7 +134,11 @@ BEGIN
     END IF;
 END $$;
 
--- Create new unique indexes
+-- Drop old partial unique indexes if they exist
+DROP INDEX IF EXISTS idx_typing_conversation_user;
+DROP INDEX IF EXISTS idx_typing_match_user;
+
+-- Create new unique indexes with WHERE clause (partial indexes)
 CREATE UNIQUE INDEX IF NOT EXISTS idx_typing_conversation_user 
     ON typing_indicators(conversation_id, user_id) 
     WHERE conversation_id IS NOT NULL;
