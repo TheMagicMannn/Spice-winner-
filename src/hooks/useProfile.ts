@@ -68,7 +68,8 @@ export const useProfile = () => {
       
       console.log('✅ Profile saved successfully to database');
 
-      updateProfile(profileData); // Update global state with original camelCase data
+      // Update global state with profileCompleted flag set to true
+      updateProfile({ ...profileData, profileCompleted: true });
       return { error: null };
     } catch (error: any) {
       console.error('❌ Failed to save profile:', error);
