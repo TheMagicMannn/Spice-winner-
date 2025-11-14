@@ -225,19 +225,18 @@ CREATE POLICY "Users can manage their own participant record" ON conversation_pa
     FOR UPDATE
     USING (user_id = auth.uid());
 
--- RLS Policies for typing_indicators
+-- RLS Policies for typing_indicators (using helper function to avoid recursion)
 DROP POLICY IF EXISTS "Users can view typing in their conversations" ON typing_indicators;
 CREATE POLICY "Users can view typing in their conversations" ON typing_indicators
     FOR SELECT
     USING (
-        (conversation_id IN (
-            SELECT conversation_id FROM conversation_participants
-            WHERE user_id = auth.uid() AND is_active = TRUE
-        ))
+        (conversation_id IS NOT NULL AND user_is_in_conversation(conversation_id, auth.uid()))
         OR
-        (match_id IN (
-            SELECT id FROM matches
-            WHERE status = 'matched' AND (user1_id = auth.uid() OR user2_id = auth.uid())
+        (match_id IS NOT NULL AND EXISTS (
+            SELECT 1 FROM matches
+            WHERE id = typing_indicators.match_id
+            AND status = 'matched' 
+            AND (user1_id = auth.uid() OR user2_id = auth.uid())
         ))
     );
 
