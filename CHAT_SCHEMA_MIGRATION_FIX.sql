@@ -162,6 +162,29 @@ ALTER TABLE conversation_participants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
 ALTER TABLE typing_indicators ENABLE ROW LEVEL SECURITY;
 
+-- =====================================================
+-- Helper Function to Prevent RLS Infinite Recursion
+-- =====================================================
+-- SECURITY DEFINER bypasses RLS when checking membership
+CREATE OR REPLACE FUNCTION user_is_in_conversation(
+    conversation_id_param UUID,
+    user_id_param UUID
+)
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+STABLE
+AS $$
+    SELECT EXISTS (
+        SELECT 1 FROM conversation_participants
+        WHERE conversation_id = conversation_id_param
+        AND user_id = user_id_param
+        AND is_active = TRUE
+    );
+$$;
+
+GRANT EXECUTE ON FUNCTION user_is_in_conversation(UUID, UUID) TO authenticated;
+
 -- RLS Policies for conversations
 DROP POLICY IF EXISTS "Users can view their conversations" ON conversations;
 CREATE POLICY "Users can view their conversations" ON conversations
