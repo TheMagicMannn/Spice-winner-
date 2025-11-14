@@ -91,7 +91,7 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
       console.log('[v0] Group created successfully:', conversationId);
       
       // Navigate to the new group chat
-      navigate(`/chat/${conversationId}/group`);
+      navigate(`/messages/${conversationId}`);
       onClose();
     } catch (error: any) {
       console.error('[v0] Error creating group:', error);
