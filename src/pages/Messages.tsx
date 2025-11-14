@@ -51,21 +51,27 @@ export const MessagesPage: React.FC = () => {
     
     setIsLoading(true);
     try {
-      // Map filter types for conversation service (it doesn't support 'sent' or 'groups' directly)
-      let conversationFilter: 'all' | 'unread' | 'groups' | 'direct' | 'deleted' = 'all';
+      // Map filter types for services
+      // MessageService only supports: 'all' | 'unread' | 'sent' | 'deleted'
+      // ConversationService supports: 'all' | 'unread' | 'groups' | 'direct' | 'deleted'
+      
+      const messageServiceFilter: 'all' | 'unread' | 'sent' | 'deleted' = 
+        activeFilter === 'groups' ? 'all' : activeFilter;
+      
+      let conversationServiceFilter: 'all' | 'unread' | 'groups' | 'direct' | 'deleted' = 'all';
       
       if (activeFilter === 'sent') {
-        conversationFilter = 'all';
+        conversationServiceFilter = 'all';
       } else if (activeFilter === 'groups') {
-        conversationFilter = 'groups';
+        conversationServiceFilter = 'groups';
       } else {
-        conversationFilter = activeFilter as 'all' | 'unread' | 'deleted';
+        conversationServiceFilter = activeFilter as 'all' | 'unread' | 'deleted';
       }
       
       // Load both match-based and conversation-based threads
       const [matchConvos, conversationThreads] = await Promise.all([
-        MessageService.getConversations(user.id, activeFilter).catch(() => []),
-        ConversationService.getUserConversations(user.id, conversationFilter).catch(() => [])
+        MessageService.getConversations(user.id, messageServiceFilter).catch(() => []),
+        ConversationService.getUserConversations(user.id, conversationServiceFilter).catch(() => [])
       ]);
 
       // Convert match-based conversations to unified format
