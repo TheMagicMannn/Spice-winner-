@@ -170,15 +170,19 @@ class AdminService {
     }
   ): Promise<UserManagement[]> {
     try {
+      console.log('[AdminService] Fetching users with filters:', filters);
+
       let query = supabase
         .from('profiles')
         .select(`
           id,
           display_name,
+          email,
           account_type,
           is_verified,
           is_admin,
           created_at,
+          last_sign_in_at,
           user_memberships (
             membership_level
           )
@@ -201,34 +205,30 @@ class AdminService {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      console.log('[AdminService] Query result:', { data, error, count: data?.length });
 
-      // Get email from auth.users
-      const usersWithEmail = await Promise.all(
-        (data || []).map(async (user: any) => {
-          const { data: authData } = await supabase
-            .from('auth.users')
-            .select('email, last_sign_in_at')
-            .eq('id', user.id)
-            .single();
+      if (error) {
+        console.error('[AdminService] Query error:', error);
+        throw error;
+      }
 
-          return {
-            id: user.id,
-            email: authData?.email || '',
-            display_name: user.display_name,
-            account_type: user.account_type,
-            is_verified: user.is_verified,
-            is_admin: user.is_admin,
-            created_at: user.created_at,
-            last_sign_in_at: authData?.last_sign_in_at,
-            membership_level: user.user_memberships?.[0]?.membership_level || 'free'
-          };
-        })
-      );
+      // Map the data to include all fields
+      const users = (data || []).map((user: any) => ({
+        id: user.id,
+        email: user.email || 'No email',
+        display_name: user.display_name,
+        account_type: user.account_type,
+        is_verified: user.is_verified,
+        is_admin: user.is_admin,
+        created_at: user.created_at,
+        last_sign_in_at: user.last_sign_in_at,
+        membership_level: user.user_memberships?.[0]?.membership_level || 'free'
+      }));
 
-      return usersWithEmail;
+      console.log('[AdminService] Returning users:', users.length);
+      return users;
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error('[AdminService] Error fetching users:', error);
       throw error;
     }
   }
