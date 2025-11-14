@@ -84,6 +84,11 @@ export const ChatPage: React.FC = () => {
   const [conversationDetails, setConversationDetails] = useState<ConversationDetails | null>(null);
   const [isGroupChat, setIsGroupChat] = useState(false);
   
+  // Menu and modals
+  const [showMenu, setShowMenu] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showAddParticipantsModal, setShowAddParticipantsModal] = useState(false);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messageChannelRef = useRef<RealtimeChannel | null>(null);
