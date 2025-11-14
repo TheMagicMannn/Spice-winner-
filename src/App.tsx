@@ -37,83 +37,27 @@ import { QueryClientProvider } from './lib/queryClient';
 import { Profile } from './types';
 
 /**
- * Comprehensive profile completion validation
- * Checks all required fields for both individual and couple accounts
+ * Check if profile setup is complete
+ * Uses the database profileCompleted flag which is set during profile setup
  */
-const isProfileComplete = (profile: Profile | null | undefined, accountType?: string): boolean => {
+const isProfileComplete = (profile: Profile | null | undefined): boolean => {
   if (!profile) {
     console.log('Profile check: No profile found');
     return false;
   }
   
-  // Debug: Log profile data
-  console.log('Checking profile completion:', {
+  // Check the profileCompleted flag from database
+  // This flag is set to true when user completes the profile setup flow
+  const isComplete = profile.profileCompleted === true;
+  
+  console.log('Profile completion check:', {
+    profileCompleted: profile.profileCompleted,
+    isComplete,
     displayName: profile.displayName,
-    location: profile.location,
-    age: profile.age,
-    gender: profile.gender,
-    orientation: profile.orientation,
-    relationshipStatus: profile.relationshipStatus,
-    bioLength: profile.bio?.length,
-    photoCount: profile.photos?.length,
     accountType: profile.accountType
   });
   
-  // Base requirements for all account types
-  const baseRequirements = [
-    profile.displayName && profile.displayName.trim().length > 0,
-    profile.location && profile.location.trim().length > 0,
-    profile.age && profile.age >= 18,
-    profile.gender && profile.gender.trim().length > 0,
-    profile.orientation && profile.orientation.trim().length > 0,
-    profile.relationshipStatus && profile.relationshipStatus.trim().length > 0,
-    profile.bio && profile.bio.trim().length >= 69,
-    profile.photos && profile.photos.length >= 2
-  ];
-  
-  // Check if all base requirements are met
-  const baseComplete = baseRequirements.every(Boolean);
-  
-  console.log('Base requirements check:', {
-    hasDisplayName: !!profile.displayName,
-    hasLocation: !!profile.location,
-    hasAge: !!profile.age && profile.age >= 18,
-    hasGender: !!profile.gender,
-    hasOrientation: !!profile.orientation,
-    hasRelationshipStatus: !!profile.relationshipStatus,
-    hasBio: !!profile.bio && profile.bio.length >= 69,
-    hasPhotos: !!profile.photos && profile.photos.length >= 2,
-    baseComplete
-  });
-  
-  if (!baseComplete) {
-    console.log('Profile incomplete: Base requirements not met');
-    return false;
-  }
-  
-  // Additional requirements for couple accounts
-  if (accountType === 'couple' || profile.accountType === 'couple') {
-    const coupleRequirements = [
-      profile.displayName2 && profile.displayName2.trim().length > 0,
-      profile.age2 && profile.age2 >= 18,
-      profile.gender2 && profile.gender2.trim().length > 0,
-      profile.orientation2 && profile.orientation2.trim().length > 0
-    ];
-    
-    const coupleComplete = coupleRequirements.every(Boolean);
-    console.log('Couple requirements check:', {
-      hasDisplayName2: !!profile.displayName2,
-      hasAge2: !!profile.age2 && profile.age2 >= 18,
-      hasGender2: !!profile.gender2,
-      hasOrientation2: !!profile.orientation2,
-      coupleComplete
-    });
-    
-    return coupleComplete;
-  }
-  
-  console.log('Profile complete!');
-  return true;
+  return isComplete;
 };
 
 const AppContent: React.FC = () => {
