@@ -432,18 +432,43 @@ export const MessagesPage: React.FC = () => {
                 {/* Conversation Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between mb-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-white font-semibold truncate">
-                        {conversation.name}
-                      </h3>
-                      {conversation.isPinned && (
-                        <Pin className="h-4 w-4 text-pink-500 fill-pink-500" />
-                      )}
-                      {conversation.type === 'group' && conversation.participantCount && (
-                        <span className="text-white/40 text-xs">({conversation.participantCount})</span>
+                    <div className="flex flex-col gap-0.5 flex-1 min-w-0">
+                      {/* Group chat: show group name with participant count */}
+                      {conversation.type === 'group' ? (
+                        <>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-white font-semibold truncate">
+                              {conversation.name}
+                            </h3>
+                            {conversation.isPinned && (
+                              <Pin className="h-4 w-4 text-pink-500 fill-pink-500" />
+                            )}
+                            {conversation.participantCount && (
+                              <span className="text-white/40 text-xs flex-shrink-0">
+                                ({conversation.participantCount} members)
+                              </span>
+                            )}
+                          </div>
+                          {/* Show participant names */}
+                          {conversation.participantNames && conversation.participantNames.length > 0 && (
+                            <p className="text-white/50 text-xs truncate">
+                              {conversation.participantNames.join(', ')}
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        /* Direct chat: show user name */
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-white font-semibold truncate">
+                            {conversation.name}
+                          </h3>
+                          {conversation.isPinned && (
+                            <Pin className="h-4 w-4 text-pink-500 fill-pink-500" />
+                          )}
+                        </div>
                       )}
                     </div>
-                    <span className="text-white/50 text-xs whitespace-nowrap ml-2">
+                    <span className="text-white/50 text-xs whitespace-nowrap ml-2 flex-shrink-0">
                       {formatTimestamp(conversation.lastMessageAt)}
                     </span>
                   </div>
