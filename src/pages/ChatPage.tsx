@@ -229,7 +229,12 @@ export const ChatPage: React.FC = () => {
       const profile = await ProfileService.getProfile(otherUserId);
       if (profile) {
         setOtherUserProfile(profile);
-        setOtherUserName(profile.displayName || 'Unknown User');
+        // Better fallback for name
+        const name = profile.displayName || 
+                    (profile.firstName && profile.lastName ? `${profile.firstName} ${profile.lastName}` : '') ||
+                    profile.email?.split('@')[0] || 
+                    'User';
+        setOtherUserName(name);
         setOtherUserPhoto(profile.photos?.[0] || '');
       } else {
         setOtherUserName('User');
