@@ -185,15 +185,12 @@ $$;
 
 GRANT EXECUTE ON FUNCTION user_is_in_conversation(UUID, UUID) TO authenticated;
 
--- RLS Policies for conversations
+-- RLS Policies for conversations (using helper function to avoid recursion)
 DROP POLICY IF EXISTS "Users can view their conversations" ON conversations;
 CREATE POLICY "Users can view their conversations" ON conversations
     FOR SELECT
     USING (
-        id IN (
-            SELECT conversation_id FROM conversation_participants
-            WHERE user_id = auth.uid() AND is_active = TRUE
-        )
+        user_is_in_conversation(id, auth.uid())
     );
 
 DROP POLICY IF EXISTS "Users can create conversations" ON conversations;
