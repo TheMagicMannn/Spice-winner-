@@ -455,7 +455,7 @@ export class MessageService {
   }
 
   /**
-   * Mark media as viewed and start self-destruct timer
+   * Mark media as viewed and start self-destruct timer (Direct messages)
    */
   static async markMediaViewed(messageId: string): Promise<Message> {
     try {
@@ -477,6 +477,40 @@ export class MessageService {
       return this.transformMessage(updatedMessage);
     } catch (error) {
       console.error('Error marking media as viewed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Mark media as viewed in group chat (starts timer only when all view)
+   */
+  static async markMediaViewedGroup(
+    messageId: string,
+    userId: string
+  ): Promise<{ message: Message; allViewed: boolean }> {
+    try {
+      const { data, error } = await supabase.rpc('mark_media_viewed_group', {
+        message_id_param: messageId,
+        user_id_param: userId
+      });
+
+      if (error) throw error;
+
+      // Fetch the updated message
+      const { data: updatedMessage, error: fetchError } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('id', messageId)
+        .single();
+
+      if (fetchError) throw fetchError;
+
+      return {
+        message: this.transformMessage(updatedMessage),
+        allViewed: data?.[0]?.all_viewed || false
+      };
+    } catch (error) {
+      console.error('Error marking media as viewed in group:', error);
       throw error;
     }
   }
