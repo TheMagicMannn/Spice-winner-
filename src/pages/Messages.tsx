@@ -204,6 +204,7 @@ export const MessagesPage: React.FC = () => {
       case 'unread': return 'Unread';
       case 'sent': return 'Sent';
       case 'deleted': return 'Deleted';
+      case 'groups': return 'Group Chats';
     }
   };
 
