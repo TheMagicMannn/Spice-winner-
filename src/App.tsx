@@ -46,12 +46,17 @@ const isProfileComplete = (profile: Profile | null | undefined): boolean => {
     return false;
   }
   
+  // Debug: Log the entire profile object to see what fields are available
+  console.log('🔍 DEBUG: Full profile object:', profile);
+  console.log('🔍 DEBUG: Profile keys:', Object.keys(profile));
+  
   // Check the profileCompleted flag from database
   // This flag is set to true when user completes the profile setup flow
   const isComplete = profile.profileCompleted === true;
   
   console.log('Profile completion check:', {
     profileCompleted: profile.profileCompleted,
+    profileCompletedType: typeof profile.profileCompleted,
     isComplete,
     displayName: profile.displayName,
     accountType: profile.accountType
