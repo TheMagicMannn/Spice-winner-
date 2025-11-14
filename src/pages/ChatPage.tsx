@@ -1147,10 +1147,26 @@ const MediaMessage: React.FC<{
   }, [message.expiresAt, message, onMessageUpdate]);
 
   const handleView = async () => {
-    if (!isViewed && message.selfDestructSeconds && !isSender) {
+    if (!isViewed && message.selfDestructSeconds && !isSender && user) {
       setIsLoading(true);
       try {
-        const updatedMessage = await MessageService.markMediaViewed(message.id);
+        let updatedMessage: Message;
+        
+        // Check if it's a group chat by checking if message has conversationId
+        if (message.conversationId) {
+          // Group chat - use group viewing logic
+          const result = await MessageService.markMediaViewedGroup(message.id, user.id);
+          updatedMessage = result.message;
+          
+          // If all viewed, timer has started
+          if (result.allViewed) {
+            console.log('All participants have viewed the media. Timer started.');
+          }
+        } else {
+          // Direct message - use standard viewing logic
+          updatedMessage = await MessageService.markMediaViewed(message.id);
+        }
+        
         setIsViewed(true);
         onMessageUpdate(updatedMessage);
       } catch (err: any) {
