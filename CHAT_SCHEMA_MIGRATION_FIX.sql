@@ -212,15 +212,12 @@ CREATE POLICY "Group admins can update conversations" ON conversations
         )
     );
 
--- RLS Policies for conversation_participants
+-- RLS Policies for conversation_participants (using helper function to avoid recursion)
 DROP POLICY IF EXISTS "Users can view participants in their conversations" ON conversation_participants;
 CREATE POLICY "Users can view participants in their conversations" ON conversation_participants
     FOR SELECT
     USING (
-        conversation_id IN (
-            SELECT conversation_id FROM conversation_participants
-            WHERE user_id = auth.uid() AND is_active = TRUE
-        )
+        user_is_in_conversation(conversation_id, auth.uid())
     );
 
 DROP POLICY IF EXISTS "Users can manage their own participant record" ON conversation_participants;
