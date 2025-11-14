@@ -328,25 +328,26 @@ AS $$
 DECLARE
     conversation_id UUID;
     participant_id UUID;
+    v_creator_id UUID := creator_id;  -- Store in variable to avoid ambiguity
 BEGIN
     FOREACH participant_id IN ARRAY participant_ids
     LOOP
         IF NOT EXISTS (
             SELECT 1 FROM matches
             WHERE status = 'matched'
-            AND ((user1_id = creator_id AND user2_id = participant_id) OR
-                 (user1_id = participant_id AND user2_id = creator_id))
+            AND ((matches.user1_id = v_creator_id AND matches.user2_id = participant_id) OR
+                 (matches.user1_id = participant_id AND matches.user2_id = v_creator_id))
         ) THEN
             RAISE EXCEPTION 'Creator must be mutually matched with all participants';
         END IF;
     END LOOP;
 
     INSERT INTO conversations (conversation_type, group_name, created_by)
-    VALUES ('group', group_name_param, creator_id)
+    VALUES ('group', group_name_param, v_creator_id)
     RETURNING id INTO conversation_id;
 
     INSERT INTO conversation_participants (conversation_id, user_id, is_admin)
-    VALUES (conversation_id, creator_id, TRUE);
+    VALUES (conversation_id, v_creator_id, TRUE);
 
     FOREACH participant_id IN ARRAY participant_ids
     LOOP
