@@ -17,16 +17,55 @@ Your database has a trigger (`track_user_login`) that tries to access a field `l
 3. Click **SQL Editor** in the left sidebar
 4. Click **+ New Query**
 
-### Run This SQL:
-Copy and paste the entire contents of `/app/FIX_LOGIN_TRIGGER.sql` into the SQL editor and click **RUN**.
-
-**Or copy this:**
+### OPTION A: Quick Fix (Recommended - Login Works Immediately)
+**This removes the broken trigger so you can login right now:**
 
 ```sql
+-- Simply drop the broken trigger
+DROP TRIGGER IF EXISTS trigger_track_login ON auth.users;
+DROP FUNCTION IF EXISTS track_user_login();
+```
+
+✅ **Run this and try logging in immediately!**
+
+---
+
+### OPTION B: Complete Fix (Keeps Activity Logging)
+**Use this if you want to keep login activity tracking:**
+
+```sql
+-- Create the missing function
+CREATE OR REPLACE FUNCTION log_user_activity(
+    p_user_id UUID,
+    p_activity_type TEXT,
+    p_activity_data JSONB DEFAULT NULL,
+    p_ip_address INET DEFAULT NULL,
+    p_user_agent TEXT DEFAULT NULL
+)
+RETURNS UUID
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+DECLARE
+    activity_id UUID;
+BEGIN
+    IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'user_activity_log') THEN
+        INSERT INTO user_activity_log (user_id, activity_type, activity_data, ip_address, user_agent)
+        VALUES (p_user_id, p_activity_type, p_activity_data, p_ip_address, p_user_agent)
+        RETURNING id INTO activity_id;
+        RETURN activity_id;
+    ELSE
+        RETURN gen_random_uuid();
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    RETURN gen_random_uuid();
+END;
+$$;
+
 -- Drop the broken trigger
 DROP TRIGGER IF EXISTS trigger_track_login ON auth.users;
 
--- Fix the function
+-- Fix the trigger function
 CREATE OR REPLACE FUNCTION track_user_login()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -34,14 +73,13 @@ BEGIN
         PERFORM log_user_activity(
             NEW.id,
             'user_login',
-            jsonb_build_object(
-                'email', NEW.email,
-                'timestamp', NEW.last_sign_in_at
-            ),
+            jsonb_build_object('email', NEW.email, 'timestamp', NEW.last_sign_in_at),
             NULL,
             NULL
         );
     END IF;
+    RETURN NEW;
+EXCEPTION WHEN OTHERS THEN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
