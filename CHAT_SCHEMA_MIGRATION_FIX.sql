@@ -527,9 +527,35 @@ CREATE TRIGGER trigger_update_conversation_timestamp
 -- =====================================================
 -- Enable Realtime
 -- =====================================================
-ALTER PUBLICATION supabase_realtime ADD TABLE IF NOT EXISTS messages;
-ALTER PUBLICATION supabase_realtime ADD TABLE IF NOT EXISTS typing_indicators;
-ALTER PUBLICATION supabase_realtime ADD TABLE IF NOT EXISTS conversation_participants;
+DO $$ 
+BEGIN
+    -- Add messages to realtime publication if not already added
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+        AND tablename = 'messages'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE messages;
+    END IF;
+
+    -- Add typing_indicators to realtime publication if not already added
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+        AND tablename = 'typing_indicators'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE typing_indicators;
+    END IF;
+
+    -- Add conversation_participants to realtime publication if not already added
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' 
+        AND tablename = 'conversation_participants'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE conversation_participants;
+    END IF;
+END $$;
 
 -- =====================================================
 -- MIGRATION COMPLETE
