@@ -47,6 +47,28 @@ export const ReportsTab: React.FC = () => {
   useEffect(() => {
     loadReports();
     loadReportCounts();
+
+    // Setup realtime subscription for user_reports table
+    const reportsSubscription = supabase
+      .channel('admin-reports-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_reports'
+        },
+        (payload) => {
+          console.log('Report change detected:', payload);
+          loadReports();
+          loadReportCounts();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(reportsSubscription);
+    };
   }, []);
 
   const loadReports = async () => {
