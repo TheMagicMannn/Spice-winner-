@@ -1142,6 +1142,26 @@ export const ChatPage: React.FC = () => {
           onClose={() => setShowProfileModal(false)}
         />
       )}
+
+      {/* Report Modal */}
+      <ReportModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        onSubmit={handleReportSubmit}
+        reportType={isGroupChat ? 'conversation' : 'user'}
+        targetName={otherUserName}
+      />
+
+      {/* Add Participants Modal */}
+      {isGroupChat && conversationDetails && (
+        <AddParticipantsModal
+          isOpen={showAddParticipantsModal}
+          onClose={() => setShowAddParticipantsModal(false)}
+          conversationId={chatId!}
+          currentParticipantIds={conversationDetails.participants.map(p => p.userId)}
+          onSuccess={handleParticipantsAdded}
+        />
+      )}
     </div>
   );
 };
