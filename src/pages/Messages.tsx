@@ -283,7 +283,7 @@ export const MessagesPage: React.FC = () => {
                   onClick={() => setShowFilterMenu(false)}
                 />
                 <div className="absolute right-0 top-full mt-2 bg-gray-900 border border-pink-500/30 rounded-lg shadow-xl z-50 min-w-[150px]">
-                  {(['all', 'unread', 'sent', 'deleted'] as FilterType[]).map((filter) => (
+                  {(['all', 'unread', 'sent', 'groups', 'deleted'] as FilterType[]).map((filter) => (
                     <button
                       key={filter}
                       onClick={() => {
