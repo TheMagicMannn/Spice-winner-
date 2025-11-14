@@ -1404,6 +1404,21 @@ export class MessageService {
    * Transform conversation_id in message data
    */
   private static transformMessage(data: any): Message {
+    // Helper to safely parse reactions (might be string or already parsed)
+    const parseReactions = (reactions: any) => {
+      if (!reactions) return [];
+      if (typeof reactions === 'string') {
+        try {
+          return JSON.parse(reactions);
+        } catch (e) {
+          console.error('Failed to parse reactions:', e);
+          return [];
+        }
+      }
+      if (Array.isArray(reactions)) return reactions;
+      return [];
+    };
+
     return {
       id: data.id,
       matchId: data.match_id,
@@ -1421,7 +1436,7 @@ export class MessageService {
       deletedAt: data.deleted_at,
       replyToId: data.reply_to_id,
       replyToMessage: data.reply_to_message ? this.transformMessage(data.reply_to_message) : undefined,
-      reactions: data.reactions ? JSON.parse(data.reactions) : [],
+      reactions: parseReactions(data.reactions),
       createdAt: data.created_at,
       updatedAt: data.updated_at,
     };
