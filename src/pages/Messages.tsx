@@ -27,6 +27,8 @@ interface UnifiedConversation {
   isPinned: boolean;
   isDeleted: boolean;
   participantCount?: number;
+  participantNames?: string[]; // For group chats
+  participantPhotos?: string[]; // For group chats
 }
 
 export const MessagesPage: React.FC = () => {
