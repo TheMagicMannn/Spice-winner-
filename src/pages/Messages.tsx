@@ -376,11 +376,48 @@ export const MessagesPage: React.FC = () => {
               <div className="flex gap-3">
                 {/* Profile Image with Online Indicator */}
                 <div className="relative">
-                  {conversation.type === 'group' ? (
+                  {conversation.type === 'group' && conversation.participantPhotos && conversation.participantPhotos.length > 0 ? (
+                    // Group avatars - show up to 4 avatars in a grid
+                    <div className="w-14 h-14 relative">
+                      {conversation.participantPhotos.length === 1 && (
+                        <img
+                          src={conversation.participantPhotos[0]}
+                          alt="Participant"
+                          className="w-14 h-14 rounded-full object-cover"
+                        />
+                      )}
+                      {conversation.participantPhotos.length === 2 && (
+                        <div className="w-14 h-14 grid grid-cols-2 gap-0.5">
+                          {conversation.participantPhotos.map((photo, idx) => (
+                            <img
+                              key={idx}
+                              src={photo}
+                              alt={`Participant ${idx + 1}`}
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ))}
+                        </div>
+                      )}
+                      {conversation.participantPhotos.length >= 3 && (
+                        <div className="w-14 h-14 grid grid-cols-2 grid-rows-2 gap-0.5">
+                          {conversation.participantPhotos.slice(0, 4).map((photo, idx) => (
+                            <img
+                              key={idx}
+                              src={photo}
+                              alt={`Participant ${idx + 1}`}
+                              className="w-full h-full rounded-sm object-cover"
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : conversation.type === 'group' ? (
+                    // Fallback for groups without photos
                     <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center">
                       <Users className="h-7 w-7 text-white" />
                     </div>
                   ) : (
+                    // Direct message avatar
                     <img
                       src={conversation.photo || 'https://via.placeholder.com/150'}
                       alt={conversation.name}
