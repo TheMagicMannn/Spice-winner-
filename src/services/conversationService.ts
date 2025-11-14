@@ -721,4 +721,27 @@ export class ConversationService {
       throw error;
     }
   }
+
+  /**
+   * Permanently delete a conversation (removes participant record completely)
+   */
+  static async permanentlyDeleteConversation(
+    conversationId: string
+  ): Promise<void> {
+    try {
+      // Delete the participant record entirely
+      const { error } = await supabase
+        .from('conversation_participants')
+        .delete()
+        .eq('conversation_id', conversationId)
+        .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+
+      if (error) throw error;
+
+      console.log("[v0] Conversation permanently deleted");
+    } catch (error: any) {
+      console.error('[v0] Error permanently deleting conversation:', error?.message || error);
+      throw error;
+    }
+  }
 }
