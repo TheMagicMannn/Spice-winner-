@@ -91,6 +91,20 @@ export const ChatModal: React.FC<ChatModalProps> = ({
   const audioChunksRef = useRef<Blob[]>([]);
   const isInitialLoadRef = useRef(true);
   const previousMessageCountRef = useRef(0);
+  // Close options menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      if (showOptionsMenu) {
+        setShowOptionsMenu(false);
+      }
+    };
+
+    if (showOptionsMenu) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [showOptionsMenu]);
+
   // Load messages
   useEffect(() => {
     if (isOpen && matchId) {
