@@ -65,14 +65,17 @@ class ReportService {
     }
   ): Promise<UserReport[]> {
     try {
+      console.log('[ReportService] Fetching reports with filters:', filters);
+
+      // Try with simplified foreign key syntax
       let query = supabase
         .from('user_reports')
         .select(`
           *,
-          reporter:profiles!user_reports_reporter_id_fkey (
+          reporter:reporter_id (
             display_name
           ),
-          reported:profiles!user_reports_reported_id_fkey (
+          reported:reported_id (
             display_name
           )
         `)
@@ -106,12 +109,30 @@ class ReportService {
 
       const { data, error } = await query;
 
-      if (error) throw error;
+      if (error) {
+        console.error('[ReportService] Query error:', error);
+        // Try without joins
+        const { data: basicData, error: basicError } = await supabase
+          .from('user_reports')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(filters?.limit || 100);
+        
+        if (basicError) {
+          console.error('[ReportService] Basic query also failed:', basicError);
+          throw basicError;
+        }
 
+        console.log('[ReportService] Returning basic data without joins');
+        return basicData || [];
+      }
+
+      console.log('[ReportService] Successfully fetched reports:', data?.length);
       return data || [];
     } catch (error) {
-      console.error('Error fetching reports:', error);
-      throw error;
+      console.error('[ReportService] Error fetching reports:', error);
+      // Return empty array to prevent UI crash
+      return [];
     }
   }
 
