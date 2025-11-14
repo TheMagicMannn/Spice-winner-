@@ -308,6 +308,7 @@ export const MessagesPage: React.FC = () => {
           {activeFilter === 'all' && `${getFilterCount()} unread conversations`}
           {activeFilter === 'unread' && `${conversations.length} unread conversations`}
           {activeFilter === 'sent' && `${conversations.length} conversations with sent messages`}
+          {activeFilter === 'groups' && `${conversations.length} group chats`}
           {activeFilter === 'deleted' && `${conversations.length} deleted conversations`}
         </p>
       </div>
