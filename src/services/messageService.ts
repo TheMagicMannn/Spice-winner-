@@ -1110,6 +1110,8 @@ export class MessageService {
     participantIds: string[]
   ): Promise<string> {
     try {
+      console.log('[v0] createGroupConversation called with:', { creatorId, groupName, participantIds });
+      
       const { data, error } = await supabase
         .rpc('create_group_conversation', {
           creator_id: creatorId,
@@ -1117,10 +1119,15 @@ export class MessageService {
           participant_ids: participantIds
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('[v0] RPC error creating group:', error);
+        throw new Error(`Failed to create group: ${error.message || error}`);
+      }
+      
+      console.log('[v0] Group conversation created:', data);
       return data; // Returns conversation_id
     } catch (error) {
-      console.error('Error creating group:', error);
+      console.error('[v0] Error creating group:', error);
       throw error;
     }
   }
