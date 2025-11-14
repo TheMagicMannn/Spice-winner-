@@ -342,12 +342,24 @@ export const ChatPage: React.FC = () => {
     }
 
     if (typing) {
-      MessageService.setTyping(chatId, user.id, true);
-      typingTimeoutRef.current = setTimeout(() => {
-        MessageService.setTyping(chatId, user.id, false);
-      }, 3000);
+      // Use appropriate typing method based on chat type
+      if (conversationDetails) {
+        MessageService.setTypingConversation(chatId, user.id, true);
+        typingTimeoutRef.current = setTimeout(() => {
+          MessageService.setTypingConversation(chatId, user.id, false);
+        }, 3000);
+      } else {
+        MessageService.setTyping(chatId, user.id, true);
+        typingTimeoutRef.current = setTimeout(() => {
+          MessageService.setTyping(chatId, user.id, false);
+        }, 3000);
+      }
     } else {
-      MessageService.setTyping(chatId, user.id, false);
+      if (conversationDetails) {
+        MessageService.setTypingConversation(chatId, user.id, false);
+      } else {
+        MessageService.setTyping(chatId, user.id, false);
+      }
     }
   };
 
