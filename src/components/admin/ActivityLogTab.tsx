@@ -6,6 +6,7 @@ import { Input } from '@/components/Input';
 import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/Spinner';
 import { adminService, UserActivity } from '@/services/adminService';
+import { supabase } from '@/services/supabase';
 import {
   Activity,
   Filter,
@@ -16,25 +17,54 @@ import {
   UserPlus,
   LogIn,
   CreditCard,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 
 export const ActivityLogTab: React.FC = () => {
   const [activities, setActivities] = useState<UserActivity[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [dateRange, setDateRange] = useState({
     start: subDays(new Date(), 7).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   });
   const [selectedType, setSelectedType] = useState<string>('all');
+  const [liveCount, setLiveCount] = useState(0);
 
   useEffect(() => {
     loadActivities();
+
+    // Setup realtime subscription for user_activity_log table
+    const activitySubscription = supabase
+      .channel('admin-activity-log')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'user_activity_log'
+        },
+        (payload) => {
+          console.log('New activity detected:', payload);
+          setLiveCount(prev => prev + 1);
+          // Add new activity to the top of the list
+          const newActivity = payload.new as UserActivity;
+          setActivities(prev => [newActivity, ...prev]);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(activitySubscription);
+    };
   }, []);
 
-  const loadActivities = async () => {
-    setIsLoading(true);
+  const loadActivities = async (showLoading = true) => {
+    if (showLoading) setIsLoading(true);
+    setIsRefreshing(true);
+    
     try {
       const filters: any = {
         startDate: dateRange.start,
@@ -48,10 +78,12 @@ export const ActivityLogTab: React.FC = () => {
 
       const data = await adminService.getUserActivities(filters);
       setActivities(data);
+      setLiveCount(0);
     } catch (error) {
       console.error('Error loading activities:', error);
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
   };
 
@@ -107,13 +139,17 @@ export const ActivityLogTab: React.FC = () => {
             <Activity className="h-5 w-5" />
             Activity Log
           </CardTitle>
-          <CardDescription className="text-white/70">
-            Monitor user activities across the platform
+          <CardDescription className="text-white/70 flex items-center gap-2">
+            Monitor user activities across the platform • 
+            <span className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Live updates enabled
+            </span>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Date Range */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="text-sm text-white/70 mb-1 block">Start Date</label>
               <Input
@@ -146,15 +182,40 @@ export const ActivityLogTab: React.FC = () => {
                 ))}
               </select>
             </div>
+            <div className="flex items-end gap-2">
+              <Button
+                onClick={() => loadActivities(false)}
+                className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                disabled={isRefreshing}
+              >
+                <Filter className="h-4 w-4 mr-2" />
+                Apply Filters
+              </Button>
+              <Button
+                onClick={() => loadActivities(false)}
+                variant="outline"
+                className="border-pink-500/30 text-white hover:bg-pink-500/10"
+                disabled={isRefreshing}
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
           </div>
 
-          <Button
-            onClick={loadActivities}
-            className="bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
-          >
-            <Filter className="h-4 w-4 mr-2" />
-            Apply Filters
-          </Button>
+          {liveCount > 0 && (
+            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 flex items-center justify-between">
+              <span className="text-green-300 text-sm">
+                {liveCount} new {liveCount === 1 ? 'activity' : 'activities'} detected
+              </span>
+              <Button
+                size="sm"
+                onClick={() => loadActivities(false)}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                Refresh to see all
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -165,12 +226,13 @@ export const ActivityLogTab: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="text-white/70 text-sm">
-            Showing {activities.length} activities
+          <div className="text-white/70 text-sm flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            Showing {activities.length} activities (Auto-refreshing)
           </div>
 
           {activities.map((activity) => (
-            <Card key={activity.id} className="bg-gray-900/50 border-pink-500/30">
+            <Card key={activity.id} className="bg-gray-900/50 border-pink-500/30 transition-all hover:border-pink-500/50">
               <CardContent className="p-4">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">
