@@ -238,8 +238,12 @@ export const ReportsTab: React.FC = () => {
             <Flag className="h-5 w-5" />
             User Reports & Activity Reports
           </CardTitle>
-          <CardDescription className="text-white/70">
-            Review user reports and generate activity reports
+          <CardDescription className="text-white/70 flex items-center gap-2">
+            Review user reports and generate activity reports •
+            <span className="flex items-center gap-1">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Live updates enabled
+            </span>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
