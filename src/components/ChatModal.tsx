@@ -909,6 +909,15 @@ export const ChatModal: React.FC<ChatModalProps> = ({
             }}
           />
         )}
+
+        {/* Report Modal */}
+        <ReportModal
+          isOpen={showReportModal}
+          onClose={() => setShowReportModal(false)}
+          onSubmit={handleReportUser}
+          reportType="user"
+          targetName={otherUserName}
+        />
       </DialogContent>
     </Dialog>
   );
