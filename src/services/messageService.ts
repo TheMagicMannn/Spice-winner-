@@ -1018,6 +1018,28 @@ export class MessageService {
   }
 
   /**
+   * Permanently delete a conversation (removes setting record completely)
+   */
+  static async permanentlyDeleteConversation(matchId: string): Promise<void> {
+    try {
+      const userId = (await supabase.auth.getUser()).data.user?.id;
+      if (!userId) throw new Error('User not authenticated');
+
+      // Delete the conversation_settings record entirely
+      const { error } = await supabase
+        .from('conversation_settings')
+        .delete()
+        .eq('user_id', userId)
+        .eq('match_id', matchId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error permanently deleting conversation:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Get matchId between two users
    */
   static async getMatchIdBetweenUsers(userId1: string, userId2: string): Promise<string | null> {
