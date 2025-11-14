@@ -125,11 +125,20 @@ export const ChatPage: React.FC = () => {
         handleNewMessage
       );
 
-      typingChannelRef.current = MessageService.subscribeToTyping(
-        chatId,
-        user.id,
-        setIsTyping
-      );
+      // Subscribe to typing based on chat type
+      if (conversationDetails) {
+        typingChannelRef.current = MessageService.subscribeToTypingConversation(
+          chatId,
+          user.id,
+          setIsTyping
+        );
+      } else {
+        typingChannelRef.current = MessageService.subscribeToTyping(
+          chatId,
+          user.id,
+          setIsTyping
+        );
+      }
 
       return () => {
         messageChannelRef.current?.unsubscribe();
