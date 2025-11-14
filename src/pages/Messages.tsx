@@ -12,7 +12,7 @@ import { CreateGroupChat } from '@/components/CreateGroupChat';
 import { useAuth } from '@/hooks/useAuth';
 import { formatDistanceToNow } from 'date-fns';
 
-type FilterType = 'all' | 'unread' | 'sent' | 'deleted';
+type FilterType = 'all' | 'unread' | 'sent' | 'deleted' | 'groups';
 
 // Unified conversation type for UI
 interface UnifiedConversation {
