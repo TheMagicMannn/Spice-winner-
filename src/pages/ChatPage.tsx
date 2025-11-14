@@ -32,6 +32,8 @@ import { MessageContextMenu } from '@/components/MessageContextMenu';
 import { EmojiPicker } from '@/components/EmojiPicker';
 import { ProfileDetailModal } from '@/components/ProfileDetailModal';
 import { GroupAvatar } from '@/components/GroupAvatar';
+import { ReportModal } from '@/components/ReportModal';
+import { AddParticipantsModal } from '@/components/AddParticipantsModal';
 import { Profile } from '@/types';
 
 const SELF_DESTRUCT_OPTIONS = [
