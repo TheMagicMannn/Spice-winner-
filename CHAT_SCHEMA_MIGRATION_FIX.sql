@@ -225,6 +225,11 @@ CREATE POLICY "Users can manage their own participant record" ON conversation_pa
     FOR UPDATE
     USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "System can insert participants" ON conversation_participants;
+CREATE POLICY "System can insert participants" ON conversation_participants
+    FOR INSERT
+    WITH CHECK (true); -- Insertion is handled by SECURITY DEFINER functions
+
 -- RLS Policies for typing_indicators (using helper function to avoid recursion)
 DROP POLICY IF EXISTS "Users can view typing in their conversations" ON typing_indicators;
 CREATE POLICY "Users can view typing in their conversations" ON typing_indicators
