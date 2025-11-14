@@ -197,6 +197,7 @@ export function profileFromDatabase(dbProfile: any): Profile {
     console.log('profileFromDatabase - Input:', {
       hasProfile: !!dbProfile,
       keys: dbProfile ? Object.keys(dbProfile) : [],
+      profile_completed: dbProfile?.profile_completed,
       matchPreferences: dbProfile?.match_preferences
     });
 
@@ -212,6 +213,7 @@ export function profileFromDatabase(dbProfile: any): Profile {
     console.log('profileFromDatabase - Output:', {
       hasProfile: !!profile,
       keys: profile ? Object.keys(profile) : [],
+      profileCompleted: profile?.profileCompleted,
       matchPreferences: profile?.matchPreferences
     });
 
