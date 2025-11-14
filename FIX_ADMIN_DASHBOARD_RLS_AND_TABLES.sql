@@ -174,7 +174,7 @@ WITH CHECK (id = auth.uid());
 CREATE POLICY "users_view_active_profiles"
 ON public.profiles
 FOR SELECT
-USING (auth.role() = 'authenticated' AND profileCompleted = true);
+USING (auth.role() = 'authenticated' AND profile_completed = true);
 
 -- ============= USER_ACTIVITY_LOG TABLE POLICIES =============
 
