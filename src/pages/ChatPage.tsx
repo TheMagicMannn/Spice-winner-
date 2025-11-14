@@ -16,7 +16,12 @@ import {
   Phone,
   VideoIcon,
   Info,
-  Users
+  Users,
+  MoreVertical,
+  UserPlus,
+  LogOut,
+  Flag,
+  Trash2
 } from 'lucide-react';
 import { MessageService, Message } from '@/services/messageService';
 import { ProfileService } from '@/services/profileService';
