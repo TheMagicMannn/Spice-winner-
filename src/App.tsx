@@ -82,8 +82,8 @@ const AppContent: React.FC = () => {
   
   // Authenticated User Flow
   if (user) {
-    // Comprehensive profile completion check
-    const profileComplete = isProfileComplete(user.profile, user.profile?.accountType);
+    // Check if profile setup is complete
+    const profileComplete = isProfileComplete(user.profile);
     
     if (!profileComplete) {
       return (
