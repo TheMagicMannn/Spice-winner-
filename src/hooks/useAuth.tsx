@@ -43,8 +43,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             
             setUser({ ...session.user, profile: null });
           } else {
+            // Debug: Log raw database profile
+            console.log('🔍 RAW DATABASE PROFILE:', profile);
+            console.log('🔍 profile_completed from DB:', profile?.profile_completed);
+            
             // Transform database snake_case to frontend camelCase
             const transformedProfile = profile ? profileFromDatabase(profile) : null;
+            
+            // Debug: Log transformed profile
+            console.log('🔍 TRANSFORMED PROFILE:', transformedProfile);
+            console.log('🔍 profileCompleted after transform:', transformedProfile?.profileCompleted);
+            
             setUser({ ...session.user, profile: transformedProfile });
           }
         } catch (error) {
