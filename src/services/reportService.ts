@@ -75,7 +75,7 @@ class ReportService {
           reporter:profiles!user_reports_reporter_id_fkey (
             display_name
           ),
-          reported:profiles!user_reports_reported_id_fkey (
+          reported:profiles!user_reports_reported_user_id_fkey (
             display_name
           )
         `)
