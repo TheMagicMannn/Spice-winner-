@@ -853,7 +853,7 @@ export const ChatPage: React.FC = () => {
                     .filter(p => p.isActive)
                     .map(p => ({
                       id: p.userId,
-                      name: p.profile?.displayName || 'User',
+                      name: p.profile?.display_name || 'User',
                       photo: p.profile?.photos?.[0]
                     }))}
                   size="md"
