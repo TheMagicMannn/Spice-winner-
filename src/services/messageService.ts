@@ -90,7 +90,7 @@ export class MessageService {
       if (profileError) throw profileError;
 
       // Create a map for quick profile lookup
-      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+      const profileMap = new Map(profiles?.map(p => [p.id, profileFromDatabase(p)]) || []);
 
       // Get last message and unread count for each match
       const conversations: Conversation[] = await Promise.all(
