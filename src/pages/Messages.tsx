@@ -100,15 +100,15 @@ export const MessagesPage: React.FC = () => {
         
         if (conv.conversationType === 'direct') {
           const otherParticipant = conv.participants.find(p => p.userId !== user.id);
-          // Fallback: displayName → 'Member' (if profile exists but no name)
+          // Fallback: display_name → 'Member' (if profile exists but no name)
           const profile = otherParticipant?.profile;
-          name = profile?.displayName || (profile ? 'Member' : 'User');
+          name = profile?.display_name || (profile ? 'Member' : 'User');
           photo = profile?.photos?.[0] || '';
         } else if (conv.conversationType === 'group') {
           // For group chats, collect all participant names and photos
           participantNames = conv.participants
             .filter(p => p.isActive)
-            .map(p => p.profile?.displayName || 'Member')
+            .map(p => p.profile?.display_name || 'Member')
             .filter(Boolean);
           
           participantPhotos = conv.participants
