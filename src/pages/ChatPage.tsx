@@ -176,6 +176,18 @@ export const ChatPage: React.FC = () => {
       if (details) {
         setConversationDetails(details);
         
+        // Build participants map for quick lookup (for group chats)
+        const pMap = new Map<string, { name: string; photo: string }>();
+        details.participants.forEach(p => {
+          if (p.profile) {
+            pMap.set(p.userId, {
+              name: p.profile.displayName || 'Member',
+              photo: p.profile.photos?.[0] || ''
+            });
+          }
+        });
+        setParticipantsMap(pMap);
+        
         if (details.conversationType === 'group') {
           setIsGroupChat(true);
           setOtherUserName(details.groupName || 'Group Chat');
