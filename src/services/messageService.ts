@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { RealtimeChannel } from '@supabase/supabase-js';
+import { profileFromDatabase } from '@/utils/transformers';
 
 export interface Message {
   id: string;
