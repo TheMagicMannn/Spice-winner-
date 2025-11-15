@@ -83,6 +83,7 @@ export const ChatPage: React.FC = () => {
   // Group chat state
   const [conversationDetails, setConversationDetails] = useState<ConversationDetails | null>(null);
   const [isGroupChat, setIsGroupChat] = useState(false);
+  const [participantsMap, setParticipantsMap] = useState<Map<string, { name: string; photo: string }>>(new Map());
   
   // Menu and modals
   const [showMenu, setShowMenu] = useState(false);
