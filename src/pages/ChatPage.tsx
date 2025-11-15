@@ -224,7 +224,7 @@ export const ChatPage: React.FC = () => {
       const profile = await ProfileService.getProfile(otherUserId);
       if (profile) {
         setOtherUserProfile(profile);
-        setOtherUserName(profile.display_name || 'Member');
+        setOtherUserName(profile.displayName || 'Member');
         setOtherUserPhoto(profile.photos?.[0] || '');
       } else {
         setOtherUserName('User');
