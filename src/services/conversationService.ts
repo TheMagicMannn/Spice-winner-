@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { Profile } from '@/types';
+import { profileFromDatabase } from '@/utils/transformers';
 
 export interface ConversationParticipant {
   id: string;
