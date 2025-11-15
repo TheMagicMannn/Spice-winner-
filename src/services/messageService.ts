@@ -120,12 +120,12 @@ export class MessageService {
 
           // Check if user is online (active in last 15 minutes)
           const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
-          const isOnline = otherUser?.last_active_at && otherUser.last_active_at > fifteenMinutesAgo;
+          const isOnline = otherUser?.lastActiveAt && otherUser.lastActiveAt > fifteenMinutesAgo;
 
           return {
             matchId: match.id,
             otherUserId: otherUserId || '',
-            otherUserName: otherUser?.display_name || 'Unknown User',
+            otherUserName: otherUser?.displayName || 'Unknown User',
             otherUserPhoto: otherUser?.photos?.[0] || '',
             lastMessage: lastMessage ? this.formatLastMessage(lastMessage) : undefined,
             lastMessageAt: lastMessage?.created_at,
