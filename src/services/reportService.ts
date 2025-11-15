@@ -38,7 +38,7 @@ class ReportService {
         .from('user_reports')
         .insert({
           reporter_id: reporterId,
-          reported_id: reportedId,
+          reported_user_id: reportedId,
           reason,
           description,
           status: 'pending'
