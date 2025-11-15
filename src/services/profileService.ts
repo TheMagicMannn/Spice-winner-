@@ -387,7 +387,7 @@ export class ProfileService {
       const totalFields = 10; // Adjust based on required fields
 
       if (profile) {
-        if (profile.displayName) completionScore++;
+        if (profile.display_name) completionScore++;
         if (profile.age && profile.age >= 18) completionScore++;
         if (profile.location) completionScore++;
         if (profile.bio && profile.bio.length >= 50) completionScore++;
