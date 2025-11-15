@@ -287,7 +287,7 @@ export class ConversationService {
         throw profileError;
       }
 
-      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+      const profileMap = new Map(profiles?.map(p => [p.id, profileFromDatabase(p)]) || []);
 
       // Build participant details
       const participantDetails: ConversationParticipant[] = (participants || []).map((p: any) => ({
@@ -420,7 +420,7 @@ export class ConversationService {
         throw profileError;
       }
 
-      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+      const profileMap = new Map(profiles?.map(p => [p.id, profileFromDatabase(p)]) || []);
 
       // Build conversation details
       const conversationDetails: ConversationDetails[] = await Promise.all(
@@ -563,7 +563,7 @@ export class ConversationService {
         throw profileError;
       }
 
-      const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
+      const profileMap = new Map(profiles?.map(p => [p.id, profileFromDatabase(p)]) || []);
 
       const participantDetails = (participants || []).map((p: any) => ({
         id: p.id,
