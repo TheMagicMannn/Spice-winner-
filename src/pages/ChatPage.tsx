@@ -720,6 +720,9 @@ export const ChatPage: React.FC = () => {
       const isMine = message.senderId === user?.id;
       let touchTimer: NodeJS.Timeout;
 
+      // Get sender info for group chats
+      const senderInfo = isGroupChat && !isMine ? participantsMap.get(message.senderId) : null;
+
       const handleTouchStart = (e: React.TouchEvent) => {
         touchTimer = setTimeout(() => {
           handleLongPress(message.id, e);
@@ -740,7 +743,24 @@ export const ChatPage: React.FC = () => {
           key={message.id}
           className={`flex ${isMine ? 'justify-end' : 'justify-start'} mb-3`}
         >
+          {/* Show avatar for other users in group chat */}
+          {isGroupChat && !isMine && senderInfo && (
+            <Avatar className="h-8 w-8 mr-2 flex-shrink-0 mt-6">
+              <AvatarImage src={senderInfo.photo} alt={senderInfo.name} />
+              <AvatarFallback className="bg-pink-600 text-white text-xs">
+                {senderInfo.name[0] || '?'}
+              </AvatarFallback>
+            </Avatar>
+          )}
+          
           <div className="max-w-[70%] relative group">
+            {/* Show sender name for other users in group chat */}
+            {isGroupChat && !isMine && senderInfo && (
+              <div className="text-xs text-pink-400 font-medium mb-1 px-1">
+                {senderInfo.name}
+              </div>
+            )}
+            
             <div
               className={`${
                 isMine
