@@ -4,7 +4,7 @@ import { supabase } from './supabase';
 export interface UserReport {
   id: string;
   reporter_id: string;
-  reported_id: string;
+  reported_user_id: string;
   reason: string;
   description?: string;
   status: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
