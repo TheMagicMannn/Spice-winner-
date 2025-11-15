@@ -185,7 +185,7 @@ export const ChatPage: React.FC = () => {
           const otherParticipant = details.participants.find(p => p.userId !== user?.id);
           if (otherParticipant?.profile) {
             const profile = otherParticipant.profile;
-            setOtherUserName(profile.display_name || 'Member');
+            setOtherUserName(profile.displayName || 'Member');
             setOtherUserPhoto(profile.photos?.[0] || '');
             setOtherUserProfile(profile);
           }
