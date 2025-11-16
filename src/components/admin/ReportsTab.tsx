@@ -107,19 +107,24 @@ export const ReportsTab: React.FC = () => {
     reportId: string,
     status: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
   ) => {
-    if (!user) return;
+    if (!user) {
+      alert('You must be logged in to update reports');
+      return;
+    }
 
     setIsUpdating(true);
     try {
+      console.log('[ReportsTab] Updating report:', { reportId, status, userId: user.id });
       await reportService.updateReportStatus(reportId, status, user.id, adminNotes);
       alert('Report status updated successfully!');
       setSelectedReport(null);
       setAdminNotes('');
       loadReports();
       loadReportCounts();
-    } catch (error) {
-      console.error('Error updating report status:', error);
-      alert('Failed to update report status.');
+    } catch (error: any) {
+      console.error('[ReportsTab] Error updating report status:', error);
+      const errorMessage = error?.message || 'Failed to update report status. Please check your permissions.';
+      alert(`Failed to update report: ${errorMessage}`);
     } finally {
       setIsUpdating(false);
     }
