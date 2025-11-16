@@ -67,18 +67,10 @@ class ReportService {
     try {
       console.log('[ReportService] Fetching reports with filters:', filters);
 
-      // Use the correct foreign key relationship syntax
+      // Query user_reports without joins first
       let query = supabase
         .from('user_reports')
-        .select(`
-          *,
-          reporter:profiles!user_reports_reporter_id_fkey (
-            display_name
-          ),
-          reported:profiles!user_reports_reported_user_id_fkey (
-            display_name
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (filters?.status) {
@@ -90,7 +82,7 @@ class ReportService {
       }
 
       if (filters?.reportedId) {
-        query = query.eq('reported_id', filters.reportedId);
+        query = query.eq('reported_user_id', filters.reportedId);
       }
 
       if (filters?.startDate) {
@@ -104,30 +96,44 @@ class ReportService {
       if (filters?.limit) {
         query = query.limit(filters.limit);
       } else {
-        query = query.limit(100);
+        query = query.limit(200);
       }
 
       const { data, error } = await query;
 
       if (error) {
         console.error('[ReportService] Query error:', error);
-        // Try without joins
-        const { data: basicData, error: basicError } = await supabase
-          .from('user_reports')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(filters?.limit || 100);
-        
-        if (basicError) {
-          console.error('[ReportService] Basic query also failed:', basicError);
-          throw basicError;
-        }
-
-        console.log('[ReportService] Returning basic data without joins');
-        return basicData || [];
+        throw error;
       }
 
       console.log('[ReportService] Successfully fetched reports:', data?.length);
+
+      // Fetch profile data separately if we have reports
+      if (data && data.length > 0) {
+        const reporterIds = [...new Set(data.map(report => report.reporter_id).filter(Boolean))];
+        const reportedIds = [...new Set(data.map(report => report.reported_user_id).filter(Boolean))];
+        const allUserIds = [...new Set([...reporterIds, ...reportedIds])];
+        
+        if (allUserIds.length > 0) {
+          const { data: profiles, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, display_name')
+            .in('id', allUserIds);
+
+          if (!profileError && profiles) {
+            // Create a map of userId to profile for quick lookup
+            const profileMap = new Map(profiles.map(p => [p.id, p]));
+            
+            // Add profile data to each report
+            return data.map(report => ({
+              ...report,
+              reporter: profileMap.get(report.reporter_id) || null,
+              reported: profileMap.get(report.reported_user_id) || null
+            }));
+          }
+        }
+      }
+
       return data || [];
     } catch (error) {
       console.error('[ReportService] Error fetching reports:', error);
