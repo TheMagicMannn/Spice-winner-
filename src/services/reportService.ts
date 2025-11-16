@@ -152,20 +152,46 @@ class ReportService {
     adminNotes?: string
   ): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('user_reports')
-        .update({
-          status,
-          admin_notes: adminNotes,
-          reviewed_by: adminId,
-          reviewed_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', reportId);
+      console.log('[ReportService] Updating report status:', {
+        reportId,
+        status,
+        adminId,
+        adminNotes
+      });
 
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error updating report status:', error);
+      const updateData: any = {
+        status,
+        updated_at: new Date().toISOString()
+      };
+
+      // Only add optional fields if they have values
+      if (adminNotes) {
+        updateData.admin_notes = adminNotes;
+      }
+
+      if (adminId) {
+        updateData.reviewed_by = adminId;
+        updateData.reviewed_at = new Date().toISOString();
+      }
+
+      const { data, error } = await supabase
+        .from('user_reports')
+        .update(updateData)
+        .eq('id', reportId)
+        .select();
+
+      if (error) {
+        console.error('[ReportService] Update error:', error);
+        throw new Error(`Failed to update report: ${error.message}`);
+      }
+
+      if (!data || data.length === 0) {
+        throw new Error('Report not found or you do not have permission to update it');
+      }
+
+      console.log('[ReportService] Report updated successfully:', data);
+    } catch (error: any) {
+      console.error('[ReportService] Error updating report status:', error);
       throw error;
     }
   }
