@@ -98,15 +98,10 @@ class AdminService {
     try {
       console.log('[AdminService] Fetching user activities with filters:', filters);
 
-      // First, try with the foreign key relationship
+      // Query user_activity_log without joins first
       let query = supabase
         .from('user_activity_log')
-        .select(`
-          *,
-          profile:user_id (
-            display_name
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (filters?.userId) {
@@ -135,23 +130,34 @@ class AdminService {
 
       if (error) {
         console.error('[AdminService] Query error:', error);
-        // If foreign key relationship fails, try without join
-        const { data: basicData, error: basicError } = await supabase
-          .from('user_activity_log')
-          .select('*')
-          .order('created_at', { ascending: false })
-          .limit(filters?.limit || 200);
-        
-        if (basicError) {
-          console.error('[AdminService] Basic query also failed:', basicError);
-          throw basicError;
-        }
-
-        console.log('[AdminService] Returning basic data without joins');
-        return basicData || [];
+        throw error;
       }
 
       console.log('[AdminService] Successfully fetched activities:', data?.length);
+
+      // Fetch profile data separately if we have activities
+      if (data && data.length > 0) {
+        const userIds = [...new Set(data.map(activity => activity.user_id).filter(Boolean))];
+        
+        if (userIds.length > 0) {
+          const { data: profiles, error: profileError } = await supabase
+            .from('profiles')
+            .select('id, display_name')
+            .in('id', userIds);
+
+          if (!profileError && profiles) {
+            // Create a map of userId to profile for quick lookup
+            const profileMap = new Map(profiles.map(p => [p.id, p]));
+            
+            // Add profile data to each activity
+            return data.map(activity => ({
+              ...activity,
+              profile: profileMap.get(activity.user_id) || null
+            }));
+          }
+        }
+      }
+
       return data || [];
     } catch (error) {
       console.error('[AdminService] Error fetching user activities:', error);
