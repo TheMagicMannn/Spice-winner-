@@ -159,7 +159,7 @@ export const ReportsTab: React.FC = () => {
         return 'bg-yellow-500/20 text-yellow-300';
       case 'reviewed':
         return 'bg-blue-500/20 text-blue-300';
-      case 'resolved':
+      case 'action_taken':
         return 'bg-green-500/20 text-green-300';
       case 'dismissed':
         return 'bg-gray-500/20 text-gray-300';
