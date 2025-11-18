@@ -70,6 +70,8 @@ export const ChatPage: React.FC = () => {
   const [showSelfDestructMenu, setShowSelfDestructMenu] = useState(false);
   const [selectedSelfDestruct, setSelectedSelfDestruct] = useState<number | undefined>();
   const [isRecording, setIsRecording] = useState(false);
+  const [recordedVoiceFile, setRecordedVoiceFile] = useState<File | null>(null);
+  const [showVoiceSelfDestructMenu, setShowVoiceSelfDestructMenu] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [contextMenu, setContextMenu] = useState<{ messageId: string; x: number; y: number } | null>(null);
