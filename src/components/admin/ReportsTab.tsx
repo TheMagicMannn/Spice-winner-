@@ -105,7 +105,7 @@ export const ReportsTab: React.FC = () => {
 
   const handleUpdateStatus = async (
     reportId: string,
-    status: 'pending' | 'reviewed' | 'resolved' | 'dismissed'
+    status: 'pending' | 'reviewed' | 'action_taken' | 'dismissed'
   ) => {
     if (!user) {
       alert('You must be logged in to update reports');
