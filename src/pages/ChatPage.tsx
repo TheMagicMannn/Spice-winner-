@@ -1200,14 +1200,14 @@ export const ChatPage: React.FC = () => {
             className={`text-pink-400 hover:bg-pink-500/10 h-10 w-10 p-0 rounded-full ${
               isRecording ? 'bg-red-500/50 animate-pulse' : ''
             }`}
-            disabled={isSending}
+            disabled={isSending || showVoiceSelfDestructMenu}
             title={isRecording ? 'Stop recording' : 'Record voice message'}
           >
             <Mic className="h-5 w-5" />
           </Button>
 
           {isRecording && (
-            <span className="text-red-500 text-xs animate-pulse font-medium">Recording...</span>
+            <span className="text-red-500 text-xs animate-pulse font-medium">Recording... (tap to stop)</span>
           )}
 
           <div className="flex-1 relative">
