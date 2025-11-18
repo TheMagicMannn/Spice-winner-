@@ -950,34 +950,51 @@ const MediaMessage: React.FC<{
   const isSender = message.senderId === user?.id;
 
   useEffect(() => {
-    if (message.expiresAt) {
+    if (message.expiresAt && !message.isDeleted) {
       const updateCountdown = () => {
         const now = new Date().getTime();
         const expires = new Date(message.expiresAt!).getTime();
         const remaining = Math.max(0, Math.floor((expires - now) / 1000));
         
         setTimeRemaining(remaining);
-
         return remaining;
       };
 
-      updateCountdown(); // Run immediately
+      // Initial countdown update
+      const remaining = updateCountdown();
+      
+      // If already expired, mark as deleted immediately
+      if (remaining === 0) {
+        MessageService.deleteSelfDestructMedia(message.id).catch(console.error);
+        onMessageUpdate({
+          ...message,
+          isDeleted: true,
+          deletedAt: new Date().toISOString(),
+          mediaUrl: undefined
+        });
+        return;
+      }
+
+      // Start countdown interval
       const interval = setInterval(() => {
         const remaining = updateCountdown();
         if (remaining === 0) {
           clearInterval(interval);
-          // Mark as deleted locally
+          // Delete from database
+          MessageService.deleteSelfDestructMedia(message.id).catch(console.error);
+          // Update local state
           onMessageUpdate({
             ...message,
             isDeleted: true,
-            deletedAt: new Date().toISOString()
+            deletedAt: new Date().toISOString(),
+            mediaUrl: undefined
           });
         }
       }, 1000);
 
       return () => clearInterval(interval);
     }
-  }, [message.expiresAt, message, onMessageUpdate]);
+  }, [message.expiresAt, message.id, message.isDeleted, onMessageUpdate]);
 
   const handleView = async () => {
     if (!isViewed && message.selfDestructSeconds && !isSender && user) {
