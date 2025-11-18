@@ -62,6 +62,13 @@ export const ActivityLogTab: React.FC = () => {
     };
   }, []);
 
+  // Reload when useAllTime changes
+  useEffect(() => {
+    if (useAllTime) {
+      loadActivities();
+    }
+  }, [useAllTime]);
+
   const loadActivities = async (showLoading = true) => {
     if (showLoading) setIsLoading(true);
     setIsRefreshing(true);
