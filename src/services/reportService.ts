@@ -56,7 +56,7 @@ class ReportService {
    */
   async getReports(
     filters?: {
-      status?: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
+      status?: 'pending' | 'reviewed' | 'action_taken' | 'dismissed';
       reporterId?: string;
       reportedId?: string;
       startDate?: string;
