@@ -1333,9 +1333,9 @@ const MediaMessage: React.FC<{
 
   if (message.isDeleted) {
     return (
-      <div className="flex items-center gap-2 text-white/50 italic text-sm py-4">
-        <Clock className="h-4 w-4" />
-        <span>This media has expired and been deleted</span>
+      <div className="flex items-center gap-2 text-white/70 italic text-sm py-4 px-3 bg-black/30 rounded-lg border border-white/10">
+        <Clock className="h-5 w-5 text-pink-400" />
+        <span className="font-medium">This media has self-destructed</span>
       </div>
     );
   }
