@@ -7,7 +7,7 @@ export interface UserReport {
   reported_user_id: string;
   reason: string;
   description?: string;
-  status: 'pending' | 'reviewed' | 'resolved' | 'dismissed';
+  status: 'pending' | 'reviewed' | 'action_taken' | 'dismissed';
   admin_notes?: string;
   reviewed_by?: string;
   reviewed_at?: string;
