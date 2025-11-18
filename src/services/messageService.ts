@@ -516,6 +516,28 @@ export class MessageService {
     }
   }
 
+
+  /**
+   * Delete expired self-destruct media
+   */
+  static async deleteSelfDestructMedia(messageId: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .update({
+          is_deleted: true,
+          deleted_at: new Date().toISOString(),
+          media_url: null // Clear the media URL
+        })
+        .eq('id', messageId);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting self-destruct media:', error);
+      throw error;
+    }
+  }
+
   /**
    * Subscribe to new messages in a conversation (supports both match_id and conversation_id)
    */
