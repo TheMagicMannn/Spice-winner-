@@ -1275,11 +1275,14 @@ const MediaMessage: React.FC<{
           
           // If all viewed, timer has started
           if (result.allViewed) {
-            console.log('All participants have viewed the media. Timer started.');
+            console.log('All participants have viewed the media. Timer started at:', updatedMessage.expiresAt);
+          } else {
+            console.log('Waiting for other participants to view the media');
           }
         } else {
           // Direct message - use standard viewing logic
           updatedMessage = await MessageService.markMediaViewed(message.id);
+          console.log('Direct message viewed. Timer started at:', updatedMessage.expiresAt);
         }
         
         setIsViewed(true);
