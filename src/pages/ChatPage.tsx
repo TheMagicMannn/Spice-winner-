@@ -1279,28 +1279,53 @@ const MediaMessage: React.FC<{
   const handleView = async () => {
     if (!isViewed && message.selfDestructSeconds && !isSender && user) {
       setIsLoading(true);
+      setError(null);
+      
+      console.log('[MediaMessage] handleView called for message:', message.id);
+      console.log('[MediaMessage] Message type:', message.messageType);
+      console.log('[MediaMessage] Self-destruct seconds:', message.selfDestructSeconds);
+      console.log('[MediaMessage] Is group chat:', !!message.conversationId);
+      
       try {
         let updatedMessage: Message;
         
         // Check if it's a group chat by checking if message has conversationId
         if (message.conversationId) {
           // Group chat - use group viewing logic
+          console.log('[MediaMessage] Calling markMediaViewedGroup...');
           const result = await MessageService.markMediaViewedGroup(message.id, user.id);
           updatedMessage = result.message;
           
+          console.log('[MediaMessage] Group view result - allViewed:', result.allViewed);
+          console.log('[MediaMessage] Updated message expiresAt:', updatedMessage.expiresAt);
+          
           // If all viewed, timer has started
           if (result.allViewed) {
-            console.log('All participants have viewed the media. Timer started.');
+            console.log('[MediaMessage] All participants have viewed the media. Timer started.');
+          } else {
+            console.log('[MediaMessage] Waiting for other participants to view...');
           }
         } else {
           // Direct message - use standard viewing logic
+          console.log('[MediaMessage] Calling markMediaViewed for direct message...');
           updatedMessage = await MessageService.markMediaViewed(message.id);
+          console.log('[MediaMessage] Direct message updated, expiresAt:', updatedMessage.expiresAt);
         }
         
         setIsViewed(true);
+        console.log('[MediaMessage] Calling onMessageUpdate with updated message');
         onMessageUpdate(updatedMessage);
+        
+        // If expiresAt is set, calculate and set initial timeRemaining immediately
+        if (updatedMessage.expiresAt) {
+          const now = new Date().getTime();
+          const expires = new Date(updatedMessage.expiresAt).getTime();
+          const remaining = Math.max(0, Math.floor((expires - now) / 1000));
+          console.log('[MediaMessage] Setting initial timeRemaining:', remaining);
+          setTimeRemaining(remaining);
+        }
       } catch (err: any) {
-        console.error('Error marking media as viewed:', err);
+        console.error('[MediaMessage] Error marking media as viewed:', err);
         setError(err.message || 'Failed to load media');
       } finally {
         setIsLoading(false);
