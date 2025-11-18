@@ -1178,7 +1178,7 @@ export const ChatPage: React.FC = () => {
             size="sm"
             onClick={() => fileInputRef.current?.click()}
             className="text-pink-400 hover:bg-pink-500/10 h-10 w-10 p-0 rounded-full"
-            disabled={isSending}
+            disabled={isSending || isRecording || showVoiceSelfDestructMenu}
           >
             <ImageIcon className="h-5 w-5" />
           </Button>
@@ -1188,7 +1188,7 @@ export const ChatPage: React.FC = () => {
             size="sm"
             onClick={() => videoInputRef.current?.click()}
             className="text-pink-400 hover:bg-pink-500/10 h-10 w-10 p-0 rounded-full"
-            disabled={isSending}
+            disabled={isSending || isRecording || showVoiceSelfDestructMenu}
           >
             <Video className="h-5 w-5" />
           </Button>
