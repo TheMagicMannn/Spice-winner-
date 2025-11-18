@@ -27,11 +27,12 @@ export const ActivityLogTab: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [dateRange, setDateRange] = useState({
-    start: subDays(new Date(), 7).toISOString().split('T')[0],
+    start: subDays(new Date(), 30).toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0]
   });
   const [selectedType, setSelectedType] = useState<string>('all');
   const [liveCount, setLiveCount] = useState(0);
+  const [useAllTime, setUseAllTime] = useState(false);
 
   useEffect(() => {
     loadActivities();
