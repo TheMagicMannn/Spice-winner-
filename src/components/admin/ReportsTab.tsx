@@ -425,12 +425,12 @@ export const ReportsTab: React.FC = () => {
                           Mark Reviewed
                         </Button>
                         <Button
-                          onClick={() => handleUpdateStatus(report.id, 'resolved')}
+                          onClick={() => handleUpdateStatus(report.id, 'action_taken')}
                           disabled={isUpdating}
                           className="flex-1 bg-green-600 hover:bg-green-700"
                         >
                           <CheckCircle2 className="h-4 w-4 mr-1" />
-                          Resolve
+                          Action Taken
                         </Button>
                         <Button
                           onClick={() => handleUpdateStatus(report.id, 'dismissed')}
