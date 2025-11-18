@@ -279,7 +279,18 @@ export const ActivityLogTab: React.FC = () => {
             <Card className="bg-gray-900/50 border-pink-500/30">
               <CardContent className="p-8 text-center">
                 <AlertCircle className="h-12 w-12 text-white/40 mx-auto mb-3" />
-                <p className="text-white/60">No activities found for the selected filters</p>
+                <p className="text-white/60 mb-3">No activities found for the selected filters</p>
+                <div className="text-sm text-white/40 space-y-2">
+                  <p>Possible reasons:</p>
+                  <ul className="list-disc list-inside text-left inline-block">
+                    <li>No user activities logged in the selected date range</li>
+                    <li>Selected activity type has no records</li>
+                    <li>Check browser console for detailed query logs</li>
+                  </ul>
+                  <p className="mt-3 text-xs">
+                    Tip: Try selecting "All Activities" and adjusting the date range
+                  </p>
+                </div>
               </CardContent>
             </Card>
           )}
