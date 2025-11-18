@@ -326,9 +326,14 @@ class AdminService {
             expires_at: null,
             is_active: true,
             updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id'
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error('[AdminService] Upsert error for free membership:', error);
+          throw error;
+        }
       } else {
         // Premium memberships
         const { error } = await supabase
@@ -339,9 +344,14 @@ class AdminService {
             expires_at: expiresAt,
             is_active: true,
             updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id'
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error('[AdminService] Upsert error for premium membership:', error);
+          throw error;
+        }
       }
 
       // Log admin action
