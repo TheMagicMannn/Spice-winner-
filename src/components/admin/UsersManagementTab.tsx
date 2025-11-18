@@ -21,7 +21,10 @@ import {
   Edit2,
   Save,
   X as XIcon,
-  Trash2
+  Trash2,
+  Ban,
+  UserX,
+  UserCheck
 } from 'lucide-react';
 import { format } from 'date-fns';
 
