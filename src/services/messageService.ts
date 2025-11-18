@@ -230,7 +230,7 @@ export class MessageService {
           .from('messages')
           .select(`
             *,
-            reply_to_message:reply_to_id (
+            reply_to_message:messages!reply_to_id (
               id,
               content,
               message_type,
