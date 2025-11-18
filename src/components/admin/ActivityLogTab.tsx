@@ -68,20 +68,26 @@ export const ActivityLogTab: React.FC = () => {
     
     try {
       const filters: any = {
-        startDate: dateRange.start,
-        endDate: new Date(dateRange.end).toISOString(),
         limit: 200
       };
+
+      // Only apply date filters if not loading all time
+      if (!useAllTime) {
+        filters.startDate = dateRange.start;
+        filters.endDate = new Date(dateRange.end).toISOString();
+      }
 
       if (selectedType !== 'all') {
         filters.activityType = selectedType;
       }
 
+      console.log('[ActivityLogTab] Loading activities with filters:', filters);
       const data = await adminService.getUserActivities(filters);
+      console.log('[ActivityLogTab] Loaded activities:', data.length, 'records');
       setActivities(data);
       setLiveCount(0);
     } catch (error) {
-      console.error('Error loading activities:', error);
+      console.error('[ActivityLogTab] Error loading activities:', error);
     } finally {
       setIsLoading(false);
       setIsRefreshing(false);
