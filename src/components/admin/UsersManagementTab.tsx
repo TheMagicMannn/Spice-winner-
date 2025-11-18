@@ -225,6 +225,43 @@ export const UsersManagementTab: React.FC = () => {
     }
   };
 
+  const handleBanUser = async (userId: string, displayName: string) => {
+    const reason = prompt(`Why are you banning ${displayName}?`);
+    if (!reason || !user) return;
+
+    const permanent = confirm('Is this a permanent ban? (Click OK for permanent, Cancel for temporary suspension)');
+
+    setIsUpdating(true);
+    try {
+      await adminService.banUser(userId, user.id, reason, permanent);
+      alert(`User ${permanent ? 'banned' : 'suspended'} successfully!`);
+      loadUsers();
+    } catch (error) {
+      console.error('Error banning user:', error);
+      alert('Failed to ban user.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleUnbanUser = async (userId: string, displayName: string) => {
+    if (!confirm(`Lift ban/suspension for ${displayName}?`) || !user) return;
+
+    const notes = prompt('Add notes (optional):');
+
+    setIsUpdating(true);
+    try {
+      await adminService.unbanUser(userId, user.id, notes || undefined);
+      alert('Ban/suspension lifted successfully!');
+      loadUsers();
+    } catch (error) {
+      console.error('Error unbanning user:', error);
+      alert('Failed to unban user.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   const getMembershipColor = (level?: string) => {
     switch (level) {
       case 'platinum':
