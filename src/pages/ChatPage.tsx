@@ -1215,15 +1215,15 @@ export const ChatPage: React.FC = () => {
               value={inputText}
               onChange={handleInputChange}
               onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-              placeholder="Message..."
+              placeholder={isRecording ? 'Recording...' : showVoiceSelfDestructMenu ? 'Voice message ready...' : 'Message...'}
               className="bg-gray-900/50 border-gray-700/50 text-white placeholder:text-gray-500 rounded-full px-4 h-10 focus:ring-pink-500 focus:border-pink-500"
-              disabled={isSending || isRecording}
+              disabled={isSending || isRecording || showVoiceSelfDestructMenu}
             />
           </div>
 
           <Button
             onClick={handleSendMessage}
-            disabled={!inputText.trim() || isSending}
+            disabled={!inputText.trim() || isSending || isRecording || showVoiceSelfDestructMenu}
             className="bg-transparent hover:bg-transparent text-pink-400 hover:text-pink-300 h-10 w-10 p-0 disabled:opacity-50 transition-colors"
           >
             <Send className="h-5 w-5" />
