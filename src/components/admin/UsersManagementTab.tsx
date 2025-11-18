@@ -488,6 +488,29 @@ export const UsersManagementTab: React.FC = () => {
                           <Key className="h-3 w-3 mr-1" />
                           Reset Password
                         </Button>
+                        {userData.is_active ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleBanUser(userData.id, userData.display_name || 'User')}
+                            disabled={isUpdating}
+                            className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                          >
+                            <UserX className="h-3 w-3 mr-1" />
+                            Ban/Suspend
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleUnbanUser(userData.id, userData.display_name || 'User')}
+                            disabled={isUpdating}
+                            className="border-green-500/30 text-green-400 hover:bg-green-500/10"
+                          >
+                            <UserCheck className="h-3 w-3 mr-1" />
+                            Lift Ban
+                          </Button>
+                        )}
                       </>
                     )}
                   </div>
