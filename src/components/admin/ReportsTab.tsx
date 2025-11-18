@@ -174,7 +174,7 @@ export const ReportsTab: React.FC = () => {
         return <Clock className="h-4 w-4" />;
       case 'reviewed':
         return <Eye className="h-4 w-4" />;
-      case 'resolved':
+      case 'action_taken':
         return <CheckCircle2 className="h-4 w-4" />;
       case 'dismissed':
         return <XCircle className="h-4 w-4" />;
