@@ -147,7 +147,7 @@ class ReportService {
    */
   async updateReportStatus(
     reportId: string,
-    status: 'pending' | 'reviewed' | 'resolved' | 'dismissed',
+    status: 'pending' | 'reviewed' | 'action_taken' | 'dismissed',
     adminId: string,
     adminNotes?: string
   ): Promise<void> {
