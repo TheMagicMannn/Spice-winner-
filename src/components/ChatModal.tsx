@@ -399,19 +399,10 @@ export const ChatModal: React.FC<ChatModalProps> = ({
         const fileExt = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
         const audioFile = new File([audioBlob], `voice-${Date.now()}.${fileExt}`, { type: mimeType });
         
-        if (user) {
-          setIsSending(true);
-          try {
-            const newMessage = await MessageService.sendMediaMessage(matchId, user.id, audioFile, 'voice');
-            // Add message immediately to UI
-            handleNewMessage(newMessage);
-          } catch (error) {
-            console.error('Error sending voice message:', error);
-            setUploadError('Failed to send voice message. Please try again.');
-          } finally {
-            setIsSending(false);
-          }
-        }
+        // Show the media preview with self-destruct options for voice messages too
+        setSelectedMedia(audioFile);
+        setMediaType('voice');
+        setShowSelfDestructMenu(true);
         
         stream.getTracks().forEach(track => track.stop());
       };
