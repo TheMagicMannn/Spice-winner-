@@ -994,14 +994,23 @@ export const ChatPage: React.FC = () => {
       )}
 
       {/* Media Preview */}
-      {mediaPreview && (
+      {(mediaPreview || (selectedMedia && mediaType === 'voice')) && (
         <div className="px-4 py-4 border-t border-pink-500/30 bg-black/90">
           <div className="relative">
-            {mediaType === 'image' && (
+            {mediaType === 'image' && mediaPreview && (
               <img src={mediaPreview} alt="Preview" className="max-h-48 rounded-lg" />
             )}
-            {mediaType === 'video' && (
+            {mediaType === 'video' && mediaPreview && (
               <video src={mediaPreview} className="max-h-48 rounded-lg" controls />
+            )}
+            {mediaType === 'voice' && selectedMedia && (
+              <div className="flex items-center gap-3 p-4 bg-gray-900/50 rounded-lg">
+                <Mic className="h-8 w-8 text-pink-400" />
+                <div>
+                  <p className="text-white font-medium">Voice Message</p>
+                  <p className="text-white/60 text-sm">Ready to send</p>
+                </div>
+              </div>
             )}
             <Button
               variant="ghost"
