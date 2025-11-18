@@ -155,6 +155,25 @@ export const ActivityLogTab: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* All Time Toggle */}
+          <div className="flex items-center gap-2 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+            <input
+              type="checkbox"
+              id="allTime"
+              checked={useAllTime}
+              onChange={(e) => {
+                setUseAllTime(e.target.checked);
+                if (e.target.checked) {
+                  console.log('[ActivityLogTab] Loading all-time activities');
+                }
+              }}
+              className="w-4 h-4"
+            />
+            <label htmlFor="allTime" className="text-sm text-blue-300 cursor-pointer">
+              Load all activities (ignore date range) - Use this if you're not seeing any data
+            </label>
+          </div>
+
           {/* Date Range */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
@@ -164,6 +183,7 @@ export const ActivityLogTab: React.FC = () => {
                 value={dateRange.start}
                 onChange={(e) => setDateRange({ ...dateRange, start: e.target.value })}
                 className="bg-gray-800 border-gray-700 text-white"
+                disabled={useAllTime}
               />
             </div>
             <div>
@@ -173,6 +193,7 @@ export const ActivityLogTab: React.FC = () => {
                 value={dateRange.end}
                 onChange={(e) => setDateRange({ ...dateRange, end: e.target.value })}
                 className="bg-gray-800 border-gray-700 text-white"
+                disabled={useAllTime}
               />
             </div>
             <div>
@@ -196,7 +217,7 @@ export const ActivityLogTab: React.FC = () => {
                 disabled={isRefreshing}
               >
                 <Filter className="h-4 w-4 mr-2" />
-                Apply Filters
+                {useAllTime ? 'Load All' : 'Apply Filters'}
               </Button>
               <Button
                 onClick={() => loadActivities(false)}
