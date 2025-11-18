@@ -60,6 +60,7 @@ export interface UserManagement {
   account_type?: string;
   is_verified?: boolean;
   is_admin?: boolean;
+  is_active?: boolean;
   created_at: string;
   last_sign_in_at?: string;
   membership_level?: string;
@@ -133,28 +134,31 @@ class AdminService {
         throw error;
       }
 
-      console.log('[AdminService] Successfully fetched activities:', data?.length);
+      console.log('[AdminService] Successfully fetched activities:', data?.length, 'records');
+
+      if (!data || data.length === 0) {
+        console.log('[AdminService] No activity records found in database');
+        return [];
+      }
 
       // Fetch profile data separately if we have activities
-      if (data && data.length > 0) {
-        const userIds = [...new Set(data.map(activity => activity.user_id).filter(Boolean))];
-        
-        if (userIds.length > 0) {
-          const { data: profiles, error: profileError } = await supabase
-            .from('profiles')
-            .select('id, display_name')
-            .in('id', userIds);
+      const userIds = [...new Set(data.map(activity => activity.user_id).filter(Boolean))];
+      
+      if (userIds.length > 0) {
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('id, display_name, email')
+          .in('id', userIds);
 
-          if (!profileError && profiles) {
-            // Create a map of userId to profile for quick lookup
-            const profileMap = new Map(profiles.map(p => [p.id, p]));
-            
-            // Add profile data to each activity
-            return data.map(activity => ({
-              ...activity,
-              profile: profileMap.get(activity.user_id) || null
-            }));
-          }
+        if (!profileError && profiles) {
+          // Create a map of userId to profile for quick lookup
+          const profileMap = new Map(profiles.map(p => [p.id, p]));
+          
+          // Add profile data to each activity
+          return data.map(activity => ({
+            ...activity,
+            profile: profileMap.get(activity.user_id) || { display_name: 'Unknown User' }
+          }));
         }
       }
 
@@ -210,7 +214,7 @@ class AdminService {
       // First, get profiles
       let query = supabase
         .from('profiles')
-        .select('id, display_name, email, account_type, is_verified, is_admin, created_at, last_sign_in_at')
+        .select('id, display_name, email, account_type, is_verified, is_admin, is_active, created_at, last_sign_in_at')
         .order('created_at', { ascending: false });
 
       if (filters?.search) {
@@ -264,6 +268,7 @@ class AdminService {
         account_type: user.account_type,
         is_verified: user.is_verified,
         is_admin: user.is_admin,
+        is_active: user.is_active !== false, // Default to true if null
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at,
         membership_level: membershipMap.get(user.id) || 'free'
@@ -308,17 +313,36 @@ class AdminService {
     adminId?: string
   ): Promise<void> {
     try {
-      const { error } = await supabase
-        .from('user_memberships')
-        .upsert({
-          user_id: userId,
-          membership_level: membershipLevel,
-          expires_at: expiresAt,
-          is_active: true,
-          updated_at: new Date().toISOString()
-        });
+      console.log('[AdminService] Updating membership:', { userId, membershipLevel, expiresAt });
 
-      if (error) throw error;
+      // For free memberships, we need to handle differently
+      if (membershipLevel === 'free') {
+        // Update to free: set expires_at to null and is_active to false for premium features
+        const { error } = await supabase
+          .from('user_memberships')
+          .upsert({
+            user_id: userId,
+            membership_level: 'free',
+            expires_at: null,
+            is_active: true,
+            updated_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+      } else {
+        // Premium memberships
+        const { error } = await supabase
+          .from('user_memberships')
+          .upsert({
+            user_id: userId,
+            membership_level: membershipLevel,
+            expires_at: expiresAt,
+            is_active: true,
+            updated_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+      }
 
       // Log admin action
       if (adminId) {
@@ -327,8 +351,77 @@ class AdminService {
           expires_at: expiresAt
         });
       }
+
+      console.log('[AdminService] Membership updated successfully');
     } catch (error) {
-      console.error('Error updating membership:', error);
+      console.error('[AdminService] Error updating membership:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Ban or suspend user
+   */
+  async banUser(
+    userId: string,
+    adminId: string,
+    reason: string,
+    permanent: boolean = false
+  ): Promise<void> {
+    try {
+      // Set is_active to false in profiles
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          is_active: false,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      // Log admin action
+      await this.logAdminAction(adminId, 'user_banned', userId, {
+        reason,
+        permanent,
+        banned_at: new Date().toISOString()
+      }, reason);
+
+      console.log('[AdminService] User banned successfully');
+    } catch (error) {
+      console.error('[AdminService] Error banning user:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Unban or lift suspension
+   */
+  async unbanUser(
+    userId: string,
+    adminId: string,
+    notes?: string
+  ): Promise<void> {
+    try {
+      // Set is_active to true in profiles
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          is_active: true,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', userId);
+
+      if (error) throw error;
+
+      // Log admin action
+      await this.logAdminAction(adminId, 'user_unbanned', userId, {
+        unbanned_at: new Date().toISOString()
+      }, notes);
+
+      console.log('[AdminService] User unbanned successfully');
+    } catch (error) {
+      console.error('[AdminService] Error unbanning user:', error);
       throw error;
     }
   }
@@ -386,18 +479,22 @@ class AdminService {
     notes?: string
   ): Promise<void> {
     try {
-      const { error } = await supabase.rpc('log_admin_action', {
-        p_admin_id: adminId,
-        p_action_type: actionType,
-        p_target_user_id: targetUserId,
-        p_action_details: actionDetails,
-        p_notes: notes
-      });
+      const { error } = await supabase
+        .from('admin_actions_log')
+        .insert({
+          admin_id: adminId,
+          action_type: actionType,
+          target_user_id: targetUserId,
+          action_details: actionDetails || {},
+          notes: notes
+        });
 
-      if (error) throw error;
+      if (error) {
+        console.error('[AdminService] Error logging admin action:', error);
+        // Don't throw, just log - we don't want to fail the main operation
+      }
     } catch (error) {
-      console.error('Error logging admin action:', error);
-      throw error;
+      console.error('[AdminService] Error in logAdminAction:', error);
     }
   }
 
