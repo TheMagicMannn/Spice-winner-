@@ -155,7 +155,7 @@ export const AdminDashboard: React.FC = () => {
 
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
-              <OverviewTab />
+              <EnhancedOverviewTab />
             </TabsContent>
 
             {/* Verification Tab */}
