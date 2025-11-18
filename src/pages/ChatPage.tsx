@@ -1351,12 +1351,13 @@ const MediaMessage: React.FC<{
   }
 
   if (message.selfDestructSeconds && !isViewed && !isSender) {
+    const mediaTypeLabel = message.messageType === 'voice' ? 'voice message' : 'media';
     return (
       <div className="flex flex-col items-center gap-2 p-4 bg-black/20 rounded-lg">
         <Clock className="h-8 w-8 text-pink-400" />
-        <p className="text-sm font-semibold">Tap to view</p>
+        <p className="text-sm font-semibold">Tap to {message.messageType === 'voice' ? 'listen' : 'view'}</p>
         <p className="text-xs opacity-70 text-center">
-          This media will self-destruct after {message.selfDestructSeconds} seconds once opened
+          This {mediaTypeLabel} will self-destruct after {message.selfDestructSeconds} seconds once opened
         </p>
         <Button
           onClick={handleView}
@@ -1364,7 +1365,7 @@ const MediaMessage: React.FC<{
           className="mt-2 bg-pink-600 hover:bg-pink-700 text-white"
           size="sm"
         >
-          {isLoading ? 'Loading...' : 'View Media'}
+          {isLoading ? 'Loading...' : message.messageType === 'voice' ? 'Play Voice Message' : 'View Media'}
         </Button>
       </div>
     );
