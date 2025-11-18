@@ -980,11 +980,12 @@ const MediaMessage: React.FC<{
   }, [message.expiresAt, message, onMessageUpdate]);
 
   const handleView = async () => {
-    if (!isViewed && message.selfDestructSeconds && !isSender) {
+    if (!isViewed && message.selfDestructSeconds && !isSender && user) {
       setIsLoading(true);
       try {
         // Mark as viewed in database and get updated message
         const updatedMessage = await MessageService.markMediaViewed(message.id);
+        console.log('Direct message viewed. Timer started at:', updatedMessage.expiresAt);
         setIsViewed(true);
         
         // Update the message in parent state with expires_at
