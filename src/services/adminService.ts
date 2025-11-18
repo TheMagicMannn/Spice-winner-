@@ -207,21 +207,10 @@ class AdminService {
     try {
       console.log('[AdminService] Fetching users with filters:', filters);
 
+      // First, get profiles
       let query = supabase
         .from('profiles')
-        .select(`
-          id,
-          display_name,
-          email,
-          account_type,
-          is_verified,
-          is_admin,
-          created_at,
-          last_sign_in_at,
-          user_memberships (
-            membership_level
-          )
-        `)
+        .select('id, display_name, email, account_type, is_verified, is_admin, created_at, last_sign_in_at')
         .order('created_at', { ascending: false });
 
       if (filters?.search) {
@@ -238,17 +227,37 @@ class AdminService {
         query = query.limit(100);
       }
 
-      const { data, error } = await query;
+      const { data: profiles, error } = await query;
 
-      console.log('[AdminService] Query result:', { data, error, count: data?.length });
+      console.log('[AdminService] Profiles query result:', { profiles, error, count: profiles?.length });
 
       if (error) {
         console.error('[AdminService] Query error:', error);
         throw error;
       }
 
+      if (!profiles || profiles.length === 0) {
+        console.log('[AdminService] No profiles found, returning empty array');
+        return [];
+      }
+
+      // Fetch memberships separately
+      const userIds = profiles.map(p => p.id);
+      const { data: memberships, error: membershipError } = await supabase
+        .from('user_memberships')
+        .select('user_id, membership_level')
+        .in('user_id', userIds);
+
+      if (membershipError) {
+        console.error('[AdminService] Membership query error:', membershipError);
+        // Continue without memberships instead of failing
+      }
+
+      // Create membership map
+      const membershipMap = new Map(memberships?.map(m => [m.user_id, m.membership_level]) || []);
+
       // Map the data to include all fields
-      const users = (data || []).map((user: any) => ({
+      const users = profiles.map((user: any) => ({
         id: user.id,
         email: user.email || 'No email',
         display_name: user.display_name,
@@ -257,14 +266,15 @@ class AdminService {
         is_admin: user.is_admin,
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at,
-        membership_level: user.user_memberships?.[0]?.membership_level || 'free'
+        membership_level: membershipMap.get(user.id) || 'free'
       }));
 
       console.log('[AdminService] Returning users:', users.length);
       return users;
     } catch (error) {
       console.error('[AdminService] Error fetching users:', error);
-      throw error;
+      // Return empty array instead of throwing to prevent UI crash
+      return [];
     }
   }
 
