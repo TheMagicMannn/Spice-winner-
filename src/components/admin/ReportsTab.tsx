@@ -215,11 +215,11 @@ export const ReportsTab: React.FC = () => {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm text-green-300 flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4" />
-              Resolved
+              Action Taken
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-green-300">{reportCounts.resolved}</div>
+            <div className="text-3xl font-bold text-green-300">{reportCounts.action_taken}</div>
           </CardContent>
         </Card>
 
