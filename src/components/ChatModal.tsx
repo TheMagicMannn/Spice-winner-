@@ -1035,21 +1035,22 @@ const MediaMessage: React.FC<{
 
   if (message.isDeleted) {
     return (
-      <div className="flex items-center gap-2 text-white/50 italic text-sm py-4">
-        <Clock className="h-4 w-4" />
-        <span>This media has expired and been deleted</span>
+      <div className="flex items-center gap-2 text-white/70 italic text-sm py-4 px-3 bg-black/30 rounded-lg border border-white/10">
+        <Clock className="h-5 w-5 text-pink-400" />
+        <span className="font-medium">This media has self-destructed</span>
       </div>
     );
   }
 
   // Show "Tap to view" for receiver when media has self-destruct and hasn't been viewed
   if (message.selfDestructSeconds && !isViewed && !isSender) {
+    const mediaTypeLabel = message.messageType === 'voice' ? 'audio' : message.messageType;
     return (
       <div className="flex flex-col items-center gap-2 p-4 bg-black/20 rounded-lg">
         <Clock className="h-8 w-8 text-pink-400" />
-        <p className="text-sm font-semibold">Tap to view</p>
+        <p className="text-sm font-semibold">Tap to view {mediaTypeLabel}</p>
         <p className="text-xs opacity-70 text-center">
-          This media will self-destruct after {message.selfDestructSeconds} seconds once opened
+          This {mediaTypeLabel} will self-destruct after {message.selfDestructSeconds} seconds once opened
         </p>
         <Button
           onClick={handleView}
@@ -1057,7 +1058,7 @@ const MediaMessage: React.FC<{
           className="mt-2 bg-pink-600 hover:bg-pink-700 text-white"
           size="sm"
         >
-          {isLoading ? 'Loading...' : 'View Media'}
+          {isLoading ? 'Loading...' : `View ${mediaTypeLabel}`}
         </Button>
       </div>
     );
