@@ -547,6 +547,31 @@ export class MessageService {
   ): RealtimeChannel {
     console.log("[v0] Setting up message subscription for:", matchId);
 
+    // Helper to fetch message with reply data
+    const fetchMessageWithReply = async (messageId: string) => {
+      try {
+        const { data, error } = await supabase
+          .from('messages')
+          .select(`
+            *,
+            reply_to_message:messages!reply_to_id (
+              id,
+              content,
+              message_type,
+              sender_id
+            )
+          `)
+          .eq('id', messageId)
+          .single();
+
+        if (error) throw error;
+        return this.transformMessage(data);
+      } catch (error) {
+        console.error('[v0] Error fetching message with reply:', error);
+        return null;
+      }
+    };
+
     const channel = supabase
       .channel(`messages:${matchId}`)
       // Subscribe to conversation-based messages
@@ -558,8 +583,16 @@ export class MessageService {
           table: 'messages',
           filter: `conversation_id=eq.${matchId}`
         },
-        (payload) => {
+        async (payload) => {
           console.log("[v0] New message received (conversation):", payload.new.id);
+          // If message has reply_to_id, fetch full data with nested reply
+          if (payload.new.reply_to_id) {
+            const fullMessage = await fetchMessageWithReply(payload.new.id);
+            if (fullMessage) {
+              onMessage(fullMessage);
+              return;
+            }
+          }
           onMessage(this.transformMessage(payload.new));
         }
       )
@@ -585,8 +618,16 @@ export class MessageService {
           table: 'messages',
           filter: `match_id=eq.${matchId}`
         },
-        (payload) => {
+        async (payload) => {
           console.log("[v0] New message received (match):", payload.new.id);
+          // If message has reply_to_id, fetch full data with nested reply
+          if (payload.new.reply_to_id) {
+            const fullMessage = await fetchMessageWithReply(payload.new.id);
+            if (fullMessage) {
+              onMessage(fullMessage);
+              return;
+            }
+          }
           onMessage(this.transformMessage(payload.new));
         }
       )
