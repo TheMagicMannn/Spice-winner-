@@ -1102,6 +1102,59 @@ export const ChatPage: React.FC = () => {
         </div>
       )}
 
+      {/* Voice Recording Self-Destruct Menu */}
+      {showVoiceSelfDestructMenu && recordedVoiceFile && (
+        <div className="px-4 py-4 border-t border-pink-500/30 bg-black/90">
+          <div className="bg-gray-900/60 p-4 rounded-lg">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Mic className="h-5 w-5 text-pink-400" />
+                <span className="text-white font-medium">Voice message recorded</span>
+              </div>
+              <button
+                onClick={clearVoiceRecording}
+                className="text-white/70 hover:text-white transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            
+            <div className="mb-3">
+              <p className="text-white text-sm mb-2">Self-destruct timer (optional):</p>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  variant={selectedSelfDestruct === undefined ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedSelfDestruct(undefined)}
+                  className="text-xs"
+                >
+                  No timer
+                </Button>
+                {SELF_DESTRUCT_OPTIONS.map(option => (
+                  <Button
+                    key={option.value}
+                    variant={selectedSelfDestruct === option.value ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setSelectedSelfDestruct(option.value)}
+                    className="text-xs"
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            <Button
+              onClick={handleSendVoiceMessage}
+              disabled={isSending}
+              className="w-full bg-pink-600 hover:bg-pink-700 text-white"
+            >
+              {isSending ? 'Sending...' : 'Send Voice Message'}
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Input Bar - Instagram Style */}
       <div className="border-t border-pink-500/30 bg-black/95 backdrop-blur-sm flex-shrink-0">
         <div className="px-4 py-3 flex items-center gap-2">
