@@ -1464,6 +1464,11 @@ export class MessageService {
       return [];
     };
 
+    // Debug: Log if reply_to_message exists
+    if (data.reply_to_id && !data.reply_to_message) {
+      console.warn('[transformMessage] Message has reply_to_id but no reply_to_message data:', data.id, data.reply_to_id);
+    }
+
     return {
       id: data.id,
       matchId: data.match_id,
