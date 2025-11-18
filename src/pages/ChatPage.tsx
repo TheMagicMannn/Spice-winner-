@@ -769,20 +769,8 @@ export const ChatPage: React.FC = () => {
                 <p className="text-sm break-words">{message.content}</p>
               )}
 
-              {(message.messageType === 'image' || message.messageType === 'video') && message.mediaUrl && (
+              {(message.messageType === 'image' || message.messageType === 'video' || message.messageType === 'voice') && message.mediaUrl && (
                 <MediaMessage message={message} onMessageUpdate={handleMessageUpdate} />
-              )}
-
-              {message.messageType === 'voice' && message.mediaUrl && (
-                <div className="py-2">
-                  <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
-                    <source src={message.mediaUrl} type="audio/webm" />
-                    <source src={message.mediaUrl} type="audio/ogg" />
-                    <source src={message.mediaUrl} type="audio/mp4" />
-                    <source src={message.mediaUrl} type="audio/mpeg" />
-                    Your browser does not support audio playback.
-                  </audio>
-                </div>
               )}
 
               {message.reactions && message.reactions.length > 0 && (
