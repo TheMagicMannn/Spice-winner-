@@ -263,7 +263,7 @@ export const ReportsTab: React.FC = () => {
                 <option value="all">All Reports</option>
                 <option value="pending">Pending</option>
                 <option value="reviewed">Reviewed</option>
-                <option value="resolved">Resolved</option>
+                <option value="action_taken">Action Taken</option>
                 <option value="dismissed">Dismissed</option>
               </select>
             </div>
