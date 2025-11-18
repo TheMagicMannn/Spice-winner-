@@ -1082,6 +1082,17 @@ const MediaMessage: React.FC<{
             controls
           />
         )}
+        {message.messageType === 'voice' && (
+          <div className="py-2">
+            <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
+              <source src={message.mediaUrl} type="audio/webm" />
+              <source src={message.mediaUrl} type="audio/ogg" />
+              <source src={message.mediaUrl} type="audio/mp4" />
+              <source src={message.mediaUrl} type="audio/mpeg" />
+              Your browser does not support audio playback.
+            </audio>
+          </div>
+        )}
         <div className="absolute top-2 right-2 bg-black/70 text-white px-3 py-1 rounded-full text-xs flex items-center gap-1">
           <Clock className="h-3 w-3" />
           <span>Waiting to be viewed</span>
@@ -1105,6 +1116,17 @@ const MediaMessage: React.FC<{
           className="max-w-full rounded-lg"
           controls
         />
+      )}
+      {message.messageType === 'voice' && (
+        <div className="py-2">
+          <audio controls className="max-w-full w-64" preload="metadata" controlsList="nodownload">
+            <source src={message.mediaUrl} type="audio/webm" />
+            <source src={message.mediaUrl} type="audio/ogg" />
+            <source src={message.mediaUrl} type="audio/mp4" />
+            <source src={message.mediaUrl} type="audio/mpeg" />
+            Your browser does not support audio playback.
+          </audio>
+        </div>
       )}
       {timeRemaining !== null && timeRemaining > 0 && (
         <div className="absolute top-2 right-2 bg-red-600/90 text-white px-3 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 animate-pulse">
