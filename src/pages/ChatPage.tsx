@@ -1221,7 +1221,7 @@ export const ChatPage: React.FC = () => {
   );
 };
 
-// Media Message Component with Self-Destruct (same as before)
+// Media Message Component with Self-Destruct
 const MediaMessage: React.FC<{ 
   message: Message;
   onMessageUpdate: (updatedMessage: Message) => void;
@@ -1233,21 +1233,30 @@ const MediaMessage: React.FC<{
   const [error, setError] = useState<string | null>(null);
   const isSender = message.senderId === user?.id;
 
+  // Countdown timer effect - triggers when expiresAt changes
   useEffect(() => {
+    console.log('[MediaMessage] useEffect triggered, expiresAt:', message.expiresAt);
+    
     if (message.expiresAt) {
       const updateCountdown = () => {
         const now = new Date().getTime();
         const expires = new Date(message.expiresAt!).getTime();
         const remaining = Math.max(0, Math.floor((expires - now) / 1000));
         
+        console.log('[MediaMessage] Countdown update - remaining:', remaining);
         setTimeRemaining(remaining);
         return remaining;
       };
 
-      updateCountdown();
+      // Initial countdown update
+      const initialRemaining = updateCountdown();
+      console.log('[MediaMessage] Starting countdown with initial:', initialRemaining);
+
+      // Set up interval to update every second
       const interval = setInterval(() => {
         const remaining = updateCountdown();
         if (remaining === 0) {
+          console.log('[MediaMessage] Timer expired, deleting message');
           clearInterval(interval);
           onMessageUpdate({
             ...message,
@@ -1257,9 +1266,15 @@ const MediaMessage: React.FC<{
         }
       }, 1000);
 
-      return () => clearInterval(interval);
+      return () => {
+        console.log('[MediaMessage] Cleaning up countdown interval');
+        clearInterval(interval);
+      };
+    } else {
+      // Reset timeRemaining if expiresAt is null
+      setTimeRemaining(null);
     }
-  }, [message.expiresAt, message, onMessageUpdate]);
+  }, [message.expiresAt, message.id]); // Only depend on expiresAt and id
 
   const handleView = async () => {
     if (!isViewed && message.selfDestructSeconds && !isSender && user) {
