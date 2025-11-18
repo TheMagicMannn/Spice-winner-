@@ -202,7 +202,7 @@ class ReportService {
   async getReportCounts(): Promise<{
     pending: number;
     reviewed: number;
-    resolved: number;
+    action_taken: number;
     dismissed: number;
   }> {
     try {
@@ -215,7 +215,7 @@ class ReportService {
       const counts = {
         pending: 0,
         reviewed: 0,
-        resolved: 0,
+        action_taken: 0,
         dismissed: 0
       };
 
@@ -231,7 +231,7 @@ class ReportService {
       return {
         pending: 0,
         reviewed: 0,
-        resolved: 0,
+        action_taken: 0,
         dismissed: 0
       };
     }
