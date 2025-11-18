@@ -410,6 +410,14 @@ export const UsersManagementTab: React.FC = () => {
                           {userData.membership_level || 'free'}
                         </Badge>
                       )}
+
+                      {/* Ban/Suspension Status */}
+                      {!userData.is_active && (
+                        <Badge className="bg-red-500/20 text-red-300">
+                          <Ban className="h-3 w-3 mr-1" />
+                          Banned
+                        </Badge>
+                      )}
                     </div>
 
                     {/* User Details */}
