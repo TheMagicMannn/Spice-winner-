@@ -33,11 +33,11 @@ export const ReportsTab: React.FC = () => {
   const [selectedReport, setSelectedReport] = useState<UserReport | null>(null);
   const [adminNotes, setAdminNotes] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'reviewed' | 'resolved' | 'dismissed'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'reviewed' | 'action_taken' | 'dismissed'>('all');
   const [reportCounts, setReportCounts] = useState({
     pending: 0,
     reviewed: 0,
-    resolved: 0,
+    action_taken: 0,
     dismissed: 0
   });
   const [dateRange, setDateRange] = useState({
