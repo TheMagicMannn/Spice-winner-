@@ -1301,7 +1301,19 @@ const MediaMessage: React.FC<{
 }> = ({ message, onMessageUpdate }) => {
   const { user } = useAuth();
   const [isViewed, setIsViewed] = useState(!!message.firstViewedAt);
-  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  
+  // Initialize timeRemaining if expiresAt already exists (e.g., reopening chat)
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(() => {
+    if (message.expiresAt) {
+      const now = new Date().getTime();
+      const expires = new Date(message.expiresAt).getTime();
+      const remaining = Math.max(0, Math.floor((expires - now) / 1000));
+      console.log('[MediaMessage] Initializing with existing expiresAt, remaining:', remaining);
+      return remaining;
+    }
+    return null;
+  });
+  
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const isSender = message.senderId === user?.id;
