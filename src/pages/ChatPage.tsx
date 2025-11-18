@@ -541,6 +541,46 @@ export const ChatPage: React.FC = () => {
     }
   };
 
+  const handleSendVoiceMessage = async () => {
+    if (!recordedVoiceFile || !user || !chatId) return;
+
+    setIsSending(true);
+    try {
+      let newMessage;
+      if (conversationDetails) {
+        newMessage = await MessageService.sendMediaMessageInConversation(
+          chatId, 
+          user.id, 
+          recordedVoiceFile, 
+          'voice',
+          selectedSelfDestruct
+        );
+      } else {
+        newMessage = await MessageService.sendMediaMessage(
+          chatId, 
+          user.id, 
+          recordedVoiceFile, 
+          'voice',
+          selectedSelfDestruct
+        );
+      }
+      handleNewMessage(newMessage);
+      clearVoiceRecording();
+    } catch (error) {
+      console.error('Error sending voice message:', error);
+      setUploadError('Failed to send voice message. Please try again.');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const clearVoiceRecording = () => {
+    setRecordedVoiceFile(null);
+    setShowVoiceSelfDestructMenu(false);
+    setSelectedSelfDestruct(undefined);
+    setUploadError(null);
+  };
+
   const handleLongPress = (messageId: string, event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
     const rect = (event.target as HTMLElement).getBoundingClientRect();
