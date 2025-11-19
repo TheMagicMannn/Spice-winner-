@@ -81,6 +81,10 @@ export class ProfileService {
 
       console.log('ProfileService.updateProfile - Update successful');
 
+      // Log the profile update activity
+      const updatedFields = Object.keys(updateData);
+      activityLogService.logProfileUpdate(userId, updatedFields);
+
       // Transform back to camelCase
       return profileFromDatabase(data);
     } catch (error: any) {
