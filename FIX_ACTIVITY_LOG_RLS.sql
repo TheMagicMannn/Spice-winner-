@@ -5,10 +5,15 @@
 -- 1. FIX USER_ACTIVITY_LOG TABLE RLS POLICIES
 -- ============================================
 
--- Drop existing restrictive policies
-DROP POLICY IF EXISTS "Users can view own activity" ON public.user_activity_log;
-DROP POLICY IF EXISTS "System can insert activity" ON public.user_activity_log;
-DROP POLICY IF EXISTS "Admins can view all activity" ON public.user_activity_log;
+-- Drop ALL existing policies on user_activity_log
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT policyname FROM pg_policies WHERE tablename = 'user_activity_log') LOOP
+        EXECUTE 'DROP POLICY IF EXISTS "' || r.policyname || '" ON public.user_activity_log';
+    END LOOP;
+END $$;
 
 -- Create new permissive policies
 -- Allow authenticated users to insert their own activities
