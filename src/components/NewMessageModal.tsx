@@ -249,11 +249,27 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
                     </div>
 
                     <div className="flex-1 text-left">
-                      <h4 className="font-semibold text-white">
-                        {getDisplayName(match)}
-                      </h4>
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <h4 className="font-semibold text-white">
+                          {getDisplayName(match)}
+                        </h4>
+                        {match.isVerified && (
+                          <BadgeCheck className="h-4 w-4 text-blue-500" title="Verified" />
+                        )}
+                        {match.membershipLevel && match.membershipLevel !== 'free' && (
+                          <Badge className={`text-[10px] px-1.5 py-0 h-5 ${
+                            match.membershipLevel === 'platinum' ? 'bg-gradient-to-r from-gray-400 to-gray-600' :
+                            match.membershipLevel === 'vip' ? 'bg-gradient-to-r from-purple-500 to-pink-500' :
+                            'bg-gradient-to-r from-yellow-500 to-orange-500'
+                          }`}>
+                            <Crown className="h-3 w-3 mr-0.5" />
+                            {match.membershipLevel.toUpperCase()}
+                          </Badge>
+                        )}
+                      </div>
+                      
                       {/* Primary user info */}
-                      <div className="flex items-center gap-1.5 text-xs text-white/60 mt-0.5">
+                      <div className="flex items-center gap-1.5 text-xs text-white/60">
                         {match.age && <span>{match.age}</span>}
                         {match.gender && (
                           <>
@@ -268,6 +284,7 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
                           </>
                         )}
                       </div>
+                      
                       {/* Secondary user info (for couples) */}
                       {match.accountType === 'couple' && (match.age2 || match.gender2 || match.orientation2) && (
                         <div className="flex items-center gap-1.5 text-xs text-white/60">
@@ -284,6 +301,14 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
                               <span>{match.orientation2}</span>
                             </>
                           )}
+                        </div>
+                      )}
+                      
+                      {/* Location */}
+                      {match.location && (
+                        <div className="flex items-center gap-1 text-xs text-white/50 mt-0.5">
+                          <MapPin className="h-3 w-3" />
+                          <span>{match.location}</span>
                         </div>
                       )}
                     </div>
