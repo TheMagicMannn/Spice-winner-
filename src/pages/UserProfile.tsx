@@ -774,18 +774,24 @@ export const UserProfilePage: React.FC = () => {
         )}
 
         {/* Action Buttons */}
-        <div className="flex space-x-3">
-          <Button className={`flex-1 ${spiceTheme.components.button.gradient}`}>
+        <div className="flex space-x-3 mt-6">
+          <Button 
+            className={`flex-1 ${spiceTheme.components.button.gradient}`}
+            data-testid="send-message-button"
+          >
             <MessageSquare className="h-5 w-5 mr-2" />
             Send Message
           </Button>
-          <Button className={spiceTheme.components.button.secondary}>
+          <Button 
+            className={spiceTheme.components.button.secondary}
+            data-testid="like-button"
+          >
             <Heart className="h-5 w-5" />
           </Button>
         </div>
 
         {/* Member Since */}
-        <div className="text-center text-white/50 text-sm">
+        <div className="text-center text-white/50 text-sm mt-4">
           Member since {formatDate(profile.created_at)}
         </div>
       </div>
