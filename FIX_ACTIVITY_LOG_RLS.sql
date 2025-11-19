@@ -77,9 +77,15 @@ WITH CHECK (true);
 -- 3. FIX ADMIN_ACTIONS_LOG TABLE RLS
 -- ============================================
 
--- Drop existing policies
-DROP POLICY IF EXISTS "Admins can view admin actions" ON public.admin_actions_log;
-DROP POLICY IF EXISTS "Admins can log actions" ON public.admin_actions_log;
+-- Drop ALL existing policies on admin_actions_log
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT policyname FROM pg_policies WHERE tablename = 'admin_actions_log') LOOP
+        EXECUTE 'DROP POLICY IF EXISTS "' || r.policyname || '" ON public.admin_actions_log';
+    END LOOP;
+END $$;
 
 -- Allow admins to insert their own actions
 CREATE POLICY "Admins can log own actions"
