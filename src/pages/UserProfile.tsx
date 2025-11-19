@@ -276,6 +276,54 @@ export const UserProfilePage: React.FC = () => {
     ? profile.photos[currentPhotoIndex] 
     : 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=800';
 
+  // Helper component for expandable sections
+  const ExpandableSection: React.FC<{
+    title: string;
+    sectionKey: string;
+    children: React.ReactNode;
+    testId?: string;
+  }> = ({ title, sectionKey, children, testId }) => (
+    <Card className={spiceTheme.components.card} data-testid={testId}>
+      <CardContent className="p-0">
+        <button
+          onClick={() => toggleSection(sectionKey)}
+          className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors"
+          data-testid={`${testId}-toggle`}
+        >
+          <h2 className="text-xl font-semibold text-white">{title}</h2>
+          <ChevronDown 
+            className={`h-6 w-6 text-pink-400 transition-transform duration-300 ${
+              expandedSections[sectionKey] ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+        
+        <div 
+          className={`overflow-hidden transition-all duration-300 ${
+            expandedSections[sectionKey] ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="px-6 pb-6" data-testid={`${testId}-content`}>
+            {children}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  // Helper to get gender icon based on seeking preferences
+  const getSeekingIcon = (item: string) => {
+    const lowerItem = item.toLowerCase();
+    if (lowerItem.includes('couple')) {
+      return <Users className="h-5 w-5 text-blue-400" />;
+    } else if (lowerItem.includes('male') || lowerItem.includes('man')) {
+      return <UserIcon className="h-5 w-5 text-cyan-400" />;
+    } else if (lowerItem.includes('female') || lowerItem.includes('woman')) {
+      return <UserIcon className="h-5 w-5 text-pink-400" />;
+    }
+    return <UserPlus className="h-5 w-5 text-purple-400" />;
+  };
+
   return (
     <SpiceBackground className="min-h-screen pb-20">
       {/* Header */}
@@ -286,17 +334,12 @@ export const UserProfilePage: React.FC = () => {
             variant="ghost"
             size="sm"
             className="text-white/80 hover:text-white"
+            data-testid="back-button"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Back
           </Button>
           <div className="flex items-center space-x-2">
-            {profile.is_verified && (
-              <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                <Shield className="h-3 w-3 mr-1" />
-                Verified
-              </Badge>
-            )}
             {profile.membership_tier === 'vip' && (
               <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
                 <Crown className="h-3 w-3 mr-1" />
@@ -308,7 +351,7 @@ export const UserProfilePage: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-6">
+      <div className="p-4 space-y-4" data-testid="profile-content">
         {/* Profile Header Card */}
         <Card className={spiceTheme.components.card}>
           <CardContent className="p-0">
