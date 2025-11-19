@@ -155,6 +155,39 @@ export const EnhancedOverviewTab: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Database Setup Alert */}
+      {hasNoData && (
+        <Card className="bg-yellow-500/10 border-yellow-500/30">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-3">
+              <Activity className="h-6 w-6 text-yellow-400 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-yellow-300 mb-2">
+                  No Activity Data Available
+                </h3>
+                <p className="text-sm text-yellow-300/80 mb-3">
+                  The dashboard cannot display statistics because no activity data exists in the database. 
+                  This is likely due to Row Level Security (RLS) policies blocking data logging.
+                </p>
+                <div className="bg-black/30 rounded-lg p-3 space-y-2">
+                  <p className="text-xs text-yellow-300 font-semibold">To fix this issue:</p>
+                  <ol className="text-xs text-yellow-300/90 space-y-1 ml-4 list-decimal">
+                    <li>Open Supabase SQL Editor</li>
+                    <li>Run the SQL script: <code className="bg-black/30 px-1 py-0.5 rounded">FIX_ACTIVITY_LOG_RLS.sql</code></li>
+                    <li>Generate test data by running: <code className="bg-black/30 px-1 py-0.5 rounded">SELECT populate_test_activity_data();</code></li>
+                    <li>Generate reports by running: <code className="bg-black/30 px-1 py-0.5 rounded">SELECT generate_daily_report(CURRENT_DATE - i) FROM generate_series(0, 6) i;</code></li>
+                    <li>Refresh this page</li>
+                  </ol>
+                </div>
+                <p className="text-xs text-yellow-300/70 mt-3">
+                  The SQL file has been created in your project root: <code className="bg-black/30 px-1 py-0.5 rounded">/app/FIX_ACTIVITY_LOG_RLS.sql</code>
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Quick Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
