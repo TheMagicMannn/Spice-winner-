@@ -95,6 +95,16 @@ export class MatchingService {
         throw error;
       }
 
+      // Log the like activity if it was a like or super_like
+      if (action === 'like' || action === 'super_like') {
+        activityLogService.logLike(userId, targetUserId, true);
+      }
+
+      // Log match creation if this resulted in a match
+      if (data.is_match) {
+        activityLogService.logMatch(userId, targetUserId);
+      }
+
       return {
         success: data.success,
         action: data.action,
