@@ -134,7 +134,20 @@ ALTER TABLE public.admin_actions_log ENABLE ROW LEVEL SECURITY;
 -- STEP 6: CREATE HELPER FUNCTION
 -- ============================================
 
-DROP FUNCTION IF EXISTS public.log_user_activity(UUID, TEXT, JSONB, TEXT, TEXT);
+-- Drop all versions of the function
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT oid::regprocedure 
+        FROM pg_proc 
+        WHERE proname = 'log_user_activity' 
+        AND pronamespace = 'public'::regnamespace
+    ) LOOP
+        EXECUTE 'DROP FUNCTION IF EXISTS ' || r.oid::regprocedure || ' CASCADE';
+    END LOOP;
+END $$;
 
 CREATE OR REPLACE FUNCTION public.log_user_activity(
   p_user_id UUID,
