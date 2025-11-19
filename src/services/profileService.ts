@@ -1,6 +1,7 @@
 import { Profile } from '../types';
 import { supabase } from './supabase';
 import { profileToDatabase, profileFromDatabase } from '../utils/transformers';
+import { activityLogService } from './activityLogService';
 
 export class ProfileService {
   /**
