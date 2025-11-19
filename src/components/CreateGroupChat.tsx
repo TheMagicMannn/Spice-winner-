@@ -203,8 +203,37 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
                     </Avatar>
                     <div className="flex-1 text-left">
                       <p className="font-semibold text-white">{match.displayName}</p>
-                      {match.bio && (
-                        <p className="text-sm text-gray-400 truncate">{match.bio}</p>
+                      <div className="flex items-center gap-1.5 text-xs text-gray-400 mt-0.5">
+                        {match.age && <span>{match.age}</span>}
+                        {match.gender && (
+                          <>
+                            {match.age && <span>•</span>}
+                            <span>{match.gender}</span>
+                          </>
+                        )}
+                        {match.orientation && (
+                          <>
+                            {(match.age || match.gender) && <span>•</span>}
+                            <span>{match.orientation}</span>
+                          </>
+                        )}
+                      </div>
+                      {match.accountType === 'couple' && (match.age2 || match.gender2 || match.orientation2) && (
+                        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                          {match.age2 && <span>{match.age2}</span>}
+                          {match.gender2 && (
+                            <>
+                              {match.age2 && <span>•</span>}
+                              <span>{match.gender2}</span>
+                            </>
+                          )}
+                          {match.orientation2 && (
+                            <>
+                              {(match.age2 || match.gender2) && <span>•</span>}
+                              <span>{match.orientation2}</span>
+                            </>
+                          )}
+                        </div>
                       )}
                     </div>
                     {isSelected && (
