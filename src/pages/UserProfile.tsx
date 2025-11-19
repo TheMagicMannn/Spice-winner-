@@ -125,6 +125,23 @@ export const UserProfilePage: React.FC = () => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Expandable sections state
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    aboutMe: false,
+    myStats: false,
+    kinksInterest: false,
+    whatSeeking: false,
+    bdsmQuiz: false,
+    boundariesLimits: false
+  });
+  
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   useEffect(() => {
     if (userId) {
