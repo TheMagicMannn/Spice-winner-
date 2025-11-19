@@ -191,7 +191,20 @@ GRANT EXECUTE ON FUNCTION public.log_user_activity TO service_role;
 -- STEP 7: CREATE TEST DATA FUNCTION
 -- ============================================
 
-DROP FUNCTION IF EXISTS public.populate_test_activity_data();
+-- Drop all versions of the function
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT oid::regprocedure 
+        FROM pg_proc 
+        WHERE proname = 'populate_test_activity_data' 
+        AND pronamespace = 'public'::regnamespace
+    ) LOOP
+        EXECUTE 'DROP FUNCTION IF EXISTS ' || r.oid::regprocedure || ' CASCADE';
+    END LOOP;
+END $$;
 
 CREATE OR REPLACE FUNCTION public.populate_test_activity_data()
 RETURNS TEXT
