@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Users, Check } from 'lucide-react';
+import { X, Users, Check, BadgeCheck, Crown, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/Input';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { MessageService } from '@/services/messageService';
 import { ProfileService } from '@/services/profileService';
 import { useAuth } from '@/hooks/useAuth';
