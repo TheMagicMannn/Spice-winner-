@@ -265,7 +265,20 @@ GRANT EXECUTE ON FUNCTION public.populate_test_activity_data TO authenticated;
 -- STEP 8: CREATE DAILY REPORT FUNCTION
 -- ============================================
 
-DROP FUNCTION IF EXISTS public.generate_daily_report(DATE);
+-- Drop all versions of the function
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT oid::regprocedure 
+        FROM pg_proc 
+        WHERE proname = 'generate_daily_report' 
+        AND pronamespace = 'public'::regnamespace
+    ) LOOP
+        EXECUTE 'DROP FUNCTION IF EXISTS ' || r.oid::regprocedure || ' CASCADE';
+    END LOOP;
+END $$;
 
 CREATE OR REPLACE FUNCTION public.generate_daily_report(p_date DATE DEFAULT CURRENT_DATE)
 RETURNS TEXT
