@@ -162,23 +162,44 @@ export const ActivityLogTab: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* All Time Toggle */}
-          <div className="flex items-center gap-2 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-            <input
-              type="checkbox"
-              id="allTime"
-              checked={useAllTime}
-              onChange={(e) => {
-                setUseAllTime(e.target.checked);
-                if (e.target.checked) {
-                  console.log('[ActivityLogTab] Loading all-time activities');
-                }
-              }}
-              className="w-4 h-4"
-            />
-            <label htmlFor="allTime" className="text-sm text-blue-300 cursor-pointer">
-              Load all activities (ignore date range) - Use this if you're not seeing any data
-            </label>
+          {/* All Time Toggle & Database Setup Helper */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+              <input
+                type="checkbox"
+                id="allTime"
+                checked={useAllTime}
+                onChange={(e) => {
+                  setUseAllTime(e.target.checked);
+                  if (e.target.checked) {
+                    console.log('[ActivityLogTab] Loading all-time activities');
+                  }
+                }}
+                className="w-4 h-4"
+              />
+              <label htmlFor="allTime" className="text-sm text-blue-300 cursor-pointer flex-1">
+                Load all activities (ignore date range) - Use this if you're not seeing any data
+              </label>
+            </div>
+            
+            {activities.length === 0 && !isLoading && (
+              <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                <p className="text-sm text-yellow-300 mb-2">
+                  <strong>No activity data found.</strong> This usually means:
+                </p>
+                <ul className="text-xs text-yellow-300/80 space-y-1 ml-4 list-disc">
+                  <li>Row Level Security (RLS) policies may be blocking data access</li>
+                  <li>No user activities have been logged yet</li>
+                  <li>Database tables need RLS policy fixes</li>
+                </ul>
+                <p className="text-xs text-yellow-300 mt-3">
+                  <strong>To fix:</strong> Run the SQL script <code className="bg-black/30 px-1 py-0.5 rounded">/app/FIX_ACTIVITY_LOG_RLS.sql</code> in your Supabase SQL Editor, then run:
+                  <code className="block bg-black/30 px-2 py-1 rounded mt-1">
+                    SELECT populate_test_activity_data();
+                  </code>
+                </p>
+              </div>
+            )}
           </div>
 
           {/* Date Range */}
