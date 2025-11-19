@@ -54,8 +54,15 @@ USING (
 -- 2. FIX DAILY_ACTIVITY_REPORTS TABLE RLS
 -- ============================================
 
--- Drop existing policies
-DROP POLICY IF EXISTS "Admins can view reports" ON public.daily_activity_reports;
+-- Drop ALL existing policies on daily_activity_reports
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (SELECT policyname FROM pg_policies WHERE tablename = 'daily_activity_reports') LOOP
+        EXECUTE 'DROP POLICY IF EXISTS "' || r.policyname || '" ON public.daily_activity_reports';
+    END LOOP;
+END $$;
 
 -- Allow admins to view all reports
 CREATE POLICY "Admins can view all reports"
