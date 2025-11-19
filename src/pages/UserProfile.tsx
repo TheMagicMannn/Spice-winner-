@@ -352,15 +352,16 @@ export const UserProfilePage: React.FC = () => {
 
       {/* Content */}
       <div className="p-4 space-y-4" data-testid="profile-content">
-        {/* Profile Header Card */}
-        <Card className={spiceTheme.components.card}>
+        {/* Hero Profile Header */}
+        <Card className={spiceTheme.components.card} data-testid="profile-hero">
           <CardContent className="p-0">
-            {/* Main Photo with Swipe Support */}
+            {/* Main Photo with Overlay */}
             <div 
-              className="relative h-96 touch-pan-y"
+              className="relative h-[500px] touch-pan-y"
               onTouchStart={onTouchStart}
               onTouchMove={onTouchMove}
               onTouchEnd={onTouchEnd}
+              data-testid="profile-photo-section"
             >
               <img
                 src={mainPhoto}
@@ -368,105 +369,76 @@ export const UserProfilePage: React.FC = () => {
                 className="w-full h-full object-cover rounded-t-lg select-none"
                 draggable={false}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-t-lg pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-t-lg pointer-events-none" />
               
-              {/* Navigation Arrows (Desktop) */}
+              {/* Navigation Arrows */}
               {profile.photos && profile.photos.length > 1 && (
                 <>
-                  {currentPhotoIndex > 0 && (
-                    <button
-                      onClick={goToPreviousPhoto}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all z-10"
-                      data-testid="previous-photo-button"
-                    >
-                      <ChevronLeft className="h-6 w-6" />
-                    </button>
-                  )}
+                  <button
+                    onClick={goToPreviousPhoto}
+                    className={`absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all z-10 ${
+                      currentPhotoIndex === 0 ? 'opacity-0 pointer-events-none' : ''
+                    }`}
+                    data-testid="previous-photo-button"
+                  >
+                    <ChevronLeft className="h-6 w-6" />
+                  </button>
                   
-                  {currentPhotoIndex < profile.photos.length - 1 && (
-                    <button
-                      onClick={goToNextPhoto}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all z-10"
-                      data-testid="next-photo-button"
-                    >
-                      <ChevronRight className="h-6 w-6" />
-                    </button>
-                  )}
+                  <button
+                    onClick={goToNextPhoto}
+                    className={`absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-all z-10 ${
+                      currentPhotoIndex === profile.photos.length - 1 ? 'opacity-0 pointer-events-none' : ''
+                    }`}
+                    data-testid="next-photo-button"
+                  >
+                    <ChevronRight className="h-6 w-6" />
+                  </button>
                 </>
               )}
 
-              {/* Photo Counter */}
-              {profile.photos && profile.photos.length > 1 && (
-                <div className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm z-10">
-                  {currentPhotoIndex + 1} / {profile.photos.length}
-                </div>
-              )}
-
-              {/* Swipe Hint (shown on first photo for mobile) */}
-              {profile.photos && profile.photos.length > 1 && currentPhotoIndex === 0 && (
-                <div className="absolute top-4 left-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs z-10 flex items-center space-x-1 md:hidden animate-pulse">
-                  <ChevronLeft className="h-3 w-3" />
-                  <span>Swipe</span>
-                  <ChevronRight className="h-3 w-3" />
-                </div>
-              )}
-              
-              {/* Photo Navigation Dots */}
-              {profile.photos && profile.photos.length > 1 && (
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2 z-10">
-                  {profile.photos.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentPhotoIndex(index)}
-                      className={`h-2 rounded-full transition-all ${
-                        index === currentPhotoIndex 
-                          ? 'bg-white w-6' 
-                          : 'bg-white/50 hover:bg-white/75 w-2'
-                      }`}
-                      data-testid={`photo-dot-${index}`}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Name & Badges Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 pointer-events-none">
-                <div className="flex items-center justify-between">
+              {/* Profile Info Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 pointer-events-none z-10">
+                <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h1 className="text-3xl font-bold text-white mb-1 flex items-center">
+                    <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
                       {displayName}
-                      {profile.is_verified && <CheckCircle className="h-6 w-6 ml-2 text-blue-400" />}
-                    </h1>
-                    <div className="flex items-center space-x-3 text-white/90">
-                      {profile.account_type === 'couple' ? (
-                        <Users className="h-4 w-4" />
-                      ) : (
-                        <UserIcon className="h-4 w-4" />
+                      {profile.is_verified && (
+                        <CheckCircle className="h-7 w-7 ml-2 text-blue-400" />
                       )}
-                      <span className="capitalize">{profile.account_type}</span>
-                      {profile.age && <span>• {profile.age} years old</span>}
-                      {profile.account_type === 'couple' && profile.age2 && <span>& {profile.age2}</span>}
+                    </h1>
+                    <div className="flex flex-wrap items-center gap-2 text-white/90 text-lg">
+                      <span>{profile.age || '??'}</span>
+                      <span>•</span>
+                      <span className="capitalize">{profile.gender || 'Not specified'}</span>
+                      {profile.account_type === 'couple' && profile.age2 && (
+                        <>
+                          <span>•</span>
+                          <span>{profile.age2}</span>
+                        </>
+                      )}
+                      {profile.account_type === 'couple' && profile.gender2 && (
+                        <>
+                          <span>•</span>
+                          <span className="capitalize">{profile.gender2}</span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
+                
+                {profile.location && (
+                  <div className="flex items-center text-white/90 mb-2">
+                    <MapPin className="h-4 w-4 mr-2 text-pink-400" />
+                    <span>{profile.location}</span>
+                  </div>
+                )}
+                
+                {/* STI Status Placeholder */}
+                <div className="flex items-center text-white/70 text-sm">
+                  <ShieldCheck className="h-4 w-4 mr-2 text-green-400" />
+                  <span>STI tested (Placeholder)</span>
+                </div>
               </div>
-            </div>
-
-            {/* Quick Info */}
-            <div className="p-6 space-y-4">
-              {profile.location && (
-                <div className="flex items-center text-white/80">
-                  <MapPin className="h-5 w-5 mr-2 text-pink-400" />
-                  <span>{profile.location}</span>
-                </div>
-              )}
-
-              {profile.last_active_at && (
-                <div className="flex items-center text-white/60 text-sm">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  <span>Last active: {formatDate(profile.last_active_at)}</span>
-                </div>
-              )}
             </div>
           </CardContent>
         </Card>
