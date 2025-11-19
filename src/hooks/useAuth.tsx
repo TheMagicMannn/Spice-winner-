@@ -117,6 +117,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
       
       if (error) throw error;
+      
+      // Log the login activity
+      if (data.user) {
+        activityLogService.logLogin(data.user.id, { email });
+      }
+      
       return { error: null };
     } catch (error: any) {
       console.error('Login error:', error);
