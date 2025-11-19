@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { profileFromDatabase } from '@/utils/transformers';
+import { activityLogService } from './activityLogService';
 
 export interface Message {
   id: string;
