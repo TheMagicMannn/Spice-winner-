@@ -52,14 +52,14 @@ ORDER BY count DESC;
 -- ========================================
 DO $$
 DECLARE
-    report_date DATE;
+    v_report_date DATE;
     days_back INTEGER;
 BEGIN
     FOR days_back IN 0..6 LOOP
-        report_date := CURRENT_DATE - days_back;
+        v_report_date := CURRENT_DATE - days_back;
         
         -- Delete existing report if any
-        DELETE FROM daily_activity_reports WHERE report_date = report_date;
+        DELETE FROM daily_activity_reports WHERE daily_activity_reports.report_date = v_report_date;
         
         -- Insert new report
         INSERT INTO daily_activity_reports (
@@ -74,7 +74,7 @@ BEGIN
             new_premium_users
         )
         SELECT
-            report_date,
+            v_report_date,
             COUNT(DISTINCT CASE WHEN activity_type IN ('signup') THEN user_id END),
             COUNT(CASE WHEN activity_type IN ('login') THEN 1 END),
             COUNT(CASE WHEN activity_type IN ('message') THEN 1 END),
@@ -84,9 +84,9 @@ BEGIN
             COUNT(DISTINCT user_id),
             0
         FROM user_activity_log
-        WHERE DATE(created_at) = report_date;
+        WHERE DATE(created_at) = v_report_date;
         
-        RAISE NOTICE 'Generated report for %', report_date;
+        RAISE NOTICE 'Generated report for %', v_report_date;
     END LOOP;
 END $$;
 
