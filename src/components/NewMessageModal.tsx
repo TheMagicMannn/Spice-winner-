@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/Input';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Search, X, Users, MessageSquare, Check } from 'lucide-react';
+import { Search, X, Users, MessageSquare, Check, BadgeCheck, Crown, MapPin } from 'lucide-react';
 import { MatchingService } from '@/services/matchingService';
 import { ConversationService } from '@/services/conversationService';
 import { useAuth } from '@/hooks/useAuth';
