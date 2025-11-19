@@ -443,137 +443,334 @@ export const UserProfilePage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* About Section */}
-        {profile.bio && (
-          <Card className={spiceTheme.components.card}>
+        {/* What I am open to - Pills */}
+        {profile.seeking_relationship_type && profile.seeking_relationship_type.length > 0 && (
+          <Card className={spiceTheme.components.card} data-testid="open-to-section">
             <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-white mb-3 flex items-center">
-                <Sparkles className="h-5 w-5 mr-2 text-pink-400" />
-                About
-              </h2>
-              <p className="text-white/80 whitespace-pre-wrap">{profile.bio}</p>
+              <h3 className="text-white font-semibold mb-3">What I am open to:</h3>
+              <div className="flex flex-wrap gap-2">
+                {profile.seeking_relationship_type.map((type, index) => (
+                  <Badge 
+                    key={index} 
+                    className="bg-purple-500/20 text-purple-300 border-purple-500/30 px-4 py-1.5 text-sm rounded-full"
+                    data-testid={`relationship-type-${index}`}
+                  >
+                    {type}
+                  </Badge>
+                ))}
+              </div>
             </CardContent>
           </Card>
         )}
 
-        {/* Basic Info */}
-        <Card className={spiceTheme.components.card}>
-          <CardContent className="p-6 space-y-4">
-            <h2 className="text-xl font-semibold text-white mb-4">Details</h2>
-            
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              {profile.gender && (
-                <div>
-                  <div className="text-white/60 mb-1">Gender</div>
-                  <div className="text-white font-medium">{profile.gender}</div>
-                </div>
-              )}
-              
-              {profile.account_type === 'couple' && profile.gender2 && (
-                <div>
-                  <div className="text-white/60 mb-1">Partner's Gender</div>
-                  <div className="text-white font-medium">{profile.gender2}</div>
-                </div>
-              )}
+        {/* What I am interested in - Icons */}
+        {profile.seeking && profile.seeking.length > 0 && (
+          <Card className={spiceTheme.components.card} data-testid="interested-in-section">
+            <CardContent className="p-6">
+              <h3 className="text-white font-semibold mb-4">What I am interested in:</h3>
+              <div className="flex flex-wrap gap-4">
+                {profile.seeking.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className="flex flex-col items-center gap-1"
+                    data-testid={`seeking-icon-${index}`}
+                  >
+                    <div className="bg-white/10 hover:bg-white/20 transition-colors rounded-full p-3 border border-white/20">
+                      {getSeekingIcon(item)}
+                    </div>
+                    <span className="text-white/70 text-xs text-center max-w-[60px]">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-              {profile.orientation && (
+        {/* Expandable Section: About Me */}
+        {profile.bio && (
+          <ExpandableSection 
+            title="About Me" 
+            sectionKey="aboutMe"
+            testId="about-me-section"
+          >
+            <p className="text-white/80 whitespace-pre-wrap leading-relaxed">{profile.bio}</p>
+          </ExpandableSection>
+        )}
+
+        {/* Expandable Section: My Stats */}
+        {(profile.height || profile.body_type || profile.hair_color || profile.eye_color || 
+          profile.ethnicity || profile.partner1_height || profile.partner2_height) && (
+          <ExpandableSection 
+            title="My Stats" 
+            sectionKey="myStats"
+            testId="my-stats-section"
+          >
+            {profile.account_type === 'individual' ? (
+              <div className="space-y-3 text-white/80">
+                {profile.height && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Height:</span>
+                    <span className="font-medium">{profile.height}</span>
+                  </div>
+                )}
+                {profile.body_type && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Build:</span>
+                    <span className="font-medium capitalize">{profile.body_type}</span>
+                  </div>
+                )}
+                {profile.hair_color && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Hair:</span>
+                    <span className="font-medium capitalize">{profile.hair_color}</span>
+                  </div>
+                )}
+                {profile.eye_color && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Eyes:</span>
+                    <span className="font-medium capitalize">{profile.eye_color}</span>
+                  </div>
+                )}
+                {profile.ethnicity && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Ethnicity:</span>
+                    <span className="font-medium capitalize">{profile.ethnicity}</span>
+                  </div>
+                )}
+                {profile.tattoos !== undefined && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Tattoos:</span>
+                    <span className="font-medium">{profile.tattoos ? 'Yes' : 'No'}</span>
+                  </div>
+                )}
+                {profile.piercings !== undefined && (
+                  <div className="flex items-center">
+                    <span className="text-white/60 w-32">Piercings:</span>
+                    <span className="font-medium">{profile.piercings ? 'Yes' : 'No'}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {/* Partner 1 Stats */}
+                {(profile.partner1_height || profile.partner1_body_type || profile.partner1_hair_color || profile.partner1_eye_color) && (
+                  <div>
+                    <h4 className="text-pink-400 font-semibold mb-3">{profile.display_name || 'Partner 1'}</h4>
+                    <div className="space-y-2 text-white/80 text-sm">
+                      {profile.partner1_height && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Height:</span>
+                          <span className="font-medium">{profile.partner1_height}</span>
+                        </div>
+                      )}
+                      {profile.partner1_body_type && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Build:</span>
+                          <span className="font-medium capitalize">{profile.partner1_body_type}</span>
+                        </div>
+                      )}
+                      {profile.partner1_hair_color && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Hair:</span>
+                          <span className="font-medium capitalize">{profile.partner1_hair_color}</span>
+                        </div>
+                      )}
+                      {profile.partner1_eye_color && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Eyes:</span>
+                          <span className="font-medium capitalize">{profile.partner1_eye_color}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Partner 2 Stats */}
+                {(profile.partner2_height || profile.partner2_body_type || profile.partner2_hair_color || profile.partner2_eye_color) && (
+                  <div>
+                    <h4 className="text-blue-400 font-semibold mb-3">{profile.display_name2 || 'Partner 2'}</h4>
+                    <div className="space-y-2 text-white/80 text-sm">
+                      {profile.partner2_height && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Height:</span>
+                          <span className="font-medium">{profile.partner2_height}</span>
+                        </div>
+                      )}
+                      {profile.partner2_body_type && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Build:</span>
+                          <span className="font-medium capitalize">{profile.partner2_body_type}</span>
+                        </div>
+                      )}
+                      {profile.partner2_hair_color && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Hair:</span>
+                          <span className="font-medium capitalize">{profile.partner2_hair_color}</span>
+                        </div>
+                      )}
+                      {profile.partner2_eye_color && (
+                        <div className="flex items-center">
+                          <span className="text-white/60 w-28">Eyes:</span>
+                          <span className="font-medium capitalize">{profile.partner2_eye_color}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </ExpandableSection>
+        )}
+
+        {/* Expandable Section: Kinks and Interest */}
+        {profile.kinks && profile.kinks.length > 0 && (
+          <ExpandableSection 
+            title="Kinks and Interest" 
+            sectionKey="kinksInterest"
+            testId="kinks-interest-section"
+          >
+            <div className="flex flex-wrap gap-2">
+              {profile.kinks.map((kink, index) => (
+                <Badge 
+                  key={index} 
+                  className="bg-red-500/20 text-red-400 border-red-500/30"
+                  data-testid={`kink-badge-${index}`}
+                >
+                  {kink}
+                </Badge>
+              ))}
+            </div>
+          </ExpandableSection>
+        )}
+
+        {/* Expandable Section: What I am seeking */}
+        {((profile.seeking && profile.seeking.length > 0) || (profile.seeking_relationship_type && profile.seeking_relationship_type.length > 0)) && (
+          <ExpandableSection 
+            title="What I am seeking" 
+            sectionKey="whatSeeking"
+            testId="what-seeking-section"
+          >
+            <div className="space-y-4">
+              {profile.seeking && profile.seeking.length > 0 && (
                 <div>
-                  <div className="text-white/60 mb-1">Orientation</div>
-                  <div className="text-white font-medium">{profile.orientation}</div>
+                  <h4 className="text-white/70 text-sm mb-2">Looking for:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.seeking.map((item, index) => (
+                      <Badge 
+                        key={index} 
+                        className="bg-pink-500/20 text-pink-400 border-pink-500/30"
+                      >
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               )}
-
-              {profile.account_type === 'couple' && profile.orientation2 && (
+              {profile.seeking_relationship_type && profile.seeking_relationship_type.length > 0 && (
                 <div>
-                  <div className="text-white/60 mb-1">Partner's Orientation</div>
-                  <div className="text-white font-medium">{profile.orientation2}</div>
-                </div>
-              )}
-
-              {profile.relationship_status && (
-                <div>
-                  <div className="text-white/60 mb-1">Status</div>
-                  <div className="text-white font-medium">{profile.relationship_status}</div>
-                </div>
-              )}
-
-              {profile.lifestyle_experience && (
-                <div>
-                  <div className="text-white/60 mb-1">Experience</div>
-                  <div className="text-white font-medium">{profile.lifestyle_experience}</div>
+                  <h4 className="text-white/70 text-sm mb-2">Relationship types:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.seeking_relationship_type.map((type, index) => (
+                      <Badge 
+                        key={index} 
+                        className="bg-purple-500/20 text-purple-400 border-purple-500/30"
+                      >
+                        {type}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Seeking */}
-        {profile.seeking && profile.seeking.length > 0 && (
-          <Card className={spiceTheme.components.card}>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-white mb-3">Looking For</h2>
-              <div className="flex flex-wrap gap-2">
-                {profile.seeking.map((item, index) => (
-                  <Badge key={index} className="bg-pink-500/20 text-pink-400 border-pink-500/30">
-                    {item}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          </ExpandableSection>
         )}
 
-        {/* Interests */}
-        {profile.interests && profile.interests.length > 0 && (
-          <Card className={spiceTheme.components.card}>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-white mb-3">Interests</h2>
-              <div className="flex flex-wrap gap-2">
-                {profile.interests.map((interest, index) => (
-                  <Badge key={index} className="bg-purple-500/20 text-purple-400 border-purple-500/30">
-                    {interest}
-                  </Badge>
+        {/* Expandable Section: My BDSM Quiz results */}
+        {profile.kink_quiz_results && Object.keys(profile.kink_quiz_results).length > 0 && (
+          <ExpandableSection 
+            title="My BDSM Quiz results" 
+            sectionKey="bdsmQuiz"
+            testId="bdsm-quiz-section"
+          >
+            <div className="space-y-3">
+              {Object.entries(profile.kink_quiz_results)
+                .sort(([, a], [, b]) => (b as number) - (a as number))
+                .slice(0, 10)
+                .map(([role, score], index) => (
+                  <div key={index} className="space-y-1">
+                    <div className="flex justify-between items-center">
+                      <span className="text-white/90 capitalize">{role.replace(/_/g, ' ')}</span>
+                      <span className="text-pink-400 font-semibold">{Math.round(score as number)}%</span>
+                    </div>
+                    <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
+                      <div 
+                        className="bg-gradient-to-r from-pink-500 to-purple-500 h-full rounded-full transition-all duration-500"
+                        style={{ width: `${score}%` }}
+                      />
+                    </div>
+                  </div>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </ExpandableSection>
         )}
 
-        {/* Kinks */}
-        {profile.kinks && profile.kinks.length > 0 && (
-          <Card className={spiceTheme.components.card}>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-white mb-3">Kinks & Preferences</h2>
-              <div className="flex flex-wrap gap-2">
-                {profile.kinks.map((kink, index) => (
-                  <Badge key={index} className="bg-red-500/20 text-red-400 border-red-500/30">
-                    {kink}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Safety & Rules */}
-        {(profile.safety_practices || profile.rules) && (
-          <Card className={spiceTheme.components.card}>
-            <CardContent className="p-6 space-y-4">
+        {/* Expandable Section: Boundaries & Limits */}
+        {(profile.soft_limits?.length || profile.hard_limits?.length || profile.safety_practices || profile.rules) && (
+          <ExpandableSection 
+            title="Boundaries & Limits" 
+            sectionKey="boundariesLimits"
+            testId="boundaries-limits-section"
+          >
+            <div className="space-y-4">
+              {profile.soft_limits && profile.soft_limits.length > 0 && (
+                <div>
+                  <h4 className="text-yellow-400 font-semibold mb-2">Soft Limits</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.soft_limits.map((limit, index) => (
+                      <Badge 
+                        key={index} 
+                        className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                        data-testid={`soft-limit-${index}`}
+                      >
+                        {limit}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {profile.hard_limits && profile.hard_limits.length > 0 && (
+                <div>
+                  <h4 className="text-red-400 font-semibold mb-2">Hard Limits</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.hard_limits.map((limit, index) => (
+                      <Badge 
+                        key={index} 
+                        className="bg-red-500/20 text-red-400 border-red-500/30"
+                        data-testid={`hard-limit-${index}`}
+                      >
+                        {limit}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
               {profile.safety_practices && (
                 <div>
-                  <h2 className="text-xl font-semibold text-white mb-2">Safety Practices</h2>
+                  <h4 className="text-green-400 font-semibold mb-2">Safety Practices</h4>
                   <p className="text-white/80 whitespace-pre-wrap">{profile.safety_practices}</p>
                 </div>
               )}
               
               {profile.rules && (
                 <div>
-                  <h2 className="text-xl font-semibold text-white mb-2">Rules & Boundaries</h2>
+                  <h4 className="text-blue-400 font-semibold mb-2">Rules</h4>
                   <p className="text-white/80 whitespace-pre-wrap">{profile.rules}</p>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </ExpandableSection>
         )}
 
         {/* Action Buttons */}
