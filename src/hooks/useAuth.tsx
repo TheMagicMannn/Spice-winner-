@@ -3,6 +3,7 @@ import { User, Profile } from '../types';
 import { supabase } from '../services/supabase';
 import { Session } from '@supabase/supabase-js';
 import { profileFromDatabase } from '../utils/transformers';
+import { activityLogService } from '../services/activityLogService';
 
 interface AuthContextType {
   user: User | null;
