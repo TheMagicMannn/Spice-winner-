@@ -252,11 +252,40 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
                       <h4 className="font-semibold text-white">
                         {getDisplayName(match)}
                       </h4>
-                      <p className="text-sm text-white/60">
-                        {match.age || 'Age N/A'}
-                        {match.age2 && match.accountType === 'couple' && ` & ${match.age2}`}
-                        {match.location && ` • ${match.location}`}
-                      </p>
+                      {/* Primary user info */}
+                      <div className="flex items-center gap-1.5 text-xs text-white/60 mt-0.5">
+                        {match.age && <span>{match.age}</span>}
+                        {match.gender && (
+                          <>
+                            {match.age && <span>•</span>}
+                            <span>{match.gender}</span>
+                          </>
+                        )}
+                        {match.orientation && (
+                          <>
+                            {(match.age || match.gender) && <span>•</span>}
+                            <span>{match.orientation}</span>
+                          </>
+                        )}
+                      </div>
+                      {/* Secondary user info (for couples) */}
+                      {match.accountType === 'couple' && (match.age2 || match.gender2 || match.orientation2) && (
+                        <div className="flex items-center gap-1.5 text-xs text-white/60">
+                          {match.age2 && <span>{match.age2}</span>}
+                          {match.gender2 && (
+                            <>
+                              {match.age2 && <span>•</span>}
+                              <span>{match.gender2}</span>
+                            </>
+                          )}
+                          {match.orientation2 && (
+                            <>
+                              {(match.age2 || match.gender2) && <span>•</span>}
+                              <span>{match.orientation2}</span>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     <Badge className="bg-transparent text-pink-400 border-pink-500/50 text-xs">
