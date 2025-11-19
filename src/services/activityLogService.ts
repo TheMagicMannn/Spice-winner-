@@ -29,6 +29,24 @@ interface LogActivityParams {
 
 class ActivityLogService {
   /**
+   * Get client IP address (best effort)
+   */
+  private async getClientIP(): Promise<string | null> {
+    try {
+      // Try to get IP from a free IP service
+      const response = await fetch('https://api.ipify.org?format=json', { 
+        method: 'GET',
+        signal: AbortSignal.timeout(2000) // 2 second timeout
+      });
+      const data = await response.json();
+      return data.ip || null;
+    } catch (error) {
+      // If it fails, return null - no big deal
+      return null;
+    }
+  }
+
+  /**
    * Log a user activity
    */
   async logActivity({
@@ -39,18 +57,46 @@ class ActivityLogService {
     userAgent
   }: LogActivityParams): Promise<void> {
     try {
+      // Get IP address if not provided
+      if (!ipAddress) {
+        ipAddress = await this.getClientIP() || undefined;
+      }
+
+      // Get user agent if not provided
+      if (!userAgent) {
+        userAgent = navigator.userAgent;
+      }
+
+      // Enrich activity data with timestamp and additional context
+      const enrichedData = {
+        ...activityData,
+        timestamp: new Date().toISOString(),
+        user_agent: userAgent,
+        ip_address: ipAddress,
+        url: window.location.href
+      };
+
+      console.log('[ActivityLog] Logging activity:', {
+        type: activityType,
+        userId,
+        ip: ipAddress,
+        userAgent: userAgent?.substring(0, 50) + '...'
+      });
+
       // Use the helper function that bypasses RLS
       const { error } = await supabase.rpc('log_user_activity', {
         p_user_id: userId,
         p_activity_type: activityType,
-        p_activity_data: activityData,
-        p_ip_address: ipAddress,
-        p_user_agent: userAgent
+        p_activity_data: enrichedData,
+        p_ip_address: ipAddress || null,
+        p_user_agent: userAgent || null
       });
 
       if (error) {
         console.error('[ActivityLog] Error logging activity:', error);
         // Don't throw - we don't want to break the user flow if logging fails
+      } else {
+        console.log('[ActivityLog] Activity logged successfully:', activityType);
       }
     } catch (error) {
       console.error('[ActivityLog] Exception logging activity:', error);
