@@ -133,6 +133,9 @@ export const EnhancedOverviewTab: React.FC = () => {
   }
 
   const todayStats = stats?.todayReport || {};
+  const hasNoData = !stats?.todayReport && chartData.every(d => 
+    d.signups === 0 && d.logins === 0 && d.messages === 0 && d.matches === 0
+  );
   
   // Calculate mock changes (replace with real data comparison)
   const changes = {
