@@ -206,7 +206,7 @@ export const CreateGroupChat: React.FC<CreateGroupChatProps> = ({ onClose }) => 
                       <div className="flex items-center gap-1.5">
                         <p className="font-semibold text-white">{match.displayName}</p>
                         {match.isVerified && (
-                          <BadgeCheck className="h-4 w-4 text-blue-500" title="Verified" />
+                          <BadgeCheck className="h-4 w-4 text-blue-500" />
                         )}
                         {match.membershipLevel && match.membershipLevel !== 'free' && (
                           <Badge className={`text-[10px] px-1.5 py-0 h-5 ${
