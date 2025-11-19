@@ -294,6 +294,20 @@ export class MessageService {
       }
 
       console.log("[v0] Message sent successfully:", data.id);
+      
+      // Log message sent activity
+      // Get recipient ID from match
+      const { data: matchData } = await supabase
+        .from('matches')
+        .select('user1_id, user2_id')
+        .eq('id', matchId)
+        .single();
+      
+      if (matchData) {
+        const recipientId = matchData.user1_id === senderId ? matchData.user2_id : matchData.user1_id;
+        activityLogService.logMessage(senderId, recipientId, matchId);
+      }
+      
       return this.transformMessage(data);
     } catch (error: any) {
       console.error("[v0] Error in sendMessage:", error?.message || error);
