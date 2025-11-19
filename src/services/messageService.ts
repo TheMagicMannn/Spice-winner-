@@ -1143,6 +1143,10 @@ export class MessageService {
       }
 
       console.log("[v0] Conversation message sent successfully:", data.id);
+      
+      // Log message sent activity (use conversation ID as recipient for group chats)
+      activityLogService.logMessage(senderId, conversationId, conversationId);
+      
       return this.transformMessage(data);
     } catch (error: any) {
       console.error("[v0] Error in sendMessageInConversation:", error?.message || error);
