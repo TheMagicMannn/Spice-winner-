@@ -19,7 +19,14 @@ import {
   CheckCircle,
   AlertCircle,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  ChevronDown,
+  UserPlus,
+  Ruler,
+  Palette,
+  Eye,
+  Activity,
+  ShieldCheck
 } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme } from '@/styles/theme';
@@ -55,6 +62,58 @@ interface UserProfile {
   membership_tier?: string;
   created_at: string;
   last_active_at?: string;
+  
+  // Physical stats - Individual
+  height?: string;
+  weight?: string;
+  body_type?: string;
+  hair_color?: string;
+  eye_color?: string;
+  facial_hair?: string;
+  ethnicity?: string;
+  cigarette_smoker?: string;
+  alcohol_drinker?: string;
+  marijuana_user?: string;
+  tattoos?: boolean;
+  piercings?: boolean;
+  body_hair?: string;
+  grooming_style?: string;
+  birth_control?: string;
+  latex_allergy?: boolean;
+  last_sti_test_date?: string;
+  sti_positive_results?: string;
+  can_host?: string;
+  
+  // Physical stats - Partner 1 (Couples)
+  partner1_height?: string;
+  partner1_weight?: string;
+  partner1_body_type?: string;
+  partner1_hair_color?: string;
+  partner1_eye_color?: string;
+  partner1_facial_hair?: string;
+  partner1_ethnicity?: string;
+  partner1_cigarette_smoker?: string;
+  partner1_alcohol_drinker?: string;
+  partner1_marijuana_user?: string;
+  partner1_tattoos?: boolean;
+  partner1_piercings?: boolean;
+  
+  // Physical stats - Partner 2 (Couples)
+  partner2_height?: string;
+  partner2_weight?: string;
+  partner2_body_type?: string;
+  partner2_hair_color?: string;
+  partner2_eye_color?: string;
+  partner2_facial_hair?: string;
+  partner2_ethnicity?: string;
+  partner2_cigarette_smoker?: string;
+  partner2_alcohol_drinker?: string;
+  partner2_marijuana_user?: string;
+  partner2_tattoos?: boolean;
+  partner2_piercings?: boolean;
+  
+  // Quiz results
+  kink_quiz_results?: Record<string, number>;
 }
 
 export const UserProfilePage: React.FC = () => {
