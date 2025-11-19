@@ -169,6 +169,9 @@ export interface Profile {
   isActive?: boolean;
   profileCompleted?: boolean;
   lastActiveAt?: string;
+  
+  // Membership level
+  membershipLevel?: 'free' | 'premium' | 'vip' | 'platinum';
 }
 
 // optional User type if you want to extend Supabase user with profile
