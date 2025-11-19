@@ -145,6 +145,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
       
       if (error) throw error;
+      
+      // Log the signup activity
+      if (data.user) {
+        activityLogService.logSignup(data.user.id, { 
+          email,
+          display_name: name,
+          age: parseInt(age, 10)
+        });
+      }
+      
       return { error: null };
     } catch (error: any) {
       console.error('Signup error:', error);
