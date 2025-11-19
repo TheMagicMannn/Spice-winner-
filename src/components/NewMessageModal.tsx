@@ -254,7 +254,7 @@ export const NewMessageModal: React.FC<NewMessageModalProps> = ({ isOpen, onClos
                           {getDisplayName(match)}
                         </h4>
                         {match.isVerified && (
-                          <BadgeCheck className="h-4 w-4 text-blue-500" title="Verified" />
+                          <BadgeCheck className="h-4 w-4 text-blue-500" />
                         )}
                         {match.membershipLevel && match.membershipLevel !== 'free' && (
                           <Badge className={`text-[10px] px-1.5 py-0 h-5 ${
