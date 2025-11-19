@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { Profile } from '../types';
 import { profileFromDatabase } from '../utils/transformers';
+import { activityLogService } from './activityLogService';
 
 export interface MatchedProfile extends Profile {
   distanceMiles?: number;
