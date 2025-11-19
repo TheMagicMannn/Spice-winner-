@@ -120,6 +120,9 @@ export class ProfileService {
         .from('profile-photos')
         .getPublicUrl(fileName);
 
+      // Log the photo upload activity
+      activityLogService.logPhotoUpload(userId, publicData.publicUrl);
+
       return publicData.publicUrl;
     } catch (error) {
       console.error('ProfileService.uploadPhoto error:', error);
