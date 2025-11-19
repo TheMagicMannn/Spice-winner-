@@ -139,8 +139,20 @@ ALTER TABLE public.admin_actions_log ENABLE ROW LEVEL SECURITY;
 -- 5. CREATE HELPER FUNCTION FOR ACTIVITY LOGGING
 -- ============================================
 
--- Drop existing function if exists
-DROP FUNCTION IF EXISTS public.log_user_activity(UUID, TEXT, JSONB, TEXT, TEXT);
+-- Drop all versions of the function
+DO $$ 
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN (
+        SELECT oid::regprocedure 
+        FROM pg_proc 
+        WHERE proname = 'log_user_activity' 
+        AND pronamespace = 'public'::regnamespace
+    ) LOOP
+        EXECUTE 'DROP FUNCTION IF EXISTS ' || r.oid::regprocedure || ' CASCADE';
+    END LOOP;
+END $$;
 
 -- Create function that bypasses RLS
 CREATE OR REPLACE FUNCTION public.log_user_activity(
