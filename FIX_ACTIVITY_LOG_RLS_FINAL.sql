@@ -187,12 +187,21 @@ BEGIN
     p_user_id,
     p_activity_type,
     p_activity_data,
-    p_ip_address,
+    CASE 
+      WHEN p_ip_address IS NOT NULL AND p_ip_address != '' 
+      THEN p_ip_address::inet 
+      ELSE NULL 
+    END,
     p_user_agent
   )
   RETURNING id INTO v_activity_id;
   
   RETURN v_activity_id;
+EXCEPTION
+  WHEN OTHERS THEN
+    -- Log error but don't fail
+    RAISE WARNING 'Failed to log activity: %', SQLERRM;
+    RETURN NULL;
 END;
 $$;
 
