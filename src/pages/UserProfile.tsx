@@ -753,59 +753,153 @@ export const UserProfilePage: React.FC = () => {
           </ExpandableSection>
         )}
 
-        {/* Expandable Section: My Stats */}
-        {(profile.height || profile.body_type || profile.hair_color || profile.eye_color || 
-          profile.ethnicity || profile.partner1_height || profile.partner2_height) && (
-          <ExpandableSection 
-            title="My Stats" 
-            sectionKey="myStats"
-            testId="my-stats-section"
-          >
-            {profile.account_type === 'individual' ? (
-              <div className="space-y-3 text-white/80">
-                {profile.height && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Height:</span>
-                    <span className="font-medium">{profile.height}</span>
-                  </div>
-                )}
-                {profile.body_type && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Build:</span>
-                    <span className="font-medium capitalize">{profile.body_type}</span>
-                  </div>
-                )}
-                {profile.hair_color && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Hair:</span>
-                    <span className="font-medium capitalize">{profile.hair_color}</span>
-                  </div>
-                )}
-                {profile.eye_color && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Eyes:</span>
-                    <span className="font-medium capitalize">{profile.eye_color}</span>
-                  </div>
-                )}
-                {profile.ethnicity && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Ethnicity:</span>
-                    <span className="font-medium capitalize">{profile.ethnicity}</span>
-                  </div>
-                )}
-                {profile.tattoos !== undefined && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Tattoos:</span>
-                    <span className="font-medium">{profile.tattoos ? 'Yes' : 'No'}</span>
-                  </div>
-                )}
-                {profile.piercings !== undefined && (
-                  <div className="flex items-center">
-                    <span className="text-white/60 w-32">Piercings:</span>
-                    <span className="font-medium">{profile.piercings ? 'Yes' : 'No'}</span>
-                  </div>
-                )}
+        {/* Expandable Section: My Stats / Our Stats */}
+        <ExpandableSection 
+          title={profile.account_type === 'couple' ? 'Our Stats' : 'My Stats'} 
+          sectionKey="myStats"
+          testId="my-stats-section"
+        >
+          {profile.account_type === 'individual' ? (
+            <div className="space-y-4">
+              {/* Physical Appearance */}
+              <div>
+                <h4 className="text-pink-400 font-semibold mb-3 text-sm uppercase tracking-wide">Physical Appearance</h4>
+                <div className="space-y-2 text-white/80 text-sm">
+                  {profile.height && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Height:</span>
+                      <span className="font-medium">{profile.height}</span>
+                    </div>
+                  )}
+                  {profile.weight && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Weight:</span>
+                      <span className="font-medium">{profile.weight}</span>
+                    </div>
+                  )}
+                  {profile.body_type && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Build:</span>
+                      <span className="font-medium capitalize">{profile.body_type}</span>
+                    </div>
+                  )}
+                  {profile.hair_color && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Hair:</span>
+                      <span className="font-medium capitalize">{profile.hair_color}</span>
+                    </div>
+                  )}
+                  {profile.eye_color && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Eyes:</span>
+                      <span className="font-medium capitalize">{profile.eye_color}</span>
+                    </div>
+                  )}
+                  {profile.facial_hair && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Facial Hair:</span>
+                      <span className="font-medium capitalize">{profile.facial_hair}</span>
+                    </div>
+                  )}
+                  {profile.ethnicity && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Ethnicity:</span>
+                      <span className="font-medium capitalize">{profile.ethnicity}</span>
+                    </div>
+                  )}
+                  {profile.tattoos !== undefined && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Tattoos:</span>
+                      <span className="font-medium">{profile.tattoos ? 'Yes' : 'No'}</span>
+                    </div>
+                  )}
+                  {profile.piercings !== undefined && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Piercings:</span>
+                      <span className="font-medium">{profile.piercings ? 'Yes' : 'No'}</span>
+                    </div>
+                  )}
+                  {profile.body_hair && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Body Hair:</span>
+                      <span className="font-medium capitalize">{profile.body_hair}</span>
+                    </div>
+                  )}
+                  {profile.grooming_style && (
+                    <div className="flex items-center">
+                      <span className="text-white/60 w-32">Grooming:</span>
+                      <span className="font-medium capitalize">{profile.grooming_style}</span>
+                    </div>
+                  )}
+                </div>
               </div>
+              
+              {/* Lifestyle */}
+              {(profile.cigarette_smoker || profile.alcohol_drinker || profile.marijuana_user) && (
+                <div>
+                  <h4 className="text-blue-400 font-semibold mb-3 text-sm uppercase tracking-wide">Lifestyle</h4>
+                  <div className="space-y-2 text-white/80 text-sm">
+                    {profile.cigarette_smoker && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Smoking:</span>
+                        <span className="font-medium capitalize">{profile.cigarette_smoker}</span>
+                      </div>
+                    )}
+                    {profile.alcohol_drinker && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Drinking:</span>
+                        <span className="font-medium capitalize">{profile.alcohol_drinker}</span>
+                      </div>
+                    )}
+                    {profile.marijuana_user && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Marijuana:</span>
+                        <span className="font-medium capitalize">{profile.marijuana_user}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* Health & Safety */}
+              {(profile.birth_control || profile.latex_allergy !== undefined || profile.last_sti_test_date || profile.can_host) && (
+                <div>
+                  <h4 className="text-green-400 font-semibold mb-3 text-sm uppercase tracking-wide">Health & Safety</h4>
+                  <div className="space-y-2 text-white/80 text-sm">
+                    {profile.birth_control && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Birth Control:</span>
+                        <span className="font-medium capitalize">{profile.birth_control}</span>
+                      </div>
+                    )}
+                    {profile.latex_allergy !== undefined && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Latex Allergy:</span>
+                        <span className="font-medium">{profile.latex_allergy ? 'Yes' : 'No'}</span>
+                      </div>
+                    )}
+                    {profile.last_sti_test_date && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Last STI Test:</span>
+                        <span className="font-medium">{new Date(profile.last_sti_test_date).toLocaleDateString()}</span>
+                      </div>
+                    )}
+                    {profile.sti_positive_results && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">STI Results:</span>
+                        <span className="font-medium">{profile.sti_positive_results}</span>
+                      </div>
+                    )}
+                    {profile.can_host && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-32">Can Host:</span>
+                        <span className="font-medium capitalize">{profile.can_host}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
             ) : (
               <div className="space-y-6">
                 {/* Partner 1 Stats */}
