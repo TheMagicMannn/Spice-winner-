@@ -34,9 +34,12 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
 }) => {
   const { user } = useAuth();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
   const [showWarning, setShowWarning] = useState(true);
   const [suspiciousActivity, setSuspiciousActivity] = useState(false);
   const [watermarkPosition, setWatermarkPosition] = useState({ x: 50, y: 50 });
+  const [isBlackoutActive, setIsBlackoutActive] = useState(false);
 
   // Dynamic watermark that moves to prevent easy removal
   useEffect(() => {
