@@ -324,7 +324,7 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
         {suspiciousActivity && (
           <div className="absolute top-16 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-lg z-50 flex items-center space-x-2 shadow-lg animate-pulse">
             <AlertTriangle className="h-5 w-5" />
-            <span className="font-semibold">Suspicious activity detected! This content is protected.</span>
+            <span className="font-semibold">Screenshot attempt blocked! This content is protected.</span>
           </div>
         )}
 
