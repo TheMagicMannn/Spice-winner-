@@ -631,6 +631,16 @@ export const MessagesPage: React.FC = () => {
       {showCreateGroupModal && (
         <CreateGroupChat onClose={() => setShowCreateGroupModal(false)} />
       )}
+
+      {/* Participant List Modal */}
+      <ParticipantListModal
+        isOpen={showParticipantModal}
+        onClose={() => {
+          setShowParticipantModal(false);
+          setSelectedConversationParticipants([]);
+        }}
+        participants={selectedConversationParticipants}
+      />
     </div>
   );
 };
