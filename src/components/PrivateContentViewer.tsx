@@ -111,12 +111,6 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isOpen, onNavigate, onClose]);
 
-  // Disable drag and drop
-  const preventDragStart = (e: React.DragEvent) => {
-    e.preventDefault();
-    return false;
-  };
-
   const canGoBack = allContent && currentIndex !== undefined && currentIndex > 0;
   const canGoForward = allContent && currentIndex !== undefined && currentIndex < allContent.length - 1;
 
