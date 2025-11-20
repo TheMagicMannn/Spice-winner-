@@ -174,8 +174,18 @@ export const UserProfilePage: React.FC = () => {
   useEffect(() => {
     if (userId) {
       loadUserProfile(userId);
+      checkMatchStatus();
+      checkBlockStatus();
+      loadPrivateContent();
     }
   }, [userId]);
+  
+  // Check match status
+  useEffect(() => {
+    if (user && userId && user.id !== userId) {
+      checkMatchStatus();
+    }
+  }, [user, userId]);
 
   // Keyboard navigation for photos
   useEffect(() => {
