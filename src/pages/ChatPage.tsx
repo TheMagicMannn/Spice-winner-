@@ -757,7 +757,14 @@ export const ChatPage: React.FC = () => {
         >
           {/* Show avatar for other users in group chat */}
           {isGroupChat && !isMine && senderInfo && (
-            <Avatar className="h-8 w-8 mr-2 flex-shrink-0 mt-6">
+            <Avatar 
+              className="h-8 w-8 mr-2 flex-shrink-0 mt-6 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`/user/${message.senderId}`);
+              }}
+              data-testid={`message-avatar-${message.senderId}`}
+            >
               <AvatarImage src={senderInfo.photo} alt={senderInfo.name} />
               <AvatarFallback className="bg-pink-600 text-white text-xs">
                 {senderInfo.name[0] || '?'}
