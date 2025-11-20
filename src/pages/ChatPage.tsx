@@ -90,6 +90,7 @@ export const ChatPage: React.FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [showAddParticipantsModal, setShowAddParticipantsModal] = useState(false);
+  const [showParticipantModal, setShowParticipantModal] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
