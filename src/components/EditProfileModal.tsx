@@ -101,11 +101,18 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   onUploadPhoto,
   onDeletePhoto
 }) => {
+  const { user } = useAuth();
   const [editedProfile, setEditedProfile] = useState<Profile>(profile);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('basic');
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  // Private content state
+  const [privateContent, setPrivateContent] = useState<PrivateContent[]>([]);
+  const [uploadingPrivateContent, setUploadingPrivateContent] = useState(false);
+  const [loadingPrivateContent, setLoadingPrivateContent] = useState(false);
+  const [privateContentDescriptions, setPrivateContentDescriptions] = useState<Record<string, string>>({});
 
   // Update profile state when prop changes
   useEffect(() => {
