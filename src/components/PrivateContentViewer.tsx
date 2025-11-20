@@ -284,6 +284,23 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
         className="max-w-[95vw] max-h-[95vh] w-full h-full bg-black border-none p-0 overflow-hidden"
         onContextMenu={(e) => e.preventDefault()}
       >
+        {/* Black Screen Overlay - Active during screenshot attempts */}
+        {isBlackoutActive && (
+          <div 
+            className="absolute inset-0 bg-black z-[100] flex items-center justify-center"
+            style={{
+              backdropFilter: 'blur(50px)',
+              WebkitBackdropFilter: 'blur(50px)'
+            }}
+          >
+            <div className="text-white text-2xl font-bold text-center p-8 animate-pulse">
+              <Shield className="h-16 w-16 mx-auto mb-4 text-red-500" />
+              <p>SCREENSHOT BLOCKED</p>
+              <p className="text-sm mt-2 text-red-400">This content is protected</p>
+            </div>
+          </div>
+        )}
+
         {/* Privacy Warning Banner */}
         {showWarning && (
           <div className="absolute top-0 left-0 right-0 bg-red-500/90 text-white px-4 py-3 z-50 flex items-center justify-between">
