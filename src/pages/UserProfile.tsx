@@ -129,12 +129,29 @@ interface UserProfile {
 export const UserProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Menu and modals state
+  const [showMenu, setShowMenu] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+  const [showUnmatchConfirm, setShowUnmatchConfirm] = useState(false);
+  const [showSharePrivateContent, setShowSharePrivateContent] = useState(false);
+  const [isMatched, setIsMatched] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+  
+  // Private content state
+  const [privateContent, setPrivateContent] = useState<PrivateContent[]>([]);
+  const [hasPrivateAccess, setHasPrivateAccess] = useState(false);
+  const [loadingPrivateContent, setLoadingPrivateContent] = useState(false);
   
   // Expandable sections state
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
@@ -143,7 +160,8 @@ export const UserProfilePage: React.FC = () => {
     kinksInterest: false,
     whatSeeking: false,
     bdsmQuiz: false,
-    boundariesLimits: false
+    boundariesLimits: false,
+    privateContent: false
   });
   
   const toggleSection = (section: string) => {
