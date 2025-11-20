@@ -894,7 +894,11 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                     >
                       <div className="flex items-start gap-4">
                         {/* Thumbnail */}
-                        <div className="relative w-24 h-24 flex-shrink-0 bg-black rounded-lg overflow-hidden">
+                        <div 
+                          className="relative w-24 h-24 flex-shrink-0 bg-black rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => openViewer(index)}
+                          data-testid={`open-viewer-${index}`}
+                        >
                           {content.content_type === 'video' ? (
                             <div className="w-full h-full flex items-center justify-center bg-gray-800">
                               <Play className="h-8 w-8 text-purple-400" />
