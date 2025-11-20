@@ -300,6 +300,30 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
   };
 
+  // Open viewer
+  const openViewer = (index: number) => {
+    setViewerIndex(index);
+    setViewerOpen(true);
+  };
+
+  // Navigate viewer
+  const navigateViewer = (direction: 'prev' | 'next') => {
+    if (direction === 'prev' && viewerIndex > 0) {
+      setViewerIndex(viewerIndex - 1);
+    } else if (direction === 'next' && viewerIndex < privateContent.length - 1) {
+      setViewerIndex(viewerIndex + 1);
+    }
+  };
+
+  // Get viewer content
+  const getViewerContent = () => {
+    return privateContent.map(content => ({
+      url: privateContentUrls[content.storage_path] || '',
+      type: content.content_type,
+      description: content.description
+    }));
+  };
+
   // Handle save
   const handleSave = async () => {
     setIsLoading(true);
