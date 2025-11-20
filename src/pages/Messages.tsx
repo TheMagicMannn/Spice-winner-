@@ -430,7 +430,11 @@ export const MessagesPage: React.FC = () => {
             <CardContent className="p-4">
               <div className="flex gap-3">
                 {/* Profile Image with Online Indicator */}
-                <div className="relative">
+                <div 
+                  className="relative cursor-pointer hover:opacity-80 transition-opacity"
+                  onClick={(e) => handleAvatarClick(conversation, e)}
+                  data-testid={`avatar-${conversation.id}`}
+                >
                   {conversation.type === 'group' && conversation.participantPhotos && conversation.participantPhotos.length > 0 ? (
                     // Group avatars - show up to 4 avatars in a grid
                     <div className="w-14 h-14 relative">
