@@ -1,8 +1,7 @@
 // src/components/PrivateContentViewer.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Dialog, DialogContent } from './ui/dialog';
-import { Button } from './ui/button';
-import { X, ChevronLeft, ChevronRight, AlertTriangle, Shield } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface PrivateContentViewerProps {
@@ -34,12 +33,7 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
 }) => {
   const { user } = useAuth();
   const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-  const [showWarning, setShowWarning] = useState(true);
-  const [suspiciousActivity, setSuspiciousActivity] = useState(false);
-  const [watermarkPosition, setWatermarkPosition] = useState({ x: 50, y: 50 });
-  const [isBlackoutActive, setIsBlackoutActive] = useState(false);
+  const [isBlackScreen, setIsBlackScreen] = useState(false);
 
   // Black screen protection - detect screenshot attempts
   useEffect(() => {
