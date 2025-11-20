@@ -9,6 +9,7 @@ import { MessageService, Conversation } from '@/services/messageService';
 import { ConversationService, ConversationDetails } from '@/services/conversationService';
 import { NewMessageModal } from '@/components/NewMessageModal';
 import { CreateGroupChat } from '@/components/CreateGroupChat';
+import { ParticipantListModal } from '@/components/ParticipantListModal';
 import { useAuth } from '@/hooks/useAuth';
 import { formatDistanceToNow } from 'date-fns';
 
