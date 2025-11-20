@@ -41,6 +41,7 @@ import { useAuth } from '@/hooks/useAuth';
 import UserActionsService from '@/services/userActionsService';
 import PrivateContentService, { PrivateContent } from '@/services/privateContentService';
 import { useToast } from '@/hooks/use-toast';
+import PrivateContentViewer from '@/components/PrivateContentViewer';
 
 interface UserProfile {
   id: string;
