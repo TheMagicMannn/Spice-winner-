@@ -221,16 +221,24 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
     const handleVisibilityChange = () => {
       if (document.hidden && videoRef.current) {
         videoRef.current.pause();
+        setIsBlackoutActive(true);
         setSuspiciousActivity(true);
-        setTimeout(() => setSuspiciousActivity(false), 2000);
+        setTimeout(() => {
+          setIsBlackoutActive(false);
+          setSuspiciousActivity(false);
+        }, 3000);
       }
     };
 
     const handleBlur = () => {
       if (videoRef.current && !videoRef.current.paused) {
         videoRef.current.pause();
+        setIsBlackoutActive(true);
         setSuspiciousActivity(true);
-        setTimeout(() => setSuspiciousActivity(false), 2000);
+        setTimeout(() => {
+          setIsBlackoutActive(false);
+          setSuspiciousActivity(false);
+        }, 3000);
       }
     };
 
