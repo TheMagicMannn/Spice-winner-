@@ -1063,6 +1063,21 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
           </div>
         </div>
       </DialogContent>
+
+      {/* Private Content Viewer */}
+      {viewerOpen && privateContent[viewerIndex] && privateContentUrls[privateContent[viewerIndex].storage_path] && (
+        <PrivateContentViewer
+          isOpen={viewerOpen}
+          onClose={() => setViewerOpen(false)}
+          contentUrl={privateContentUrls[privateContent[viewerIndex].storage_path]}
+          contentType={privateContent[viewerIndex].content_type}
+          ownerName={editedProfile.displayName || 'User'}
+          description={privateContent[viewerIndex].description}
+          allContent={getViewerContent()}
+          currentIndex={viewerIndex}
+          onNavigate={navigateViewer}
+        />
+      )}
     </Dialog>
   );
 };
