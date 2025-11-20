@@ -783,6 +783,193 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
               </div>
             </div>
           </TabsContent>
+
+          {/* Private Content Tab */}
+          <TabsContent value="private-content" className="space-y-6 mt-6">
+            <div className="space-y-4">
+              <Label className="text-white text-lg flex items-center">
+                <Lock className="h-5 w-5 mr-2 text-purple-400" />
+                Private Content (Photos & Videos)
+              </Label>
+              
+              <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
+                <div className="flex items-start space-x-2 mb-2">
+                  <AlertCircle className="h-5 w-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-purple-200">
+                    <p className="font-medium mb-1">Private Content Guidelines:</p>
+                    <ul className="space-y-1 text-purple-300">
+                      <li>• Only visible to users you grant access to</li>
+                      <li>• Maximum 20 items allowed</li>
+                      <li>• File size limit: 50MB per file</li>
+                      <li>• Supported formats: Images (JPG, PNG, GIF) and Videos (MP4, MOV, AVI)</li>
+                      <li>• You can reorder items using the arrows</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Upload Button */}
+              <div className="flex items-center gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10"
+                  disabled={uploadingPrivateContent || privateContent.length >= 20}
+                  onClick={() => document.getElementById('private-content-upload')?.click()}
+                  data-testid="upload-private-content-button"
+                >
+                  {uploadingPrivateContent ? (
+                    <Spinner />
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Private Content
+                    </>
+                  )}
+                </Button>
+                <input
+                  id="private-content-upload"
+                  type="file"
+                  accept="image/*,video/*"
+                  className="hidden"
+                  onChange={handlePrivateContentUpload}
+                />
+                <span className="text-sm text-white/60">
+                  {privateContent.length} / 20 items
+                </span>
+              </div>
+
+              {/* Loading State */}
+              {loadingPrivateContent && (
+                <div className="flex items-center justify-center py-8">
+                  <Spinner />
+                </div>
+              )}
+
+              {/* Private Content Grid */}
+              {!loadingPrivateContent && privateContent.length > 0 && (
+                <div className="space-y-3">
+                  {privateContent.map((content, index) => (
+                    <div 
+                      key={content.id} 
+                      className="bg-gray-900/50 border border-purple-500/30 rounded-lg p-4"
+                      data-testid={`private-content-item-${index}`}
+                    >
+                      <div className="flex items-start gap-4">
+                        {/* Thumbnail */}
+                        <div className="relative w-24 h-24 flex-shrink-0 bg-black rounded-lg overflow-hidden">
+                          {content.content_type === 'video' ? (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-800">
+                              <Play className="h-8 w-8 text-purple-400" />
+                            </div>
+                          ) : (
+                            <img
+                              src={PrivateContentService.getPrivateContentUrl(content.storage_path)}
+                              alt="Private content"
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                          <Badge 
+                            className={`absolute top-1 right-1 text-xs ${
+                              content.content_type === 'video' 
+                                ? 'bg-purple-500/90 text-white' 
+                                : 'bg-pink-500/90 text-white'
+                            }`}
+                          >
+                            {content.content_type === 'video' ? (
+                              <FileVideo className="h-3 w-3 mr-1" />
+                            ) : (
+                              <ImageIcon className="h-3 w-3 mr-1" />
+                            )}
+                            {content.content_type}
+                          </Badge>
+                        </div>
+
+                        {/* Content Details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs text-white/50">
+                              Uploaded {new Date(content.uploaded_at).toLocaleDateString()}
+                            </span>
+                          </div>
+                          
+                          <Textarea
+                            value={privateContentDescriptions[content.id] || content.description || ''}
+                            onChange={(e) => {
+                              setPrivateContentDescriptions(prev => ({
+                                ...prev,
+                                [content.id]: e.target.value
+                              }));
+                            }}
+                            placeholder="Add a description (optional)"
+                            className="bg-gray-900 border-purple-500/30 text-white text-sm h-16 mb-2"
+                          />
+
+                          <div className="flex items-center gap-2 text-xs text-white/50">
+                            <span className="capitalize">{content.content_type}</span>
+                            <span>•</span>
+                            <span>ID: {content.id.slice(0, 8)}</span>
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex flex-col gap-2">
+                          {/* Reorder buttons */}
+                          <div className="flex flex-col">
+                            <button
+                              onClick={() => movePrivateContent(index, 'up')}
+                              disabled={index === 0}
+                              className={`p-1 rounded ${
+                                index === 0 
+                                  ? 'text-white/20 cursor-not-allowed' 
+                                  : 'text-white/60 hover:text-white hover:bg-white/10'
+                              }`}
+                              title="Move up"
+                            >
+                              <ChevronUp className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => movePrivateContent(index, 'down')}
+                              disabled={index === privateContent.length - 1}
+                              className={`p-1 rounded ${
+                                index === privateContent.length - 1
+                                  ? 'text-white/20 cursor-not-allowed' 
+                                  : 'text-white/60 hover:text-white hover:bg-white/10'
+                              }`}
+                              title="Move down"
+                            >
+                              <ChevronDown className="h-4 w-4" />
+                            </button>
+                          </div>
+
+                          {/* Delete button */}
+                          <button
+                            onClick={() => handlePrivateContentDelete(content.id)}
+                            className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded transition-colors"
+                            title="Delete"
+                            data-testid={`delete-private-content-${index}`}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!loadingPrivateContent && privateContent.length === 0 && (
+                <div className="text-center py-12 bg-gray-900/30 rounded-lg border border-purple-500/20">
+                  <Lock className="h-12 w-12 mx-auto text-purple-400/50 mb-3" />
+                  <p className="text-white/70 mb-2">No private content uploaded yet</p>
+                  <p className="text-sm text-white/50">
+                    Upload private photos and videos to share with specific users
+                  </p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
         </Tabs>
 
         {/* Footer Actions */}
