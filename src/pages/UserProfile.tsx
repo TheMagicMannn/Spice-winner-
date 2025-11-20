@@ -238,6 +238,154 @@ export const UserProfilePage: React.FC = () => {
     });
   };
 
+  // Check if users are matched
+  const checkMatchStatus = async () => {
+    if (!user || !userId || user.id === userId) return;
+    
+    try {
+      const matched = await UserActionsService.areUsersMatched(user.id, userId);
+      setIsMatched(matched);
+    } catch (error) {
+      console.error('Error checking match status:', error);
+    }
+  };
+
+  // Check if user is blocked
+  const checkBlockStatus = async () => {
+    if (!user || !userId || user.id === userId) return;
+    
+    try {
+      const blocked = await UserActionsService.isUserBlocked(user.id, userId);
+      setIsBlocked(blocked);
+    } catch (error) {
+      console.error('Error checking block status:', error);
+    }
+  };
+
+  // Load private content
+  const loadPrivateContent = async () => {
+    if (!user || !userId) return;
+    
+    setLoadingPrivateContent(true);
+    try {
+      // Check if current user has access
+      const hasAccess = await PrivateContentService.checkAccess(userId, user.id);
+      setHasPrivateAccess(hasAccess);
+      
+      // Load content if has access or is owner
+      if (hasAccess || user.id === userId) {
+        const content = await PrivateContentService.getPrivateContentWithAccess(userId, user.id);
+        setPrivateContent(content);
+      }
+    } catch (error) {
+      console.error('Error loading private content:', error);
+    } finally {
+      setLoadingPrivateContent(false);
+    }
+  };
+
+  // Handle report user
+  const handleReportUser = async (reason: string, description: string, shouldBlock: boolean) => {
+    if (!user || !userId) return;
+    
+    try {
+      await UserActionsService.reportUser(user.id, userId, reason, description);
+      
+      if (shouldBlock) {
+        await handleBlockUser();
+      }
+      
+      toast({
+        title: 'Report submitted',
+        description: 'Thank you for helping keep our community safe.',
+      });
+      
+      setShowReportModal(false);
+    } catch (error) {
+      console.error('Error reporting user:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to submit report. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Handle block user
+  const handleBlockUser = async () => {
+    if (!user || !userId) return;
+    
+    try {
+      await UserActionsService.blockUser(user.id, userId, 'Blocked from profile');
+      setIsBlocked(true);
+      setShowBlockConfirm(false);
+      setShowMenu(false);
+      
+      toast({
+        title: 'User blocked',
+        description: 'You will no longer see this user.',
+      });
+      
+      // Navigate back after blocking
+      setTimeout(() => navigate(-1), 1500);
+    } catch (error: any) {
+      console.error('Error blocking user:', error);
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to block user. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Handle unmatch user
+  const handleUnmatchUser = async () => {
+    if (!user || !userId) return;
+    
+    try {
+      await UserActionsService.unmatchUser(user.id, userId);
+      setIsMatched(false);
+      setShowUnmatchConfirm(false);
+      setShowMenu(false);
+      
+      toast({
+        title: 'Unmatched',
+        description: 'You are no longer matched with this user.',
+      });
+    } catch (error) {
+      console.error('Error unmatching user:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to unmatch. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Handle share private content
+  const handleSharePrivateContent = async () => {
+    if (!user || !userId) return;
+    
+    try {
+      await PrivateContentService.grantAccess(user.id, userId);
+      
+      toast({
+        title: 'Access granted',
+        description: 'This user can now view your private content.',
+      });
+      
+      setShowSharePrivateContent(false);
+      setShowMenu(false);
+    } catch (error) {
+      console.error('Error granting access:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to grant access. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  };
+
   // Swipe gesture handling
   const minSwipeDistance = 50;
 
