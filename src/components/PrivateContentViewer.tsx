@@ -156,8 +156,12 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
 
     const preventContextMenu = (e: MouseEvent) => {
       e.preventDefault();
+      setIsBlackoutActive(true);
       setSuspiciousActivity(true);
-      setTimeout(() => setSuspiciousActivity(false), 2000);
+      setTimeout(() => {
+        setIsBlackoutActive(false);
+        setSuspiciousActivity(false);
+      }, 3000);
       return false;
     };
 
