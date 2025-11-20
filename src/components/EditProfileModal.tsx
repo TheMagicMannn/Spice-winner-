@@ -113,6 +113,7 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [uploadingPrivateContent, setUploadingPrivateContent] = useState(false);
   const [loadingPrivateContent, setLoadingPrivateContent] = useState(false);
   const [privateContentDescriptions, setPrivateContentDescriptions] = useState<Record<string, string>>({});
+  const [privateContentUrls, setPrivateContentUrls] = useState<Record<string, string>>({});
 
   // Update profile state when prop changes
   useEffect(() => {
