@@ -31,6 +31,7 @@ import { Spinner } from './Spinner';
 import { spiceTheme } from '../styles/theme';
 import PrivateContentService, { PrivateContent } from '../services/privateContentService';
 import { useAuth } from '../hooks/useAuth';
+import PrivateContentViewer from './PrivateContentViewer';
 
 // Options arrays (from database schema)
 const GENDER_OPTIONS = [
