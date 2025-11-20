@@ -155,6 +155,10 @@ export const UserProfilePage: React.FC = () => {
   const [loadingPrivateContent, setLoadingPrivateContent] = useState(false);
   const [privateContentUrls, setPrivateContentUrls] = useState<Record<string, string>>({});
   
+  // Viewer state
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
+  
   // Expandable sections state
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     aboutMe: false,
