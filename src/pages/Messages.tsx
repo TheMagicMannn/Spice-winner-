@@ -41,6 +41,14 @@ export const MessagesPage: React.FC = () => {
   const [showFilterMenu, setShowFilterMenu] = useState(false);
   const [showNewMessageModal, setShowNewMessageModal] = useState(false);
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [showParticipantModal, setShowParticipantModal] = useState(false);
+  const [selectedConversationParticipants, setSelectedConversationParticipants] = useState<Array<{
+    userId: string;
+    name: string;
+    photo?: string;
+    isVerified?: boolean;
+    membershipTier?: string;
+  }>>([]);
 
   // Load conversations
   useEffect(() => {
