@@ -115,6 +115,10 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
   const [loadingPrivateContent, setLoadingPrivateContent] = useState(false);
   const [privateContentDescriptions, setPrivateContentDescriptions] = useState<Record<string, string>>({});
   const [privateContentUrls, setPrivateContentUrls] = useState<Record<string, string>>({});
+  
+  // Viewer state
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
 
   // Update profile state when prop changes
   useEffect(() => {
