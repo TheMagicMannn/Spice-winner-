@@ -365,86 +365,125 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
         {/* Content Display */}
         <div className="relative w-full h-full flex items-center justify-center bg-black">
           {contentType === 'photo' ? (
-            <img
-              src={contentUrl}
-              alt={description || 'Private content'}
-              className="max-w-full max-h-full object-contain select-none pointer-events-none"
-              draggable="false"
-              onDragStart={preventDragStart}
-              onContextMenu={(e) => e.preventDefault()}
-              style={{
-                userSelect: 'none',
-                WebkitUserSelect: 'none',
-                MozUserSelect: 'none',
-                msUserSelect: 'none'
-              }}
-              data-testid="viewer-image"
-            />
+            <div className="relative max-w-full max-h-full">
+              {/* Hidden image for loading */}
+              <img
+                ref={imageRef}
+                src={contentUrl}
+                alt={description || 'Private content'}
+                className="hidden"
+                crossOrigin="anonymous"
+              />
+              
+              {/* Canvas for protected rendering */}
+              <canvas
+                ref={canvasRef}
+                className="max-w-full max-h-full object-contain select-none pointer-events-none"
+                onContextMenu={(e) => e.preventDefault()}
+                style={{
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none',
+                  imageRendering: 'pixelated',
+                  filter: 'contrast(1.01)', // Subtle filter to interfere with screen capture
+                }}
+                data-testid="viewer-image"
+              />
+            </div>
           ) : (
-            <video
-              ref={videoRef}
-              src={contentUrl}
-              controls
-              controlsList="nodownload nofullscreen"
-              disablePictureInPicture
-              className="max-w-full max-h-full object-contain select-none"
-              onContextMenu={(e) => e.preventDefault()}
-              style={{
-                userSelect: 'none',
-                WebkitUserSelect: 'none',
-                MozUserSelect: 'none',
-                msUserSelect: 'none'
-              }}
-              data-testid="viewer-video"
-            />
+            <div className="relative max-w-full max-h-full">
+              <video
+                ref={videoRef}
+                src={contentUrl}
+                controls
+                controlsList="nodownload nofullscreen noremoteplayback"
+                disablePictureInPicture
+                disableRemotePlayback
+                className="max-w-full max-h-full object-contain select-none"
+                onContextMenu={(e) => e.preventDefault()}
+                style={{
+                  userSelect: 'none',
+                  WebkitUserSelect: 'none',
+                  MozUserSelect: 'none',
+                  msUserSelect: 'none',
+                  filter: 'contrast(1.01)', // Subtle filter to interfere with screen capture
+                }}
+                data-testid="viewer-video"
+              />
+            </div>
           )}
 
-          {/* Dynamic Watermark Overlays - Multiple for better protection */}
+          {/* Enhanced Dynamic Watermark Overlays - "SPICE CONTENT- OUTSIDE OF SPICE IS UNAUTHORIZED USE" */}
           <div
-            className="absolute text-white/20 font-bold text-lg pointer-events-none select-none transform -rotate-12"
+            className="absolute text-red-500/40 font-bold text-2xl pointer-events-none select-none transform -rotate-12"
             style={{
               top: `${watermarkPosition.y}%`,
               left: `${watermarkPosition.x}%`,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+              textShadow: '3px 3px 6px rgba(0,0,0,0.8), 0 0 20px rgba(255,0,0,0.3)',
+              fontFamily: 'monospace',
+              letterSpacing: '0.1em'
             }}
           >
-            {ownerName || 'Private Content'} • {user?.email || 'Protected'}
+            SPICE CONTENT
           </div>
           
           <div
-            className="absolute text-white/15 font-bold text-sm pointer-events-none select-none transform rotate-12"
+            className="absolute text-red-500/35 font-bold text-lg pointer-events-none select-none transform rotate-12"
             style={{
-              top: `${(watermarkPosition.y + 30) % 90}%`,
+              top: `${(watermarkPosition.y + 25) % 90}%`,
               left: `${(watermarkPosition.x + 40) % 90}%`,
-              textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+              textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 15px rgba(255,0,0,0.3)',
+              fontFamily: 'monospace',
+              letterSpacing: '0.1em'
             }}
           >
-            DO NOT SHARE • PRIVATE
+            OUTSIDE OF SPICE IS UNAUTHORIZED USE
           </div>
 
           <div
-            className="absolute text-white/10 font-bold text-xs pointer-events-none select-none"
+            className="absolute text-white/20 font-bold text-base pointer-events-none select-none transform -rotate-6"
             style={{
-              top: `${(watermarkPosition.y + 60) % 90}%`,
+              top: `${(watermarkPosition.y + 50) % 90}%`,
               left: `${(watermarkPosition.x + 20) % 90}%`,
+              textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+              fontFamily: 'monospace'
+            }}
+          >
+            {ownerName || 'Private'} • {user?.email || 'Protected'}
+          </div>
+
+          <div
+            className="absolute text-white/15 font-bold text-sm pointer-events-none select-none"
+            style={{
+              top: `${(watermarkPosition.y + 70) % 90}%`,
+              left: `${(watermarkPosition.x + 60) % 90}%`,
               textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
             }}
           >
             {new Date().toLocaleString()}
           </div>
 
-          {/* Corner Watermarks */}
-          <div className="absolute top-2 left-2 text-white/10 text-xs font-semibold pointer-events-none select-none">
-            PRIVATE
+          {/* Corner Watermarks with Updated Text */}
+          <div className="absolute top-2 left-2 text-red-400/30 text-xs font-semibold pointer-events-none select-none">
+            SPICE CONTENT
           </div>
-          <div className="absolute top-2 right-2 text-white/10 text-xs font-semibold pointer-events-none select-none">
-            DO NOT SHARE
+          <div className="absolute top-2 right-2 text-red-400/30 text-xs font-semibold pointer-events-none select-none">
+            UNAUTHORIZED USE PROHIBITED
           </div>
-          <div className="absolute bottom-2 left-2 text-white/10 text-xs font-semibold pointer-events-none select-none">
+          <div className="absolute bottom-2 left-2 text-white/15 text-xs font-semibold pointer-events-none select-none">
             PROTECTED CONTENT
           </div>
-          <div className="absolute bottom-2 right-2 text-white/10 text-xs font-semibold pointer-events-none select-none">
+          <div className="absolute bottom-2 right-2 text-white/15 text-xs font-semibold pointer-events-none select-none">
             {user?.email}
+          </div>
+
+          {/* Additional scattered watermarks for better protection */}
+          <div className="absolute top-1/4 right-1/4 text-red-500/20 text-sm font-bold pointer-events-none select-none transform rotate-45">
+            SPICE CONTENT
+          </div>
+          <div className="absolute top-3/4 left-1/4 text-red-500/20 text-sm font-bold pointer-events-none select-none transform -rotate-45">
+            UNAUTHORIZED USE
           </div>
         </div>
 
