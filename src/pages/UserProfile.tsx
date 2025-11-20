@@ -1283,6 +1283,110 @@ export const UserProfilePage: React.FC = () => {
           Member since {formatDate(profile.created_at)}
         </div>
       </div>
+
+      {/* Report Modal */}
+      {showReportModal && (
+        <ReportModal
+          isOpen={showReportModal}
+          onClose={() => setShowReportModal(false)}
+          onSubmit={handleReportUser}
+          reportType="user"
+          targetName={displayName}
+        />
+      )}
+
+      {/* Block Confirmation Dialog */}
+      {showBlockConfirm && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <Card className={`${spiceTheme.components.card} max-w-md w-full`}>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <UserX className="h-8 w-8 text-orange-400" />
+                <h2 className="text-xl font-semibold text-white">Block User?</h2>
+              </div>
+              <p className="text-white/80 mb-6">
+                Are you sure you want to block {displayName}? You will no longer see their profile or receive messages from them.
+              </p>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => setShowBlockConfirm(false)}
+                  className={spiceTheme.components.button.secondary}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleBlockUser}
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+                >
+                  Block User
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Unmatch Confirmation Dialog */}
+      {showUnmatchConfirm && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <Card className={`${spiceTheme.components.card} max-w-md w-full`}>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <HeartOff className="h-8 w-8 text-pink-400" />
+                <h2 className="text-xl font-semibold text-white">Unmatch?</h2>
+              </div>
+              <p className="text-white/80 mb-6">
+                Are you sure you want to unmatch with {displayName}? This action cannot be undone.
+              </p>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => setShowUnmatchConfirm(false)}
+                  className={spiceTheme.components.button.secondary}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleUnmatchUser}
+                  className="flex-1 bg-pink-500 hover:bg-pink-600 text-white"
+                >
+                  Unmatch
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Share Private Content Confirmation Dialog */}
+      {showSharePrivateContent && (
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <Card className={`${spiceTheme.components.card} max-w-md w-full`}>
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-3 mb-4">
+                <Lock className="h-8 w-8 text-purple-400" />
+                <h2 className="text-xl font-semibold text-white">Share Private Content?</h2>
+              </div>
+              <p className="text-white/80 mb-6">
+                Grant {displayName} access to view your private content? You can revoke access at any time from your settings.
+              </p>
+              <div className="flex space-x-3">
+                <Button
+                  onClick={() => setShowSharePrivateContent(false)}
+                  className={spiceTheme.components.button.secondary}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSharePrivateContent}
+                  className="flex-1 bg-purple-500 hover:bg-purple-600 text-white"
+                >
+                  Grant Access
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </SpiceBackground>
   );
 };
