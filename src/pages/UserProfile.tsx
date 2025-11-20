@@ -26,11 +26,21 @@ import {
   Palette,
   Eye,
   Activity,
-  ShieldCheck
+  ShieldCheck,
+  MoreVertical,
+  Flag,
+  UserX,
+  Lock,
+  HeartOff
 } from 'lucide-react';
 import { SpiceBackground } from '@/components/SpiceComponents';
 import { spiceTheme } from '@/styles/theme';
 import { Spinner } from '@/components/Spinner';
+import { ReportModal } from '@/components/ReportModal';
+import { useAuth } from '@/hooks/useAuth';
+import UserActionsService from '@/services/userActionsService';
+import PrivateContentService, { PrivateContent } from '@/services/privateContentService';
+import { useToast } from '@/hooks/use-toast';
 
 interface UserProfile {
   id: string;
