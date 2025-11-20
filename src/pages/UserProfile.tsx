@@ -1264,22 +1264,40 @@ export const UserProfilePage: React.FC = () => {
           ) : hasPrivateAccess || user?.id === userId ? (
             privateContent.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {privateContent.map((content) => (
-                  <div key={content.id} className="relative aspect-square rounded-lg overflow-hidden bg-white/10">
+                {privateContent.map((content, index) => (
+                  <div 
+                    key={content.id} 
+                    className="relative aspect-square rounded-lg overflow-hidden bg-white/10 cursor-pointer hover:opacity-80 transition-opacity group"
+                    onClick={() => privateContentUrls[content.storage_path] && openPrivateContentViewer(index)}
+                    data-testid={`private-content-item-${index}`}
+                  >
                     {privateContentUrls[content.storage_path] ? (
-                      content.content_type === 'video' ? (
-                        <video 
-                          src={privateContentUrls[content.storage_path]}
-                          className="w-full h-full object-cover"
-                          controls
-                        />
-                      ) : (
-                        <img
-                          src={privateContentUrls[content.storage_path]}
-                          alt={content.description || 'Private content'}
-                          className="w-full h-full object-cover"
-                        />
-                      )
+                      <>
+                        {content.content_type === 'video' ? (
+                          <div className="relative w-full h-full bg-gray-800">
+                            <video 
+                              src={privateContentUrls[content.storage_path]}
+                              className="w-full h-full object-cover pointer-events-none"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
+                              <div className="bg-purple-500/80 rounded-full p-4">
+                                <Play className="h-8 w-8 text-white" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <img
+                            src={privateContentUrls[content.storage_path]}
+                            alt={content.description || 'Private content'}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                          <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                            <Eye className="h-6 w-6 text-white" />
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gray-800">
                         <Spinner />
