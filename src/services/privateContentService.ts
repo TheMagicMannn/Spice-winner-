@@ -235,14 +235,56 @@ export class PrivateContentService {
   }
 
   /**
-   * Get storage URL for private content
+   * Get storage URL for private content (using signed URLs)
    */
-  static getPrivateContentUrl(storagePath: string): string {
-    const { data } = supabase.storage
-      .from('private-content')
-      .getPublicUrl(storagePath);
-    
-    return data.publicUrl;
+  static async getPrivateContentUrl(storagePath: string): Promise<string> {
+    try {
+      // Generate a signed URL with 1 hour expiration
+      const { data, error } = await supabase.storage
+        .from('private-content')
+        .createSignedUrl(storagePath, 3600); // 3600 seconds = 1 hour
+      
+      if (error) {
+        console.error('Error generating signed URL:', error);
+        throw error;
+      }
+      
+      return data.signedUrl;
+    } catch (error) {
+      console.error('Error getting private content URL:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get multiple signed URLs at once (for better performance)
+   */
+  static async getPrivateContentUrls(storagePaths: string[]): Promise<Record<string, string>> {
+    try {
+      const urlPromises = storagePaths.map(async (path) => {
+        const { data, error } = await supabase.storage
+          .from('private-content')
+          .createSignedUrl(path, 3600);
+        
+        if (error) {
+          console.error(`Error generating signed URL for ${path}:`, error);
+          return { path, url: '' };
+        }
+        
+        return { path, url: data.signedUrl };
+      });
+      
+      const results = await Promise.all(urlPromises);
+      const urlMap: Record<string, string> = {};
+      results.forEach(({ path, url }) => {
+        if (url) urlMap[path] = url;
+      });
+      
+      return urlMap;
+    } catch (error) {
+      console.error('Error getting private content URLs:', error);
+      return {};
+    }
   }
 }
 
