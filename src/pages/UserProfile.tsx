@@ -1237,15 +1237,29 @@ export const UserProfilePage: React.FC = () => {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {privateContent.map((content) => (
                   <div key={content.id} className="relative aspect-square rounded-lg overflow-hidden bg-white/10">
-                    <img
-                      src={PrivateContentService.getPrivateContentUrl(content.storage_path)}
-                      alt={content.description || 'Private content'}
-                      className="w-full h-full object-cover"
-                    />
-                    {content.content_type === 'video' && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="bg-black/50 rounded-full p-3">
-                          <Activity className="h-6 w-6 text-white" />
+                    {privateContentUrls[content.storage_path] ? (
+                      content.content_type === 'video' ? (
+                        <video 
+                          src={privateContentUrls[content.storage_path]}
+                          className="w-full h-full object-cover"
+                          controls
+                        />
+                      ) : (
+                        <img
+                          src={privateContentUrls[content.storage_path]}
+                          alt={content.description || 'Private content'}
+                          className="w-full h-full object-cover"
+                        />
+                      )
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-800">
+                        <Spinner />
+                      </div>
+                    )}
+                    {content.content_type === 'video' && privateContentUrls[content.storage_path] && (
+                      <div className="absolute top-2 right-2">
+                        <div className="bg-black/70 rounded-full p-2">
+                          <Activity className="h-4 w-4 text-white" />
                         </div>
                       </div>
                     )}
