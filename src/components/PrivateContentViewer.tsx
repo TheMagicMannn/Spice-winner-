@@ -35,215 +35,63 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isBlackScreen, setIsBlackScreen] = useState(false);
 
-  // Black screen protection - detect screenshot attempts
+  // Simple black screen detection - screenshot and screen recording
   useEffect(() => {
     if (!isOpen) return;
 
-    let blackoutTimer: NodeJS.Timeout;
-
-    const triggerBlackout = () => {
-      setIsBlackoutActive(true);
-      setSuspiciousActivity(true);
-      
-      // Keep blackout for 3 seconds
-      clearTimeout(blackoutTimer);
-      blackoutTimer = setTimeout(() => {
-        setIsBlackoutActive(false);
-        setSuspiciousActivity(false);
-      }, 3000);
+    // Activate black screen on these events
+    const activateBlackScreen = () => {
+      setIsBlackScreen(true);
     };
 
-    // Detect visibility changes (screen recording detection)
+    // Deactivate black screen
+    const deactivateBlackScreen = () => {
+      setIsBlackScreen(false);
+    };
+
+    // Detect screen recording (tab switch, window blur, visibility change)
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        triggerBlackout();
+        activateBlackScreen();
+      } else {
+        deactivateBlackScreen();
       }
     };
 
-    // Detect window blur (potential screen recording)
     const handleBlur = () => {
-      triggerBlackout();
+      activateBlackScreen();
     };
 
-    // Detect focus loss
-    const handleFocusOut = () => {
-      triggerBlackout();
+    const handleFocus = () => {
+      deactivateBlackScreen();
     };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('blur', handleBlur);
-    window.addEventListener('focusout', handleFocusOut);
-
-    return () => {
-      clearTimeout(blackoutTimer);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('blur', handleBlur);
-      window.removeEventListener('focusout', handleFocusOut);
-    };
-  }, [isOpen]);
-
-  // Canvas-based image rendering for better screenshot protection
-  useEffect(() => {
-    if (!isOpen || contentType !== 'photo' || !canvasRef.current || !imageRef.current) return;
-
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d', { willReadFrequently: false });
-    if (!ctx) return;
-
-    const img = imageRef.current;
-
-    const drawImage = () => {
-      if (!img.complete) return;
-
-      // Set canvas size to match image
-      canvas.width = img.naturalWidth || img.width;
-      canvas.height = img.naturalHeight || img.height;
-
-      // Draw image on canvas
-      ctx.drawImage(img, 0, 0);
-
-      // Add noise/interference layer to make screenshots harder
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const data = imageData.data;
-
-      // Add subtle noise that's barely visible but interferes with screen capture
-      for (let i = 0; i < data.length; i += 4) {
-        if (Math.random() > 0.99) {
-          const noise = Math.random() * 10 - 5;
-          data[i] = Math.max(0, Math.min(255, data[i] + noise));
-          data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
-          data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
-        }
-      }
-
-      ctx.putImageData(imageData, 0, 0);
-    };
-
-    if (img.complete) {
-      drawImage();
-    } else {
-      img.onload = drawImage;
-    }
-
-    // Redraw periodically to prevent frame capture
-    const interval = setInterval(drawImage, 100);
-    return () => clearInterval(interval);
-  }, [isOpen, contentType, contentUrl]);
-
-  // Dynamic watermark that moves to prevent easy removal
-  useEffect(() => {
-    if (!isOpen) return;
-    
-    const interval = setInterval(() => {
-      setWatermarkPosition({
-        x: Math.random() * 80 + 10, // 10-90%
-        y: Math.random() * 80 + 10
-      });
-    }, 3000); // Move every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [isOpen]);
-
-  // Screenshot protection - disable right click
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const preventContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      setIsBlackoutActive(true);
-      setSuspiciousActivity(true);
-      setTimeout(() => {
-        setIsBlackoutActive(false);
-        setSuspiciousActivity(false);
-      }, 3000);
-      return false;
-    };
-
-    document.addEventListener('contextmenu', preventContextMenu);
-    return () => document.removeEventListener('contextmenu', preventContextMenu);
-  }, [isOpen]);
-
-  // Keyboard shortcuts protection
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const preventScreenshot = (e: KeyboardEvent) => {
-      // Print Screen, Windows+Shift+S (Snipping Tool), Cmd+Shift+4/5 (Mac)
+    // Detect screenshot shortcuts
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Print Screen, Snipping Tool, Mac screenshots
       if (
         e.key === 'PrintScreen' ||
-        (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) ||
-        (e.ctrlKey && e.shiftKey && e.key === 'S') ||
-        (e.key === 'Meta' && e.shiftKey) // Additional Mac protection
+        (e.metaKey && e.shiftKey && ['3', '4', '5'].includes(e.key)) ||
+        (e.ctrlKey && e.shiftKey && e.key === 'S')
       ) {
-        e.preventDefault();
-        setIsBlackoutActive(true);
-        setSuspiciousActivity(true);
-        setTimeout(() => {
-          setIsBlackoutActive(false);
-          setSuspiciousActivity(false);
-        }, 3000);
-        
-        // Log suspicious activity
-        console.warn('Screenshot attempt detected');
-        return false;
-      }
-
-      // Prevent F12, Ctrl+Shift+I (DevTools)
-      if (
-        e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-        (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-        (e.ctrlKey && e.key === 'U')
-      ) {
-        e.preventDefault();
-        return false;
+        activateBlackScreen();
+        setTimeout(deactivateBlackScreen, 2000);
       }
     };
 
-    document.addEventListener('keydown', preventScreenshot);
-    document.addEventListener('keyup', preventScreenshot);
-    return () => {
-      document.removeEventListener('keydown', preventScreenshot);
-      document.removeEventListener('keyup', preventScreenshot);
-    };
-  }, [isOpen]);
-
-  // Video protection - pause when window loses focus (potential screen recording)
-  useEffect(() => {
-    if (!isOpen || contentType !== 'video') return;
-
-    const handleVisibilityChange = () => {
-      if (document.hidden && videoRef.current) {
-        videoRef.current.pause();
-        setIsBlackoutActive(true);
-        setSuspiciousActivity(true);
-        setTimeout(() => {
-          setIsBlackoutActive(false);
-          setSuspiciousActivity(false);
-        }, 3000);
-      }
-    };
-
-    const handleBlur = () => {
-      if (videoRef.current && !videoRef.current.paused) {
-        videoRef.current.pause();
-        setIsBlackoutActive(true);
-        setSuspiciousActivity(true);
-        setTimeout(() => {
-          setIsBlackoutActive(false);
-          setSuspiciousActivity(false);
-        }, 3000);
-      }
-    };
-
+    // Add event listeners
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, contentType]);
+  }, [isOpen]);
 
   // Keyboard navigation
   useEffect(() => {
