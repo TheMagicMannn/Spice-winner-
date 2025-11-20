@@ -532,6 +532,76 @@ export const UserProfilePage: React.FC = () => {
                 VIP
               </Badge>
             )}
+            {user && user.id !== userId && (
+              <div className="relative">
+                <Button
+                  onClick={() => setShowMenu(!showMenu)}
+                  variant="ghost"
+                  size="sm"
+                  className="text-white/80 hover:text-white"
+                  data-testid="profile-menu-button"
+                >
+                  <MoreVertical className="h-5 w-5" />
+                </Button>
+                
+                {showMenu && (
+                  <div 
+                    className="absolute right-0 top-full mt-2 w-56 bg-gray-900 border border-white/10 rounded-lg shadow-lg overflow-hidden z-50"
+                    data-testid="profile-menu-dropdown"
+                  >
+                    <button
+                      onClick={() => {
+                        setShowReportModal(true);
+                        setShowMenu(false);
+                      }}
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-white/90 hover:bg-white/10 transition-colors text-left"
+                      data-testid="report-user-button"
+                    >
+                      <Flag className="h-5 w-5 text-red-400" />
+                      <span>Report User</span>
+                    </button>
+                    
+                    <button
+                      onClick={() => {
+                        setShowBlockConfirm(true);
+                        setShowMenu(false);
+                      }}
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-white/90 hover:bg-white/10 transition-colors text-left"
+                      data-testid="block-user-button"
+                    >
+                      <UserX className="h-5 w-5 text-orange-400" />
+                      <span>Block User</span>
+                    </button>
+                    
+                    {isMatched && (
+                      <button
+                        onClick={() => {
+                          setShowUnmatchConfirm(true);
+                          setShowMenu(false);
+                        }}
+                        className="w-full flex items-center space-x-3 px-4 py-3 text-white/90 hover:bg-white/10 transition-colors text-left"
+                        data-testid="unmatch-user-button"
+                      >
+                        <HeartOff className="h-5 w-5 text-pink-400" />
+                        <span>Unmatch</span>
+                      </button>
+                    )}
+                    
+                    <button
+                      onClick={() => {
+                        setShowSharePrivateContent(true);
+                        setShowMenu(false);
+                      }}
+                      className="w-full flex items-center space-x-3 px-4 py-3 text-white/90 hover:bg-white/10 transition-colors text-left"
+                      data-testid="share-private-content-button"
+                    >
+                      <Lock className="h-5 w-5 text-purple-400" />
+                      <span>Share Private Content</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
