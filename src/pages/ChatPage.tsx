@@ -629,7 +629,17 @@ export const ChatPage: React.FC = () => {
   };
 
   const handleProfileClick = () => {
-    setShowProfileModal(true);
+    if (isGroupChat) {
+      // For group chats, show participant list
+      setShowParticipantModal(true);
+    } else {
+      // For direct chats, show profile modal or navigate to user profile
+      if (otherUserProfile) {
+        navigate(`/user/${otherUserProfile.id}`);
+      } else if (otherUserId) {
+        navigate(`/user/${otherUserId}`);
+      }
+    }
   };
 
   const handleDeleteChat = async () => {
