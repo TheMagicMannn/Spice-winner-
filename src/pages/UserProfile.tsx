@@ -438,6 +438,30 @@ export const UserProfilePage: React.FC = () => {
     }
   };
 
+  // Open viewer
+  const openPrivateContentViewer = (index: number) => {
+    setViewerIndex(index);
+    setViewerOpen(true);
+  };
+
+  // Navigate viewer
+  const navigateViewer = (direction: 'prev' | 'next') => {
+    if (direction === 'prev' && viewerIndex > 0) {
+      setViewerIndex(viewerIndex - 1);
+    } else if (direction === 'next' && viewerIndex < privateContent.length - 1) {
+      setViewerIndex(viewerIndex + 1);
+    }
+  };
+
+  // Get viewer content
+  const getViewerContent = () => {
+    return privateContent.map(content => ({
+      url: privateContentUrls[content.storage_path] || '',
+      type: content.content_type,
+      description: content.description
+    }));
+  };
+
   if (isLoading) {
     return (
       <SpiceBackground className="min-h-screen flex items-center justify-center">
