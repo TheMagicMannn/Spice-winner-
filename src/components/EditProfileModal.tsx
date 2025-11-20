@@ -870,12 +870,16 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
                             <div className="w-full h-full flex items-center justify-center bg-gray-800">
                               <Play className="h-8 w-8 text-purple-400" />
                             </div>
-                          ) : (
+                          ) : privateContentUrls[content.storage_path] ? (
                             <img
-                              src={PrivateContentService.getPrivateContentUrl(content.storage_path)}
+                              src={privateContentUrls[content.storage_path]}
                               alt="Private content"
                               className="w-full h-full object-cover"
                             />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-800">
+                              <Spinner />
+                            </div>
                           )}
                           <Badge 
                             className={`absolute top-1 right-1 text-xs ${
