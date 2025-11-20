@@ -1229,6 +1229,24 @@ export const ChatPage: React.FC = () => {
           onSuccess={handleParticipantsAdded}
         />
       )}
+
+      {/* Participant List Modal */}
+      {isGroupChat && conversationDetails && (
+        <ParticipantListModal
+          isOpen={showParticipantModal}
+          onClose={() => setShowParticipantModal(false)}
+          participants={conversationDetails.participants
+            .filter(p => p.isActive)
+            .map(p => ({
+              userId: p.userId,
+              name: p.profile?.displayName || 'Member',
+              photo: p.profile?.photos?.[0],
+              isVerified: p.profile?.isVerified,
+              membershipTier: p.profile?.membershipTier
+            }))}
+          title={conversationDetails.groupName || 'Group Participants'}
+        />
+      )}
     </div>
   );
 };
