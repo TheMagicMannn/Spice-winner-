@@ -336,11 +336,15 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-900">
             <TabsTrigger value="basic">Basic Info</TabsTrigger>
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="interests">Interests</TabsTrigger>
             <TabsTrigger value="photos">Photos</TabsTrigger>
+            <TabsTrigger value="private-content">
+              <Lock className="h-4 w-4 mr-1" />
+              Private
+            </TabsTrigger>
           </TabsList>
 
           {/* Basic Info Tab */}
