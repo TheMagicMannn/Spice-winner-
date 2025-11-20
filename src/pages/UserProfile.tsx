@@ -1456,6 +1456,21 @@ export const UserProfilePage: React.FC = () => {
           </Card>
         </div>
       )}
+
+      {/* Private Content Viewer */}
+      {viewerOpen && privateContent[viewerIndex] && privateContentUrls[privateContent[viewerIndex].storage_path] && (
+        <PrivateContentViewer
+          isOpen={viewerOpen}
+          onClose={() => setViewerOpen(false)}
+          contentUrl={privateContentUrls[privateContent[viewerIndex].storage_path]}
+          contentType={privateContent[viewerIndex].content_type}
+          ownerName={profile?.display_name || 'User'}
+          description={privateContent[viewerIndex].description}
+          allContent={getViewerContent()}
+          currentIndex={viewerIndex}
+          onNavigate={navigateViewer}
+        />
+      )}
     </SpiceBackground>
   );
 };
