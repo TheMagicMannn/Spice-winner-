@@ -1214,64 +1214,52 @@ export const UserProfilePage: React.FC = () => {
           </ExpandableSection>
         )}
 
-        {/* Expandable Section: Boundaries & Limits */}
-        {(profile.soft_limits?.length || profile.hard_limits?.length || profile.safety_practices || profile.rules) && (
-          <ExpandableSection 
-            title="Boundaries & Limits" 
-            sectionKey="boundariesLimits"
-            testId="boundaries-limits-section"
-          >
-            <div className="space-y-4">
-              {profile.soft_limits && profile.soft_limits.length > 0 && (
-                <div>
-                  <h4 className="text-yellow-400 font-semibold mb-2">Soft Limits</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {profile.soft_limits.map((limit, index) => (
-                      <Badge 
-                        key={index} 
-                        className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
-                        data-testid={`soft-limit-${index}`}
-                      >
-                        {limit}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {profile.hard_limits && profile.hard_limits.length > 0 && (
-                <div>
-                  <h4 className="text-red-400 font-semibold mb-2">Hard Limits</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {profile.hard_limits.map((limit, index) => (
-                      <Badge 
-                        key={index} 
-                        className="bg-red-500/20 text-red-400 border-red-500/30"
-                        data-testid={`hard-limit-${index}`}
-                      >
-                        {limit}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-              
-              {profile.safety_practices && (
-                <div>
-                  <h4 className="text-green-400 font-semibold mb-2">Safety Practices</h4>
-                  <p className="text-white/80 whitespace-pre-wrap">{profile.safety_practices}</p>
-                </div>
-              )}
-              
-              {profile.rules && (
-                <div>
-                  <h4 className="text-blue-400 font-semibold mb-2">Rules</h4>
-                  <p className="text-white/80 whitespace-pre-wrap">{profile.rules}</p>
-                </div>
-              )}
+        {/* Expandable Section: My Private Content - LAST TAB */}
+        <ExpandableSection 
+          title="My Private Content" 
+          sectionKey="privateContent"
+          testId="private-content-section"
+        >
+          {loadingPrivateContent ? (
+            <div className="flex items-center justify-center py-8">
+              <Spinner />
             </div>
-          </ExpandableSection>
-        )}
+          ) : hasPrivateAccess || user?.id === userId ? (
+            privateContent.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {privateContent.map((content) => (
+                  <div key={content.id} className="relative aspect-square rounded-lg overflow-hidden bg-white/10">
+                    <img
+                      src={PrivateContentService.getPrivateContentUrl(content.storage_path)}
+                      alt={content.description || 'Private content'}
+                      className="w-full h-full object-cover"
+                    />
+                    {content.content_type === 'video' && (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="bg-black/50 rounded-full p-3">
+                          <Activity className="h-6 w-6 text-white" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Lock className="h-12 w-12 mx-auto text-white/30 mb-3" />
+                <p className="text-white/60">No private content uploaded yet</p>
+              </div>
+            )
+          ) : (
+            <div className="text-center py-8">
+              <Lock className="h-12 w-12 mx-auto text-purple-400 mb-3" />
+              <p className="text-white/80 font-semibold mb-2">Private Content</p>
+              <p className="text-white/60 text-sm">
+                This user's private content is only visible to those granted access.
+              </p>
+            </div>
+          )}
+        </ExpandableSection>
 
         {/* Action Buttons */}
         <div className="flex space-x-3 mt-6">
