@@ -152,6 +152,7 @@ export const UserProfilePage: React.FC = () => {
   const [privateContent, setPrivateContent] = useState<PrivateContent[]>([]);
   const [hasPrivateAccess, setHasPrivateAccess] = useState(false);
   const [loadingPrivateContent, setLoadingPrivateContent] = useState(false);
+  const [privateContentUrls, setPrivateContentUrls] = useState<Record<string, string>>({});
   
   // Expandable sections state
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
