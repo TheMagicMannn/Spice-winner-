@@ -1084,6 +1084,65 @@ export const UserProfilePage: React.FC = () => {
           </ExpandableSection>
         )}
 
+        {/* Expandable Section: Boundaries & Limits */}
+        {(profile.soft_limits?.length || profile.hard_limits?.length || profile.safety_practices || profile.rules) && (
+          <ExpandableSection 
+            title="Boundaries & Limits" 
+            sectionKey="boundariesLimits"
+            testId="boundaries-limits-section"
+          >
+            <div className="space-y-4">
+              {profile.soft_limits && profile.soft_limits.length > 0 && (
+                <div>
+                  <h4 className="text-yellow-400 font-semibold mb-2">Soft Limits</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.soft_limits.map((limit, index) => (
+                      <Badge 
+                        key={index} 
+                        className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                        data-testid={`soft-limit-${index}`}
+                      >
+                        {limit}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {profile.hard_limits && profile.hard_limits.length > 0 && (
+                <div>
+                  <h4 className="text-red-400 font-semibold mb-2">Hard Limits</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {profile.hard_limits.map((limit, index) => (
+                      <Badge 
+                        key={index} 
+                        className="bg-red-500/20 text-red-400 border-red-500/30"
+                        data-testid={`hard-limit-${index}`}
+                      >
+                        {limit}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {profile.safety_practices && (
+                <div>
+                  <h4 className="text-green-400 font-semibold mb-2">Safety Practices</h4>
+                  <p className="text-white/80 whitespace-pre-wrap">{profile.safety_practices}</p>
+                </div>
+              )}
+              
+              {profile.rules && (
+                <div>
+                  <h4 className="text-blue-400 font-semibold mb-2">Rules</h4>
+                  <p className="text-white/80 whitespace-pre-wrap">{profile.rules}</p>
+                </div>
+              )}
+            </div>
+          </ExpandableSection>
+        )}
+
         {/* Expandable Section: What I am seeking */}
         {((profile.seeking && profile.seeking.length > 0) || (profile.seeking_relationship_type && profile.seeking_relationship_type.length > 0)) && (
           <ExpandableSection 
