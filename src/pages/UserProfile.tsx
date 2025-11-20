@@ -277,6 +277,13 @@ export const UserProfilePage: React.FC = () => {
       if (hasAccess || user.id === userId) {
         const content = await PrivateContentService.getPrivateContentWithAccess(userId, user.id);
         setPrivateContent(content);
+        
+        // Generate signed URLs for all content
+        if (content.length > 0) {
+          const paths = content.map(item => item.storage_path);
+          const urls = await PrivateContentService.getPrivateContentUrls(paths);
+          setPrivateContentUrls(urls);
+        }
       }
     } catch (error) {
       console.error('Error loading private content:', error);
