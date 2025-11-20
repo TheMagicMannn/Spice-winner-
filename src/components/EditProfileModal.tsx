@@ -208,6 +208,85 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
     handleInputChange('photos', currentPhotos.filter(url => url !== photoUrl));
   };
 
+  // Handle private content upload
+  const handlePrivateContentUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
+
+    // Check file size (50MB limit)
+    const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+    if (file.size > maxSize) {
+      setErrorMessage('File size must be under 50MB');
+      return;
+    }
+
+    // Check max items limit
+    if (privateContent.length >= 20) {
+      setErrorMessage('Maximum 20 private content items allowed');
+      return;
+    }
+
+    // Determine content type
+    const contentType = file.type.startsWith('video/') ? 'video' : 'photo';
+
+    setUploadingPrivateContent(true);
+    setErrorMessage(null);
+    try {
+      const uploadedContent = await PrivateContentService.uploadPrivateContent(
+        user.id,
+        file,
+        contentType,
+        '' // Description can be added later
+      );
+      
+      setPrivateContent(prev => [...prev, uploadedContent]);
+    } catch (error) {
+      console.error('Private content upload failed:', error);
+      setErrorMessage('Failed to upload private content. Please try again.');
+    } finally {
+      setUploadingPrivateContent(false);
+      // Reset input
+      event.target.value = '';
+    }
+  };
+
+  // Handle private content deletion
+  const handlePrivateContentDelete = async (contentId: string) => {
+    try {
+      await PrivateContentService.deletePrivateContent(contentId);
+      setPrivateContent(prev => prev.filter(item => item.id !== contentId));
+      
+      // Remove description
+      setPrivateContentDescriptions(prev => {
+        const updated = { ...prev };
+        delete updated[contentId];
+        return updated;
+      });
+    } catch (error) {
+      console.error('Private content deletion failed:', error);
+      setErrorMessage('Failed to delete private content. Please try again.');
+    }
+  };
+
+  // Handle private content reorder
+  const movePrivateContent = (index: number, direction: 'up' | 'down') => {
+    const newContent = [...privateContent];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (targetIndex < 0 || targetIndex >= newContent.length) return;
+    
+    // Swap items
+    [newContent[index], newContent[targetIndex]] = [newContent[targetIndex], newContent[index]];
+    setPrivateContent(newContent);
+  };
+
+  // Format file size
+  const formatFileSize = (bytes: number): string => {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  };
+
   // Handle save
   const handleSave = async () => {
     setIsLoading(true);
