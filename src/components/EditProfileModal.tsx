@@ -18,10 +18,19 @@ import {
   X, 
   Plus,
   Trash2,
-  Upload
+  Upload,
+  Lock,
+  Play,
+  Image as ImageIcon,
+  ChevronUp,
+  ChevronDown,
+  FileVideo,
+  AlertCircle
 } from 'lucide-react';
 import { Spinner } from './Spinner';
 import { spiceTheme } from '../styles/theme';
+import PrivateContentService, { PrivateContent } from '../services/privateContentService';
+import { useAuth } from '../hooks/useAuth';
 
 // Options arrays (from database schema)
 const GENDER_OPTIONS = [
