@@ -119,6 +119,37 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
     setEditedProfile(profile);
   }, [profile]);
 
+  // Load private content when modal opens
+  useEffect(() => {
+    if (isOpen && user) {
+      loadPrivateContent();
+    }
+  }, [isOpen, user]);
+
+  // Load user's private content
+  const loadPrivateContent = async () => {
+    if (!user) return;
+    
+    setLoadingPrivateContent(true);
+    try {
+      const content = await PrivateContentService.getUserPrivateContent(user.id);
+      setPrivateContent(content);
+      
+      // Initialize descriptions
+      const descriptions: Record<string, string> = {};
+      content.forEach(item => {
+        if (item.description) {
+          descriptions[item.id] = item.description;
+        }
+      });
+      setPrivateContentDescriptions(descriptions);
+    } catch (error) {
+      console.error('Error loading private content:', error);
+    } finally {
+      setLoadingPrivateContent(false);
+    }
+  };
+
   // Handle input changes
   const handleInputChange = (field: keyof Profile, value: any) => {
     setEditedProfile(prev => ({
