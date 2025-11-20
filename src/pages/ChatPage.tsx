@@ -34,6 +34,7 @@ import { ProfileDetailModal } from '@/components/ProfileDetailModal';
 import { GroupAvatar } from '@/components/GroupAvatar';
 import { ReportModal } from '@/components/ReportModal';
 import { AddParticipantsModal } from '@/components/AddParticipantsModal';
+import { ParticipantListModal } from '@/components/ParticipantListModal';
 import { Profile } from '@/types';
 
 const SELF_DESTRUCT_OPTIONS = [
