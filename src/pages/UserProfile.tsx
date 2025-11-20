@@ -903,74 +903,165 @@ export const UserProfilePage: React.FC = () => {
             ) : (
               <div className="space-y-6">
                 {/* Partner 1 Stats */}
-                {(profile.partner1_height || profile.partner1_body_type || profile.partner1_hair_color || profile.partner1_eye_color) && (
-                  <div>
-                    <h4 className="text-pink-400 font-semibold mb-3">{profile.display_name || 'Partner 1'}</h4>
-                    <div className="space-y-2 text-white/80 text-sm">
-                      {profile.partner1_height && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Height:</span>
-                          <span className="font-medium">{profile.partner1_height}</span>
-                        </div>
-                      )}
-                      {profile.partner1_body_type && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Build:</span>
-                          <span className="font-medium capitalize">{profile.partner1_body_type}</span>
-                        </div>
-                      )}
-                      {profile.partner1_hair_color && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Hair:</span>
-                          <span className="font-medium capitalize">{profile.partner1_hair_color}</span>
-                        </div>
-                      )}
-                      {profile.partner1_eye_color && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Eyes:</span>
-                          <span className="font-medium capitalize">{profile.partner1_eye_color}</span>
-                        </div>
-                      )}
-                    </div>
+                <div>
+                  <h4 className="text-pink-400 font-semibold mb-3 text-lg">{profile.display_name || 'Partner 1'}'s Stats</h4>
+                  <div className="space-y-2 text-white/80 text-sm">
+                    {profile.partner1_height && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Height:</span>
+                        <span className="font-medium">{profile.partner1_height}</span>
+                      </div>
+                    )}
+                    {profile.partner1_weight && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Weight:</span>
+                        <span className="font-medium">{profile.partner1_weight}</span>
+                      </div>
+                    )}
+                    {profile.partner1_body_type && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Build:</span>
+                        <span className="font-medium capitalize">{profile.partner1_body_type}</span>
+                      </div>
+                    )}
+                    {profile.partner1_hair_color && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Hair:</span>
+                        <span className="font-medium capitalize">{profile.partner1_hair_color}</span>
+                      </div>
+                    )}
+                    {profile.partner1_eye_color && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Eyes:</span>
+                        <span className="font-medium capitalize">{profile.partner1_eye_color}</span>
+                      </div>
+                    )}
+                    {profile.partner1_facial_hair && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Facial Hair:</span>
+                        <span className="font-medium capitalize">{profile.partner1_facial_hair}</span>
+                      </div>
+                    )}
+                    {profile.partner1_ethnicity && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Ethnicity:</span>
+                        <span className="font-medium capitalize">{profile.partner1_ethnicity}</span>
+                      </div>
+                    )}
+                    {profile.partner1_tattoos !== undefined && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Tattoos:</span>
+                        <span className="font-medium">{profile.partner1_tattoos ? 'Yes' : 'No'}</span>
+                      </div>
+                    )}
+                    {profile.partner1_piercings !== undefined && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Piercings:</span>
+                        <span className="font-medium">{profile.partner1_piercings ? 'Yes' : 'No'}</span>
+                      </div>
+                    )}
+                    {profile.partner1_cigarette_smoker && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Smoking:</span>
+                        <span className="font-medium capitalize">{profile.partner1_cigarette_smoker}</span>
+                      </div>
+                    )}
+                    {profile.partner1_alcohol_drinker && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Drinking:</span>
+                        <span className="font-medium capitalize">{profile.partner1_alcohol_drinker}</span>
+                      </div>
+                    )}
+                    {profile.partner1_marijuana_user && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Marijuana:</span>
+                        <span className="font-medium capitalize">{profile.partner1_marijuana_user}</span>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
                 
                 {/* Partner 2 Stats */}
-                {(profile.partner2_height || profile.partner2_body_type || profile.partner2_hair_color || profile.partner2_eye_color) && (
-                  <div>
-                    <h4 className="text-blue-400 font-semibold mb-3">{profile.display_name2 || 'Partner 2'}</h4>
-                    <div className="space-y-2 text-white/80 text-sm">
-                      {profile.partner2_height && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Height:</span>
-                          <span className="font-medium">{profile.partner2_height}</span>
-                        </div>
-                      )}
-                      {profile.partner2_body_type && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Build:</span>
-                          <span className="font-medium capitalize">{profile.partner2_body_type}</span>
-                        </div>
-                      )}
-                      {profile.partner2_hair_color && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Hair:</span>
-                          <span className="font-medium capitalize">{profile.partner2_hair_color}</span>
-                        </div>
-                      )}
-                      {profile.partner2_eye_color && (
-                        <div className="flex items-center">
-                          <span className="text-white/60 w-28">Eyes:</span>
-                          <span className="font-medium capitalize">{profile.partner2_eye_color}</span>
-                        </div>
-                      )}
-                    </div>
+                <div>
+                  <h4 className="text-blue-400 font-semibold mb-3 text-lg">{profile.display_name2 || 'Partner 2'}'s Stats</h4>
+                  <div className="space-y-2 text-white/80 text-sm">
+                    {profile.partner2_height && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Height:</span>
+                        <span className="font-medium">{profile.partner2_height}</span>
+                      </div>
+                    )}
+                    {profile.partner2_weight && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Weight:</span>
+                        <span className="font-medium">{profile.partner2_weight}</span>
+                      </div>
+                    )}
+                    {profile.partner2_body_type && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Build:</span>
+                        <span className="font-medium capitalize">{profile.partner2_body_type}</span>
+                      </div>
+                    )}
+                    {profile.partner2_hair_color && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Hair:</span>
+                        <span className="font-medium capitalize">{profile.partner2_hair_color}</span>
+                      </div>
+                    )}
+                    {profile.partner2_eye_color && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Eyes:</span>
+                        <span className="font-medium capitalize">{profile.partner2_eye_color}</span>
+                      </div>
+                    )}
+                    {profile.partner2_facial_hair && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Facial Hair:</span>
+                        <span className="font-medium capitalize">{profile.partner2_facial_hair}</span>
+                      </div>
+                    )}
+                    {profile.partner2_ethnicity && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Ethnicity:</span>
+                        <span className="font-medium capitalize">{profile.partner2_ethnicity}</span>
+                      </div>
+                    )}
+                    {profile.partner2_tattoos !== undefined && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Tattoos:</span>
+                        <span className="font-medium">{profile.partner2_tattoos ? 'Yes' : 'No'}</span>
+                      </div>
+                    )}
+                    {profile.partner2_piercings !== undefined && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Piercings:</span>
+                        <span className="font-medium">{profile.partner2_piercings ? 'Yes' : 'No'}</span>
+                      </div>
+                    )}
+                    {profile.partner2_cigarette_smoker && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Smoking:</span>
+                        <span className="font-medium capitalize">{profile.partner2_cigarette_smoker}</span>
+                      </div>
+                    )}
+                    {profile.partner2_alcohol_drinker && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Drinking:</span>
+                        <span className="font-medium capitalize">{profile.partner2_alcohol_drinker}</span>
+                      </div>
+                    )}
+                    {profile.partner2_marijuana_user && (
+                      <div className="flex items-center">
+                        <span className="text-white/60 w-28">Marijuana:</span>
+                        <span className="font-medium capitalize">{profile.partner2_marijuana_user}</span>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
             )}
-          </ExpandableSection>
-        )}
+        </ExpandableSection>
 
         {/* Expandable Section: Kinks and Interest */}
         {profile.kinks && profile.kinks.length > 0 && (
