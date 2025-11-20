@@ -178,11 +178,16 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
       if (
         e.key === 'PrintScreen' ||
         (e.metaKey && e.shiftKey && (e.key === '3' || e.key === '4' || e.key === '5')) ||
-        (e.ctrlKey && e.shiftKey && e.key === 'S')
+        (e.ctrlKey && e.shiftKey && e.key === 'S') ||
+        (e.key === 'Meta' && e.shiftKey) // Additional Mac protection
       ) {
         e.preventDefault();
+        setIsBlackoutActive(true);
         setSuspiciousActivity(true);
-        setTimeout(() => setSuspiciousActivity(false), 2000);
+        setTimeout(() => {
+          setIsBlackoutActive(false);
+          setSuspiciousActivity(false);
+        }, 3000);
         
         // Log suspicious activity
         console.warn('Screenshot attempt detected');
@@ -202,7 +207,11 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
     };
 
     document.addEventListener('keydown', preventScreenshot);
-    return () => document.removeEventListener('keydown', preventScreenshot);
+    document.addEventListener('keyup', preventScreenshot);
+    return () => {
+      document.removeEventListener('keydown', preventScreenshot);
+      document.removeEventListener('keyup', preventScreenshot);
+    };
   }, [isOpen]);
 
   // Video protection - pause when window loses focus (potential screen recording)
