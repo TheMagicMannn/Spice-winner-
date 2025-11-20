@@ -41,6 +41,101 @@ export const PrivateContentViewer: React.FC<PrivateContentViewerProps> = ({
   const [watermarkPosition, setWatermarkPosition] = useState({ x: 50, y: 50 });
   const [isBlackoutActive, setIsBlackoutActive] = useState(false);
 
+  // Black screen protection - detect screenshot attempts
+  useEffect(() => {
+    if (!isOpen) return;
+
+    let blackoutTimer: NodeJS.Timeout;
+
+    const triggerBlackout = () => {
+      setIsBlackoutActive(true);
+      setSuspiciousActivity(true);
+      
+      // Keep blackout for 3 seconds
+      clearTimeout(blackoutTimer);
+      blackoutTimer = setTimeout(() => {
+        setIsBlackoutActive(false);
+        setSuspiciousActivity(false);
+      }, 3000);
+    };
+
+    // Detect visibility changes (screen recording detection)
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        triggerBlackout();
+      }
+    };
+
+    // Detect window blur (potential screen recording)
+    const handleBlur = () => {
+      triggerBlackout();
+    };
+
+    // Detect focus loss
+    const handleFocusOut = () => {
+      triggerBlackout();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      clearTimeout(blackoutTimer);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focusout', handleFocusOut);
+    };
+  }, [isOpen]);
+
+  // Canvas-based image rendering for better screenshot protection
+  useEffect(() => {
+    if (!isOpen || contentType !== 'photo' || !canvasRef.current || !imageRef.current) return;
+
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d', { willReadFrequently: false });
+    if (!ctx) return;
+
+    const img = imageRef.current;
+
+    const drawImage = () => {
+      if (!img.complete) return;
+
+      // Set canvas size to match image
+      canvas.width = img.naturalWidth || img.width;
+      canvas.height = img.naturalHeight || img.height;
+
+      // Draw image on canvas
+      ctx.drawImage(img, 0, 0);
+
+      // Add noise/interference layer to make screenshots harder
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imageData.data;
+
+      // Add subtle noise that's barely visible but interferes with screen capture
+      for (let i = 0; i < data.length; i += 4) {
+        if (Math.random() > 0.99) {
+          const noise = Math.random() * 10 - 5;
+          data[i] = Math.max(0, Math.min(255, data[i] + noise));
+          data[i + 1] = Math.max(0, Math.min(255, data[i + 1] + noise));
+          data[i + 2] = Math.max(0, Math.min(255, data[i + 2] + noise));
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+    };
+
+    if (img.complete) {
+      drawImage();
+    } else {
+      img.onload = drawImage;
+    }
+
+    // Redraw periodically to prevent frame capture
+    const interval = setInterval(drawImage, 100);
+    return () => clearInterval(interval);
+  }, [isOpen, contentType, contentUrl]);
+
   // Dynamic watermark that moves to prevent easy removal
   useEffect(() => {
     if (!isOpen) return;
