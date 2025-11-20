@@ -182,6 +182,50 @@ export const MessagesPage: React.FC = () => {
     navigate(`/messages/${conversation.id}`);
   };
 
+  const handleAvatarClick = async (conversation: UnifiedConversation, e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (conversation.type === 'group') {
+      // For group chats, show participant list
+      try {
+        const details = await ConversationService.getConversationDetails(conversation.id);
+        if (details) {
+          const participants = details.participants
+            .filter(p => p.isActive)
+            .map(p => ({
+              userId: p.userId,
+              name: p.profile?.displayName || 'Member',
+              photo: p.profile?.photos?.[0],
+              isVerified: p.profile?.isVerified,
+              membershipTier: p.profile?.membershipTier
+            }));
+          setSelectedConversationParticipants(participants);
+          setShowParticipantModal(true);
+        }
+      } catch (error) {
+        console.error('Error loading participants:', error);
+      }
+    } else {
+      // For direct messages, navigate to user profile
+      // We need to find the other user's ID
+      try {
+        const details = await ConversationService.getConversationDetails(conversation.id);
+        if (details) {
+          const otherParticipant = details.participants.find(p => p.userId !== user?.id);
+          if (otherParticipant) {
+            navigate(`/user/${otherParticipant.userId}`);
+          }
+        } else {
+          // Fallback: if conversation details not found, try to extract user ID from conversation name/id
+          // For match-based conversations, we might need to query for the other user
+          console.log('Could not determine other user ID');
+        }
+      } catch (error) {
+        console.error('Error navigating to profile:', error);
+      }
+    }
+  };
+
   const handlePinConversation = async (conversation: UnifiedConversation, e: React.MouseEvent) => {
     e.stopPropagation();
     if (!user) return;
