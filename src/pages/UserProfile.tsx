@@ -727,11 +727,32 @@ export const UserProfilePage: React.FC = () => {
                   </div>
                 )}
                 
-                {/* STI Status Placeholder */}
-                <div className="flex items-center text-white/70 text-sm">
-                  <ShieldCheck className="h-4 w-4 mr-2 text-green-400" />
-                  <span>STI tested (Placeholder)</span>
-                </div>
+                {/* STI Status - Dynamic Display */}
+                {profile.account_type === 'individual' ? (
+                  // Individual Account STI Status
+                  profile.sti_positive_results === 'Negative' && profile.last_sti_test_date && (
+                    <div className="flex items-center text-white/70 text-sm" data-testid="sti-status-individual">
+                      <ShieldCheck className="h-4 w-4 mr-2 text-green-400" />
+                      <span>STI Tested: {new Date(profile.last_sti_test_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                    </div>
+                  )
+                ) : (
+                  // Couple Account STI Status - Show both partners if applicable
+                  <div className="space-y-1">
+                    {profile.partner1_sti_positive_results === 'Negative' && profile.partner1_last_sti_test_date && (
+                      <div className="flex items-center text-white/70 text-sm" data-testid="sti-status-partner1">
+                        <ShieldCheck className="h-4 w-4 mr-2 text-green-400" />
+                        <span>{profile.display_name || 'Partner 1'}: STI Tested {new Date(profile.partner1_last_sti_test_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      </div>
+                    )}
+                    {profile.partner2_sti_positive_results === 'Negative' && profile.partner2_last_sti_test_date && (
+                      <div className="flex items-center text-white/70 text-sm" data-testid="sti-status-partner2">
+                        <ShieldCheck className="h-4 w-4 mr-2 text-green-400" />
+                        <span>{profile.display_name2 || 'Partner 2'}: STI Tested {new Date(profile.partner2_last_sti_test_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
