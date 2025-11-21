@@ -109,6 +109,8 @@ interface UserProfile {
   partner1_marijuana_user?: string;
   partner1_tattoos?: boolean;
   partner1_piercings?: boolean;
+  partner1_last_sti_test_date?: string;
+  partner1_sti_positive_results?: string;
   
   // Physical stats - Partner 2 (Couples)
   partner2_height?: string;
@@ -123,6 +125,8 @@ interface UserProfile {
   partner2_marijuana_user?: string;
   partner2_tattoos?: boolean;
   partner2_piercings?: boolean;
+  partner2_last_sti_test_date?: string;
+  partner2_sti_positive_results?: string;
   
   // Quiz results
   kink_quiz_results?: Record<string, number>;
