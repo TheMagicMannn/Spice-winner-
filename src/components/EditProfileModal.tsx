@@ -85,6 +85,50 @@ const LIMITS_OPTIONS = [
   'Choking', 'Hair Pulling', 'Spanking', 'Blindfolding', 'Recording'
 ];
 
+// Physical Stats Options
+const BODY_TYPE_OPTIONS = [
+  'Slim', 'Average', 'Athletic', 'Muscular', 'Curvy', 'Dad Bod', 
+  'Thick', 'BBW', 'Fit', 'Petite', 'Heavyset'
+];
+
+const HAIR_COLOR_OPTIONS = [
+  'Black', 'Brown', 'Blonde', 'Red', 'Auburn', 'Gray', 
+  'White', 'Salt and Pepper', 'Bald', 'Other'
+];
+
+const EYE_COLOR_OPTIONS = [
+  'Brown', 'Blue', 'Green', 'Hazel', 'Gray', 'Amber', 'Other'
+];
+
+const FACIAL_HAIR_OPTIONS = [
+  'Clean Shaven', 'Stubble', 'Goatee', 'Beard', 'Mustache', 
+  'Full Beard', 'Doesn\'t Apply'
+];
+
+const ETHNICITY_OPTIONS = [
+  'Asian', 'Black/African', 'Caucasian/White', 'Hispanic/Latino', 
+  'Middle Eastern', 'Native American', 'Pacific Islander', 
+  'Mixed/Multiracial', 'Other', 'Prefer not to say'
+];
+
+const BODY_HAIR_OPTIONS = [
+  'None', 'Light', 'Moderate', 'Heavy', 'Trimmed', 'Natural'
+];
+
+const GROOMING_STYLE_OPTIONS = [
+  'Natural', 'Trimmed', 'Shaved', 'Waxed', 'Prefer not to say'
+];
+
+const BIRTH_CONTROL_OPTIONS = [
+  'Yes', 'No', 'Sometimes', 'Prefer not to say'
+];
+
+const YES_NO_OPTIONS = ['Yes', 'No'];
+
+const YES_NO_POSSIBLY_OPTIONS = ['Yes', 'No', 'Possibly'];
+
+const STI_TEST_OPTIONS = ['Negative', 'Positive', 'Prefer not to say'];
+
 interface EditProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
