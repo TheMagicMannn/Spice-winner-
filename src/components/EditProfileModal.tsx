@@ -704,6 +704,702 @@ export const EditProfileModal: React.FC<EditProfileModalProps> = ({
             </div>
           </TabsContent>
 
+          {/* Physical Stats Tab */}
+          <TabsContent value="physical" className="space-y-6 mt-6">
+            {editedProfile.accountType === 'individual' ? (
+              /* Individual Physical Stats */
+              <div className="space-y-6">
+                <h3 className="text-white text-lg font-semibold">Physical Appearance</h3>
+                
+                {/* Height & Weight */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Height</Label>
+                    <Input
+                      value={editedProfile.height || ''}
+                      onChange={(e) => handleInputChange('height', e.target.value)}
+                      className="bg-gray-900 border-pink-500/30 text-white"
+                      placeholder="e.g., 5'10&quot;"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">Weight</Label>
+                    <Input
+                      value={editedProfile.weight || ''}
+                      onChange={(e) => handleInputChange('weight', e.target.value)}
+                      className="bg-gray-900 border-pink-500/30 text-white"
+                      placeholder="e.g., 160 lbs"
+                    />
+                  </div>
+                </div>
+
+                {/* Body Type & Ethnicity */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Body Type</Label>
+                    <Select
+                      value={editedProfile.bodyType}
+                      onValueChange={(value) => handleInputChange('bodyType', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select body type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {BODY_TYPE_OPTIONS.map(type => (
+                          <SelectItem key={type} value={type}>{type}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">Ethnicity</Label>
+                    <Select
+                      value={editedProfile.ethnicity}
+                      onValueChange={(value) => handleInputChange('ethnicity', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select ethnicity" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ETHNICITY_OPTIONS.map(ethnicity => (
+                          <SelectItem key={ethnicity} value={ethnicity}>{ethnicity}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Hair Color & Eye Color */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Hair Color</Label>
+                    <Select
+                      value={editedProfile.hairColor}
+                      onValueChange={(value) => handleInputChange('hairColor', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select hair color" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {HAIR_COLOR_OPTIONS.map(color => (
+                          <SelectItem key={color} value={color}>{color}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">Eye Color</Label>
+                    <Select
+                      value={editedProfile.eyeColor}
+                      onValueChange={(value) => handleInputChange('eyeColor', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select eye color" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {EYE_COLOR_OPTIONS.map(color => (
+                          <SelectItem key={color} value={color}>{color}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Facial Hair & Body Hair */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Facial Hair</Label>
+                    <Select
+                      value={editedProfile.facialHair}
+                      onValueChange={(value) => handleInputChange('facialHair', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select facial hair" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FACIAL_HAIR_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">Body Hair</Label>
+                    <Select
+                      value={editedProfile.bodyHair}
+                      onValueChange={(value) => handleInputChange('bodyHair', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select body hair" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {BODY_HAIR_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Grooming Style */}
+                <div className="space-y-2">
+                  <Label className="text-white">Grooming Style</Label>
+                  <Select
+                    value={editedProfile.groomingStyle}
+                    onValueChange={(value) => handleInputChange('groomingStyle', value)}
+                  >
+                    <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                      <SelectValue placeholder="Select grooming style" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {GROOMING_STYLE_OPTIONS.map(style => (
+                        <SelectItem key={style} value={style}>{style}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Tattoos & Piercings */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="tattoos"
+                      checked={editedProfile.tattoos || false}
+                      onCheckedChange={(checked) => handleInputChange('tattoos', !!checked)}
+                    />
+                    <Label htmlFor="tattoos" className="text-white">I have tattoos</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="piercings"
+                      checked={editedProfile.piercings || false}
+                      onCheckedChange={(checked) => handleInputChange('piercings', !!checked)}
+                    />
+                    <Label htmlFor="piercings" className="text-white">I have piercings</Label>
+                  </div>
+                </div>
+
+                <h3 className="text-white text-lg font-semibold mt-6">Lifestyle</h3>
+
+                {/* Cigarette Smoker, Alcohol Drinker, Marijuana User */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Cigarette Smoker</Label>
+                    <Select
+                      value={editedProfile.cigaretteSmoker}
+                      onValueChange={(value) => handleInputChange('cigaretteSmoker', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {YES_NO_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">Alcohol Drinker</Label>
+                    <Select
+                      value={editedProfile.alcoholDrinker}
+                      onValueChange={(value) => handleInputChange('alcoholDrinker', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {YES_NO_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">Marijuana User</Label>
+                    <Select
+                      value={editedProfile.marijuanaUser}
+                      onValueChange={(value) => handleInputChange('marijuanaUser', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {YES_NO_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <h3 className="text-white text-lg font-semibold mt-6">Health & Safety</h3>
+
+                {/* Birth Control & Latex Allergy */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Birth Control</Label>
+                    <Select
+                      value={editedProfile.birthControl}
+                      onValueChange={(value) => handleInputChange('birthControl', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {BIRTH_CONTROL_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center space-x-2 mt-8">
+                    <Checkbox
+                      id="latexAllergy"
+                      checked={editedProfile.latexAllergy || false}
+                      onCheckedChange={(checked) => handleInputChange('latexAllergy', !!checked)}
+                    />
+                    <Label htmlFor="latexAllergy" className="text-white">I have a latex allergy</Label>
+                  </div>
+                </div>
+
+                {/* STI Test Date & Results */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-white">Last STI Test Date</Label>
+                    <Input
+                      type="date"
+                      value={editedProfile.lastSTITestDate || ''}
+                      onChange={(e) => handleInputChange('lastSTITestDate', e.target.value)}
+                      className="bg-gray-900 border-pink-500/30 text-white"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-white">STI Test Results</Label>
+                    <Select
+                      value={editedProfile.stiPositiveResults}
+                      onValueChange={(value) => handleInputChange('stiPositiveResults', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select results" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {STI_TEST_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                {/* Can Host */}
+                <div className="space-y-2">
+                  <Label className="text-white">Can Host</Label>
+                  <Select
+                    value={editedProfile.canHost}
+                    onValueChange={(value) => handleInputChange('canHost', value)}
+                  >
+                    <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {YES_NO_POSSIBLY_OPTIONS.map(option => (
+                        <SelectItem key={option} value={option}>{option}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            ) : (
+              /* Couple Physical Stats */
+              <div className="space-y-8">
+                {/* Partner 1 Stats */}
+                <div className="border border-pink-500/30 rounded-lg p-6 space-y-6">
+                  <h3 className="text-pink-400 text-lg font-semibold">
+                    {editedProfile.displayName || 'Partner 1'}'s Physical Stats
+                  </h3>
+                  
+                  {/* Height & Weight */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Height</Label>
+                      <Input
+                        value={editedProfile.partner1Height || ''}
+                        onChange={(e) => handleInputChange('partner1Height', e.target.value)}
+                        className="bg-gray-900 border-pink-500/30 text-white"
+                        placeholder="e.g., 5'10&quot;"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Weight</Label>
+                      <Input
+                        value={editedProfile.partner1Weight || ''}
+                        onChange={(e) => handleInputChange('partner1Weight', e.target.value)}
+                        className="bg-gray-900 border-pink-500/30 text-white"
+                        placeholder="e.g., 160 lbs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Body Type & Ethnicity */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Body Type</Label>
+                      <Select
+                        value={editedProfile.partner1BodyType}
+                        onValueChange={(value) => handleInputChange('partner1BodyType', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select body type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {BODY_TYPE_OPTIONS.map(type => (
+                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Ethnicity</Label>
+                      <Select
+                        value={editedProfile.partner1Ethnicity}
+                        onValueChange={(value) => handleInputChange('partner1Ethnicity', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select ethnicity" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ETHNICITY_OPTIONS.map(ethnicity => (
+                            <SelectItem key={ethnicity} value={ethnicity}>{ethnicity}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Hair & Eye Color */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Hair Color</Label>
+                      <Select
+                        value={editedProfile.partner1HairColor}
+                        onValueChange={(value) => handleInputChange('partner1HairColor', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select hair color" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {HAIR_COLOR_OPTIONS.map(color => (
+                            <SelectItem key={color} value={color}>{color}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Eye Color</Label>
+                      <Select
+                        value={editedProfile.partner1EyeColor}
+                        onValueChange={(value) => handleInputChange('partner1EyeColor', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select eye color" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {EYE_COLOR_OPTIONS.map(color => (
+                            <SelectItem key={color} value={color}>{color}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Facial Hair */}
+                  <div className="space-y-2">
+                    <Label className="text-white">Facial Hair</Label>
+                    <Select
+                      value={editedProfile.partner1FacialHair}
+                      onValueChange={(value) => handleInputChange('partner1FacialHair', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                        <SelectValue placeholder="Select facial hair" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FACIAL_HAIR_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Tattoos & Piercings */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="partner1Tattoos"
+                        checked={editedProfile.partner1Tattoos || false}
+                        onCheckedChange={(checked) => handleInputChange('partner1Tattoos', !!checked)}
+                      />
+                      <Label htmlFor="partner1Tattoos" className="text-white">Has tattoos</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="partner1Piercings"
+                        checked={editedProfile.partner1Piercings || false}
+                        onCheckedChange={(checked) => handleInputChange('partner1Piercings', !!checked)}
+                      />
+                      <Label htmlFor="partner1Piercings" className="text-white">Has piercings</Label>
+                    </div>
+                  </div>
+
+                  {/* Lifestyle */}
+                  <h4 className="text-white font-semibold mt-4">Lifestyle</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Cigarette Smoker</Label>
+                      <Select
+                        value={editedProfile.partner1CigaretteSmoker}
+                        onValueChange={(value) => handleInputChange('partner1CigaretteSmoker', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YES_NO_OPTIONS.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Alcohol Drinker</Label>
+                      <Select
+                        value={editedProfile.partner1AlcoholDrinker}
+                        onValueChange={(value) => handleInputChange('partner1AlcoholDrinker', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YES_NO_OPTIONS.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Marijuana User</Label>
+                      <Select
+                        value={editedProfile.partner1MarijuanaUser}
+                        onValueChange={(value) => handleInputChange('partner1MarijuanaUser', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-pink-500/30 text-white">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YES_NO_OPTIONS.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Partner 2 Stats */}
+                <div className="border border-blue-500/30 rounded-lg p-6 space-y-6">
+                  <h3 className="text-blue-400 text-lg font-semibold">
+                    {editedProfile.displayName2 || 'Partner 2'}'s Physical Stats
+                  </h3>
+                  
+                  {/* Height & Weight */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Height</Label>
+                      <Input
+                        value={editedProfile.partner2Height || ''}
+                        onChange={(e) => handleInputChange('partner2Height', e.target.value)}
+                        className="bg-gray-900 border-blue-500/30 text-white"
+                        placeholder="e.g., 5'6&quot;"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Weight</Label>
+                      <Input
+                        value={editedProfile.partner2Weight || ''}
+                        onChange={(e) => handleInputChange('partner2Weight', e.target.value)}
+                        className="bg-gray-900 border-blue-500/30 text-white"
+                        placeholder="e.g., 140 lbs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Body Type & Ethnicity */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Body Type</Label>
+                      <Select
+                        value={editedProfile.partner2BodyType}
+                        onValueChange={(value) => handleInputChange('partner2BodyType', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select body type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {BODY_TYPE_OPTIONS.map(type => (
+                            <SelectItem key={type} value={type}>{type}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Ethnicity</Label>
+                      <Select
+                        value={editedProfile.partner2Ethnicity}
+                        onValueChange={(value) => handleInputChange('partner2Ethnicity', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select ethnicity" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {ETHNICITY_OPTIONS.map(ethnicity => (
+                            <SelectItem key={ethnicity} value={ethnicity}>{ethnicity}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Hair & Eye Color */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Hair Color</Label>
+                      <Select
+                        value={editedProfile.partner2HairColor}
+                        onValueChange={(value) => handleInputChange('partner2HairColor', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select hair color" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {HAIR_COLOR_OPTIONS.map(color => (
+                            <SelectItem key={color} value={color}>{color}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Eye Color</Label>
+                      <Select
+                        value={editedProfile.partner2EyeColor}
+                        onValueChange={(value) => handleInputChange('partner2EyeColor', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select eye color" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {EYE_COLOR_OPTIONS.map(color => (
+                            <SelectItem key={color} value={color}>{color}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  {/* Facial Hair */}
+                  <div className="space-y-2">
+                    <Label className="text-white">Facial Hair</Label>
+                    <Select
+                      value={editedProfile.partner2FacialHair}
+                      onValueChange={(value) => handleInputChange('partner2FacialHair', value)}
+                    >
+                      <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                        <SelectValue placeholder="Select facial hair" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FACIAL_HAIR_OPTIONS.map(option => (
+                          <SelectItem key={option} value={option}>{option}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Tattoos & Piercings */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="partner2Tattoos"
+                        checked={editedProfile.partner2Tattoos || false}
+                        onCheckedChange={(checked) => handleInputChange('partner2Tattoos', !!checked)}
+                      />
+                      <Label htmlFor="partner2Tattoos" className="text-white">Has tattoos</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="partner2Piercings"
+                        checked={editedProfile.partner2Piercings || false}
+                        onCheckedChange={(checked) => handleInputChange('partner2Piercings', !!checked)}
+                      />
+                      <Label htmlFor="partner2Piercings" className="text-white">Has piercings</Label>
+                    </div>
+                  </div>
+
+                  {/* Lifestyle */}
+                  <h4 className="text-white font-semibold mt-4">Lifestyle</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-white">Cigarette Smoker</Label>
+                      <Select
+                        value={editedProfile.partner2CigaretteSmoker}
+                        onValueChange={(value) => handleInputChange('partner2CigaretteSmoker', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YES_NO_OPTIONS.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Alcohol Drinker</Label>
+                      <Select
+                        value={editedProfile.partner2AlcoholDrinker}
+                        onValueChange={(value) => handleInputChange('partner2AlcoholDrinker', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YES_NO_OPTIONS.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-white">Marijuana User</Label>
+                      <Select
+                        value={editedProfile.partner2MarijuanaUser}
+                        onValueChange={(value) => handleInputChange('partner2MarijuanaUser', value)}
+                      >
+                        <SelectTrigger className="bg-gray-900 border-blue-500/30 text-white">
+                          <SelectValue placeholder="Select" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {YES_NO_OPTIONS.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </TabsContent>
+
           {/* Interests Tab */}
           <TabsContent value="interests" className="space-y-6 mt-6">
             {/* General Interests */}
