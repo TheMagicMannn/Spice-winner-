@@ -5,9 +5,16 @@ import { Profile, MatchPreferences } from '../types';
 
 /**
  * Converts a camelCase string to snake_case
+ * Handles acronyms properly (e.g., lastSTITestDate -> last_sti_test_date)
  */
 function toSnakeCase(str: string): string {
-  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+  return str
+    // Insert underscore before uppercase letters that follow lowercase letters or numbers
+    .replace(/([a-z0-9])([A-Z])/g, '$1_$2')
+    // Insert underscore before uppercase letters that are followed by lowercase letters
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1_$2')
+    // Convert everything to lowercase
+    .toLowerCase();
 }
 
 /**
