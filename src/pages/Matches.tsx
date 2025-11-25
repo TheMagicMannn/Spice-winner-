@@ -79,10 +79,11 @@ export const MatchesPage: React.FC = () => {
     }
   };
 
-  // Handle profile card click to open detail modal
+  // Handle profile card click to navigate to user profile page
   const handleProfileClick = (profile: Profile) => {
-    setSelectedProfile(profile);
-    setShowProfileDetail(true);
+    if (profile.id) {
+      navigate(`/user/${profile.id}`);
+    }
   };
 
   const renderMatchCard = (match: Profile, type: 'match' | 'liked' | 'likes') => (
