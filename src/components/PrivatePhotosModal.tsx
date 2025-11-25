@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Image, AlertCircle, X } from 'lucide-react';
+import { Lock, AlertCircle, X } from 'lucide-react';
 import { settingsService, PrivatePhotoAccess } from '@/services/settingsService';
 import { Spinner } from './Spinner';
 
@@ -40,7 +40,7 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
       const list = await settingsService.getPrivatePhotoAccessList();
       setAccessList(list);
     } catch (err: any) {
-      console.error('Error loading private photo access list:', err);
+      console.error('Error loading private content access list:', err);
       setError('Failed to load access list');
     } finally {
       setIsLoading(false);
