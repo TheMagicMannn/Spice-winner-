@@ -122,16 +122,17 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
     }
   };
 
-  const getPlanName = (planId: string) => {
-    if (planId.includes('yearly') || planId.includes('annual')) return 'VIP Annual';
-    if (planId.includes('monthly')) return 'VIP Monthly';
+  const getPlanName = (amountCents: number) => {
+    if (amountCents >= 14999) return 'VIP Annual';
+    if (amountCents >= 1699) return 'VIP Monthly';
     return 'VIP Plan';
   };
 
-  const getPlanPrice = (planId: string) => {
-    if (planId.includes('yearly') || planId.includes('annual')) return '$149.99/year';
-    if (planId.includes('monthly')) return '$16.99/month';
-    return 'VIP';
+  const getPlanPrice = (amountCents: number, currency: string = 'USD') => {
+    const amount = (amountCents / 100).toFixed(2);
+    if (amountCents >= 14999) return `$${amount}/year`;
+    if (amountCents >= 1699) return `$${amount}/month`;
+    return `$${amount}`;
   };
 
   return (
