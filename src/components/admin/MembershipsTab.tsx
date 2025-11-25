@@ -278,9 +278,9 @@ export const MembershipsTab: React.FC = () => {
                       <h3 className="text-lg font-semibold text-white">
                         {userData.display_name || 'No Name'}
                       </h3>
-                      <Badge className={getMembershipColor(userData.membership_level)}>
+                      <Badge className={getMembershipColor(userData.membership_tier)}>
                         <Crown className="h-3 w-3 mr-1" />
-                        {userData.membership_level || 'free'}
+                        {userData.membership_tier === 'vip' ? 'VIP' : 'Basic'}
                       </Badge>
                       {userData.is_verified && (
                         <Badge className="bg-blue-500/20 text-blue-300">
