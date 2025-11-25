@@ -88,7 +88,9 @@ export const VIPUpgradeModal: React.FC<VIPUpgradeModalProps> = ({
       const { data, error: checkoutError } = await supabase.functions.invoke('create-checkout-session', {
         body: {
           userId: user.id,
-          planId: plans[selectedPlan].id,
+          tier: plans[selectedPlan].tier,
+          periodMonths: plans[selectedPlan].periodMonths,
+          amountCents: plans[selectedPlan].priceCents,
           priceId: selectedPlan === 'monthly' ? 'price_monthly_vip' : 'price_yearly_vip',
           successUrl: `${window.location.origin}/#/profile?upgrade=success`,
           cancelUrl: `${window.location.origin}/#/profile?upgrade=cancelled`
