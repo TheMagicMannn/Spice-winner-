@@ -53,9 +53,6 @@ interface SlideCarouselProps {
 
 const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [touchStart, setTouchStart] = useState(0);
-  const [touchEnd, setTouchEnd] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
   const slides = [
     {
@@ -63,9 +60,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       title: 'My Learning Journey',
       description: 'Track your progress through educational modules and learning paths',
       icon: <BookOpen className="h-8 w-8 text-pink-400" />,
-      path: '/learning-journey',
       gradient: 'from-pink-500/20 to-purple-500/20',
-      isExternal: false,
       onClick: () => navigate('/learning-journey')
     },
     {
@@ -73,9 +68,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       title: 'SPICE Groups',
       description: 'Connect with like-minded members in topic-specific and lifestyle community groups',
       icon: <Users className="h-8 w-8 text-purple-400" />,
-      path: '/spice-groups',
       gradient: 'from-purple-500/20 to-pink-500/20',
-      isExternal: false,
       onClick: () => navigate('/spice-groups')
     },
     {
@@ -83,23 +76,10 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       title: 'Adult Toy Store',
       description: 'Shop discreetly for adult toys with exclusive SPICE member discounts',
       icon: <ShoppingBag className="h-8 w-8 text-rose-400" />,
-      path: 'https://www.lovense.com/r/6wn77j',
       gradient: 'from-rose-500/20 to-red-500/20',
-      isExternal: true,
       onClick: () => window.open('https://www.lovense.com/r/6wn77j', '_blank', 'noopener,noreferrer')
     }
   ];
-
-  // Auto-slide effect
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 4500); // 4.5 seconds
-
-    return () => clearInterval(interval);
-  }, [isPaused, slides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -109,45 +89,16 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-    setIsPaused(true);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (touchStart - touchEnd > 75) {
-      nextSlide();
-    }
-    if (touchStart - touchEnd < -75) {
-      prevSlide();
-    }
-    setTimeout(() => setIsPaused(false), 1000);
-  };
-
-  // Get current slide data
   const currentSlideData = slides[currentSlide];
 
   return (
-    <div 
-      className="relative"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
+    <div className="relative">
       {/* Slide Content */}
-      <div
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
+      <div className="relative">
         <button
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            setIsPaused(true);
             currentSlideData.onClick();
           }}
           className="w-full p-6 text-left transition-all hover:scale-[1.02] cursor-pointer"
@@ -174,6 +125,34 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
             </div>
           </div>
         </button>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            prevSlide();
+          }}
+          className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 transition-all flex items-center justify-center z-10"
+          data-testid="carousel-prev"
+        >
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            nextSlide();
+          }}
+          className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-black/70 backdrop-blur-sm text-white hover:bg-black/90 transition-all flex items-center justify-center z-10"
+          data-testid="carousel-next"
+        >
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
 
       {/* Dots Indicator */}
@@ -181,11 +160,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => {
-              setIsPaused(true);
-              setCurrentSlide(index);
-              setTimeout(() => setIsPaused(false), 2000);
-            }}
+            onClick={() => setCurrentSlide(index)}
             className={`transition-all rounded-full ${
               index === currentSlide 
                 ? 'w-8 h-2 bg-pink-500' 
