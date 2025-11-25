@@ -138,6 +138,8 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
       {/* Slide Content */}
       <button
