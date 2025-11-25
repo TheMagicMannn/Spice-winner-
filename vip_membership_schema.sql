@@ -270,7 +270,7 @@ BEGIN
     SELECT * INTO subscription_record
     FROM subscriptions
     WHERE user_id = user_id_param
-        AND status = 'cancelled'
+        AND status = 'canceled'
         AND current_period_end > NOW()
     ORDER BY created_at DESC
     LIMIT 1;
@@ -283,18 +283,10 @@ BEGIN
     UPDATE subscriptions
     SET 
         status = 'active',
-        cancel_at_period_end = FALSE,
-        cancelled_at = NULL,
         updated_at = NOW()
     WHERE id = subscription_record.id;
     
-    -- Ensure profile is VIP
-    UPDATE profiles
-    SET 
-        membership_tier = 'vip',
-        vip_expires_at = subscription_record.current_period_end,
-        updated_at = NOW()
-    WHERE id = user_id_param;
+    -- Profile will be updated automatically by trigger
     
     RETURN TRUE;
 END;
