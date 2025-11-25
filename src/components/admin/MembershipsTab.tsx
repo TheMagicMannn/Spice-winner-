@@ -414,15 +414,13 @@ export const MembershipsTab: React.FC = () => {
                           Edit
                         </Button>
                         <select
-                          value={userData.membership_level || 'free'}
-                          onChange={(e) => handleQuickUpdate(userData.id, e.target.value as any)}
+                          value={userData.membership_tier || 'basic'}
+                          onChange={(e) => handleQuickUpdate(userData.id, e.target.value as 'basic' | 'vip')}
                           disabled={isUpdating}
                           className="px-3 py-1.5 text-sm rounded-md bg-gray-800 border border-gray-700 text-white"
                         >
-                          <option value="free">Free</option>
-                          <option value="premium">Premium</option>
+                          <option value="basic">Basic (Free)</option>
                           <option value="vip">VIP</option>
-                          <option value="platinum">Platinum</option>
                         </select>
                       </>
                     ) : null}
