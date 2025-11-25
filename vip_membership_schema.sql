@@ -77,12 +77,43 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Apply trigger to subscriptions table
+-- Function to automatically update profile membership tier when subscription changes
+CREATE OR REPLACE FUNCTION update_membership_tier()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Update profile membership tier based on subscription
+    IF NEW.status = 'active' AND NEW.tier = 'vip' THEN
+        UPDATE profiles
+        SET 
+            membership_tier = 'vip',
+            vip_expires_at = NEW.current_period_end,
+            updated_at = NOW()
+        WHERE id = NEW.user_id;
+    ELSIF NEW.status IN ('canceled', 'expired') OR (NEW.status = 'active' AND NEW.tier = 'basic') THEN
+        UPDATE profiles
+        SET 
+            membership_tier = 'basic',
+            vip_expires_at = NULL,
+            updated_at = NOW()
+        WHERE id = NEW.user_id;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Apply triggers to subscriptions table
 DROP TRIGGER IF EXISTS update_subscriptions_updated_at ON subscriptions;
 CREATE TRIGGER update_subscriptions_updated_at 
     BEFORE UPDATE ON subscriptions
     FOR EACH ROW 
     EXECUTE FUNCTION update_updated_at_column();
+
+DROP TRIGGER IF EXISTS on_subscription_change ON subscriptions;
+CREATE TRIGGER on_subscription_change
+    AFTER INSERT OR UPDATE ON subscriptions
+    FOR EACH ROW
+    EXECUTE FUNCTION update_membership_tier();
 
 -- Function to automatically downgrade expired VIP memberships
 CREATE OR REPLACE FUNCTION check_expired_vip_memberships()
