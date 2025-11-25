@@ -210,23 +210,11 @@ export const MembershipsTab: React.FC = () => {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm text-white/70 flex items-center gap-2">
               <Users className="h-4 w-4" />
-              Free Users
+              Basic (Free) Users
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-white">{stats.free}</div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gray-900/50 border-yellow-500/30">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-yellow-300 flex items-center gap-2">
-              <Crown className="h-4 w-4" />
-              Premium
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-yellow-300">{stats.premium}</div>
+            <div className="text-3xl font-bold text-white">{stats.basic}</div>
           </CardContent>
         </Card>
 
@@ -234,23 +222,11 @@ export const MembershipsTab: React.FC = () => {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm text-purple-300 flex items-center gap-2">
               <Crown className="h-4 w-4" />
-              VIP
+              VIP Members
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold text-purple-300">{stats.vip}</div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gray-900/50 border-gray-300/30">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm text-gray-300 flex items-center gap-2">
-              <Crown className="h-4 w-4" />
-              Platinum
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-gray-300">{stats.platinum}</div>
           </CardContent>
         </Card>
       </div>
