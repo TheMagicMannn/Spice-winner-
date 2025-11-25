@@ -173,12 +173,24 @@ export const BrowsePage: React.FC = () => {
           <p className="text-white/60 mb-6">
             We've shown you all available matches based on your preferences.
           </p>
-          <Button 
-            onClick={loadProfiles}
-            className="bg-pink-600 hover:bg-pink-700"
-          >
-            Refresh Matches
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button 
+              onClick={loadProfiles}
+              className="bg-pink-600 hover:bg-pink-700"
+              data-testid="refresh-matches-button"
+            >
+              Refresh Matches
+            </Button>
+            <Button 
+              onClick={() => setIsMatchPreferencesOpen(true)}
+              variant="outline"
+              className="border-pink-500/50 text-pink-400 hover:bg-pink-500/10"
+              data-testid="edit-preferences-button"
+            >
+              <Sliders className="h-4 w-4 mr-2" />
+              Edit Preferences
+            </Button>
+          </div>
         </div>
       </SpiceBackground>
     );
