@@ -231,6 +231,8 @@ export const ProfilePage: React.FC = () => {
   const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
   const [isGetVerifiedOpen, setIsGetVerifiedOpen] = useState(false);
   const [isKinkQuizOpen, setIsKinkQuizOpen] = useState(false);
+  const [isVIPUpgradeOpen, setIsVIPUpgradeOpen] = useState(false);
+  const [isManageSubscriptionOpen, setIsManageSubscriptionOpen] = useState(false);
   const [showKinkQuizPrompt, setShowKinkQuizPrompt] = useState(false);
   const [viewKinkResultsOnly, setViewKinkResultsOnly] = useState(false);
   const [viewMode, setViewMode] = useState<'own' | 'preview'>('own');
