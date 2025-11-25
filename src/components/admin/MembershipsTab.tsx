@@ -80,8 +80,8 @@ export const MembershipsTab: React.FC = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(membershipsSubscription);
       supabase.removeChannel(profilesSubscription);
+      supabase.removeChannel(subscriptionsSubscription);
     };
   }, []);
 
