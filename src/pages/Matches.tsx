@@ -99,11 +99,7 @@ export const MatchesPage: React.FC = () => {
           <img
             src={match.photos?.[0] || 'https://via.placeholder.com/200x200?text=No+Photo'}
             alt={getDisplayName(match)}
-            className="w-20 h-20 rounded-lg object-cover cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/user/${match.id}`);
-            }}
+            className="w-20 h-20 rounded-lg object-cover"
             data-testid={`avatar-${match.id}`}
           />
           
