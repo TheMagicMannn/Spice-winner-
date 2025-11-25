@@ -237,7 +237,7 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
 
               {/* Action Buttons */}
               <div className="space-y-3 pt-4 border-t border-gray-700">
-                {!subscription.cancel_at_period_end ? (
+                {subscription.status === 'active' ? (
                   <Button
                     onClick={handleCancelSubscription}
                     disabled={isCancelling}
