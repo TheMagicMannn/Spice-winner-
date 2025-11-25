@@ -315,27 +315,37 @@ class AdminService {
     try {
       console.log('[AdminService] Updating membership:', { userId, membershipLevel, expiresAt });
 
-      // For free memberships, we need to handle differently
-      if (membershipLevel === 'free') {
-        // Update to free: set expires_at to null and is_active to false for premium features
-        const { error } = await supabase
-          .from('user_memberships')
-          .upsert({
-            user_id: userId,
-            membership_level: 'free',
-            expires_at: null,
-            is_active: true,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id'
-          });
+      // Map membership level to tier (basic or vip)
+      const tier = (membershipLevel === 'vip' || membershipLevel === 'premium' || membershipLevel === 'platinum') ? 'vip' : 'basic';
+      
+      // Update profiles table with membership_tier
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          membership_tier: tier,
+          vip_expires_at: tier === 'vip' && expiresAt ? expiresAt : null
+        })
+        .eq('id', userId);
 
-        if (error) {
-          console.error('[AdminService] Upsert error for free membership:', error);
-          throw error;
+      if (profileError) {
+        console.error('[AdminService] Profile update error:', profileError);
+        throw profileError;
+      }
+
+      // For free/basic memberships, cancel any active subscriptions
+      if (tier === 'basic') {
+        const { error: subError } = await supabase
+          .from('subscriptions')
+          .update({ status: 'canceled' })
+          .eq('user_id', userId)
+          .eq('status', 'active');
+
+        if (subError) {
+          console.error('[AdminService] Subscription cancel error:', subError);
+          // Don't throw, just log - profile update is what matters
         }
       } else {
-        // Premium memberships
+        // For VIP memberships, create or update subscription
         const { error } = await supabase
           .from('user_memberships')
           .upsert({
