@@ -200,13 +200,24 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
             onClick={() => setCurrentSlide(index)}
             className={`transition-all rounded-full ${
               index === currentSlide 
-                ? 'w-8 h-2 bg-pink-500' 
+                ? 'w-8 h-2 bg-pink-500 shadow-lg shadow-pink-500/50' 
                 : 'w-2 h-2 bg-white/30 hover:bg-white/50'
             }`}
             data-testid={`carousel-dot-${index}`}
           />
         ))}
       </div>
+
+      {/* Shimmer Animation */}
+      <style>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-100%) skewX(-12deg); }
+          100% { transform: translateX(200%) skewX(-12deg); }
+        }
+        .animate-shimmer {
+          animation: shimmer 3s infinite;
+        }
+      `}</style>
     </div>
   );
 };
