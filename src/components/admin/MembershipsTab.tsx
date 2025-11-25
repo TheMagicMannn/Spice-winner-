@@ -181,16 +181,13 @@ export const MembershipsTab: React.FC = () => {
     }
   };
 
-  const getMembershipColor = (level?: string) => {
-    switch (level) {
-      case 'platinum':
-        return 'bg-gray-300 text-gray-900';
+  const getMembershipColor = (tier?: string) => {
+    switch (tier) {
       case 'vip':
-        return 'bg-purple-500/20 text-purple-300';
-      case 'premium':
-        return 'bg-yellow-500/20 text-yellow-300';
+        return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+      case 'basic':
       default:
-        return 'bg-gray-500/20 text-gray-300';
+        return 'bg-gray-500/20 text-gray-300 border-gray-500/30';
     }
   };
 
