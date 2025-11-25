@@ -212,10 +212,10 @@ class AdminService {
     try {
       console.log('[AdminService] Fetching users with filters:', filters);
 
-      // First, get profiles
+      // First, get profiles with membership_tier
       let query = supabase
         .from('profiles')
-        .select('id, display_name, email, account_type, is_verified, is_admin, is_active, created_at, last_sign_in_at')
+        .select('id, display_name, email, account_type, is_verified, is_admin, is_active, created_at, last_sign_in_at, membership_tier, vip_expires_at')
         .order('created_at', { ascending: false });
 
       if (filters?.search) {
