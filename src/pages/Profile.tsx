@@ -58,25 +58,37 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     {
       id: 1,
       title: 'My Learning Journey',
-      description: 'Track your progress through educational modules and learning paths',
-      icon: <BookOpen className="h-8 w-8 text-pink-400" />,
-      gradient: 'from-pink-500/20 to-purple-500/20',
+      subtitle: '🎓 Grow & Explore',
+      description: 'Expert-curated educational modules designed for your lifestyle journey',
+      badge: 'FREE',
+      badgeColor: 'bg-green-500',
+      icon: <BookOpen className="h-10 w-10 text-pink-400" />,
+      gradient: 'from-pink-600/30 via-purple-600/20 to-pink-500/30',
+      borderGlow: 'shadow-[0_0_20px_rgba(236,72,153,0.3)]',
       onClick: () => navigate('/learning-journey')
     },
     {
       id: 2,
       title: 'SPICE Groups',
-      description: 'Connect with like-minded members in topic-specific and lifestyle community groups',
-      icon: <Users className="h-8 w-8 text-purple-400" />,
-      gradient: 'from-purple-500/20 to-pink-500/20',
+      subtitle: '💬 Connect & Thrive',
+      description: 'Join exclusive communities with thousands of like-minded members',
+      badge: 'POPULAR',
+      badgeColor: 'bg-purple-500',
+      icon: <Users className="h-10 w-10 text-purple-400" />,
+      gradient: 'from-purple-600/30 via-pink-600/20 to-purple-500/30',
+      borderGlow: 'shadow-[0_0_20px_rgba(168,85,247,0.3)]',
       onClick: () => navigate('/spice-groups')
     },
     {
       id: 3,
-      title: 'Adult Toy Store',
-      description: 'Shop discreetly for adult toys with exclusive SPICE member discounts',
-      icon: <ShoppingBag className="h-8 w-8 text-rose-400" />,
-      gradient: 'from-rose-500/20 to-red-500/20',
+      title: 'Pleasure Shop',
+      subtitle: '🎁 Exclusive Offers',
+      description: 'Premium adult toys with members-only discounts. Shop discreetly!',
+      badge: 'SAVE 15%',
+      badgeColor: 'bg-rose-500',
+      icon: <ShoppingBag className="h-10 w-10 text-rose-400" />,
+      gradient: 'from-rose-600/30 via-red-600/20 to-rose-500/30',
+      borderGlow: 'shadow-[0_0_20px_rgba(244,63,94,0.3)]',
       onClick: () => window.open('https://www.lovense.com/r/6wn77j', '_blank', 'noopener,noreferrer')
     }
   ];
