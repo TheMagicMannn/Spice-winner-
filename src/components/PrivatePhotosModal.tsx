@@ -91,10 +91,10 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
             </div>
           ) : accessList.length === 0 ? (
             <div className="text-center py-12">
-              <Image className="h-12 w-12 text-white/20 mx-auto mb-3" />
+              <Lock className="h-12 w-12 text-white/20 mx-auto mb-3" />
               <p className="text-white/60">No shared access</p>
               <p className="text-white/40 text-sm mt-1">
-                Users you grant access to will appear here
+                Users you grant private content access to will appear here
               </p>
             </div>
           ) : (
