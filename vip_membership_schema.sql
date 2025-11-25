@@ -175,55 +175,54 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Function to create or upgrade subscription
 CREATE OR REPLACE FUNCTION create_vip_subscription(
     user_id_param UUID,
-    plan_id_param TEXT,
-    period_months INTEGER DEFAULT 1
+    tier_param TEXT DEFAULT 'vip',
+    period_months INTEGER DEFAULT 1,
+    amount_cents_param INTEGER DEFAULT NULL
 )
 RETURNS UUID AS $$
 DECLARE
     subscription_id UUID;
     period_start TIMESTAMPTZ := NOW();
     period_end TIMESTAMPTZ;
+    amount INTEGER;
 BEGIN
-    -- Calculate period end based on plan
+    -- Calculate period end and amount based on period
     IF period_months = 12 THEN
         period_end := period_start + INTERVAL '1 year';
+        amount := COALESCE(amount_cents_param, 14999); -- $149.99
     ELSE
         period_end := period_start + (period_months || ' months')::INTERVAL;
+        amount := COALESCE(amount_cents_param, 1699); -- $16.99
     END IF;
     
     -- Cancel any existing active subscriptions
     UPDATE subscriptions
-    SET status = 'cancelled',
-        cancel_at_period_end = TRUE,
-        cancelled_at = NOW()
+    SET status = 'canceled',
+        updated_at = NOW()
     WHERE user_id = user_id_param
         AND status = 'active';
     
     -- Create new subscription
     INSERT INTO subscriptions (
         user_id,
-        plan_id,
+        tier,
         status,
         current_period_start,
         current_period_end,
-        cancel_at_period_end
+        amount_cents,
+        currency
     ) VALUES (
         user_id_param,
-        plan_id_param,
+        tier_param,
         'active',
         period_start,
         period_end,
-        FALSE
+        amount,
+        'USD'
     )
     RETURNING id INTO subscription_id;
     
-    -- Update user profile
-    UPDATE profiles
-    SET 
-        membership_tier = 'vip',
-        vip_expires_at = period_end,
-        updated_at = NOW()
-    WHERE id = user_id_param;
+    -- Profile will be updated automatically by trigger
     
     RETURN subscription_id;
 END;
