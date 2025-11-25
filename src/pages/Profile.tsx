@@ -65,7 +65,8 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       icon: <BookOpen className="h-8 w-8 text-pink-400" />,
       path: '/learning-journey',
       gradient: 'from-pink-500/20 to-purple-500/20',
-      isExternal: false
+      isExternal: false,
+      onClick: () => navigate('/learning-journey')
     },
     {
       id: 2,
@@ -74,7 +75,8 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       icon: <Users className="h-8 w-8 text-purple-400" />,
       path: '/spice-groups',
       gradient: 'from-purple-500/20 to-pink-500/20',
-      isExternal: false
+      isExternal: false,
+      onClick: () => navigate('/spice-groups')
     },
     {
       id: 3,
@@ -83,7 +85,8 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       icon: <ShoppingBag className="h-8 w-8 text-rose-400" />,
       path: 'https://www.lovense.com/r/6wn77j',
       gradient: 'from-rose-500/20 to-red-500/20',
-      isExternal: true
+      isExternal: true,
+      onClick: () => window.open('https://www.lovense.com/r/6wn77j', '_blank', 'noopener,noreferrer')
     }
   ];
 
@@ -108,7 +111,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
-    setIsPaused(true); // Pause auto-slide on touch
+    setIsPaused(true);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -122,62 +125,67 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     if (touchStart - touchEnd < -75) {
       prevSlide();
     }
-    // Resume auto-slide after a delay
     setTimeout(() => setIsPaused(false), 1000);
   };
 
-  const handleSlideClick = (slide: typeof slides[0]) => {
-    setIsPaused(true); // Pause to prevent race condition
-    if (slide.isExternal) {
-      window.open(slide.path, '_blank', 'noopener,noreferrer');
-    } else {
-      navigate(slide.path);
-    }
-  };
+  // Get current slide data
+  const currentSlideData = slides[currentSlide];
 
   return (
     <div 
       className="relative"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Slide Content */}
-      <button
-        onClick={() => handleSlideClick(slides[currentSlide])}
-        className="w-full p-6 text-left transition-all hover:scale-[1.02] cursor-pointer"
-        data-testid="carousel-slide"
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        <div className={`bg-gradient-to-br ${slides[currentSlide].gradient} rounded-lg p-6 border border-white/10`}>
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-black/30 rounded-full">
-              {slides[currentSlide].icon}
-            </div>
-            <div className="flex-1">
-              <h3 className="text-white font-semibold text-lg mb-2">
-                {slides[currentSlide].title}
-              </h3>
-              <p className="text-white/70 text-sm leading-relaxed">
-                {slides[currentSlide].description}
-              </p>
-            </div>
-            <div className="text-white/50">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsPaused(true);
+            currentSlideData.onClick();
+          }}
+          className="w-full p-6 text-left transition-all hover:scale-[1.02] cursor-pointer"
+          data-testid="carousel-slide"
+        >
+          <div className={`bg-gradient-to-br ${currentSlideData.gradient} rounded-lg p-6 border border-white/10`}>
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-black/30 rounded-full">
+                {currentSlideData.icon}
+              </div>
+              <div className="flex-1">
+                <h3 className="text-white font-semibold text-lg mb-2">
+                  {currentSlideData.title}
+                </h3>
+                <p className="text-white/70 text-sm leading-relaxed">
+                  {currentSlideData.description}
+                </p>
+              </div>
+              <div className="text-white/50">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-      </button>
+        </button>
+      </div>
 
       {/* Dots Indicator */}
       <div className="flex items-center justify-center gap-2 py-4">
         {slides.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentSlide(index)}
+            onClick={() => {
+              setIsPaused(true);
+              setCurrentSlide(index);
+              setTimeout(() => setIsPaused(false), 2000);
+            }}
             className={`transition-all rounded-full ${
               index === currentSlide 
                 ? 'w-8 h-2 bg-pink-500' 
