@@ -146,14 +146,14 @@ export const UsersManagementTab: React.FC = () => {
       if (profileError) throw profileError;
 
       // Update membership if changed
-      if (editData.membership_level) {
-        const expiresAt = editData.membership_level !== 'free'
+      if (editData.membership_tier) {
+        const expiresAt = editData.membership_tier === 'vip'
           ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
           : undefined;
 
         await adminService.updateMembershipLevel(
           userId,
-          editData.membership_level as any,
+          editData.membership_tier,
           expiresAt,
           user.id
         );
