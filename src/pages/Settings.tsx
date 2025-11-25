@@ -430,11 +430,11 @@ export const SettingsPage: React.FC = () => {
             <button
               onClick={() => setIsPrivatePhotosModalOpen(true)}
               className="w-full flex items-center justify-between p-4 hover:bg-pink-500/5 rounded-lg transition-colors text-left"
-              data-testid="private-photos-button"
+              data-testid="private-content-button"
             >
               <div className="flex items-center space-x-3">
-                <Image className="h-5 w-5 text-white/70" />
-                <span className="text-white text-sm">Private Photos Sharing List</span>
+                <Lock className="h-5 w-5 text-white/70" />
+                <span className="text-white text-sm">Private Content Sharing List</span>
               </div>
               <ChevronRight className="h-5 w-5 text-white/40" />
             </button>
