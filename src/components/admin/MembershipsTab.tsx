@@ -25,7 +25,7 @@ import { format, addDays } from 'date-fns';
 
 interface EditMembership {
   userId: string;
-  level: 'free' | 'premium' | 'vip' | 'platinum';
+  level: 'basic' | 'vip';
   expiresAt?: string;
   autoRenew: boolean;
 }
@@ -37,10 +37,8 @@ export const MembershipsTab: React.FC = () => {
   const [editingMembership, setEditingMembership] = useState<EditMembership | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [stats, setStats] = useState({
-    free: 0,
-    premium: 0,
-    vip: 0,
-    platinum: 0
+    basic: 0,
+    vip: 0
   });
 
   useEffect(() => {
