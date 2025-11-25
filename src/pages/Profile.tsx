@@ -1046,18 +1046,12 @@ export const ProfilePage: React.FC = () => {
       <VIPUpgradeModal
         isOpen={isVIPUpgradeOpen}
         onClose={() => setIsVIPUpgradeOpen(false)}
-        userId={user.id}
-        userEmail={email || ''}
-        profile={profile}
       />
 
       {/* Manage Subscription Modal */}
       <ManageSubscriptionModal
         isOpen={isManageSubscriptionOpen}
         onClose={() => setIsManageSubscriptionOpen(false)}
-        userId={user.id}
-        userEmail={email || ''}
-        profile={profile}
       />
 
       {/* Theme Styles */}
