@@ -143,26 +143,30 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION get_user_subscription(user_id_param UUID)
 RETURNS TABLE (
     id UUID,
-    plan_id TEXT,
-    status subscription_status,
+    tier TEXT,
+    status TEXT,
     current_period_start TIMESTAMPTZ,
     current_period_end TIMESTAMPTZ,
-    cancel_at_period_end BOOLEAN,
-    cancelled_at TIMESTAMPTZ
+    amount_cents INTEGER,
+    currency TEXT,
+    stripe_subscription_id TEXT,
+    stripe_customer_id TEXT
 ) AS $$
 BEGIN
     RETURN QUERY
     SELECT 
         s.id,
-        s.plan_id,
+        s.tier,
         s.status,
         s.current_period_start,
         s.current_period_end,
-        s.cancel_at_period_end,
-        s.cancelled_at
+        s.amount_cents,
+        s.currency,
+        s.stripe_subscription_id,
+        s.stripe_customer_id
     FROM subscriptions s
     WHERE s.user_id = user_id_param
-        AND s.status IN ('active', 'cancelled')
+        AND s.status IN ('active', 'canceled', 'pending')
     ORDER BY s.created_at DESC
     LIMIT 1;
 END;
