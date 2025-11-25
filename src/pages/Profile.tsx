@@ -33,6 +33,8 @@ import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
 import { EditProfileModal } from '@/components/EditProfileModal';
 import { MatchPreferencesModal } from '@/components/MatchPreferencesModal';
+import { VIPUpgradeModal } from '@/components/VIPUpgradeModal';
+import { ManageSubscriptionModal } from '@/components/ManageSubscriptionModal';
 import { GetVerifiedModal } from '@/components/GetVerifiedModal';
 import { ProfileService } from '@/services/profileService';
 import { verificationService } from '@/services/verificationService';
