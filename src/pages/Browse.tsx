@@ -107,6 +107,27 @@ export const BrowsePage: React.FC = () => {
     setCurrentPhotoIndex(0);
   };
 
+  const handleSaveMatchPreferences = async (updatedPreferences: MatchPreferences) => {
+    if (!user?.id || !user?.profile) return;
+    
+    try {
+      console.log('BrowsePage - Saving match preferences:', updatedPreferences);
+      const updatedProfileData = {
+        ...user.profile,
+        matchPreferences: updatedPreferences
+      };
+      const savedProfile = await ProfileService.updateProfile(user.id, updatedProfileData);
+      updateProfile(savedProfile);
+      console.log('BrowsePage - Match preferences saved successfully');
+      
+      // Reload profiles with new preferences
+      await loadProfiles();
+    } catch (error) {
+      console.error('BrowsePage - Failed to save match preferences:', error);
+      throw error;
+    }
+  };
+
   const handlePrevPhoto = () => {
     const photos = currentProfile?.photos || [];
     setCurrentPhotoIndex((prev) => (prev > 0 ? prev - 1 : photos.length - 1));
