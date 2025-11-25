@@ -155,7 +155,7 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
           <Button
             onClick={onClose}
             className="w-full bg-pink-600 hover:bg-pink-700 text-white"
-            data-testid="close-private-photos-button"
+            data-testid="close-private-content-button"
           >
             Done
           </Button>
