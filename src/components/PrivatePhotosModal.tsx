@@ -115,31 +115,31 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
             <div className="space-y-2">
               {accessList.map((access) => (
                 <div
-                  key={access.id}
+                  key={access.user_id}
                   className="flex items-center justify-between p-3 bg-gray-800/50 rounded-lg hover:bg-gray-800 transition-colors"
-                  data-testid={`private-access-${access.grantedToId}`}
+                  data-testid={`private-access-${access.user_id}`}
                 >
                   <div className="flex items-center space-x-3 flex-1">
                     <Avatar className="h-12 w-12">
-                      <AvatarImage src={access.grantedProfile?.photos?.[0]} />
+                      <AvatarImage src={access.photos?.[0]} />
                       <AvatarFallback className="bg-pink-500/20 text-pink-400">
-                        {access.grantedProfile?.displayName?.[0] || 'U'}
+                        {access.display_name?.[0] || 'U'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="text-white font-medium truncate">
-                        {access.grantedProfile?.displayName || 'Unknown User'}
+                        {access.display_name || 'Unknown User'}
                       </div>
                       <div className="text-white/60 text-xs">
-                        Granted {new Date(access.grantedAt).toLocaleDateString()}
+                        Granted {new Date(access.granted_at).toLocaleDateString()}
                       </div>
-                      {access.expiresAt && (
+                      {access.expires_at && (
                         <div className={`text-xs mt-0.5 ${
-                          isExpired(access.expiresAt) ? 'text-red-400' : 'text-yellow-400'
+                          isExpired(access.expires_at) ? 'text-red-400' : 'text-yellow-400'
                         }`}>
-                          {isExpired(access.expiresAt) 
+                          {isExpired(access.expires_at) 
                             ? 'Expired' 
-                            : `Expires ${new Date(access.expiresAt).toLocaleDateString()}`
+                            : `Expires ${new Date(access.expires_at).toLocaleDateString()}`
                           }
                         </div>
                       )}
@@ -148,12 +148,12 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => handleRevoke(access.grantedToId)}
-                    disabled={revokingId === access.grantedToId}
+                    onClick={() => handleRevoke(access.user_id)}
+                    disabled={revokingId === access.user_id}
                     className="text-red-400 hover:bg-red-500/10 ml-2"
-                    data-testid={`revoke-button-${access.grantedToId}`}
+                    data-testid={`revoke-button-${access.user_id}`}
                   >
-                    {revokingId === access.grantedToId ? (
+                    {revokingId === access.user_id ? (
                       <Spinner />
                     ) : (
                       <X className="h-4 w-4" />
