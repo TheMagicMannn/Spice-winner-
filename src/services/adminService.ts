@@ -346,21 +346,48 @@ class AdminService {
         }
       } else {
         // For VIP memberships, create or update subscription
-        const { error } = await supabase
-          .from('user_memberships')
-          .upsert({
-            user_id: userId,
-            membership_level: membershipLevel,
-            expires_at: expiresAt,
-            is_active: true,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'user_id'
-          });
+        const periodEnd = expiresAt || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+        
+        // Check if subscription exists
+        const { data: existingSub } = await supabase
+          .from('subscriptions')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('status', 'active')
+          .maybeSingle();
 
-        if (error) {
-          console.error('[AdminService] Upsert error for premium membership:', error);
-          throw error;
+        if (existingSub) {
+          // Update existing subscription
+          const { error: subError } = await supabase
+            .from('subscriptions')
+            .update({
+              tier: 'vip',
+              status: 'active',
+              current_period_end: periodEnd
+            })
+            .eq('id', existingSub.id);
+
+          if (subError) {
+            console.error('[AdminService] Subscription update error:', subError);
+          }
+        } else {
+          // Create new subscription
+          const { error: subError } = await supabase
+            .from('subscriptions')
+            .insert({
+              user_id: userId,
+              tier: 'vip',
+              status: 'active',
+              current_period_start: new Date().toISOString(),
+              current_period_end: periodEnd,
+              amount_cents: 1699, // Default monthly
+              currency: 'USD'
+            });
+
+          if (subError) {
+            console.error('[AdminService] Subscription insert error:', subError);
+            // Don't throw - profile is already updated
+          }
         }
       }
 
