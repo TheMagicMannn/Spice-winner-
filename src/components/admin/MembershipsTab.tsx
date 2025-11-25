@@ -334,18 +334,16 @@ export const MembershipsTab: React.FC = () => {
                             value={editingMembership.level}
                             onChange={(e) => setEditingMembership({
                               ...editingMembership,
-                              level: e.target.value as any
+                              level: e.target.value as 'basic' | 'vip'
                             })}
                             className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 text-white"
                           >
-                            <option value="free">Free</option>
-                            <option value="premium">Premium</option>
+                            <option value="basic">Basic (Free)</option>
                             <option value="vip">VIP</option>
-                            <option value="platinum">Platinum</option>
                           </select>
                         </div>
 
-                        {editingMembership.level !== 'free' && (
+                        {editingMembership.level === 'vip' && (
                           <>
                             <div>
                               <label className="text-sm text-white/70 mb-1 block">Expires At</label>
