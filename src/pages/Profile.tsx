@@ -113,26 +113,51 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
             e.stopPropagation();
             currentSlideData.onClick();
           }}
-          className="w-full p-6 text-left transition-all hover:scale-[1.02] cursor-pointer"
+          className="w-full text-left transition-all hover:scale-[1.03] cursor-pointer group"
           data-testid="carousel-slide"
         >
-          <div className={`bg-gradient-to-br ${currentSlideData.gradient} rounded-lg p-6 border border-white/10`}>
-            <div className="flex items-start gap-4">
-              <div className="p-3 bg-black/30 rounded-full">
+          <div className={`relative bg-gradient-to-br ${currentSlideData.gradient} rounded-2xl p-6 border-2 border-white/20 ${currentSlideData.borderGlow} overflow-hidden transition-all group-hover:border-white/40`}>
+            {/* Animated shimmer effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -skew-x-12 group-hover:animate-shimmer" />
+            
+            {/* Badge */}
+            <div className="absolute top-3 right-3 z-10">
+              <span className={`${currentSlideData.badgeColor} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-pulse`}>
+                {currentSlideData.badge}
+              </span>
+            </div>
+
+            <div className="relative flex items-start gap-4">
+              {/* Icon with glow */}
+              <div className="p-4 bg-black/40 rounded-2xl backdrop-blur-sm shadow-lg group-hover:scale-110 transition-transform">
                 {currentSlideData.icon}
               </div>
-              <div className="flex-1">
-                <h3 className="text-white font-semibold text-lg mb-2">
+              
+              <div className="flex-1 pt-1">
+                {/* Subtitle */}
+                <p className="text-pink-300 text-xs font-semibold mb-1 tracking-wide">
+                  {currentSlideData.subtitle}
+                </p>
+                
+                {/* Title */}
+                <h3 className="text-white font-bold text-xl mb-2 tracking-tight">
                   {currentSlideData.title}
                 </h3>
-                <p className="text-white/70 text-sm leading-relaxed">
+                
+                {/* Description */}
+                <p className="text-white/80 text-sm leading-relaxed font-medium">
                   {currentSlideData.description}
                 </p>
-              </div>
-              <div className="text-white/50">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                
+                {/* CTA indicator */}
+                <div className="mt-3 flex items-center gap-2">
+                  <span className="text-pink-400 text-xs font-bold uppercase tracking-wider">
+                    Tap to Explore
+                  </span>
+                  <svg className="h-4 w-4 text-pink-400 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
