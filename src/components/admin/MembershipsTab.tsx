@@ -155,13 +155,13 @@ export const MembershipsTab: React.FC = () => {
 
   const handleQuickUpdate = async (
     userId: string,
-    level: 'free' | 'premium' | 'vip' | 'platinum'
+    level: 'basic' | 'vip'
   ) => {
     if (!user || !confirm(`Update membership level to ${level}?`)) return;
 
     setIsUpdating(true);
     try {
-      const expiresAt = level !== 'free'
+      const expiresAt = level === 'vip'
         ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         : undefined;
 
