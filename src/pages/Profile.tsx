@@ -124,7 +124,12 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
   };
 
   const handleSlideClick = () => {
-    navigate(slides[currentSlide].path);
+    const slide = slides[currentSlide];
+    if (slide.isExternal) {
+      window.open(slide.path, '_blank', 'noopener,noreferrer');
+    } else {
+      navigate(slide.path);
+    }
   };
 
   return (
