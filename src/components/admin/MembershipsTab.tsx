@@ -90,12 +90,14 @@ export const MembershipsTab: React.FC = () => {
       const data = await adminService.getAllUsers({ limit: 200 });
       setUsers(data);
 
-      // Calculate stats
-      const newStats = { free: 0, premium: 0, vip: 0, platinum: 0 };
+      // Calculate stats based on membership_tier from profiles
+      const newStats = { basic: 0, vip: 0 };
       data.forEach((u) => {
-        const level = u.membership_level || 'free';
-        if (level in newStats) {
-          newStats[level as keyof typeof newStats]++;
+        const tier = u.membership_tier || 'basic';
+        if (tier === 'vip') {
+          newStats.vip++;
+        } else {
+          newStats.basic++;
         }
       });
       setStats(newStats);
@@ -109,8 +111,8 @@ export const MembershipsTab: React.FC = () => {
   const startEditing = (userData: UserManagement) => {
     setEditingMembership({
       userId: userData.id,
-      level: (userData.membership_level || 'free') as any,
-      expiresAt: '',
+      level: (userData.membership_tier || 'basic') as 'basic' | 'vip',
+      expiresAt: userData.vip_expires_at || '',
       autoRenew: false
     });
   };
