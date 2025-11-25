@@ -246,14 +246,15 @@ BEGIN
         RETURN FALSE;
     END IF;
     
-    -- Cancel subscription at period end
+    -- Cancel subscription (user keeps access until period end)
     UPDATE subscriptions
     SET 
-        status = 'cancelled',
-        cancel_at_period_end = TRUE,
-        cancelled_at = NOW(),
+        status = 'canceled',
         updated_at = NOW()
     WHERE id = subscription_record.id;
+    
+    -- Note: User will retain VIP access until current_period_end
+    -- The check_expired_vip_memberships function will downgrade them after expiry
     
     RETURN TRUE;
 END;
