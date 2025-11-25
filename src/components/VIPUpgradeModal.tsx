@@ -29,16 +29,20 @@ export const VIPUpgradeModal: React.FC<VIPUpgradeModalProps> = ({
 
   const plans = {
     monthly: {
-      id: 'vip_monthly',
+      tier: 'vip',
       name: 'VIP Monthly',
       price: 16.99,
+      priceCents: 1699,
+      periodMonths: 1,
       interval: 'month',
       savings: null
     },
     yearly: {
-      id: 'vip_yearly',
+      tier: 'vip',
       name: 'VIP Annual',
       price: 149.99,
+      priceCents: 14999,
+      periodMonths: 12,
       interval: 'year',
       savings: '26%',
       monthlyEquivalent: 12.49
