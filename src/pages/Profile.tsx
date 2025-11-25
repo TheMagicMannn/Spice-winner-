@@ -67,19 +67,19 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     },
     {
       id: 2,
-      title: 'Achievements',
-      description: 'View your badges, milestones, and community accomplishments',
-      icon: <Award className="h-8 w-8 text-yellow-400" />,
-      path: '/achievements',
-      gradient: 'from-yellow-500/20 to-orange-500/20'
+      title: 'Join Community Groups',
+      description: 'Connect with like-minded members in topic-specific and lifestyle community groups',
+      icon: <Users className="h-8 w-8 text-purple-400" />,
+      path: '/community-groups',
+      gradient: 'from-purple-500/20 to-pink-500/20'
     },
     {
       id: 3,
-      title: 'Community Stats',
-      description: 'See your activity, connections, and engagement metrics',
-      icon: <TrendingUp className="h-8 w-8 text-blue-400" />,
-      path: '/stats',
-      gradient: 'from-blue-500/20 to-cyan-500/20'
+      title: 'Adult Toy Store',
+      description: 'Shop discreetly for adult toys with exclusive SPICE member discounts',
+      icon: <ShoppingBag className="h-8 w-8 text-rose-400" />,
+      path: '/toy-store',
+      gradient: 'from-rose-500/20 to-red-500/20'
     }
   ];
 
