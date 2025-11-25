@@ -116,6 +116,7 @@ const AppContent: React.FC = () => {
             <Route path="/messages/:matchId/:otherUserId" element={<ChatPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/learning-journey" element={<LearningJourneyPage />} />
+            <Route path="/spice-groups" element={<SpiceGroupsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/help-support" element={<HelpSupportPage />} />
             <Route path="/about-spice" element={<AboutSpicePage />} />
