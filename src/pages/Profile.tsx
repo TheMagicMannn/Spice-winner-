@@ -127,6 +127,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
   };
 
   const handleSlideClick = (slide: typeof slides[0]) => {
+    setIsPaused(true); // Pause to prevent race condition
     if (slide.isExternal) {
       window.open(slide.path, '_blank', 'noopener,noreferrer');
     } else {
