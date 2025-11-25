@@ -889,14 +889,30 @@ export const ProfilePage: React.FC = () => {
                     <Separator className="bg-pink-500/30" />
                   </>
                 )}
-                {profileStats.membershipTier === 'basic' && (
+                {profileStats.membershipTier !== 'vip' && (
                   <>
                     <Button
                       variant="ghost"
+                      onClick={() => setIsVIPUpgradeOpen(true)}
                       className="w-full justify-start text-yellow-400 hover:bg-yellow-500/10"
+                      data-testid="upgrade-to-vip-button"
                     >
                       <Crown className="h-4 w-4 mr-3" />
                       Upgrade to VIP
+                    </Button>
+                    <Separator className="bg-pink-500/30" />
+                  </>
+                )}
+                {profileStats.membershipTier === 'vip' && (
+                  <>
+                    <Button
+                      variant="ghost"
+                      onClick={() => setIsManageSubscriptionOpen(true)}
+                      className="w-full justify-start text-yellow-400 hover:bg-yellow-500/10"
+                      data-testid="manage-subscription-button"
+                    >
+                      <Crown className="h-4 w-4 mr-3" />
+                      Manage VIP Subscription
                     </Button>
                     <Separator className="bg-pink-500/30" />
                   </>
