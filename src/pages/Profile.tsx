@@ -25,7 +25,9 @@ import {
   Heart,
   BookOpen,
   Award,
-  TrendingUp
+  TrendingUp,
+  Users,
+  ShoppingBag
 } from 'lucide-react';
 import { Spinner } from '@/components/Spinner';
 import { ProfileCard } from '@/components/ProfileCard';
