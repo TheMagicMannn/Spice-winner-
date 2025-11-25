@@ -152,8 +152,19 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
             </div>
           ) : !subscription ? (
             <div className="text-center py-12">
-              <AlertCircle className="h-12 w-12 text-gray-500 mx-auto mb-3" />
-              <p className="text-gray-400">No active subscription found</p>
+              <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-3" />
+              <p className="text-white font-medium mb-2">VIP Access (Admin Granted)</p>
+              <p className="text-gray-400 text-sm mb-4">
+                Your VIP membership was granted by an administrator.
+                {user?.profile?.vip_expires_at && (
+                  <span className="block mt-1">
+                    Expires: {new Date(user.profile.vip_expires_at).toLocaleDateString()}
+                  </span>
+                )}
+              </p>
+              <p className="text-gray-500 text-xs">
+                Contact support if you have questions about your membership.
+              </p>
             </div>
           ) : (
             <div className="space-y-4">
