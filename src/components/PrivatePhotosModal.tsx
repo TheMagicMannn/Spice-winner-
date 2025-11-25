@@ -9,8 +9,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Lock, AlertCircle, X } from 'lucide-react';
-import { settingsService, PrivatePhotoAccess } from '@/services/settingsService';
+import PrivateContentService from '@/services/privateContentService';
+import { useAuth } from '@/hooks/useAuth';
 import { Spinner } from './Spinner';
+
+interface UserWithAccess {
+  user_id: string;
+  granted_at: string;
+  expires_at?: string;
+  display_name?: string;
+  photos?: string[];
+}
 
 interface PrivatePhotosModalProps {
   isOpen: boolean;
@@ -21,23 +30,26 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
   isOpen,
   onClose
 }) => {
-  const [accessList, setAccessList] = useState<PrivatePhotoAccess[]>([]);
+  const { user } = useAuth();
+  const [accessList, setAccessList] = useState<UserWithAccess[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [revokingId, setRevokingId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && user?.id) {
       loadAccessList();
     }
-  }, [isOpen]);
+  }, [isOpen, user?.id]);
 
   const loadAccessList = async () => {
+    if (!user?.id) return;
+    
     setIsLoading(true);
     setError(null);
     
     try {
-      const list = await settingsService.getPrivatePhotoAccessList();
+      const list = await PrivateContentService.getUsersWithAccess(user.id);
       setAccessList(list);
     } catch (err: any) {
       console.error('Error loading private content access list:', err);
@@ -47,12 +59,14 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
     }
   };
 
-  const handleRevoke = async (grantedToId: string) => {
-    setRevokingId(grantedToId);
+  const handleRevoke = async (grantedToUserId: string) => {
+    if (!user?.id) return;
+    
+    setRevokingId(grantedToUserId);
     
     try {
-      await settingsService.revokePrivatePhotoAccess(grantedToId);
-      setAccessList(accessList.filter(access => access.grantedToId !== grantedToId));
+      await PrivateContentService.revokeAccess(user.id, grantedToUserId);
+      setAccessList(accessList.filter(access => access.user_id !== grantedToUserId));
     } catch (err: any) {
       console.error('Error revoking access:', err);
       setError('Failed to revoke access');
