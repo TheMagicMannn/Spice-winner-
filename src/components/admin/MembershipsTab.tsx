@@ -126,9 +126,9 @@ export const MembershipsTab: React.FC = () => {
 
     setIsUpdating(true);
     try {
-      const expiresAt = editingMembership.level !== 'free' && editingMembership.expiresAt
+      const expiresAt = editingMembership.level === 'vip' && editingMembership.expiresAt
         ? editingMembership.expiresAt
-        : editingMembership.level !== 'free'
+        : editingMembership.level === 'vip'
         ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
         : undefined;
 
@@ -140,13 +140,7 @@ export const MembershipsTab: React.FC = () => {
         user.id
       );
 
-      // Update auto_renew if membership exists
-      if (editingMembership.level !== 'free') {
-        await supabase
-          .from('user_memberships')
-          .update({ auto_renew: editingMembership.autoRenew })
-          .eq('user_id', editingMembership.userId);
-      }
+      // No need to update auto_renew for the new system
 
       alert('Membership updated successfully!');
       cancelEditing();
