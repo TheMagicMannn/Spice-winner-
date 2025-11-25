@@ -63,7 +63,8 @@ export interface UserManagement {
   is_active?: boolean;
   created_at: string;
   last_sign_in_at?: string;
-  membership_level?: string;
+  membership_tier?: 'basic' | 'vip';
+  vip_expires_at?: string;
 }
 
 export interface ActivitySummary {
