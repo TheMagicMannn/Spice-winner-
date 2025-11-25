@@ -39,6 +39,7 @@ export interface Profile {
   relationshipStatus?: string;
   lifestyleExperience?: string;
   membershipTier?: 'basic' | 'vip';
+  vip_expires_at?: string;
 
   // seeking / interests / kinks / limits
   seeking?: string[];                 // SEEKING_OPTIONS
