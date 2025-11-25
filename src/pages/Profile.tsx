@@ -108,6 +108,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
 
   const handleTouchStart = (e: React.TouchEvent) => {
     setTouchStart(e.targetTouches[0].clientX);
+    setIsPaused(true); // Pause auto-slide on touch
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -121,6 +122,8 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     if (touchStart - touchEnd < -75) {
       prevSlide();
     }
+    // Resume auto-slide after a delay
+    setTimeout(() => setIsPaused(false), 1000);
   };
 
   const handleSlideClick = (slide: typeof slides[0]) => {
