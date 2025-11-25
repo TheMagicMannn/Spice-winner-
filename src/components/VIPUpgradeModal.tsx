@@ -120,33 +120,15 @@ export const VIPUpgradeModal: React.FC<VIPUpgradeModalProps> = ({
     setError(null);
 
     try {
-      // Update user's membership tier in database
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          membership_tier: 'vip',
-          vip_expires_at: selectedPlan === 'yearly' 
-            ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        })
-        .eq('id', user.id);
+      // Call the RPC function to create subscription (trigger will update profile automatically)
+      const { data, error: rpcError } = await supabase.rpc('create_vip_subscription', {
+        user_id_param: user.id,
+        tier_param: plans[selectedPlan].tier,
+        period_months: plans[selectedPlan].periodMonths,
+        amount_cents_param: plans[selectedPlan].priceCents
+      });
 
-      if (updateError) throw updateError;
-
-      // Create subscription record
-      const { error: subError } = await supabase
-        .from('subscriptions')
-        .insert({
-          user_id: user.id,
-          plan_id: plans[selectedPlan].id,
-          status: 'active',
-          current_period_start: new Date().toISOString(),
-          current_period_end: selectedPlan === 'yearly'
-            ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
-            : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        });
-
-      if (subError) throw subError;
+      if (rpcError) throw rpcError;
 
       // Success!
       onSuccess?.();
