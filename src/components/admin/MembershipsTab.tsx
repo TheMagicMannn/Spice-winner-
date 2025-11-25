@@ -44,24 +44,7 @@ export const MembershipsTab: React.FC = () => {
   useEffect(() => {
     loadMemberships();
 
-    // Setup realtime subscription for user_memberships table
-    const membershipsSubscription = supabase
-      .channel('admin-memberships-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_memberships'
-        },
-        (payload) => {
-          console.log('Membership change detected:', payload);
-          loadMemberships();
-        }
-      )
-      .subscribe();
-
-    // Also subscribe to profiles for membership_level changes
+    // Setup realtime subscription for profiles membership_tier changes
     const profilesSubscription = supabase
       .channel('admin-profiles-membership')
       .on(
@@ -69,10 +52,28 @@ export const MembershipsTab: React.FC = () => {
         {
           event: 'UPDATE',
           schema: 'public',
-          table: 'profiles'
+          table: 'profiles',
+          filter: 'membership_tier=neq.null'
         },
         (payload) => {
           console.log('Profile membership change:', payload);
+          loadMemberships();
+        }
+      )
+      .subscribe();
+
+    // Also subscribe to subscriptions table changes
+    const subscriptionsSubscription = supabase
+      .channel('admin-subscriptions-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'subscriptions'
+        },
+        (payload) => {
+          console.log('Subscription change detected:', payload);
           loadMemberships();
         }
       )
