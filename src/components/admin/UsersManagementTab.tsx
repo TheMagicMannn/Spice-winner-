@@ -395,19 +395,17 @@ export const UsersManagementTab: React.FC = () => {
                       {/* Membership Badge */}
                       {isEditing ? (
                         <select
-                          value={editData.membership_level || 'free'}
-                          onChange={(e) => setEditData({ ...editData, membership_level: e.target.value })}
+                          value={editData.membership_tier || 'basic'}
+                          onChange={(e) => setEditData({ ...editData, membership_tier: e.target.value as 'basic' | 'vip' })}
                           className="px-3 py-1 rounded-full text-xs bg-gray-800 border border-gray-700 text-white"
                         >
-                          <option value="free">Free</option>
-                          <option value="premium">Premium</option>
+                          <option value="basic">Basic (Free)</option>
                           <option value="vip">VIP</option>
-                          <option value="platinum">Platinum</option>
                         </select>
                       ) : (
-                        <Badge className={getMembershipColor(userData.membership_level)}>
+                        <Badge className={getMembershipColor(userData.membership_tier)}>
                           <Crown className="h-3 w-3 mr-1" />
-                          {userData.membership_level || 'free'}
+                          {userData.membership_tier === 'vip' ? 'VIP' : 'Basic'}
                         </Badge>
                       )}
 
