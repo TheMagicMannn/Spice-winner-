@@ -27,6 +27,7 @@ import { UserProfilePage } from './pages/UserProfile';
 import { HelpSupportPage } from './pages/HelpSupport';
 import { AboutSpicePage } from './pages/AboutSpice';
 import { LearningJourneyPage } from './pages/LearningJourney';
+import { SpiceGroupsPage } from './pages/SpiceGroups';
 import { Header } from './components/Header';
 import { BottomNav } from './components/BottomNav';
 import { Spinner } from './components/Spinner';
