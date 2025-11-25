@@ -450,6 +450,23 @@ export const BrowsePage: React.FC = () => {
         distanceMiles={currentProfile?.distanceMiles}
       />
 
+      {/* Match Preferences Modal */}
+      <MatchPreferencesModal
+        isOpen={isMatchPreferencesOpen}
+        onClose={() => setIsMatchPreferencesOpen(false)}
+        currentPreferences={{
+          ageRange: user?.profile?.matchPreferences?.ageRange || [18, 55],
+          genders: user?.profile?.matchPreferences?.genders || [],
+          sexualities: user?.profile?.matchPreferences?.sexualities || [],
+          searchingFor: user?.profile?.matchPreferences?.searchingFor || [],
+          distance: user?.profile?.matchPreferences?.distance ?? 50,
+          vipOnly: user?.profile?.matchPreferences?.vipOnly ?? false,
+          verifiedOnly: user?.profile?.matchPreferences?.verifiedOnly ?? true,
+          experienceLevels: user?.profile?.matchPreferences?.experienceLevels || []
+        }}
+        onSave={handleSaveMatchPreferences}
+      />
+
       {/* Theme Styles */}
       <style>{themeStyles}</style>
     </SpiceBackground>
