@@ -15,7 +15,7 @@ import { ProfileService } from '@/services/profileService';
 import { MatchPreferences } from '@/types';
 
 export const BrowsePage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [profiles, setProfiles] = useState<MatchedProfile[]>([]);
@@ -25,6 +25,7 @@ export const BrowsePage: React.FC = () => {
   const [matchedProfile, setMatchedProfile] = useState<MatchedProfile | null>(null);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showProfileDetail, setShowProfileDetail] = useState(false);
+  const [isMatchPreferencesOpen, setIsMatchPreferencesOpen] = useState(false);
 
   const currentProfile = profiles[currentIndex];
 
