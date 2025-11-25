@@ -55,6 +55,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const slides = [
     {
@@ -63,25 +64,39 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
       description: 'Track your progress through educational modules and learning paths',
       icon: <BookOpen className="h-8 w-8 text-pink-400" />,
       path: '/learning-journey',
-      gradient: 'from-pink-500/20 to-purple-500/20'
+      gradient: 'from-pink-500/20 to-purple-500/20',
+      isExternal: false
     },
     {
       id: 2,
-      title: 'Join Community Groups',
+      title: 'SPICE Groups',
       description: 'Connect with like-minded members in topic-specific and lifestyle community groups',
       icon: <Users className="h-8 w-8 text-purple-400" />,
-      path: '/community-groups',
-      gradient: 'from-purple-500/20 to-pink-500/20'
+      path: '/spice-groups',
+      gradient: 'from-purple-500/20 to-pink-500/20',
+      isExternal: false
     },
     {
       id: 3,
       title: 'Adult Toy Store',
       description: 'Shop discreetly for adult toys with exclusive SPICE member discounts',
       icon: <ShoppingBag className="h-8 w-8 text-rose-400" />,
-      path: '/toy-store',
-      gradient: 'from-rose-500/20 to-red-500/20'
+      path: 'https://www.lovense.com/r/6wn77j',
+      gradient: 'from-rose-500/20 to-red-500/20',
+      isExternal: true
     }
   ];
+
+  // Auto-slide effect
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4500); // 4.5 seconds
+
+    return () => clearInterval(interval);
+  }, [isPaused, slides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
