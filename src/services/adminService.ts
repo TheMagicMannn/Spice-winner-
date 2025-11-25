@@ -308,15 +308,15 @@ class AdminService {
    */
   async updateMembershipLevel(
     userId: string,
-    membershipLevel: 'free' | 'premium' | 'vip' | 'platinum',
+    membershipLevel: 'basic' | 'vip',
     expiresAt?: string,
     adminId?: string
   ): Promise<void> {
     try {
       console.log('[AdminService] Updating membership:', { userId, membershipLevel, expiresAt });
 
-      // Map membership level to tier (basic or vip)
-      const tier = (membershipLevel === 'vip' || membershipLevel === 'premium' || membershipLevel === 'platinum') ? 'vip' : 'basic';
+      // Use the tier directly
+      const tier = membershipLevel;
       
       // Update profiles table with membership_tier
       const { error: profileError } = await supabase
