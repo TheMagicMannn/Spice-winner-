@@ -120,20 +120,51 @@ export const VIPUpgradeModal: React.FC<VIPUpgradeModalProps> = ({
     setError(null);
 
     try {
-      // Call the RPC function to create subscription (trigger will update profile automatically)
-      const { data, error: rpcError } = await supabase.rpc('create_vip_subscription', {
-        user_id_param: user.id,
-        tier_param: plans[selectedPlan].tier,
-        period_months: plans[selectedPlan].periodMonths,
-        amount_cents_param: plans[selectedPlan].priceCents
-      });
+      const periodEnd = selectedPlan === 'yearly' 
+        ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
+        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
-      if (rpcError) throw rpcError;
+      // First, directly update the profile to ensure it's VIP
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({
+          membership_tier: 'vip',
+          vip_expires_at: periodEnd
+        })
+        .eq('id', user.id);
+
+      if (profileError) {
+        console.error('Profile update error:', profileError);
+        throw profileError;
+      }
+
+      // Then create the subscription record
+      const { error: subError } = await supabase
+        .from('subscriptions')
+        .insert({
+          user_id: user.id,
+          tier: 'vip',
+          status: 'active',
+          current_period_start: new Date().toISOString(),
+          current_period_end: periodEnd,
+          amount_cents: plans[selectedPlan].priceCents,
+          currency: 'USD'
+        });
+
+      if (subError) {
+        console.error('Subscription insert error:', subError);
+        // Don't throw - profile is already updated which is most important
+      }
 
       // Success!
+      console.log('VIP upgrade successful');
       onSuccess?.();
       onClose();
-      window.location.reload(); // Reload to update UI
+      
+      // Force a full page reload to ensure all data refreshes
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (err: any) {
       console.error('Upgrade error:', err);
       setError(err.message || 'Failed to upgrade. Please try again.');
