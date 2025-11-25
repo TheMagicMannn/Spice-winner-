@@ -166,33 +166,52 @@ export const BrowsePage: React.FC = () => {
   // No profiles state
   if (!currentProfile || profiles.length === 0) {
     return (
-      <SpiceBackground className="min-h-screen flex items-center justify-center pb-20">
-        <div className="text-center px-4">
-          <Sparkles className="h-16 w-16 text-pink-400 mx-auto mb-4" />
-          <h2 className="text-white text-2xl mb-2 font-bold">No More Profiles</h2>
-          <p className="text-white/60 mb-6">
-            We've shown you all available matches based on your preferences.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button 
-              onClick={loadProfiles}
-              className="bg-pink-600 hover:bg-pink-700"
-              data-testid="refresh-matches-button"
-            >
-              Refresh Matches
-            </Button>
-            <Button 
-              onClick={() => setIsMatchPreferencesOpen(true)}
-              variant="outline"
-              className="border-pink-500/50 text-pink-400 hover:bg-pink-500/10"
-              data-testid="edit-preferences-button"
-            >
-              <Sliders className="h-4 w-4 mr-2" />
-              Edit Preferences
-            </Button>
+      <>
+        <SpiceBackground className="min-h-screen flex items-center justify-center pb-20">
+          <div className="text-center px-4">
+            <Sparkles className="h-16 w-16 text-pink-400 mx-auto mb-4" />
+            <h2 className="text-white text-2xl mb-2 font-bold">No More Profiles</h2>
+            <p className="text-white/60 mb-6">
+              We've shown you all available matches based on your preferences.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button 
+                onClick={loadProfiles}
+                className="bg-pink-600 hover:bg-pink-700"
+                data-testid="refresh-matches-button"
+              >
+                Refresh Matches
+              </Button>
+              <Button 
+                onClick={() => setIsMatchPreferencesOpen(true)}
+                variant="outline"
+                className="border-pink-500/50 text-pink-400 hover:bg-pink-500/10"
+                data-testid="edit-preferences-button"
+              >
+                <Sliders className="h-4 w-4 mr-2" />
+                Edit Preferences
+              </Button>
+            </div>
           </div>
-        </div>
-      </SpiceBackground>
+        </SpiceBackground>
+
+        {/* Match Preferences Modal */}
+        <MatchPreferencesModal
+          isOpen={isMatchPreferencesOpen}
+          onClose={() => setIsMatchPreferencesOpen(false)}
+          currentPreferences={{
+            ageRange: user?.profile?.matchPreferences?.ageRange || [18, 55],
+            genders: user?.profile?.matchPreferences?.genders || [],
+            sexualities: user?.profile?.matchPreferences?.sexualities || [],
+            searchingFor: user?.profile?.matchPreferences?.searchingFor || [],
+            distance: user?.profile?.matchPreferences?.distance ?? 50,
+            vipOnly: user?.profile?.matchPreferences?.vipOnly ?? false,
+            verifiedOnly: user?.profile?.matchPreferences?.verifiedOnly ?? true,
+            experienceLevels: user?.profile?.matchPreferences?.experienceLevels || []
+          }}
+          onSave={handleSaveMatchPreferences}
+        />
+      </>
     );
   }
 
