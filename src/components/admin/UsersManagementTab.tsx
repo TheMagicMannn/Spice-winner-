@@ -118,7 +118,7 @@ export const UsersManagementTab: React.FC = () => {
       display_name: userData.display_name,
       is_verified: userData.is_verified,
       is_admin: userData.is_admin,
-      membership_level: userData.membership_level
+      membership_tier: userData.membership_tier
     });
   };
 
