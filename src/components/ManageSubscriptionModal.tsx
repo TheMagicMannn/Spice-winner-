@@ -162,31 +162,33 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-gray-400">Status</span>
                   <Badge className={
-                    subscription.cancel_at_period_end
+                    subscription.status === 'canceled'
                       ? 'bg-orange-500 text-white'
-                      : 'bg-green-500 text-white'
+                      : subscription.status === 'active'
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-500 text-white'
                   }>
-                    {subscription.cancel_at_period_end ? 'Cancelling' : 'Active'}
+                    {subscription.status === 'canceled' ? 'Cancelled' : subscription.status.charAt(0).toUpperCase() + subscription.status.slice(1)}
                   </Badge>
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-gray-400">Plan</span>
                   <span className="text-white font-medium">
-                    {getPlanName(subscription.plan_id)}
+                    {getPlanName(subscription.amount_cents)}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-sm text-gray-400">Price</span>
                   <span className="text-white font-medium">
-                    {getPlanPrice(subscription.plan_id)}
+                    {getPlanPrice(subscription.amount_cents, subscription.currency)}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-400">
-                    {subscription.cancel_at_period_end ? 'Access Until' : 'Renews On'}
+                    {subscription.status === 'canceled' ? 'Access Until' : 'Renews On'}
                   </span>
                   <span className="text-white font-medium flex items-center">
                     <Calendar className="h-4 w-4 mr-1" />
@@ -196,7 +198,7 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
               </div>
 
               {/* Cancellation Warning */}
-              {subscription.cancel_at_period_end && (
+              {subscription.status === 'canceled' && (
                 <div className="bg-orange-500/20 border border-orange-500 rounded-lg p-4">
                   <div className="flex items-start">
                     <AlertCircle className="h-5 w-5 text-orange-400 mr-2 mt-0.5 flex-shrink-0" />
