@@ -105,15 +105,12 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
     setError(null);
 
     try {
-      const { error: updateError } = await supabase
-        .from('subscriptions')
-        .update({
-          cancel_at_period_end: false,
-          status: 'active'
-        })
-        .eq('id', subscription.id);
+      // Use RPC function to reactivate subscription
+      const { data, error: reactivateError } = await supabase
+        .rpc('reactivate_vip_subscription', { user_id_param: user.id });
 
-      if (updateError) throw updateError;
+      if (reactivateError) throw reactivateError;
+      if (!data) throw new Error('Failed to reactivate subscription');
 
       setSuccess('Subscription reactivated! Your VIP benefits will continue.');
       await loadSubscription();
