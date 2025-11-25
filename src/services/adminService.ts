@@ -246,22 +246,7 @@ class AdminService {
         return [];
       }
 
-      // Fetch memberships separately
-      const userIds = profiles.map(p => p.id);
-      const { data: memberships, error: membershipError } = await supabase
-        .from('user_memberships')
-        .select('user_id, membership_level')
-        .in('user_id', userIds);
-
-      if (membershipError) {
-        console.error('[AdminService] Membership query error:', membershipError);
-        // Continue without memberships instead of failing
-      }
-
-      // Create membership map
-      const membershipMap = new Map(memberships?.map(m => [m.user_id, m.membership_level]) || []);
-
-      // Map the data to include all fields
+      // Map the data to include all fields (membership_tier is already in profiles)
       const users = profiles.map((user: any) => ({
         id: user.id,
         email: user.email || 'No email',
@@ -272,7 +257,8 @@ class AdminService {
         is_active: user.is_active !== false, // Default to true if null
         created_at: user.created_at,
         last_sign_in_at: user.last_sign_in_at,
-        membership_level: membershipMap.get(user.id) || 'free'
+        membership_tier: user.membership_tier || 'basic',
+        vip_expires_at: user.vip_expires_at
       }));
 
       console.log('[AdminService] Returning users:', users.length);
