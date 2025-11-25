@@ -71,11 +71,11 @@ export const PrivatePhotosModal: React.FC<PrivatePhotosModalProps> = ({
       <DialogContent className="bg-gray-900 text-white border-pink-500/30 max-w-md max-h-[80vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center text-xl text-pink-400">
-            <Image className="h-5 w-5 mr-2" />
-            Private Photos Sharing List
+            <Lock className="h-5 w-5 mr-2" />
+            Private Content Sharing List
           </DialogTitle>
           <DialogDescription className="text-white/60">
-            Manage who can see your private photos.
+            Manage who can see your private content (photos, videos, etc.).
           </DialogDescription>
         </DialogHeader>
 
