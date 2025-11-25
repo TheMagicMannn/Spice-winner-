@@ -414,24 +414,26 @@ END $$;
 -- =====================================================
 
 /*
--- Example 1: Create a monthly VIP subscription
+-- Example 1: Create a monthly VIP subscription ($16.99)
 SELECT create_vip_subscription(
     'user-uuid-here',  -- user_id
-    'vip_monthly',     -- plan_id
-    1                  -- period_months
+    'vip',             -- tier
+    1,                 -- period_months
+    1699               -- amount_cents (optional, defaults to 1699)
 );
 
--- Example 2: Create an annual VIP subscription
+-- Example 2: Create an annual VIP subscription ($149.99)
 SELECT create_vip_subscription(
     'user-uuid-here',  -- user_id
-    'vip_yearly',      -- plan_id
-    12                 -- period_months
+    'vip',             -- tier
+    12,                -- period_months
+    14999              -- amount_cents (optional, defaults to 14999)
 );
 
 -- Example 3: Get user's active subscription
 SELECT * FROM get_user_subscription('user-uuid-here');
 
--- Example 4: Cancel a subscription
+-- Example 4: Cancel a subscription (user keeps VIP until period end)
 SELECT cancel_vip_subscription('user-uuid-here');
 
 -- Example 5: Reactivate a cancelled subscription
@@ -448,14 +450,39 @@ ORDER BY vip_expires_at DESC;
 
 -- Example 8: View subscription history for a user
 SELECT 
-    plan_id,
+    tier,
     status,
     current_period_start,
     current_period_end,
-    cancel_at_period_end
+    amount_cents,
+    currency
 FROM subscriptions
 WHERE user_id = 'user-uuid-here'
 ORDER BY created_at DESC;
+
+-- Example 9: Create subscription with Stripe IDs (after Stripe checkout)
+INSERT INTO subscriptions (
+    user_id,
+    tier,
+    status,
+    stripe_subscription_id,
+    stripe_customer_id,
+    current_period_start,
+    current_period_end,
+    amount_cents,
+    currency
+) VALUES (
+    'user-uuid-here',
+    'vip',
+    'active',
+    'sub_stripe_id',
+    'cus_stripe_id',
+    NOW(),
+    NOW() + INTERVAL '1 month',
+    1699,
+    'USD'
+);
+-- Note: The trigger will automatically update the profile to VIP tier
 */
 
 -- =====================================================
