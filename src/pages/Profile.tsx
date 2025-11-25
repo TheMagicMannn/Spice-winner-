@@ -123,8 +123,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     }
   };
 
-  const handleSlideClick = () => {
-    const slide = slides[currentSlide];
+  const handleSlideClick = (slide: typeof slides[0]) => {
     if (slide.isExternal) {
       window.open(slide.path, '_blank', 'noopener,noreferrer');
     } else {
@@ -143,7 +142,7 @@ const SlideCarousel: React.FC<SlideCarouselProps> = ({ navigate }) => {
     >
       {/* Slide Content */}
       <button
-        onClick={handleSlideClick}
+        onClick={() => handleSlideClick(slides[currentSlide])}
         className="w-full p-6 text-left transition-all hover:scale-[1.02] cursor-pointer"
         data-testid="carousel-slide"
       >
