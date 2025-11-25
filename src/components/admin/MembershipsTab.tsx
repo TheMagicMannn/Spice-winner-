@@ -89,6 +89,13 @@ export const MembershipsTab: React.FC = () => {
     setIsLoading(true);
     try {
       const data = await adminService.getAllUsers({ limit: 200 });
+      console.log('[MembershipsTab] Loaded users:', data.length);
+      console.log('[MembershipsTab] First 3 users:', data.slice(0, 3).map(u => ({
+        id: u.id,
+        email: u.email,
+        membership_tier: u.membership_tier,
+        vip_expires_at: u.vip_expires_at
+      })));
       setUsers(data);
 
       // Calculate stats based on membership_tier from profiles
@@ -101,6 +108,7 @@ export const MembershipsTab: React.FC = () => {
           newStats.basic++;
         }
       });
+      console.log('[MembershipsTab] Stats:', newStats);
       setStats(newStats);
     } catch (error) {
       console.error('Error loading memberships:', error);
