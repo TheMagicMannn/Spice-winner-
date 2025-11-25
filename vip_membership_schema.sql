@@ -489,19 +489,22 @@ INSERT INTO subscriptions (
 -- SCHEMA COMPLETE
 -- =====================================================
 
-RAISE NOTICE '==========================================';
-RAISE NOTICE 'VIP Membership Schema Installation Complete!';
-RAISE NOTICE '==========================================';
-RAISE NOTICE 'Created:';
-RAISE NOTICE '  - Subscriptions table';
-RAISE NOTICE '  - VIP columns in profiles table';
-RAISE NOTICE '  - 5 RPC functions';
-RAISE NOTICE '  - 4 RLS policies';
-RAISE NOTICE '  - 6 indexes';
-RAISE NOTICE '  - 1 trigger';
-RAISE NOTICE '==========================================';
-RAISE NOTICE 'Next Steps:';
-RAISE NOTICE '  1. Set up daily cron job for check_expired_vip_memberships()';
-RAISE NOTICE '  2. Configure Stripe webhooks (optional)';
-RAISE NOTICE '  3. Test subscription flow in your app';
-RAISE NOTICE '==========================================';
+DO $$
+BEGIN
+    RAISE NOTICE '==========================================';
+    RAISE NOTICE 'VIP Membership Schema Installation Complete!';
+    RAISE NOTICE '==========================================';
+    RAISE NOTICE 'Created:';
+    RAISE NOTICE '  - Subscriptions table';
+    RAISE NOTICE '  - VIP columns in profiles table';
+    RAISE NOTICE '  - 5 RPC functions';
+    RAISE NOTICE '  - 4 RLS policies';
+    RAISE NOTICE '  - 6 indexes';
+    RAISE NOTICE '  - 2 triggers';
+    RAISE NOTICE '==========================================';
+    RAISE NOTICE 'Next Steps:';
+    RAISE NOTICE '  1. Set up daily cron job for check_expired_vip_memberships()';
+    RAISE NOTICE '  2. Configure Stripe webhooks (optional)';
+    RAISE NOTICE '  3. Test subscription flow in your app';
+    RAISE NOTICE '==========================================';
+END $$;
