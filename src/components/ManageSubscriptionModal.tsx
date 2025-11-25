@@ -51,17 +51,15 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
     setError(null);
 
     try {
+      // Use RPC function to get subscription
       const { data, error: fetchError } = await supabase
-        .from('subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .rpc('get_user_subscription', { user_id_param: user.id });
 
       if (fetchError) throw fetchError;
-      setSubscription(data);
+      
+      // RPC returns an array, get first item or convert single object to expected format
+      const subscriptionData = Array.isArray(data) ? data[0] : data;
+      setSubscription(subscriptionData);
     } catch (err: any) {
       console.error('Error loading subscription:', err);
       setError('Failed to load subscription details');
