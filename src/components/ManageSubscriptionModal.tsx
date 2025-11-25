@@ -79,16 +79,12 @@ export const ManageSubscriptionModal: React.FC<ManageSubscriptionModalProps> = (
     setError(null);
 
     try {
-      // Update subscription to cancel at period end
-      const { error: updateError } = await supabase
-        .from('subscriptions')
-        .update({
-          cancel_at_period_end: true,
-          status: 'cancelled'
-        })
-        .eq('id', subscription.id);
+      // Use RPC function to cancel subscription
+      const { data, error: cancelError } = await supabase
+        .rpc('cancel_vip_subscription', { user_id_param: user.id });
 
-      if (updateError) throw updateError;
+      if (cancelError) throw cancelError;
+      if (!data) throw new Error('Failed to cancel subscription');
 
       setSuccess('Subscription cancelled. You\'ll retain VIP access until ' + 
         new Date(subscription.current_period_end).toLocaleDateString());
