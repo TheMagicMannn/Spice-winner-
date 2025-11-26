@@ -229,6 +229,9 @@ export interface Profile {
   metamourRelationship?: string;      // Type of metamour relationship
   parallelDating?: string;            // Parallel dating preference
   escalatorInterests?: string[];      // Relationship escalator interests
+  
+  // Step5B_SwingerDeepDive.tsx  
+  groupPlayMaxSize?: number;          // Maximum group size comfortable with
 
   // DB-related optional meta (from profiles table)
   id?: string;  // User's UUID (same as auth.users.id)
