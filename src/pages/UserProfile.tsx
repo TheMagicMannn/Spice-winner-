@@ -568,12 +568,6 @@ export const UserProfilePage: React.FC = () => {
             Back
           </Button>
           <div className="flex items-center space-x-2">
-            {profile.membership_tier === 'vip' && (
-              <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
-                <Crown className="h-3 w-3 mr-1" />
-                VIP
-              </Badge>
-            )}
             {user && user.id !== userId && (
               <div className="relative">
                 <Button
