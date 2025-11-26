@@ -271,10 +271,10 @@ export const EnhancedOverviewTab: React.FC = () => {
           color="from-purple-500 to-pink-500"
         />
         <StatsCard
-          title="Today's Revenue"
-          value={`$${(todayStats.total_payments || 0).toFixed(2)}`}
-          change={changes.revenue}
-          icon={<DollarSign className="h-6 w-6 text-yellow-400" />}
+          title="New VIP Members"
+          value={todayStats.new_premium_users || 0}
+          change={changes.vipMembers}
+          icon={<Crown className="h-6 w-6 text-yellow-400" />}
           color="from-yellow-500 to-orange-500"
         />
       </div>
