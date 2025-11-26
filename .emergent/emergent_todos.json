@@ -13,15 +13,15 @@
   },
   {
     "content": "Phase 2: Update ProfileSetup.tsx to implement complete 14-step workflow with dynamic routing",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Phase 2: Verify frontend builds without TypeScript errors",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Phase 3: Apply database migrations for new fields",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 3: Update /api/profile.ts with camelCase to snake_case transformer",
