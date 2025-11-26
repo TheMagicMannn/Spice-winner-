@@ -692,8 +692,31 @@ export const UserProfilePage: React.FC = () => {
               <div className="absolute bottom-0 left-0 right-0 p-6 pointer-events-none z-10">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h1 className="text-4xl font-bold text-white mb-2 flex items-center">
+                    <h1 className="text-4xl font-bold text-white mb-2 flex items-center relative">
                       {displayName}
+                      {profile.membership_tier === 'vip' && (
+                        <div className="relative inline-block ml-3 animate-pulse">
+                          <Crown 
+                            className="h-8 w-8 text-yellow-400 transform -rotate-12 relative z-10" 
+                            style={{
+                              filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 12px rgba(250, 204, 21, 0.4))',
+                              animation: 'sparkle 2s ease-in-out infinite'
+                            }}
+                          />
+                          {/* Sparkle effects */}
+                          <Sparkles 
+                            className="h-4 w-4 text-yellow-300 absolute -top-1 -right-1 animate-ping" 
+                            style={{ animationDuration: '2s' }}
+                          />
+                          <Sparkles 
+                            className="h-3 w-3 text-yellow-200 absolute -bottom-1 -left-1" 
+                            style={{ 
+                              animation: 'sparkle-reverse 2.5s ease-in-out infinite',
+                              animationDelay: '0.5s'
+                            }}
+                          />
+                        </div>
+                      )}
                       {profile.is_verified && (
                         <CheckCircle className="h-7 w-7 ml-2 text-blue-400" />
                       )}
