@@ -40,14 +40,21 @@ User Stories (POC)
 4) As a user, I can upload a profile photo to the proper bucket.
 5) As a user, I see a clear error if saving fails.
 
-## Phase 2 — App Development (Complete 14-step Flow)
-Front-end: Update src/pages/ProfileSetup.tsx to implement 14 steps with dynamic routing and validations.
+## Phase 2 — App Development (Complete 13-step Flow) ✅ COMPLETED
+Front-end: Updated src/pages/ProfileSetup.tsx to implement refined 13-step workflow with dynamic routing and validations.
+
+**REFINEMENTS COMPLETED:**
+- Added experience level slider (Curious → Living it 24/7) for each selected lifestyle identity in Step 3
+- Removed old Step 9 (Role & Kink Preferences) 
+- Steps renumbered: old 10-13 are now 9-12
+- Removed questions: Barrier Methods, Fluid Bonding, Risk Profile, Discretion Needs, "Who knows about lifestyle"
+- Updated Lifestyle Identity options: BDSM/Kink, Swinger, ENM, Polyamory, Fetish, Vanilla but Curious, Exploring/Not Sure Yet, Other
 
 Step Map (Individual & Couples share numbering; conditional rendering)
 0) Account Type selection (Individual | Couple)
 1) Basic Info (name(s), location, gender(s), sexuality(ies), DOB/Age, relationship status)
 2) Relationship Context (+ partner alignment for Partnered/Solo Poly/Polycule, consent toggle for Married Solo)
-3) Lifestyle Identity (Swinger, ENM, Poly, BDSM/Kink, Exploring — multi-select)
+3) Lifestyle Identity (BDSM/Kink, Swinger, ENM, Polyamory, Fetish, Vanilla but Curious, Exploring, Other — multi-select) + Experience Level Sliders ✨NEW
 4) Deep Relationship Structure (Adaptive)
    - If ENM/Poly → structure options
    - If Swinger → swinger structure
