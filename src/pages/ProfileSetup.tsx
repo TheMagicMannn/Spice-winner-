@@ -779,7 +779,9 @@ export const ProfileSetupPage: React.FC = () => {
 
   // Dynamic routing for Step 4
   const needsEnmPolyStructure = useMemo(() => {
-    return formData.lifestyleIdentities?.includes('ENM') || formData.lifestyleIdentities?.includes('Poly');
+    return formData.lifestyleIdentities?.includes('ENM') || 
+           formData.lifestyleIdentities?.includes('Poly') ||
+           formData.lifestyleIdentities?.includes('Polyamory');
   }, [formData.lifestyleIdentities]);
 
   const needsSwingerStructure = useMemo(() => {
@@ -787,7 +789,8 @@ export const ProfileSetupPage: React.FC = () => {
   }, [formData.lifestyleIdentities]);
 
   const needsBdsmStructure = useMemo(() => {
-    return formData.lifestyleIdentities?.includes('BDSM/Kink');
+    return formData.lifestyleIdentities?.includes('BDSM/Kink') ||
+           formData.lifestyleIdentities?.includes('Fetish');
   }, [formData.lifestyleIdentities]);
 
   const canProceed = useMemo(() => {
