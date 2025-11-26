@@ -731,11 +731,11 @@ export const UserProfilePage: React.FC = () => {
               {/* Active Status Indicator */}
               <div 
                 className={`absolute top-4 right-4 w-4 h-4 rounded-full border-2 border-white shadow-lg z-20 ${
-                  isUserActive(profile.last_active_at) 
+                  isUserActive(profile?.last_active_at) 
                     ? 'bg-green-500 animate-pulse' 
                     : 'bg-red-500'
                 }`}
-                title={isUserActive(profile.last_active_at) ? 'Active Now' : 'Offline'}
+                title={isUserActive(profile?.last_active_at) ? 'Active Now' : 'Offline'}
               />
               
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent rounded-t-lg pointer-events-none" />
