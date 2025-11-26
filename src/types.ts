@@ -168,6 +168,7 @@ export interface Profile {
 
   // Step 3: Lifestyle Identity Selection
   lifestyleIdentities?: string[];     // Swinger, ENM, Poly, BDSM/Kink, Exploring
+  lifestyleExperienceLevels?: Record<string, number>; // Experience level (0-100) for each lifestyle
 
   // Step 4: Deep Relationship Structure (Adaptive based on lifestyle)
   // ENM/Poly structures
