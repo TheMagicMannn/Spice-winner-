@@ -304,7 +304,8 @@ export const SettingsPage: React.FC = () => {
             <Separator className="bg-pink-500/20" />
             
             <SettingToggle
-              label="Don't Show My Distance"
+              label="Hide Distance on My Profile"
+              description="When enabled, other users won't see your distance from them"
               checked={!settings.showDistance}
               onChange={(checked) => updateSetting('showDistance', !checked)}
               disabled={isSaving}
