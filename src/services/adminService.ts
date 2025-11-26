@@ -688,8 +688,8 @@ class AdminService {
         .maybeSingle();
       
       // If RPC doesn't exist, fallback to counting message senders
-      if (activeUsersData) {
-        stats.active_users = activeUsersData.count || 0;
+      if (activeUsersData && typeof activeUsersData === 'object' && 'count' in activeUsersData) {
+        stats.active_users = (activeUsersData as { count: number }).count || 0;
       } else {
         const { data: messageSenders } = await supabase
           .from('messages')
