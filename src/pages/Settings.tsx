@@ -362,6 +362,7 @@ export const SettingsPage: React.FC = () => {
           
           <div className="space-y-1">
             <button
+              onClick={() => setIsLocationDisplayModalOpen(true)}
               className="w-full flex items-center justify-between p-4 hover:bg-pink-500/5 rounded-lg transition-colors text-left"
               data-testid="location-distance-button"
             >
@@ -370,7 +371,9 @@ export const SettingsPage: React.FC = () => {
                 <span className="text-white text-sm">Show My Location with</span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-white/60 text-sm">{settings.locationDistance}</span>
+                <span className="text-white/60 text-sm">
+                  {settings.locationDistance === 'distance' ? 'Distance' : 'City, State'}
+                </span>
                 <ChevronRight className="h-5 w-5 text-white/40" />
               </div>
             </button>
