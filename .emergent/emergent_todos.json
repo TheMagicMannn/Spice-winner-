@@ -1,14 +1,18 @@
 [
   {
-    "content": "Individual Steps 3-6: Relationship Context, Community ID, BDSM Deep Dive, Swinger Deep Dive",
+    "content": "Individual Steps 3-6: Relationship Context, Community ID, BDSM Deep Dive, Swinger Deep Dive, ENM/Poly Deep Dive",
+    "status": "completed"
+  },
+  {
+    "content": "Individual Steps 6-9: Intent, Who to Meet, Boundaries, Communication",
     "status": "in_progress"
   },
   {
-    "content": "Individual Steps 7-12: ENM/Poly, Intent, Who to Meet, Boundaries, Communication, Health",
+    "content": "Individual Steps 10-14: Health, Bio, Physical, Lifestyle, Interests",
     "status": "pending"
   },
   {
-    "content": "Individual Steps 13-18: Bio, Physical, Lifestyle, Interests, Preferences, Photos, Verification, Membership",
+    "content": "Individual Steps 15-18: Preferences, Photos, Verification, Membership",
     "status": "pending"
   },
   {
@@ -20,7 +24,7 @@
     "status": "pending"
   },
   {
-    "content": "Couple Shell Steps 1-20 + Linking",
+    "content": "Couple Shell Steps + Linking",
     "status": "pending"
   },
   {
@@ -28,7 +32,7 @@
     "status": "pending"
   },
   {
-    "content": "Backend APIs for couples",
+    "content": "Backend APIs",
     "status": "pending"
   }
 ]
