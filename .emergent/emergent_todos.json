@@ -1,14 +1,34 @@
 [
   {
-    "content": "Rewrite ProfileSetup.tsx with complete new workflow - Steps 0-8+ for Individual and Couples accounts",
-    "status": "completed"
-  },
-  {
-    "content": "User needs to run the SQL migration in Supabase: /app/ENHANCED_PROFILE_WORKFLOW_MIGRATION.sql",
+    "content": "Design comprehensive database schema for 3 account types (Individual, Couple Shared, Couple Shell)",
     "status": "pending"
   },
   {
-    "content": "Test the new profile setup workflow end-to-end",
+    "content": "Update types.ts with new account types and all enhanced fields",
+    "status": "pending"
+  },
+  {
+    "content": "Create SQL migration for couple_links table and enhanced profile fields",
+    "status": "pending"
+  },
+  {
+    "content": "Implement Individual account workflow (15+ steps with deep community questions)",
+    "status": "pending"
+  },
+  {
+    "content": "Implement Couple Shared account workflow (2 logins, 1 profile)",
+    "status": "pending"
+  },
+  {
+    "content": "Implement Couple Shell account workflow (2 individual accounts linking)",
+    "status": "pending"
+  },
+  {
+    "content": "Add experience-based routing (newbie to 24/7 lifestyle)",
+    "status": "pending"
+  },
+  {
+    "content": "Test all 3 account types end-to-end",
     "status": "pending"
   }
 ]
