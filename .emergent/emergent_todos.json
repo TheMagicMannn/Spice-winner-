@@ -1,7 +1,7 @@
 [
   {
     "content": "Phase 1: Create test_core.ts script to test profile API with enhanced fields for Individual and Couple accounts + photo upload",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 1: Run test_core.ts and fix until all tests pass",
