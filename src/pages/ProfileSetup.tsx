@@ -291,6 +291,15 @@ const validateDateOfBirth = (date: string): boolean => {
          age >= 18 && age <= 99;
 };
 
+// Helper function to get experience level label from slider value
+const getExperienceLevelLabel = (value: number): string => {
+  if (value === 0) return 'Not Selected';
+  if (value <= 25) return 'Curious';
+  if (value <= 50) return 'Exploring';
+  if (value <= 75) return 'Experienced';
+  return 'Living it 24/7';
+};
+
 // --- MAIN COMPONENT ---
 export const ProfileSetupPage: React.FC = () => {
   const { user } = useAuth();
