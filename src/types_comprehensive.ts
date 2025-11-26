@@ -300,7 +300,6 @@ export interface Profile {
   metamourRelationship?: string;
   parallelDating?: string;
   escalatorInterests?: string[];
-  groupPlayMaxSize?: number;
 }
 
 export type User = SupabaseUser & {
