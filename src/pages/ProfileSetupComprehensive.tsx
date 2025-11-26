@@ -687,7 +687,7 @@ export const ProfileSetupComprehensive: React.FC = () => {
           />
         );
       default:
-        return <div className=\"text-white\">Unknown step</div>;
+        return <div className="text-white">Unknown step</div>;
     }
   };
 
