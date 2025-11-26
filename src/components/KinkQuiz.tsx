@@ -267,13 +267,15 @@ export const KinkQuiz: React.FC<Props> = ({ onClose, onSaveResults, existingResu
 
   const copy = async () => {
     if (!results) return;
-    await navigator.clipboard.writeText(results.slice(0, 10).map(r => `${r.pct}% ${r.name}`).join('\n'));
-    alert('Results copied to clipboard!');
+    // Copy ALL results, not just top 10
+    await navigator.clipboard.writeText(results.map(r => `${r.pct}% ${r.name}`).join('\n'));
+    alert('All results copied to clipboard!');
   };
 
   const share = async () => {
     if (!results) return;
-    const text = results.slice(0, 10).map(r => `${r.pct}% ${r.name}`).join('\n');
+    // Share ALL results, not just top 10
+    const text = results.map(r => `${r.pct}% ${r.name}`).join('\n');
     if (navigator.share) {
       try {
         await navigator.share({ title: 'My SPICE Kink Quiz Results', text });
