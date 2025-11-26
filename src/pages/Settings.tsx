@@ -55,6 +55,8 @@ export const SettingsPage: React.FC = () => {
   const [isBlockedUsersModalOpen, setIsBlockedUsersModalOpen] = useState(false);
   const [isPrivatePhotosModalOpen, setIsPrivatePhotosModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isLocationDisplayModalOpen, setIsLocationDisplayModalOpen] = useState(false);
+  const [isMeasurementSystemModalOpen, setIsMeasurementSystemModalOpen] = useState(false);
 
   useEffect(() => {
     loadSettings();
