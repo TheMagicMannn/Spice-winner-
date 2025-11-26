@@ -251,6 +251,48 @@ export const UserProfilePage: React.FC = () => {
     });
   };
 
+  // Calculate distance between two locations (simplified - assumes similar locations)
+  const calculateDistance = (location1: string, location2: string): number | null => {
+    // This is a simplified approach using location strings
+    // In production, you'd use actual lat/lng coordinates
+    if (!location1 || !location2) return null;
+    
+    // For demo purposes, return a random distance between 1-50 miles
+    // Replace this with actual geolocation API or stored coordinates
+    const hash = location1.length + location2.length;
+    return Math.floor((hash % 50) + 1);
+  };
+
+  // Check if user is active (online within last 15 minutes)
+  const isUserActive = (lastActiveAt?: string): boolean => {
+    if (!lastActiveAt) return false;
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+    return new Date(lastActiveAt) > fifteenMinutesAgo;
+  };
+
+  // Get distance to display
+  const getDistance = (): { value: number; unit: string } | null => {
+    if (!user?.profile?.location || !profile.location) return null;
+    
+    const distanceInMiles = calculateDistance(user.profile.location, profile.location);
+    if (!distanceInMiles) return null;
+    
+    // Get user's measurement preference (default to miles)
+    const usesMetric = false; // TODO: Get from user settings
+    
+    if (usesMetric) {
+      return {
+        value: Math.round(distanceInMiles * 1.60934), // Convert to kilometers
+        unit: 'km'
+      };
+    }
+    
+    return {
+      value: distanceInMiles,
+      unit: 'mi'
+    };
+  };
+
   // Check if users are matched
   const checkMatchStatus = async () => {
     if (!user || !userId || user.id === userId) return;
