@@ -1,30 +1,38 @@
 [
   {
-    "content": "Create comprehensive data constants file with all 500+ options",
-    "status": "completed"
-  },
-  {
-    "content": "Create helper components for complex form sections",
-    "status": "completed"
-  },
-  {
-    "content": "Implement Individual Account workflow (18 steps, all questions) - Part 1: Steps 0-9",
+    "content": "Create Individual Account Steps 1-6 components",
     "status": "in_progress"
   },
   {
-    "content": "Implement Individual Account workflow - Part 2: Steps 10-18",
+    "content": "Create Individual Account Steps 7-12 components",
     "status": "pending"
   },
   {
-    "content": "Implement Couple Shared Account workflow (19 steps, all questions)",
+    "content": "Create Individual Account Steps 13-18 components",
     "status": "pending"
   },
   {
-    "content": "Implement Couple Shell Account workflow (20 steps, all questions)",
+    "content": "Create Couple Shared Account Steps 1-10 components",
     "status": "pending"
   },
   {
-    "content": "Test all 3 account types end-to-end",
+    "content": "Create Couple Shared Account Steps 11-19 components",
+    "status": "pending"
+  },
+  {
+    "content": "Create Couple Shell linking steps",
+    "status": "pending"
+  },
+  {
+    "content": "Create main ProfileSetup orchestrator component",
+    "status": "pending"
+  },
+  {
+    "content": "Create backend API endpoints for couple operations",
+    "status": "pending"
+  },
+  {
+    "content": "Test all workflows end-to-end",
     "status": "pending"
   }
 ]
