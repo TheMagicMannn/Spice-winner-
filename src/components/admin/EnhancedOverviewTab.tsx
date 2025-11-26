@@ -166,7 +166,7 @@ export const EnhancedOverviewTab: React.FC = () => {
     signups: yesterdayData ? calculateChange(todayStats.total_signups || 0, yesterdayData.signups) : 0,
     logins: yesterdayData ? calculateChange(todayStats.total_logins || 0, yesterdayData.logins) : 0,
     messages: yesterdayData ? calculateChange(todayStats.total_messages || 0, yesterdayData.messages) : 0,
-    revenue: yesterdayData ? calculateChange(todayStats.total_payments || 0, yesterdayData.revenue) : 0
+    vipMembers: 0 // VIP members change - can be calculated if needed
   };
 
   // Pie chart data for activity distribution
