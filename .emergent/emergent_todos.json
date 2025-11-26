@@ -1,38 +1,34 @@
 [
   {
-    "content": "Phase 1: SKIPPED - Moving directly to implementation",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: Update src/types.ts to add all missing fields causing TypeScript errors",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: Fix TypeScript errors in existing step files",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: Update ProfileSetup.tsx to implement complete 14-step workflow with dynamic routing",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 2: Verify frontend builds without TypeScript errors",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 3: Apply database migrations for new fields",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 3: Update /api/profile.ts with camelCase to snake_case transformer",
-    "status": "completed"
-  },
-  {
-    "content": "Phase 4: End to End Testing using Testing Agent",
+    "content": "Remove Step 2 Experience Level - make it a dropdown for each lifestyle tag",
     "status": "in_progress"
   },
   {
-    "content": "Phase 4: Fix all bugs found by testing agent",
+    "content": "Update Step 3 Lifestyle Identity options to: BDSM/kink, swinger, ENM, polyamory, fetish, vanilla but curious, exploring/not sure yet, other",
+    "status": "pending"
+  },
+  {
+    "content": "Remove Communication Preferences step (Step 9)",
+    "status": "pending"
+  },
+  {
+    "content": "Remove Barrier Methods, Fluid Bonding, Risk Profile questions",
+    "status": "pending"
+  },
+  {
+    "content": "Remove Discretion needs and Who knows about lifestyle questions",
+    "status": "pending"
+  },
+  {
+    "content": "Adjust step numbering after removals",
+    "status": "pending"
+  },
+  {
+    "content": "Update types.ts to reflect changes",
+    "status": "pending"
+  },
+  {
+    "content": "Test refined workflow",
     "status": "pending"
   }
 ]
