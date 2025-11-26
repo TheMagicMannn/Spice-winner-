@@ -148,12 +148,25 @@ export const EnhancedOverviewTab: React.FC = () => {
     d.signups === 0 && d.logins === 0 && d.messages === 0 && d.matches === 0
   );
   
-  // Calculate mock changes (replace with real data comparison)
+  // Check if today has zero activity
+  const todayHasZeroActivity = 
+    (todayStats.total_signups || 0) === 0 &&
+    (todayStats.total_logins || 0) === 0 &&
+    (todayStats.total_messages || 0) === 0 &&
+    (todayStats.total_matches || 0) === 0;
+  
+  // Calculate changes from yesterday
+  const yesterdayData = chartData.length >= 2 ? chartData[chartData.length - 2] : null;
+  const calculateChange = (today: number, yesterday: number) => {
+    if (yesterday === 0) return 0;
+    return Math.round(((today - yesterday) / yesterday) * 100);
+  };
+  
   const changes = {
-    signups: 12,
-    logins: 8,
-    messages: 15,
-    revenue: 22
+    signups: yesterdayData ? calculateChange(todayStats.total_signups || 0, yesterdayData.signups) : 0,
+    logins: yesterdayData ? calculateChange(todayStats.total_logins || 0, yesterdayData.logins) : 0,
+    messages: yesterdayData ? calculateChange(todayStats.total_messages || 0, yesterdayData.messages) : 0,
+    revenue: yesterdayData ? calculateChange(todayStats.total_payments || 0, yesterdayData.revenue) : 0
   };
 
   // Pie chart data for activity distribution
