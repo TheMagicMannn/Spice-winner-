@@ -74,6 +74,8 @@ interface UserProfile {
   membership_tier?: string;
   created_at: string;
   last_active_at?: string;
+  latitude?: number;
+  longitude?: number;
   
   // Physical stats - Individual
   height?: string;
