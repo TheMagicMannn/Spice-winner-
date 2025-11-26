@@ -21,15 +21,15 @@
   },
   {
     "content": "Phase 3: Apply database migrations for new fields",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
     "content": "Phase 3: Update /api/profile.ts with camelCase to snake_case transformer",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Phase 4: End to End Testing using Testing Agent",
-    "status": "pending"
+    "status": "in_progress"
   },
   {
     "content": "Phase 4: Fix all bugs found by testing agent",
