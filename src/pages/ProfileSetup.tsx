@@ -316,6 +316,7 @@ export const ProfileSetupPage: React.FC = () => {
     partnerAlignment: [],
     consentConfirmed: false,
     lifestyleIdentities: [],
+    lifestyleExperienceLevels: {}, // Maps lifestyle identity to experience level (0-100)
     enmPolyStructure: [],
     swingerStructure: [],
     bdsmRoles: [],
