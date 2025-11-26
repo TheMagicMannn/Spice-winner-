@@ -380,6 +380,7 @@ export const SettingsPage: React.FC = () => {
             <Separator className="bg-pink-500/20" />
             
             <button
+              onClick={() => setIsMeasurementSystemModalOpen(true)}
               className="w-full flex items-center justify-between p-4 hover:bg-pink-500/5 rounded-lg transition-colors text-left"
               data-testid="measurement-system-button"
             >
@@ -388,7 +389,9 @@ export const SettingsPage: React.FC = () => {
                 <span className="text-white text-sm">System of Measurement</span>
               </div>
               <div className="flex items-center space-x-2">
-                <span className="text-white/60 text-sm">{settings.measurementSystem}</span>
+                <span className="text-white/60 text-sm">
+                  {settings.measurementSystem === 'MI' ? 'Miles' : 'Kilometers'}
+                </span>
                 <ChevronRight className="h-5 w-5 text-white/40" />
               </div>
             </button>
