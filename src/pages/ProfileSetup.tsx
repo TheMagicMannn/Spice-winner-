@@ -1522,12 +1522,16 @@ export const ProfileSetupPage: React.FC = () => {
       );
     }
 
+    // STEP 9: REMOVED - Role & Kink Preferences step deleted per user request
+    // Old step 10 is now step 9
+    
     // STEP 9: About Me/Us + Physical Stats (formerly Step 10)
     if (step === 9) {
+      const bioLength = String(formData.bio || '').length;
       return (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white mb-4 text-center">
-            {isIndividual ? 'Discover Your Role' : 'Discover Your Roles'}
+            {isIndividual ? 'About Me' : 'About Us'}
           </h2>
           
           {isIndividual ? (
