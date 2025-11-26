@@ -310,14 +310,17 @@ export const UserProfilePage: React.FC = () => {
   const getDistance = (): { value: number; unit: string } | null => {
     if (!user?.profile?.location || !profile?.location) return null;
     
-    // Check if user has disabled distance display
-    if (userSettings && !userSettings.showDistance) return null;
+    // Check if viewer has disabled distance display in their settings
+    if (viewerSettings && !viewerSettings.showDistance) return null;
+    
+    // Check if profile owner wants to show distance (not location)
+    if (profileOwnerSettings?.locationDistance !== 'distance') return null;
     
     const distanceInMiles = calculateDistance(user.profile.location, profile.location);
     if (!distanceInMiles) return null;
     
-    // Get user's measurement preference (default to miles)
-    const usesMetric = userSettings?.measurementSystem === 'KM';
+    // Get viewer's measurement preference (default to miles)
+    const usesMetric = viewerSettings?.measurementSystem === 'KM';
     
     if (usesMetric) {
       return {
@@ -330,6 +333,15 @@ export const UserProfilePage: React.FC = () => {
       value: distanceInMiles,
       unit: 'mi'
     };
+  };
+  
+  // Check if we should show location (city, state)
+  const shouldShowLocation = (): boolean => {
+    // If profile owner hasn't set preference, default to showing location
+    if (!profileOwnerSettings) return true;
+    
+    // Show location only if profile owner chose 'location' (not 'distance')
+    return profileOwnerSettings.locationDistance === 'location';
   };
 
   // Check if users are matched
