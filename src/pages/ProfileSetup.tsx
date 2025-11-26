@@ -1679,7 +1679,7 @@ export const ProfileSetupPage: React.FC = () => {
                     title="Hard Limits" 
                     options={LIMITS_OPTIONS} 
                     selected={formData.partner2HardLimits || []} 
-                    onToggle((val) => handlePartnerToggle('partner2', 'hardLimits', val, 10)} 
+                    onToggle={(val) => handlePartnerToggle('partner2', 'hardLimits', val, 10)} 
                     max={10} 
                   />
                 </div>
