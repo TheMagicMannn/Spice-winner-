@@ -1,10 +1,18 @@
 [
   {
     "content": "Create comprehensive data constants file with all 500+ options",
+    "status": "completed"
+  },
+  {
+    "content": "Create helper components for complex form sections",
+    "status": "completed"
+  },
+  {
+    "content": "Implement Individual Account workflow (18 steps, all questions) - Part 1: Steps 0-9",
     "status": "in_progress"
   },
   {
-    "content": "Implement Individual Account workflow (18 steps, all questions)",
+    "content": "Implement Individual Account workflow - Part 2: Steps 10-18",
     "status": "pending"
   },
   {
@@ -13,14 +21,6 @@
   },
   {
     "content": "Implement Couple Shell Account workflow (20 steps, all questions)",
-    "status": "pending"
-  },
-  {
-    "content": "Add experience-based routing and conditional rendering",
-    "status": "pending"
-  },
-  {
-    "content": "Create helper components for complex form sections",
     "status": "pending"
   },
   {
