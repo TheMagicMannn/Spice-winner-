@@ -7,10 +7,7 @@ import { SectionHeader, RadioGrid, Select, InfoBox } from '../../FormComponents'
 import { 
   STI_TESTING_FREQUENCY_OPTIONS,
   TESTING_REQUIREMENT_OPTIONS,
-  BARRIER_METHOD_OPTIONS,
-  FLUID_BONDING_STATUS_OPTIONS,
-  BIRTH_CONTROL_OPTIONS,
-  RISK_PROFILE_OPTIONS
+  BIRTH_CONTROL_OPTIONS
 } from '../../../../data/profileSetupConstants';
 import { Profile } from '../../../../types_comprehensive';
 
