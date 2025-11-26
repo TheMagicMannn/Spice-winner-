@@ -693,7 +693,7 @@ export const ProfileSetupComprehensive: React.FC = () => {
 
   return (
     <div
-      className=\"min-h-screen py-8 px-4\"
+      className="min-h-screen py-8 px-4\"
       style={{
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
@@ -701,22 +701,22 @@ export const ProfileSetupComprehensive: React.FC = () => {
         backgroundAttachment: 'fixed'
       }}
     >
-      <div className=\"max-w-4xl mx-auto\">
-        <div className=\"bg-base-100/95 backdrop-blur-sm rounded-xl shadow-2xl p-8\">
+      <div className="max-w-4xl mx-auto\">
+        <div className="bg-base-100/95 backdrop-blur-sm rounded-xl shadow-2xl p-8\">
           {/* Progress Bar */}
           {step > 0 && (
-            <div className=\"mb-8\">
-              <div className=\"flex justify-between items-center mb-2\">
-                <span className=\"text-sm text-text-secondary\">
+            <div className="mb-8\">
+              <div className="flex justify-between items-center mb-2\">
+                <span className="text-sm text-text-secondary\">
                   Step {step > 4 && step < 6 ? '5' : step > 50 ? '5' : step} of 18
                 </span>
-                <span className=\"text-sm text-brand-secondary font-semibold\">
+                <span className="text-sm text-brand-secondary font-semibold\">
                   {progressPercentage}%
                 </span>
               </div>
-              <div className=\"w-full bg-base-300 rounded-full h-2\">
+              <div className="w-full bg-base-300 rounded-full h-2\">
                 <div
-                  className=\"bg-gradient-to-r from-brand-primary to-brand-secondary h-2 rounded-full transition-all duration-300\"
+                  className="bg-gradient-to-r from-brand-primary to-brand-secondary h-2 rounded-full transition-all duration-300\"
                   style={{ width: `${progressPercentage}%` }}
                 />
               </div>
@@ -725,7 +725,7 @@ export const ProfileSetupComprehensive: React.FC = () => {
 
           {/* Error Display */}
           {error && (
-            <div className=\"mb-6 p-4 bg-red-500/10 border border-red-500 rounded-lg text-red-400\">
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500 rounded-lg text-red-400\">
               {error}
             </div>
           )}
