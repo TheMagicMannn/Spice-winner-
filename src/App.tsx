@@ -6,6 +6,7 @@ import { SignupPage } from './pages/Signup';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicy';
 import { TermsOfServicePage } from './pages/TermsOfService';
 import { ProfileSetupPage } from './pages/ProfileSetup';
+import { ProfileSetupComprehensive } from './pages/ProfileSetupComprehensive';
 import { ForgotPasswordPage } from './pages/ForgotPassword';
 import { ResetPasswordPage } from './pages/ResetPassword';
 import { DashboardPage } from './pages/Dashboard';
