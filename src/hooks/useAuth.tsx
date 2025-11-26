@@ -109,6 +109,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
+  // Update last_active_at every 5 minutes when user is logged in
+  useEffect(() => {
+    if (!user?.id) return;
+
+    // Update immediately on login/mount
+    ProfileService.updateLastActive(user.id);
+
+    // Update every 5 minutes
+    const interval = setInterval(() => {
+      ProfileService.updateLastActive(user.id);
+    }, 5 * 60 * 1000); // 5 minutes
+
+    return () => clearInterval(interval);
+  }, [user?.id]);
+
   // ✅ Direct Supabase auth - no API middleman
   const login = async (email: string, pass: string) => {
     try {
