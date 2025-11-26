@@ -77,6 +77,7 @@ export const EnhancedOverviewTab: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
   const [chartData, setChartData] = useState<any[]>([]);
+  const [overallStats, setOverallStats] = useState<any>(null);
 
   useEffect(() => {
     loadStats();
@@ -85,10 +86,16 @@ export const EnhancedOverviewTab: React.FC = () => {
   const loadStats = async () => {
     try {
       const today = new Date().toISOString().split('T')[0];
-      const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString();
       
-      // Get today's report
+      console.log('[EnhancedOverviewTab] Loading stats for today:', today);
+      
+      // Get today's report (now fetches real-time data)
       const todayReport = await adminService.getDailyReport(today);
+      console.log('[EnhancedOverviewTab] Today report:', todayReport);
+      
+      // Get overall platform stats
+      const platformStats = await adminService.getOverallStats();
+      console.log('[EnhancedOverviewTab] Platform stats:', platformStats);
       
       // Get last 7 days for chart
       const chartDataPromises = [];
@@ -100,6 +107,7 @@ export const EnhancedOverviewTab: React.FC = () => {
       }
       
       const weekReports = await Promise.all(chartDataPromises);
+      console.log('[EnhancedOverviewTab] Week reports:', weekReports);
       
       // Transform data for charts
       const formattedChartData = weekReports.map((report, index) => {
@@ -115,10 +123,13 @@ export const EnhancedOverviewTab: React.FC = () => {
         };
       });
 
+      console.log('[EnhancedOverviewTab] Formatted chart data:', formattedChartData);
+
       setChartData(formattedChartData);
       setStats({ todayReport });
+      setOverallStats(platformStats);
     } catch (error) {
-      console.error('Error loading stats:', error);
+      console.error('[EnhancedOverviewTab] Error loading stats:', error);
     } finally {
       setIsLoading(false);
     }
