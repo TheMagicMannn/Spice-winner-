@@ -43,6 +43,7 @@ import UserActionsService from '@/services/userActionsService';
 import PrivateContentService, { PrivateContent } from '@/services/privateContentService';
 import { useToast } from '@/hooks/use-toast';
 import PrivateContentViewer from '@/components/PrivateContentViewer';
+import settingsService, { UserSettings } from '@/services/settingsService';
 
 interface UserProfile {
   id: string;
