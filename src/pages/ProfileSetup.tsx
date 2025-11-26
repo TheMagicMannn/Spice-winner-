@@ -2567,7 +2567,7 @@ export const ProfileSetupPage: React.FC = () => {
         }}
       >
         <div className="max-w-4xl mx-auto">
-          <KinkQuiz onComplete={handleQuizComplete} onClose={() => setShowQuiz(false)} />
+          <KinkQuiz onSaveResults={handleQuizComplete} onClose={() => setShowQuiz(false)} />
         </div>
       </div>
     );
