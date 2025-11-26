@@ -179,7 +179,52 @@ export const EnhancedOverviewTab: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Database Setup Alert */}
+      {/* Overall Platform Stats Card - Show when today has zero activity */}
+      {todayHasZeroActivity && overallStats && (
+        <Card className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border-blue-500/30">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-3">
+              <Activity className="h-6 w-6 text-blue-400 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-blue-300 mb-2">
+                  📊 Platform Overview (All-Time Stats)
+                </h3>
+                <p className="text-sm text-blue-300/80 mb-4">
+                  No activity recorded for today yet. Here are your overall platform statistics:
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-xs text-blue-300/70 mb-1">Total Users</p>
+                    <p className="text-2xl font-bold text-white">{overallStats.totalUsers.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-xs text-blue-300/70 mb-1">Total Messages</p>
+                    <p className="text-2xl font-bold text-white">{overallStats.totalMessages.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-xs text-blue-300/70 mb-1">Total Matches</p>
+                    <p className="text-2xl font-bold text-white">{overallStats.totalMatches.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-xs text-blue-300/70 mb-1">Total Likes</p>
+                    <p className="text-2xl font-bold text-white">{overallStats.totalLikes.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-xs text-blue-300/70 mb-1">Active Users (30d)</p>
+                    <p className="text-2xl font-bold text-white">{overallStats.activeUsers.toLocaleString()}</p>
+                  </div>
+                  <div className="bg-black/30 rounded-lg p-3">
+                    <p className="text-xs text-blue-300/70 mb-1">VIP Members</p>
+                    <p className="text-2xl font-bold text-white">{overallStats.vipUsers.toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      
+      {/* Database Setup Alert - Only show if NO data at all */}
       {hasNoData && (
         <Card className="bg-yellow-500/10 border-yellow-500/30">
           <CardContent className="p-6">
@@ -187,24 +232,14 @@ export const EnhancedOverviewTab: React.FC = () => {
               <Activity className="h-6 w-6 text-yellow-400 flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-yellow-300 mb-2">
-                  No Activity Data Available
+                  ⚠️ No Historical Data Available
                 </h3>
                 <p className="text-sm text-yellow-300/80 mb-3">
-                  The dashboard cannot display statistics because no activity data exists in the database. 
-                  This is likely due to Row Level Security (RLS) policies blocking data logging.
+                  The dashboard is now fetching real-time data directly from your database tables. 
+                  Charts will populate as users interact with your platform.
                 </p>
-                <div className="bg-black/30 rounded-lg p-3 space-y-2">
-                  <p className="text-xs text-yellow-300 font-semibold">To fix this issue:</p>
-                  <ol className="text-xs text-yellow-300/90 space-y-1 ml-4 list-decimal">
-                    <li>Open Supabase SQL Editor</li>
-                    <li>Run the SQL script: <code className="bg-black/30 px-1 py-0.5 rounded">FIX_ACTIVITY_LOG_RLS.sql</code></li>
-                    <li>Generate test data by running: <code className="bg-black/30 px-1 py-0.5 rounded">SELECT populate_test_activity_data();</code></li>
-                    <li>Generate reports by running: <code className="bg-black/30 px-1 py-0.5 rounded">SELECT generate_daily_report(CURRENT_DATE - i) FROM generate_series(0, 6) i;</code></li>
-                    <li>Refresh this page</li>
-                  </ol>
-                </div>
                 <p className="text-xs text-yellow-300/70 mt-3">
-                  The SQL file has been created in your project root: <code className="bg-black/30 px-1 py-0.5 rounded">/app/FIX_ACTIVITY_LOG_RLS.sql</code>
+                  💡 Tip: The dashboard now shows live statistics from profiles, messages, matches, and likes tables.
                 </p>
               </div>
             </div>
