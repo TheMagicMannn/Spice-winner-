@@ -290,6 +290,17 @@ export interface Profile {
   isActive?: boolean;
   profileCompleted?: boolean;
   lastActiveAt?: string;
+  
+  // === MISSING FIELDS FROM STEP COMPONENTS ===
+  // Added for TypeScript compatibility
+  hairLength?: string;
+  fitnessLevel?: string;
+  energyLevel?: string;
+  hasMetamours?: boolean;
+  metamourRelationship?: string;
+  parallelDating?: string;
+  escalatorInterests?: string[];
+  groupPlayMaxSize?: number;
 }
 
 export type User = SupabaseUser & {
