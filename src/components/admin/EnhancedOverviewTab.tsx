@@ -441,20 +441,20 @@ export const EnhancedOverviewTab: React.FC = () => {
                       stroke: '#9ca3af',
                       strokeWidth: 1
                     }}
-                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
-                      const RADIAN = Math.PI / 180;
-                      const radius = outerRadius + 30;
-                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }: any) => {
+                      if (!midAngle || !percent || percent === 0) return null;
                       
-                      if (percent === 0) return null;
+                      const RADIAN = Math.PI / 180;
+                      const radius = (outerRadius || 0) + 30;
+                      const x = (cx || 0) + radius * Math.cos(-midAngle * RADIAN);
+                      const y = (cy || 0) + radius * Math.sin(-midAngle * RADIAN);
                       
                       return (
                         <text 
                           x={x} 
                           y={y} 
                           fill="#fff" 
-                          textAnchor={x > cx ? 'start' : 'end'} 
+                          textAnchor={x > (cx || 0) ? 'start' : 'end'} 
                           dominantBaseline="central"
                           style={{ fontSize: '12px', fontWeight: 500 }}
                         >
