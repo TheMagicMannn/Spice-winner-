@@ -710,14 +710,14 @@ class AdminService {
         .lte('created_at', endISO);
       stats.total_logins = loginsCount || 0;
 
-      // Get new premium users (VIP memberships created on this date)
-      const { count: premiumCount } = await supabase
+      // Get new VIP users (VIP memberships created on this date)
+      const { count: vipCount } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true })
         .eq('membership_tier', 'vip')
         .gte('created_at', startISO)
         .lte('created_at', endISO);
-      stats.new_premium_users = premiumCount || 0;
+      stats.new_premium_users = vipCount || 0;
 
       // Get total payments (if payment_history table exists)
       const { data: paymentsData } = await supabase
