@@ -30,11 +30,14 @@ const RELATIONSHIP_CONTEXT_OPTIONS: string[] = [
 
 // Step 3: Lifestyle Identity
 const LIFESTYLE_IDENTITY_OPTIONS: string[] = [
+  'BDSM/Kink',
   'Swinger',
   'ENM',
-  'Poly',
-  'BDSM/Kink',
-  'Exploring / Not Sure Yet'
+  'Polyamory',
+  'Fetish',
+  'Vanilla but Curious',
+  'Exploring / Not Sure Yet',
+  'Other'
 ];
 
 // Step 4: Deep Relationship Structure
