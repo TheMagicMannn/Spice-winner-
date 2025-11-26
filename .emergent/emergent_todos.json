@@ -4,23 +4,23 @@
     "status": "completed"
   },
   {
-    "content": "Remove Step 9 Role & Kink Preferences - need to complete deletion and renumber",
-    "status": "in_progress"
+    "content": "Remove Step 9 Role & Kink Preferences and renumber steps",
+    "status": "completed"
   },
   {
     "content": "Remove Barrier Methods, Fluid Bonding, Risk Profile from Step10_SexualHealth.tsx",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Remove Discretion and Who knows questions from Step13_Lifestyle.tsx",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Update step validation logic for new numbering (canProceed)",
-    "status": "pending"
+    "status": "completed"
   },
   {
     "content": "Rebuild and test refined workflow",
-    "status": "pending"
+    "status": "in_progress"
   }
 ]
