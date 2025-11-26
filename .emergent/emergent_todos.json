@@ -1,30 +1,26 @@
 [
   {
-    "content": "Remove Step 2 Experience Level - make it a dropdown for each lifestyle tag",
+    "content": "Add experience level slider (curious to 24/7) for each lifestyle tag in Step 3",
     "status": "in_progress"
   },
   {
-    "content": "Update Step 3 Lifestyle Identity options to: BDSM/kink, swinger, ENM, polyamory, fetish, vanilla but curious, exploring/not sure yet, other",
+    "content": "Remove Step 9 Role & Kink Preferences and renumber all subsequent steps",
     "status": "pending"
   },
   {
-    "content": "Remove Communication Preferences step (Step 9)",
+    "content": "Remove Barrier Methods, Fluid Bonding, Risk Profile from Step10_SexualHealth.tsx",
     "status": "pending"
   },
   {
-    "content": "Remove Barrier Methods, Fluid Bonding, Risk Profile questions",
+    "content": "Remove Discretion and Who knows questions from Step13_Lifestyle.tsx",
     "status": "pending"
   },
   {
-    "content": "Remove Discretion needs and Who knows about lifestyle questions",
+    "content": "Update step validation logic for new numbering",
     "status": "pending"
   },
   {
-    "content": "Adjust step numbering after removals",
-    "status": "pending"
-  },
-  {
-    "content": "Update types.ts to reflect changes",
+    "content": "Update types.ts for lifestyle experience mapping",
     "status": "pending"
   },
   {
