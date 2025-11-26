@@ -1522,7 +1522,7 @@ export const ProfileSetupPage: React.FC = () => {
       );
     }
 
-    // STEP 9: Role & Kink Preferences (existing code adapted)
+    // STEP 9: About Me/Us + Physical Stats (formerly Step 10)
     if (step === 9) {
       return (
         <div className="space-y-6">
