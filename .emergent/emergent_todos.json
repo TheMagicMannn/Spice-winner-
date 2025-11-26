@@ -1,11 +1,11 @@
 [
   {
     "content": "Add experience level slider (curious to 24/7) for each lifestyle tag in Step 3",
-    "status": "in_progress"
+    "status": "completed"
   },
   {
-    "content": "Remove Step 9 Role & Kink Preferences and renumber all subsequent steps",
-    "status": "pending"
+    "content": "Remove Step 9 Role & Kink Preferences - need to complete deletion and renumber",
+    "status": "in_progress"
   },
   {
     "content": "Remove Barrier Methods, Fluid Bonding, Risk Profile from Step10_SexualHealth.tsx",
@@ -16,15 +16,11 @@
     "status": "pending"
   },
   {
-    "content": "Update step validation logic for new numbering",
+    "content": "Update step validation logic for new numbering (canProceed)",
     "status": "pending"
   },
   {
-    "content": "Update types.ts for lifestyle experience mapping",
-    "status": "pending"
-  },
-  {
-    "content": "Test refined workflow",
+    "content": "Rebuild and test refined workflow",
     "status": "pending"
   }
 ]
