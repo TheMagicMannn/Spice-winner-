@@ -291,7 +291,7 @@ export const UserProfilePage: React.FC = () => {
 
   // Get distance to display
   const getDistance = (): { value: number; unit: string } | null => {
-    if (!user?.profile?.location || !profile.location) return null;
+    if (!user?.profile?.location || !profile?.location) return null;
     
     // Check if user has disabled distance display
     if (userSettings && !userSettings.showDistance) return null;
