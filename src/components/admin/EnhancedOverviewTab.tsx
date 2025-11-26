@@ -488,7 +488,7 @@ export const EnhancedOverviewTab: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-white/60 mb-1">New Premium Users</p>
+                <p className="text-sm text-white/60 mb-1">New VIP Members</p>
                 <h3 className="text-2xl font-bold text-white">{todayStats.new_premium_users || 0}</h3>
               </div>
               <Crown className="h-8 w-8 text-yellow-400" />
