@@ -208,6 +208,28 @@ export interface Profile {
   // Conditional for Polycules interest
   polyculePreferences?: string[];     // Join existing, Build triad/quad, etc.
 
+  // === MISSING FIELDS FROM STEP COMPONENTS ===
+  // Step11_Bio.tsx
+  personalityTraits?: string[];       // Personality trait selections
+  
+  // Step12_Physical.tsx
+  hairLength?: string;                // Hair length option
+  fitnessLevel?: string;              // Fitness level
+  
+  // Step14_Interests.tsx
+  lifestyleActivities?: string[];     // Lifestyle activities
+  tryingInterests?: string;           // Things they want to try
+  
+  // Step17_Verification.tsx
+  referenceWillingness?: string;      // Willingness to provide references
+  
+  // Step5C_ENMPolyDeepDive.tsx
+  energyLevel?: string;               // Energy level for poly
+  hasMetamours?: boolean;             // Has metamours
+  metamourRelationship?: string;      // Type of metamour relationship
+  parallelDating?: string;            // Parallel dating preference
+  escalatorInterests?: string[];      // Relationship escalator interests
+
   // DB-related optional meta (from profiles table)
   id?: string;  // User's UUID (same as auth.users.id)
   createdAt?: string;  // Maps to created_at in database
