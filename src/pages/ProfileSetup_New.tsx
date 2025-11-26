@@ -1713,9 +1713,846 @@ export const ProfileSetupPage: React.FC = () => {
       );
     }
 
-    // Continuing with remaining steps (About Me/Us, Photos, Preferences, Membership)
-    // Due to length, I'll create this in a second part
-    return <div>Step {step} - Coming soon</div>;
+    // STEP 10: About Me/Us + Physical Stats
+    if (step === 10) {
+      const bioLength = String(formData.bio || '').length;
+      return (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">
+            {isIndividual ? 'About Me' : 'About Us'}
+          </h2>
+          
+          <div>
+            <Label htmlFor="bio">
+              {isIndividual ? 'Bio' : 'Shared Bio'} (69-1000 characters)
+            </Label>
+            <p className="text-xs text-text-secondary mb-2">
+              {isIndividual 
+                ? "Show your personality—your vibe attracts your tribe." 
+                : "Tell others about you as a couple—what makes you special together."
+              }
+            </p>
+            <Textarea 
+              id="bio" 
+              name="bio" 
+              value={formData.bio} 
+              onChange={handleInputChange} 
+              rows={5} 
+              minLength={69} 
+              maxLength={1000} 
+              required 
+            />
+            <p className={`text-sm mt-1 ${bioLength < 69 || bioLength > 1000 ? 'text-red-400' : 'text-text-secondary'}`}>
+              {bioLength} / 1000
+            </p>
+          </div>
+
+          {isIndividual ? (
+            <div className="p-4 border border-brand-primary/30 rounded-lg">
+              <h3 className="font-semibold text-lg text-brand-secondary mb-4">My Stats</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Select
+                  label="Height"
+                  value={String(formData.height || '')}
+                  onChange={handleInputChange}
+                  name="height"
+                  options={HEIGHT_OPTIONS}
+                  placeholder="Select height..."
+                />
+                
+                <Select
+                  label="Weight"
+                  value={String(formData.weight || '')}
+                  onChange={handleInputChange}
+                  name="weight"
+                  options={WEIGHT_OPTIONS}
+                  placeholder="Select weight..."
+                />
+                
+                <Select
+                  label="Body Type"
+                  value={String(formData.bodyType || '')}
+                  onChange={handleInputChange}
+                  name="bodyType"
+                  options={BODY_TYPE_OPTIONS}
+                  placeholder="Select body type..."
+                />
+                
+                <Select
+                  label="Hair Color"
+                  value={String(formData.hairColor || '')}
+                  onChange={handleInputChange}
+                  name="hairColor"
+                  options={HAIR_COLOR_OPTIONS}
+                  placeholder="Select hair color..."
+                />
+                
+                <Select
+                  label="Eye Color"
+                  value={String(formData.eyeColor || '')}
+                  onChange={handleInputChange}
+                  name="eyeColor"
+                  options={EYE_COLOR_OPTIONS}
+                  placeholder="Select eye color..."
+                />
+                
+                <Select
+                  label="Facial Hair"
+                  value={String(formData.facialHair || '')}
+                  onChange={handleInputChange}
+                  name="facialHair"
+                  options={FACIAL_HAIR_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Ethnicity"
+                  value={String(formData.ethnicity || '')}
+                  onChange={handleInputChange}
+                  name="ethnicity"
+                  options={ETHNICITY_OPTIONS}
+                  placeholder="Select ethnicity..."
+                />
+                
+                <Select
+                  label="Cigarette Smoker"
+                  value={String(formData.cigaretteSmoker || '')}
+                  onChange={handleInputChange}
+                  name="cigaretteSmoker"
+                  options={YES_NO_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Alcohol Drinker"
+                  value={String(formData.alcoholDrinker || '')}
+                  onChange={handleInputChange}
+                  name="alcoholDrinker"
+                  options={YES_NO_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Marijuana User"
+                  value={String(formData.marijuanaUser || '')}
+                  onChange={handleInputChange}
+                  name="marijuanaUser"
+                  options={YES_NO_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Body Hair"
+                  value={String(formData.bodyHair || '')}
+                  onChange={handleInputChange}
+                  name="bodyHair"
+                  options={BODY_HAIR_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Grooming Style"
+                  value={String(formData.groomingStyle || '')}
+                  onChange={handleInputChange}
+                  name="groomingStyle"
+                  options={GROOMING_STYLE_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Birth Control"
+                  value={String(formData.birthControl || '')}
+                  onChange={handleInputChange}
+                  name="birthControl"
+                  options={BIRTH_CONTROL_OPTIONS}
+                  placeholder="Select..."
+                />
+                
+                <Select
+                  label="Can Host?"
+                  value={String(formData.canHost || '')}
+                  onChange={handleInputChange}
+                  name="canHost"
+                  options={CAN_HOST_OPTIONS}
+                  placeholder="Select..."
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="tattoos"
+                    name="tattoos"
+                    checked={Boolean(formData.tattoos)}
+                    onChange={handleInputChange}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="tattoos">Tattoos</Label>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="piercings"
+                    name="piercings"
+                    checked={Boolean(formData.piercings)}
+                    onChange={handleInputChange}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="piercings">Piercings</Label>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="latex-allergy"
+                    name="latexAllergy"
+                    checked={Boolean(formData.latexAllergy)}
+                    onChange={handleInputChange}
+                    className="w-4 h-4"
+                  />
+                  <Label htmlFor="latex-allergy">Latex Allergy</Label>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label>Last STI Test Date</Label>
+                  <Input
+                    type="date"
+                    name="lastSTITestDate"
+                    value={String(formData.lastSTITestDate || '')}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                
+                <Select
+                  label="STI Positive Results"
+                  value={String(formData.stiPositiveResults || '')}
+                  onChange={handleInputChange}
+                  name="stiPositiveResults"
+                  options={YES_NO_OPTIONS}
+                  placeholder="Select..."
+                />
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Partner 1 Stats */}
+              <div className="p-4 border border-brand-primary/30 rounded-lg">
+                <h3 className="font-semibold text-lg text-brand-secondary mb-4">{formData.displayName}'s Stats</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Select
+                    label="Height"
+                    value={String(formData.partner1Height || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'height', e.target.value)}
+                    options={HEIGHT_OPTIONS}
+                    placeholder="Select height..."
+                  />
+                  
+                  <Select
+                    label="Weight"
+                    value={String(formData.partner1Weight || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'weight', e.target.value)}
+                    options={WEIGHT_OPTIONS}
+                    placeholder="Select weight..."
+                  />
+                  
+                  <Select
+                    label="Body Type"
+                    value={String(formData.partner1BodyType || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'bodyType', e.target.value)}
+                    options={BODY_TYPE_OPTIONS}
+                    placeholder="Select body type..."
+                  />
+                  
+                  <Select
+                    label="Hair Color"
+                    value={String(formData.partner1HairColor || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'hairColor', e.target.value)}
+                    options={HAIR_COLOR_OPTIONS}
+                    placeholder="Select hair color..."
+                  />
+                  
+                  <Select
+                    label="Eye Color"
+                    value={String(formData.partner1EyeColor || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'eyeColor', e.target.value)}
+                    options={EYE_COLOR_OPTIONS}
+                    placeholder="Select eye color..."
+                  />
+                  
+                  <Select
+                    label="Facial Hair"
+                    value={String(formData.partner1FacialHair || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'facialHair', e.target.value)}
+                    options={FACIAL_HAIR_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Ethnicity"
+                    value={String(formData.partner1Ethnicity || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'ethnicity', e.target.value)}
+                    options={ETHNICITY_OPTIONS}
+                    placeholder="Select ethnicity..."
+                  />
+                  
+                  <Select
+                    label="Cigarette Smoker"
+                    value={String(formData.partner1CigaretteSmoker || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'cigaretteSmoker', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Alcohol Drinker"
+                    value={String(formData.partner1AlcoholDrinker || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'alcoholDrinker', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Marijuana User"
+                    value={String(formData.partner1MarijuanaUser || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'marijuanaUser', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Body Hair"
+                    value={String(formData.partner1BodyHair || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'bodyHair', e.target.value)}
+                    options={BODY_HAIR_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Grooming Style"
+                    value={String(formData.partner1GroomingStyle || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'groomingStyle', e.target.value)}
+                    options={GROOMING_STYLE_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Birth Control"
+                    value={String(formData.partner1BirthControl || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'birthControl', e.target.value)}
+                    options={BIRTH_CONTROL_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Can Host?"
+                    value={String(formData.partner1CanHost || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'canHost', e.target.value)}
+                    options={CAN_HOST_OPTIONS}
+                    placeholder="Select..."
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="partner1-tattoos"
+                      checked={Boolean(formData.partner1Tattoos)}
+                      onChange={(e) => handlePartnerStatsChange('partner1', 'tattoos', e.target.checked)}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="partner1-tattoos">Tattoos</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="partner1-piercings"
+                      checked={Boolean(formData.partner1Piercings)}
+                      onChange={(e) => handlePartnerStatsChange('partner1', 'piercings', e.target.checked)}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="partner1-piercings">Piercings</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="partner1-latex-allergy"
+                      checked={Boolean(formData.partner1LatexAllergy)}
+                      onChange={(e) => handlePartnerStatsChange('partner1', 'latexAllergy', e.target.checked)}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="partner1-latex-allergy">Latex Allergy</Label>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="space-y-2">
+                    <Label>Last STI Test Date</Label>
+                    <Input
+                      type="date"
+                      value={String(formData.partner1LastSTITestDate || '')}
+                      onChange={(e) => handlePartnerStatsChange('partner1', 'lastSTITestDate', e.target.value)}
+                    />
+                  </div>
+                  
+                  <Select
+                    label="STI Positive Results"
+                    value={String(formData.partner1StiPositiveResults || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner1', 'stiPositiveResults', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                </div>
+              </div>
+
+              {/* Partner 2 Stats */}
+              <div className="p-4 border border-brand-primary/30 rounded-lg">
+                <h3 className="font-semibold text-lg text-brand-secondary mb-4">{formData.displayName2}'s Stats</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Select
+                    label="Height"
+                    value={String(formData.partner2Height || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'height', e.target.value)}
+                    options={HEIGHT_OPTIONS}
+                    placeholder="Select height..."
+                  />
+                  
+                  <Select
+                    label="Weight"
+                    value={String(formData.partner2Weight || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'weight', e.target.value)}
+                    options={WEIGHT_OPTIONS}
+                    placeholder="Select weight..."
+                  />
+                  
+                  <Select
+                    label="Body Type"
+                    value={String(formData.partner2BodyType || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'bodyType', e.target.value)}
+                    options={BODY_TYPE_OPTIONS}
+                    placeholder="Select body type..."
+                  />
+                  
+                  <Select
+                    label="Hair Color"
+                    value={String(formData.partner2HairColor || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'hairColor', e.target.value)}
+                    options={HAIR_COLOR_OPTIONS}
+                    placeholder="Select hair color..."
+                  />
+                  
+                  <Select
+                    label="Eye Color"
+                    value={String(formData.partner2EyeColor || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'eyeColor', e.target.value)}
+                    options={EYE_COLOR_OPTIONS}
+                    placeholder="Select eye color..."
+                  />
+                  
+                  <Select
+                    label="Facial Hair"
+                    value={String(formData.partner2FacialHair || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'facialHair', e.target.value)}
+                    options={FACIAL_HAIR_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Ethnicity"
+                    value={String(formData.partner2Ethnicity || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'ethnicity', e.target.value)}
+                    options={ETHNICITY_OPTIONS}
+                    placeholder="Select ethnicity..."
+                  />
+                  
+                  <Select
+                    label="Cigarette Smoker"
+                    value={String(formData.partner2CigaretteSmoker || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'cigaretteSmoker', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Alcohol Drinker"
+                    value={String(formData.partner2AlcoholDrinker || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'alcoholDrinker', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Marijuana User"
+                    value={String(formData.partner2MarijuanaUser || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'marijuanaUser', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Body Hair"
+                    value={String(formData.partner2BodyHair || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'bodyHair', e.target.value)}
+                    options={BODY_HAIR_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Grooming Style"
+                    value={String(formData.partner2GroomingStyle || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'groomingStyle', e.target.value)}
+                    options={GROOMING_STYLE_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Birth Control"
+                    value={String(formData.partner2BirthControl || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'birthControl', e.target.value)}
+                    options={BIRTH_CONTROL_OPTIONS}
+                    placeholder="Select..."
+                  />
+                  
+                  <Select
+                    label="Can Host?"
+                    value={String(formData.partner2CanHost || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'canHost', e.target.value)}
+                    options={CAN_HOST_OPTIONS}
+                    placeholder="Select..."
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="partner2-tattoos"
+                      checked={Boolean(formData.partner2Tattoos)}
+                      onChange={(e) => handlePartnerStatsChange('partner2', 'tattoos', e.target.checked)}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="partner2-tattoos">Tattoos</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="partner2-piercings"
+                      checked={Boolean(formData.partner2Piercings)}
+                      onChange={(e) => handlePartnerStatsChange('partner2', 'piercings', e.target.checked)}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="partner2-piercings">Piercings</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="partner2-latex-allergy"
+                      checked={Boolean(formData.partner2LatexAllergy)}
+                      onChange={(e) => handlePartnerStatsChange('partner2', 'latexAllergy', e.target.checked)}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="partner2-latex-allergy">Latex Allergy</Label>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                  <div className="space-y-2">
+                    <Label>Last STI Test Date</Label>
+                    <Input
+                      type="date"
+                      value={String(formData.partner2LastSTITestDate || '')}
+                      onChange={(e) => handlePartnerStatsChange('partner2', 'lastSTITestDate', e.target.value)}
+                    />
+                  </div>
+                  
+                  <Select
+                    label="STI Positive Results"
+                    value={String(formData.partner2StiPositiveResults || '')}
+                    onChange={(e) => handlePartnerStatsChange('partner2', 'stiPositiveResults', e.target.value)}
+                    options={YES_NO_OPTIONS}
+                    placeholder="Select..."
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          
+          <div className="flex gap-4">
+            <Button onClick={prevStep} variant="outline" className="flex-1">← Back</Button>
+            <Button onClick={nextStep} disabled={!canProceed} className="flex-1">Next →</Button>
+          </div>
+        </div>
+      );
+    }
+
+    // STEP 11: Photos
+    if (step === 11) {
+      return (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">Add Your Photos</h2>
+          <p className="text-text-secondary text-center mb-4">Upload at least 2 photos (maximum 10)</p>
+          
+          <div className="space-y-4">
+            <div className="border-2 border-dashed border-brand-primary/50 rounded-lg p-8 text-center">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handlePhotoUpload}
+                className="hidden"
+                id="photo-upload"
+              />
+              <label htmlFor="photo-upload" className="cursor-pointer">
+                <div className="text-brand-secondary text-4xl mb-2">📷</div>
+                <p className="text-white font-semibold mb-1">Click to upload photos</p>
+                <p className="text-sm text-text-secondary">PNG, JPG up to 10MB each</p>
+              </label>
+            </div>
+            
+            {validationErrors.photos && (
+              <p className="text-red-400 text-sm">{validationErrors.photos}</p>
+            )}
+            
+            {photoFiles.length > 0 && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {photoFiles.map((file, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={URL.createObjectURL(file)}
+                      alt={`Preview ${index + 1}`}
+                      className="w-full h-48 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(index)}
+                      className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            <p className="text-sm text-text-secondary text-center">
+              {photoFiles.length} / 10 photos uploaded
+            </p>
+          </div>
+          
+          <div className="flex gap-4">
+            <Button onClick={prevStep} variant="outline" className="flex-1">← Back</Button>
+            <Button onClick={nextStep} disabled={!canProceed} className="flex-1">Next →</Button>
+          </div>
+        </div>
+      );
+    }
+
+    // STEP 12: Match Preferences
+    if (step === 12) {
+      return (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">Match Preferences</h2>
+          <p className="text-text-secondary text-center mb-4">Set your matching preferences (optional)</p>
+          
+          <div className="space-y-6">
+            <div>
+              <Label>Age Range: {formData.matchPreferences?.ageRange?.[0]} - {formData.matchPreferences?.ageRange?.[1]}</Label>
+              <div className="flex gap-4 items-center mt-2">
+                <input
+                  type="range"
+                  min="18"
+                  max="99"
+                  value={formData.matchPreferences?.ageRange?.[0] || 18}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    matchPreferences: {
+                      ...prev.matchPreferences!,
+                      ageRange: [parseInt(e.target.value), prev.matchPreferences?.ageRange?.[1] || 55]
+                    }
+                  }))}
+                  className="flex-1"
+                />
+                <input
+                  type="range"
+                  min="18"
+                  max="99"
+                  value={formData.matchPreferences?.ageRange?.[1] || 55}
+                  onChange={(e) => setFormData(prev => ({
+                    ...prev,
+                    matchPreferences: {
+                      ...prev.matchPreferences!,
+                      ageRange: [prev.matchPreferences?.ageRange?.[0] || 18, parseInt(e.target.value)]
+                    }
+                  }))}
+                  className="flex-1"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label>Distance: {formData.matchPreferences?.distance || 50} miles</Label>
+              <input
+                type="range"
+                min="0"
+                max="200"
+                value={formData.matchPreferences?.distance || 50}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  matchPreferences: {
+                    ...prev.matchPreferences!,
+                    distance: parseInt(e.target.value)
+                  }
+                }))}
+                className="w-full mt-2"
+              />
+            </div>
+            
+            <CheckboxGrid
+              title="Preferred Genders"
+              options={GENDER_OPTIONS}
+              selected={formData.matchPreferences?.genders || []}
+              onToggle={(val) => {
+                const current = formData.matchPreferences?.genders || [];
+                const newGenders = current.includes(val) ? current.filter(g => g !== val) : [...current, val];
+                setFormData(prev => ({
+                  ...prev,
+                  matchPreferences: {
+                    ...prev.matchPreferences!,
+                    genders: newGenders
+                  }
+                }));
+              }}
+            />
+            
+            <CheckboxGrid
+              title="Preferred Sexualities"
+              options={SEXUALITY_OPTIONS}
+              selected={formData.matchPreferences?.sexualities || []}
+              onToggle={(val) => {
+                const current = formData.matchPreferences?.sexualities || [];
+                const newSexualities = current.includes(val) ? current.filter(s => s !== val) : [...current, val];
+                setFormData(prev => ({
+                  ...prev,
+                  matchPreferences: {
+                    ...prev.matchPreferences!,
+                    sexualities: newSexualities
+                  }
+                }));
+              }}
+            />
+            
+            <CheckboxGrid
+              title="Experience Level Preference"
+              options={EXPERIENCE_LEVEL_OPTIONS}
+              selected={formData.matchPreferences?.experienceLevels || []}
+              onToggle={(val) => {
+                const current = formData.matchPreferences?.experienceLevels || [];
+                const newLevels = current.includes(val) ? current.filter(l => l !== val) : [...current, val];
+                setFormData(prev => ({
+                  ...prev,
+                  matchPreferences: {
+                    ...prev.matchPreferences!,
+                    experienceLevels: newLevels
+                  }
+                }));
+              }}
+            />
+            
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="verified-only"
+                checked={formData.matchPreferences?.verifiedOnly || false}
+                onChange={(e) => setFormData(prev => ({
+                  ...prev,
+                  matchPreferences: {
+                    ...prev.matchPreferences!,
+                    verifiedOnly: e.target.checked
+                  }
+                }))}
+                className="w-4 h-4"
+              />
+              <Label htmlFor="verified-only">Verified Profiles Only</Label>
+            </div>
+          </div>
+          
+          <div className="flex gap-4">
+            <Button onClick={prevStep} variant="outline" className="flex-1">← Back</Button>
+            <Button onClick={nextStep} disabled={!canProceed} className="flex-1">Next →</Button>
+          </div>
+        </div>
+      );
+    }
+
+    // STEP 13: Membership
+    if (step === 13) {
+      return (
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-white mb-4 text-center">Choose Your Membership</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, membershipTier: 'basic' }))}
+              className={`p-6 rounded-xl border-2 transition-all ${
+                formData.membershipTier === 'basic'
+                  ? 'border-brand-primary bg-brand-primary/10'
+                  : 'border-brand-primary/30 bg-black/30 hover:border-brand-primary/50'
+              }`}
+            >
+              <h3 className="text-xl font-bold text-white mb-2">Basic (Free)</h3>
+              <ul className="text-sm text-text-secondary space-y-1 text-left">
+                <li>• View profiles</li>
+                <li>• Send messages</li>
+                <li>• Basic matching</li>
+              </ul>
+            </button>
+            
+            <button
+              type="button"
+              onClick={() => setFormData(prev => ({ ...prev, membershipTier: 'vip' }))}
+              className={`p-6 rounded-xl border-2 transition-all ${
+                formData.membershipTier === 'vip'
+                  ? 'border-brand-primary bg-brand-primary/10'
+                  : 'border-brand-primary/30 bg-black/30 hover:border-brand-primary/50'
+              }`}
+            >
+              <h3 className="text-xl font-bold text-white mb-2">VIP ($24.99/mo)</h3>
+              <ul className="text-sm text-text-secondary space-y-1 text-left">
+                <li>• Everything in Basic</li>
+                <li>• Advanced filters</li>
+                <li>• See who viewed you</li>
+                <li>• Priority support</li>
+              </ul>
+            </button>
+          </div>
+          
+          <div className="flex gap-4 mt-8">
+            <Button onClick={prevStep} variant="outline" className="flex-1">← Back</Button>
+            <Button 
+              onClick={handleSubmit} 
+              disabled={loading || !canProceed} 
+              className="flex-1"
+            >
+              {loading ? <Spinner /> : 'Complete Profile Setup ✓'}
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    return <div>Step {step} - Unknown</div>;
   };
 
   if (showQuiz) {
