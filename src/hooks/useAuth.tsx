@@ -4,6 +4,7 @@ import { supabase } from '../services/supabase';
 import { Session } from '@supabase/supabase-js';
 import { profileFromDatabase } from '../utils/transformers';
 import { activityLogService } from '../services/activityLogService';
+import { ProfileService } from '../services/profileService';
 
 interface AuthContextType {
   user: User | null;
