@@ -1523,260 +1523,8 @@ export const ProfileSetupPage: React.FC = () => {
     }
 
     // STEP 9: REMOVED - Role & Kink Preferences step deleted per user request
-    // Old step 10 is now step 9
-    
-    // STEP 9: About Me/Us + Physical Stats (formerly Step 10)
+    // STEP 9: About Me/Us + Physical Stats
     if (step === 9) {
-      const bioLength = String(formData.bio || '').length;
-      return (
-        <div className="space-y-6">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">
-            {isIndividual ? 'About Me' : 'About Us'}
-          </h2>
-          
-          {isIndividual ? (
-            <>
-              <div className="space-y-4">
-                <Select 
-                  label="Select Your Primary Role"
-                  name="role"
-                  value={formData.topRoles && formData.topRoles[0] || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, topRoles: [e.target.value] }))}
-                  options={ROLE_OPTIONS}
-                  placeholder="Select a role..."
-                />
-                
-                <Button
-                  type="button"
-                  onClick={() => openQuiz('individual')}
-                  variant="outline"
-                  className="w-full"
-                >
-                  🎯 Take Kink Quiz for Role Suggestions
-                </Button>
-                
-                <Select 
-                  label="Lifestyle Experience Level" 
-                  name="lifestyleExperience" 
-                  value={String(formData.lifestyleExperience || 'New')} 
-                  onChange={handleInputChange} 
-                  options={EXPERIENCE_LEVEL_OPTIONS} 
-                />
-                
-                <CheckboxGrid 
-                  title="Kinks You're Interested In" 
-                  options={KINKS_INTERESTED_OPTIONS} 
-                  selected={formData.interestedKinks || []} 
-                  onToggle={(val) => handleToggle('interestedKinks', val, 15)} 
-                  max={15} 
-                  error={validationErrors.interestedKinks} 
-                />
-                
-                <CheckboxGrid 
-                  title="Soft Limits" 
-                  options={LIMITS_OPTIONS} 
-                  selected={formData.softLimits || []} 
-                  onToggle={(val) => handleToggle('softLimits', val, 10)} 
-                  max={10} 
-                  error={validationErrors.softLimits} 
-                />
-                
-                <CheckboxGrid 
-                  title="Hard Limits" 
-                  options={LIMITS_OPTIONS} 
-                  selected={formData.hardLimits || []} 
-                  onToggle={(val) => handleToggle('hardLimits', val, 10)} 
-                  max={10} 
-                  error={validationErrors.hardLimits} 
-                />
-                
-                <div className="space-y-2">
-                  <Label>Safety/Health Practices</Label>
-                  <Textarea name="safetyPractices" value={formData.safetyPractices} onChange={handleInputChange} rows={3} />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>Rules (Optional)</Label>
-                  <Textarea name="rules" value={formData.rules} onChange={handleInputChange} rows={3} />
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Partner 1 */}
-              <div className="p-4 border border-brand-primary/30 rounded-lg">
-                <h3 className="font-semibold text-lg text-brand-secondary mb-4">{formData.displayName}'s Role</h3>
-                
-                <Select 
-                  label="Select Role"
-                  name="partner1Role"
-                  value={formData.partner1Role || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, partner1Role: e.target.value }))}
-                  options={ROLE_OPTIONS}
-                  placeholder="Select a role..."
-                />
-                
-                <Button
-                  type="button"
-                  onClick={() => openQuiz('partner1')}
-                  variant="outline"
-                  className="w-full mt-4"
-                >
-                  🎯 Take Kink Quiz
-                </Button>
-                
-                <div className="mt-4">
-                  <Select 
-                    label="Experience Level" 
-                    name="partner1Experience" 
-                    value={String(formData.partner1Experience || 'New')} 
-                    onChange={(e) => handlePartnerTextChange('partner1', 'experience', e.target.value)} 
-                    options={EXPERIENCE_LEVEL_OPTIONS} 
-                  />
-                </div>
-                
-                <div className="mt-4">
-                  <CheckboxGrid 
-                    title="Kinks Interested In" 
-                    options={KINKS_INTERESTED_OPTIONS} 
-                    selected={formData.partner1Kinks || []} 
-                    onToggle={(val) => handlePartnerToggle('partner1', 'kinks', val, 15)} 
-                    max={15} 
-                  />
-                </div>
-                
-                <div className="mt-4">
-                  <CheckboxGrid 
-                    title="Soft Limits" 
-                    options={LIMITS_OPTIONS} 
-                    selected={formData.partner1SoftLimits || []} 
-                    onToggle={(val) => handlePartnerToggle('partner1', 'softLimits', val, 10)} 
-                    max={10} 
-                  />
-                </div>
-                
-                <div className="mt-4">
-                  <CheckboxGrid 
-                    title="Hard Limits" 
-                    options={LIMITS_OPTIONS} 
-                    selected={formData.partner1HardLimits || []} 
-                    onToggle={(val) => handlePartnerToggle('partner1', 'hardLimits', val, 10)} 
-                    max={10} 
-                  />
-                </div>
-                
-                <div className="space-y-2 mt-4">
-                  <Label>Safety/Health Practices</Label>
-                  <Textarea 
-                    value={String(formData.partner1SafetyPractices || '')} 
-                    onChange={(e) => handlePartnerTextChange('partner1', 'safetyPractices', e.target.value)} 
-                    rows={3} 
-                  />
-                </div>
-                
-                <div className="space-y-2 mt-4">
-                  <Label>Rules (Optional)</Label>
-                  <Textarea 
-                    value={String(formData.partner1Rules || '')} 
-                    onChange={(e) => handlePartnerTextChange('partner1', 'rules', e.target.value)} 
-                    rows={3} 
-                  />
-                </div>
-              </div>
-
-              {/* Partner 2 */}
-              <div className="p-4 border border-brand-primary/30 rounded-lg">
-                <h3 className="font-semibold text-lg text-brand-secondary mb-4">{formData.displayName2}'s Role</h3>
-                
-                <Select 
-                  label="Select Role"
-                  name="partner2Role"
-                  value={formData.partner2Role || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, partner2Role: e.target.value }))}
-                  options={ROLE_OPTIONS}
-                  placeholder="Select a role..."
-                />
-                
-                <Button
-                  type="button"
-                  onClick={() => openQuiz('partner2')}
-                  variant="outline"
-                  className="w-full mt-4"
-                >
-                  🎯 Take Kink Quiz
-                </Button>
-                
-                <div className="mt-4">
-                  <Select 
-                    label="Experience Level" 
-                    name="partner2Experience" 
-                    value={String(formData.partner2Experience || 'New')} 
-                    onChange={(e) => handlePartnerTextChange('partner2', 'experience', e.target.value)} 
-                    options={EXPERIENCE_LEVEL_OPTIONS} 
-                  />
-                </div>
-                
-                <div className="mt-4">
-                  <CheckboxGrid 
-                    title="Kinks Interested In" 
-                    options={KINKS_INTERESTED_OPTIONS} 
-                    selected={formData.partner2Kinks || []} 
-                    onToggle={(val) => handlePartnerToggle('partner2', 'kinks', val, 15)} 
-                    max={15} 
-                  />
-                </div>
-                
-                <div className="mt-4">
-                  <CheckboxGrid 
-                    title="Soft Limits" 
-                    options={LIMITS_OPTIONS} 
-                    selected={formData.partner2SoftLimits || []} 
-                    onToggle={(val) => handlePartnerToggle('partner2', 'softLimits', val, 10)} 
-                    max={10} 
-                  />
-                </div>
-                
-                <div className="mt-4">
-                  <CheckboxGrid 
-                    title="Hard Limits" 
-                    options={LIMITS_OPTIONS} 
-                    selected={formData.partner2HardLimits || []} 
-                    onToggle={(val) => handlePartnerToggle('partner2', 'hardLimits', val, 10)} 
-                    max={10} 
-                  />
-                </div>
-                
-                <div className="space-y-2 mt-4">
-                  <Label>Safety/Health Practices</Label>
-                  <Textarea 
-                    value={String(formData.partner2SafetyPractices || '')} 
-                    onChange={(e) => handlePartnerTextChange('partner2', 'safetyPractices', e.target.value)} 
-                    rows={3} 
-                  />
-                </div>
-                
-                <div className="space-y-2 mt-4">
-                  <Label>Rules (Optional)</Label>
-                  <Textarea 
-                    value={String(formData.partner2Rules || '')} 
-                    onChange={(e) => handlePartnerTextChange('partner2', 'rules', e.target.value)} 
-                    rows={3} 
-                  />
-                </div>
-              </div>
-            </>
-          )}
-          
-          <div className="flex gap-4">
-            <Button onClick={prevStep} variant="outline" className="flex-1">← Back</Button>
-            <Button onClick={nextStep} disabled={!canProceed} className="flex-1">Next →</Button>
-          </div>
-        </div>
-      );
-    }
-
-    // STEP 10: About Me/Us + Physical Stats
-    if (step === 10) {
       const bioLength = String(formData.bio || '').length;
       return (
         <div className="space-y-6">
@@ -2358,8 +2106,8 @@ export const ProfileSetupPage: React.FC = () => {
       );
     }
 
-    // STEP 11: Photos
-    if (step === 11) {
+    // STEP 10: Photos
+    if (step === 10) {
       return (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white mb-4 text-center">Add Your Photos</h2>
@@ -2420,8 +2168,8 @@ export const ProfileSetupPage: React.FC = () => {
       );
     }
 
-    // STEP 12: Match Preferences
-    if (step === 12) {
+    // STEP 11: Match Preferences
+    if (step === 11) {
       return (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white mb-4 text-center">Match Preferences</h2>
@@ -2557,8 +2305,8 @@ export const ProfileSetupPage: React.FC = () => {
       );
     }
 
-    // STEP 13: Membership
-    if (step === 13) {
+    // STEP 12: Membership
+    if (step === 12) {
       return (
         <div className="space-y-6">
           <h2 className="text-2xl font-bold text-white mb-4 text-center">Choose Your Membership</h2>
