@@ -1,26 +1,22 @@
 [
   {
-    "content": "Individual Steps 1-13 complete",
-    "status": "completed"
-  },
-  {
-    "content": "Individual Steps 14-18: Interests, Preferences, Photos, Verification, Membership",
+    "content": "Create main ProfileSetup orchestrator for Individual account",
     "status": "in_progress"
   },
   {
-    "content": "Couple Shared full workflow (19 steps)",
-    "status": "pending"
+    "content": "Wire up all 18 Individual steps",
+    "status": "in_progress"
   },
   {
-    "content": "Couple Shell full workflow (20 steps + linking)",
-    "status": "pending"
+    "content": "Add photo upload handling",
+    "status": "in_progress"
   },
   {
-    "content": "Main ProfileSetup orchestrator component",
-    "status": "pending"
+    "content": "Add profile submission logic",
+    "status": "in_progress"
   },
   {
-    "content": "Backend APIs for couples and submission",
+    "content": "Test Individual workflow end-to-end",
     "status": "pending"
   }
 ]
