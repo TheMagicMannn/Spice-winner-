@@ -220,7 +220,7 @@ const CheckboxGrid = ({ title, options, selected, onToggle, max, error }: { titl
           key={option} 
           type="button" 
           onClick={() => onToggle(option)} 
-          disabled={max && !selected.includes(option) && selected.length >= max}
+          disabled={Boolean(max && !selected.includes(option) && selected.length >= max)}
           className={`py-2 px-3 text-sm rounded-lg text-left transition-all ${
             selected.includes(option) 
               ? 'bg-brand-primary text-white font-semibold' 
