@@ -206,6 +206,7 @@ export interface Profile {
   
   // === PROFILE VERIFICATION & TRUST ===
   referencesAvailable?: boolean;
+  referenceWillingness?: string;
   referenceContacts?: string[];
   backgroundCheckCompleted?: boolean;
   stdTestShareWillingness?: string;
