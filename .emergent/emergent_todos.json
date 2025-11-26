@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Update types.ts with new fields for the enhanced workflow (relationship context, lifestyle identity, deep relationship structure, intent, boundaries, seeking, who to meet)",
+    "status": "pending"
+  },
+  {
+    "content": "Create database migration SQL file with all new fields needed for the enhanced profile workflow",
+    "status": "pending"
+  },
+  {
+    "content": "Rewrite ProfileSetup.tsx with complete new workflow - Steps 0-8+ for Individual accounts",
+    "status": "pending"
+  },
+  {
+    "content": "Rewrite ProfileSetup.tsx with complete new workflow - Steps 0-8+ for Couples accounts",
+    "status": "pending"
+  },
+  {
+    "content": "Test the new profile setup workflow end-to-end",
+    "status": "pending"
+  }
+]
