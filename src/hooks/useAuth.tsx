@@ -109,19 +109,47 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
   }, []);
 
-  // Update last_active_at every 5 minutes when user is logged in
+  // Update last_active_at when user is active
   useEffect(() => {
     if (!user?.id) return;
 
     // Update immediately on login/mount
     ProfileService.updateLastActive(user.id);
 
-    // Update every 5 minutes
+    // Track last update time to avoid too frequent updates
+    let lastUpdate = Date.now();
+    
+    // Update on user activity (mouse move, click, key press, touch)
+    const updateActivity = () => {
+      const now = Date.now();
+      // Only update if 1 minute has passed since last update
+      if (now - lastUpdate > 60 * 1000) {
+        ProfileService.updateLastActive(user.id);
+        lastUpdate = now;
+      }
+    };
+
+    // Listen to user interactions
+    window.addEventListener('mousemove', updateActivity);
+    window.addEventListener('click', updateActivity);
+    window.addEventListener('keypress', updateActivity);
+    window.addEventListener('touchstart', updateActivity);
+    window.addEventListener('scroll', updateActivity);
+
+    // Also update every 5 minutes as backup
     const interval = setInterval(() => {
       ProfileService.updateLastActive(user.id);
+      lastUpdate = Date.now();
     }, 5 * 60 * 1000); // 5 minutes
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mousemove', updateActivity);
+      window.removeEventListener('click', updateActivity);
+      window.removeEventListener('keypress', updateActivity);
+      window.removeEventListener('touchstart', updateActivity);
+      window.removeEventListener('scroll', updateActivity);
+    };
   }, [user?.id]);
 
   // ✅ Direct Supabase auth - no API middleman
