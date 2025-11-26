@@ -25,6 +25,10 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
+    hmr: {
+      clientPort: 443,
+      host: 'metrics-display-fix.preview.emergentagent.com'
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3001',
