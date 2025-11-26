@@ -1,11 +1,11 @@
 [
   {
-    "content": "Create database migration SQL file with all new fields needed for the enhanced profile workflow",
+    "content": "Rewrite ProfileSetup.tsx with complete new workflow - Steps 0-8+ for Individual and Couples accounts",
     "status": "completed"
   },
   {
-    "content": "Rewrite ProfileSetup.tsx with complete new workflow - Steps 0-8+ for Individual and Couples accounts",
-    "status": "in_progress"
+    "content": "User needs to run the SQL migration in Supabase: /app/ENHANCED_PROFILE_WORKFLOW_MIGRATION.sql",
+    "status": "pending"
   },
   {
     "content": "Test the new profile setup workflow end-to-end",
