@@ -458,9 +458,9 @@ export const ProfileSetupComprehensive: React.FC = () => {
     // Only Individual account for now
     if (accountType !== 'individual') {
       return (
-        <div className=\"text-center text-white p-8\">
-          <h2 className=\"text-2xl font-bold mb-4\">Coming Soon!</h2>
-          <p className=\"text-text-secondary\">
+        <div className="text-center text-white p-8">
+          <h2 className="text-2xl font-bold mb-4">Coming Soon!</h2>
+          <p className="text-text-secondary">
             Couple accounts are currently under development. Please select Individual account for now.
           </p>
           <button
@@ -468,7 +468,7 @@ export const ProfileSetupComprehensive: React.FC = () => {
               setAccountType(null);
               setStep(0);
             }}
-            className=\"mt-6 px-6 py-2 bg-brand-primary rounded-lg hover:bg-brand-primary/80\"
+            className="mt-6 px-6 py-2 bg-brand-primary rounded-lg hover:bg-brand-primary/80"
           >
             Go Back
           </button>
