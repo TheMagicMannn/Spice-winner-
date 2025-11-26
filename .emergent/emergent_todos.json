@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Create main ProfileSetup orchestrator for Individual account",
+    "status": "in_progress"
+  },
+  {
+    "content": "Wire up all 18 Individual steps",
+    "status": "in_progress"
+  },
+  {
+    "content": "Add photo upload handling",
+    "status": "in_progress"
+  },
+  {
+    "content": "Add profile submission logic",
+    "status": "in_progress"
+  },
+  {
+    "content": "Test Individual workflow end-to-end",
+    "status": "pending"
+  }
+]

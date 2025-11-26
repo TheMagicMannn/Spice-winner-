@@ -160,6 +160,54 @@ export interface Profile {
   partner2SafetyPractices?: string;   // Safety practices
   partner2Rules?: string;             // Rules (optional)
 
+  // === NEW ENHANCED WORKFLOW FIELDS ===
+  // Step 2: Relationship Context
+  relationshipContext?: string;       // Single, Single but in Relationship, Married Solo, etc.
+  partnerAlignment?: string[];        // For partnered users - alignment questions responses
+  consentConfirmed?: boolean;         // For married solo users
+
+  // Step 3: Lifestyle Identity Selection
+  lifestyleIdentities?: string[];     // Swinger, ENM, Poly, BDSM/Kink, Exploring
+
+  // Step 4: Deep Relationship Structure (Adaptive based on lifestyle)
+  // ENM/Poly structures
+  enmPolyStructure?: string[];        // Open Relationship, Hierarchical Poly, etc.
+  // Swinger structures
+  swingerStructure?: string[];        // Attached Single, Couple-Friendly, Solo Play Only, etc.
+  // BDSM structures
+  bdsmRoles?: string[];               // Dominant, Submissive, Switch, D/s Dynamic, etc.
+
+  // Step 5: Intent
+  intentHereFor?: string[];           // Dating, Play partners, Meeting couples/singles, etc.
+
+  // Step 6: Boundaries
+  comfortableMeeting?: string[];      // Singles, Couples, Groups/polycules
+  comfortEnvironments?: string[];     // Public events, Private gatherings, Online-only
+  negotiationComfort?: string;        // For BDSM users
+  autonomyLevel?: string;             // For Poly users
+
+  // Step 7: What You're Seeking (Enhanced)
+  seekingDetailed?: string[];         // Friendship, Play partners, Poly relationships, etc.
+  polyRole?: string;                  // If "Poly expansion" selected
+  
+  // Step 8: Who You Want to Meet
+  interestedInGenders?: string[];     // Multi-select gender interests
+  interestedInTypes?: string[];       // Singles, Couples, Groups, Polycules, Event hosts
+  
+  // Conditional for Couples interest
+  couplePref?: string[];              // M/F, F/F, M/M, NB-inclusive, Any
+  coupleInteraction?: string;         // Only together, With one partner only, Either, Not sure
+  coupleInteractionGenders?: string[]; // If "With one partner only" - which genders
+  
+  // Conditional for Singles interest  
+  singlesGenders?: string[];          // Which genders interested in for singles
+  
+  // Conditional for Groups interest
+  groupTypes?: string[];              // Other couples, Multiple men, Mixture of both
+  
+  // Conditional for Polycules interest
+  polyculePreferences?: string[];     // Join existing, Build triad/quad, etc.
+
   // DB-related optional meta (from profiles table)
   id?: string;  // User's UUID (same as auth.users.id)
   createdAt?: string;  // Maps to created_at in database

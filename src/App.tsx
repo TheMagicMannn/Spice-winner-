@@ -6,6 +6,7 @@ import { SignupPage } from './pages/Signup';
 import { PrivacyPolicyPage } from './pages/PrivacyPolicy';
 import { TermsOfServicePage } from './pages/TermsOfService';
 import { ProfileSetupPage } from './pages/ProfileSetup';
+import { ProfileSetupComprehensive } from './pages/ProfileSetupComprehensive';
 import { ForgotPasswordPage } from './pages/ForgotPassword';
 import { ResetPasswordPage } from './pages/ResetPassword';
 import { DashboardPage } from './pages/Dashboard';
@@ -94,7 +95,8 @@ const AppContent: React.FC = () => {
     if (!profileComplete) {
       return (
          <Routes>
-          <Route path="/profile-setup" element={<ProfileSetupPage />} />
+          <Route path="/profile-setup" element={<ProfileSetupComprehensive />} />
+          <Route path="/profile-setup-old" element={<ProfileSetupPage />} />
           <Route path="*" element={<Navigate to="/profile-setup" />} />
         </Routes>
       );
