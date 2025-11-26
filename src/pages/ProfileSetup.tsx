@@ -880,23 +880,16 @@ export const ProfileSetupPage: React.FC = () => {
         }
         return true;
         
-      case 9: // Role & Kink Preferences
-        if (isIndividual) {
-          return Boolean((formData.topRoles && formData.topRoles.length >= 1) || Object.keys(formData.kinkQuizResults || {}).length > 0);
-        } else {
-          return Boolean(formData.partner1Role && formData.partner2Role);
-        }
-        
-      case 10: // About Me/Us + Physical Stats
+      case 9: // About Me/Us + Physical Stats (formerly Step 10)
         return Boolean(formData.bio) && (String(formData.bio).length >= 69 && String(formData.bio).length <= 1000);
         
-      case 11: // Photos
+      case 10: // Photos (formerly Step 11)
         return photoFiles.length >= 2;
         
-      case 12: // Match Preferences
+      case 11: // Match Preferences (formerly Step 12)
         return true; // Optional
         
-      case 13: // Membership
+      case 12: // Membership (formerly Step 13)
         return true;
         
       default:
