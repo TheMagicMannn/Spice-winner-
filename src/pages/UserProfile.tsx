@@ -293,11 +293,14 @@ export const UserProfilePage: React.FC = () => {
   const getDistance = (): { value: number; unit: string } | null => {
     if (!user?.profile?.location || !profile.location) return null;
     
+    // Check if user has disabled distance display
+    if (userSettings && !userSettings.showDistance) return null;
+    
     const distanceInMiles = calculateDistance(user.profile.location, profile.location);
     if (!distanceInMiles) return null;
     
     // Get user's measurement preference (default to miles)
-    const usesMetric = false; // TODO: Get from user settings
+    const usesMetric = userSettings?.measurementSystem === 'KM';
     
     if (usesMetric) {
       return {
