@@ -202,7 +202,7 @@ export const UserProfilePage: React.FC = () => {
     const loadSettings = async () => {
       if (user?.id) {
         try {
-          const settings = await settingsService.getSettings(user.id);
+          const settings = await settingsService.getUserSettings(user.id);
           setUserSettings(settings);
         } catch (error) {
           console.error('Error loading user settings:', error);
