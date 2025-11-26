@@ -167,6 +167,9 @@ export const UserProfilePage: React.FC = () => {
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
   
+  // User settings for measurement preference
+  const [userSettings, setUserSettings] = useState<UserSettings | null>(null);
+  
   // Expandable sections state
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     aboutMe: false,
