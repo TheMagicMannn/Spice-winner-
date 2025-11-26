@@ -531,6 +531,144 @@ export const SettingsPage: React.FC = () => {
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
       />
+
+      {/* Location Display Selection Modal */}
+      {isLocationDisplayModalOpen && settings && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-lg max-w-md w-full border border-pink-500/30">
+            <div className="p-6 border-b border-pink-500/20">
+              <h3 className="text-xl font-semibold text-white">Show My Location with</h3>
+              <p className="text-white/60 text-sm mt-1">Choose what other users see</p>
+            </div>
+            <div className="p-6 space-y-3">
+              <button
+                onClick={() => {
+                  updateSetting('locationDistance', 'distance');
+                  setIsLocationDisplayModalOpen(false);
+                }}
+                className={`w-full p-4 rounded-lg border-2 transition-all ${
+                  settings.locationDistance === 'distance'
+                    ? 'border-pink-500 bg-pink-500/10'
+                    : 'border-white/10 bg-gray-800/50 hover:border-pink-500/50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="text-white font-medium">Distance</div>
+                    <div className="text-white/60 text-sm">Show "X mi away" or "X km away"</div>
+                  </div>
+                  {settings.locationDistance === 'distance' && (
+                    <div className="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    </div>
+                  )}
+                </div>
+              </button>
+              
+              <button
+                onClick={() => {
+                  updateSetting('locationDistance', 'location');
+                  setIsLocationDisplayModalOpen(false);
+                }}
+                className={`w-full p-4 rounded-lg border-2 transition-all ${
+                  settings.locationDistance === 'location'
+                    ? 'border-pink-500 bg-pink-500/10'
+                    : 'border-white/10 bg-gray-800/50 hover:border-pink-500/50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="text-white font-medium">City, State</div>
+                    <div className="text-white/60 text-sm">Show actual location (e.g., "Austin, TX")</div>
+                  </div>
+                  {settings.locationDistance === 'location' && (
+                    <div className="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    </div>
+                  )}
+                </div>
+              </button>
+            </div>
+            <div className="p-4 border-t border-pink-500/20">
+              <Button
+                onClick={() => setIsLocationDisplayModalOpen(false)}
+                className="w-full bg-gray-800 hover:bg-gray-700 text-white"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Measurement System Selection Modal */}
+      {isMeasurementSystemModalOpen && settings && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-lg max-w-md w-full border border-pink-500/30">
+            <div className="p-6 border-b border-pink-500/20">
+              <h3 className="text-xl font-semibold text-white">System of Measurement</h3>
+              <p className="text-white/60 text-sm mt-1">Choose your preferred unit</p>
+            </div>
+            <div className="p-6 space-y-3">
+              <button
+                onClick={() => {
+                  updateSetting('measurementSystem', 'MI');
+                  setIsMeasurementSystemModalOpen(false);
+                }}
+                className={`w-full p-4 rounded-lg border-2 transition-all ${
+                  settings.measurementSystem === 'MI'
+                    ? 'border-pink-500 bg-pink-500/10'
+                    : 'border-white/10 bg-gray-800/50 hover:border-pink-500/50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="text-white font-medium">Miles</div>
+                    <div className="text-white/60 text-sm">Imperial system (mi, ft, lbs)</div>
+                  </div>
+                  {settings.measurementSystem === 'MI' && (
+                    <div className="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    </div>
+                  )}
+                </div>
+              </button>
+              
+              <button
+                onClick={() => {
+                  updateSetting('measurementSystem', 'KM');
+                  setIsMeasurementSystemModalOpen(false);
+                }}
+                className={`w-full p-4 rounded-lg border-2 transition-all ${
+                  settings.measurementSystem === 'KM'
+                    ? 'border-pink-500 bg-pink-500/10'
+                    : 'border-white/10 bg-gray-800/50 hover:border-pink-500/50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="text-white font-medium">Kilometers</div>
+                    <div className="text-white/60 text-sm">Metric system (km, m, kg)</div>
+                  </div>
+                  {settings.measurementSystem === 'KM' && (
+                    <div className="w-5 h-5 rounded-full bg-pink-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    </div>
+                  )}
+                </div>
+              </button>
+            </div>
+            <div className="p-4 border-t border-pink-500/20">
+              <Button
+                onClick={() => setIsMeasurementSystemModalOpen(false)}
+                className="w-full bg-gray-800 hover:bg-gray-700 text-white"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </SpiceBackground>
   );
 };
