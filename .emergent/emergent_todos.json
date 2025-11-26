@@ -1,30 +1,26 @@
 [
   {
-    "content": "Design comprehensive database schema for 3 account types (Individual, Couple Shared, Couple Shell)",
+    "content": "Create comprehensive data constants file with all 500+ options",
+    "status": "in_progress"
+  },
+  {
+    "content": "Implement Individual Account workflow (18 steps, all questions)",
     "status": "pending"
   },
   {
-    "content": "Update types.ts with new account types and all enhanced fields",
+    "content": "Implement Couple Shared Account workflow (19 steps, all questions)",
     "status": "pending"
   },
   {
-    "content": "Create SQL migration for couple_links table and enhanced profile fields",
+    "content": "Implement Couple Shell Account workflow (20 steps, all questions)",
     "status": "pending"
   },
   {
-    "content": "Implement Individual account workflow (15+ steps with deep community questions)",
+    "content": "Add experience-based routing and conditional rendering",
     "status": "pending"
   },
   {
-    "content": "Implement Couple Shared account workflow (2 logins, 1 profile)",
-    "status": "pending"
-  },
-  {
-    "content": "Implement Couple Shell account workflow (2 individual accounts linking)",
-    "status": "pending"
-  },
-  {
-    "content": "Add experience-based routing (newbie to 24/7 lifestyle)",
+    "content": "Create helper components for complex form sections",
     "status": "pending"
   },
   {
