@@ -197,6 +197,21 @@ export const UserProfilePage: React.FC = () => {
     }
   }, [userId]);
   
+  // Load user settings for measurement preference
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (user?.id) {
+        try {
+          const settings = await settingsService.getSettings(user.id);
+          setUserSettings(settings);
+        } catch (error) {
+          console.error('Error loading user settings:', error);
+        }
+      }
+    };
+    loadSettings();
+  }, [user]);
+  
   // Check match status
   useEffect(() => {
     if (user && userId && user.id !== userId) {
