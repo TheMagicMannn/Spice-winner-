@@ -426,34 +426,71 @@ export const EnhancedOverviewTab: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie
-                  data={activityDistribution}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) => `${name}: ${percent ? (percent * 100).toFixed(0) : 0}%`}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  animationBegin={0}
-                  animationDuration={800}
-                >
-                  {activityDistribution.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#1f2937',
-                    border: '1px solid #ec4899',
-                    borderRadius: '8px',
-                    color: '#fff'
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
+            {activityDistribution.every(d => d.value === 0) ? (
+              <div className="flex items-center justify-center h-[250px]">
+                <p className="text-white/50 text-sm">No activity data for today</p>
+              </div>
+            ) : (
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={activityDistribution}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={{
+                      stroke: '#9ca3af',
+                      strokeWidth: 1
+                    }}
+                    label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+                      const RADIAN = Math.PI / 180;
+                      const radius = outerRadius + 30;
+                      const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                      const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                      
+                      if (percent === 0) return null;
+                      
+                      return (
+                        <text 
+                          x={x} 
+                          y={y} 
+                          fill="#fff" 
+                          textAnchor={x > cx ? 'start' : 'end'} 
+                          dominantBaseline="central"
+                          style={{ fontSize: '12px', fontWeight: 500 }}
+                        >
+                          {`${name}: ${(percent * 100).toFixed(0)}%`}
+                        </text>
+                      );
+                    }}
+                    outerRadius={70}
+                    fill="#8884d8"
+                    dataKey="value"
+                    animationBegin={200}
+                    animationDuration={1200}
+                    animationEasing="ease-out"
+                  >
+                    {activityDistribution.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={entry.color}
+                        style={{
+                          filter: `drop-shadow(0 0 8px ${entry.color}40)`,
+                          transition: 'all 0.3s ease'
+                        }}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#1f2937',
+                      border: '1px solid #ec4899',
+                      borderRadius: '8px',
+                      color: '#fff'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
           </CardContent>
         </Card>
       </div>
