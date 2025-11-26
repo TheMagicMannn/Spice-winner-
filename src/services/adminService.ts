@@ -616,28 +616,137 @@ class AdminService {
   }
 
   /**
-   * Get daily report
+   * Get daily report - Now fetches real-time data from actual tables
    */
   async getDailyReport(date: string): Promise<DailyReport | null> {
     try {
-      console.log('[AdminService] Fetching daily report for date:', date);
+      console.log('[AdminService] Fetching real-time stats for date:', date);
 
-      const { data, error } = await supabase
-        .from('daily_activity_reports')
-        .select('*')
-        .eq('report_date', date)
+      // Parse the date to get start and end of day
+      const startOfDay = new Date(date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(date);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      const startISO = startOfDay.toISOString();
+      const endISO = endOfDay.toISOString();
+
+      console.log('[AdminService] Date range:', { startISO, endISO });
+
+      // Fetch real-time statistics from actual tables
+      const stats: DailyReport = {
+        report_date: date,
+        total_signups: 0,
+        total_logins: 0,
+        total_messages: 0,
+        total_likes: 0,
+        total_matches: 0,
+        total_payments: 0,
+        active_users: 0,
+        new_premium_users: 0
+      };
+
+      // Get total signups (profiles created on this date)
+      const { count: signupsCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      stats.total_signups = signupsCount || 0;
+
+      // Get total messages (messages sent on this date)
+      const { count: messagesCount } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      stats.total_messages = messagesCount || 0;
+
+      // Get total likes (likes created on this date)
+      const { count: likesCount } = await supabase
+        .from('likes')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      stats.total_likes = likesCount || 0;
+
+      // Get total matches (matches created on this date)
+      const { count: matchesCount } = await supabase
+        .from('matches')
+        .select('*', { count: 'exact', head: true })
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      stats.total_matches = matchesCount || 0;
+
+      // Get total active users (users who did any activity on this date)
+      // Count unique users who sent messages, liked, or matched
+      const { data: activeUsersData } = await supabase
+        .rpc('count_active_users_by_date', {
+          start_date: startISO,
+          end_date: endISO
+        })
         .maybeSingle();
-
-      if (error) {
-        console.error('[AdminService] Daily report error:', error);
-        return null;
+      
+      // If RPC doesn't exist, fallback to counting message senders
+      if (activeUsersData) {
+        stats.active_users = activeUsersData.count || 0;
+      } else {
+        const { data: messageSenders } = await supabase
+          .from('messages')
+          .select('sender_id')
+          .gte('created_at', startISO)
+          .lte('created_at', endISO);
+        
+        const uniqueSenders = new Set(messageSenders?.map(m => m.sender_id) || []);
+        stats.active_users = uniqueSenders.size;
       }
 
-      console.log('[AdminService] Daily report data:', data);
-      return data;
+      // Get logins from user_activity_log if it exists
+      const { count: loginsCount } = await supabase
+        .from('user_activity_log')
+        .select('*', { count: 'exact', head: true })
+        .eq('activity_type', 'user_login')
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      stats.total_logins = loginsCount || 0;
+
+      // Get new premium users (VIP memberships created on this date)
+      const { count: premiumCount } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('membership_tier', 'vip')
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      stats.new_premium_users = premiumCount || 0;
+
+      // Get total payments (if payment_history table exists)
+      const { data: paymentsData } = await supabase
+        .from('payment_history')
+        .select('amount')
+        .eq('status', 'completed')
+        .gte('created_at', startISO)
+        .lte('created_at', endISO);
+      
+      if (paymentsData) {
+        stats.total_payments = paymentsData.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+      }
+
+      console.log('[AdminService] Real-time stats calculated:', stats);
+      return stats;
     } catch (error) {
       console.error('[AdminService] Error fetching daily report:', error);
-      return null;
+      // Return zeros instead of null to prevent UI errors
+      return {
+        report_date: date,
+        total_signups: 0,
+        total_logins: 0,
+        total_messages: 0,
+        total_likes: 0,
+        total_matches: 0,
+        total_payments: 0,
+        active_users: 0,
+        new_premium_users: 0
+      };
     }
   }
 
