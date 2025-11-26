@@ -69,6 +69,26 @@
               slideUp: {
                 '0%': { transform: 'translateY(20px)', opacity: '0' },
                 '100%': { transform: 'translateY(0)', opacity: '1' },
+              },
+              sparkle: {
+                '0%, 100%': { 
+                  transform: 'rotate(-12deg) scale(1)',
+                  filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.8)) drop-shadow(0 0 12px rgba(250, 204, 21, 0.4))'
+                },
+                '50%': { 
+                  transform: 'rotate(-12deg) scale(1.1)',
+                  filter: 'drop-shadow(0 0 12px rgba(250, 204, 21, 1)) drop-shadow(0 0 20px rgba(250, 204, 21, 0.6))'
+                }
+              },
+              'sparkle-reverse': {
+                '0%, 100%': { 
+                  opacity: '0.4',
+                  transform: 'scale(0.8) rotate(0deg)'
+                },
+                '50%': { 
+                  opacity: '1',
+                  transform: 'scale(1.2) rotate(180deg)'
+                }
               }
             }
           }
