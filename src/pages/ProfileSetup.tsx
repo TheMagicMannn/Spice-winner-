@@ -1191,6 +1191,48 @@ export const ProfileSetupPage: React.FC = () => {
             onToggle={(val) => handleToggle('lifestyleIdentities', val)}
           />
           
+          {/* Experience Level Sliders for Each Selected Lifestyle */}
+          {formData.lifestyleIdentities && formData.lifestyleIdentities.length > 0 && (
+            <div className="space-y-6 mt-8 p-6 bg-black/30 rounded-lg border border-brand-primary/30">
+              <h3 className="text-xl font-semibold text-brand-secondary mb-4">Experience Level</h3>
+              <p className="text-sm text-text-secondary mb-6">
+                Rate your experience level for each lifestyle you selected
+              </p>
+              
+              {formData.lifestyleIdentities.map((lifestyle) => (
+                <div key={lifestyle} className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <Label className="text-base">{lifestyle}</Label>
+                    <span className="text-sm text-brand-primary font-medium">
+                      {getExperienceLevelLabel(formData.lifestyleExperienceLevels?.[lifestyle] || 0)}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={formData.lifestyleExperienceLevels?.[lifestyle] || 0}
+                    onChange={(e) => {
+                      const newLevels = { ...(formData.lifestyleExperienceLevels || {}) };
+                      newLevels[lifestyle] = parseInt(e.target.value);
+                      setFormData(prev => ({ ...prev, lifestyleExperienceLevels: newLevels }));
+                    }}
+                    className="w-full h-2 bg-black/50 rounded-lg appearance-none cursor-pointer slider-thumb"
+                    style={{
+                      background: `linear-gradient(to right, #FF1493 0%, #FF1493 ${formData.lifestyleExperienceLevels?.[lifestyle] || 0}%, rgba(255,255,255,0.1) ${formData.lifestyleExperienceLevels?.[lifestyle] || 0}%, rgba(255,255,255,0.1) 100%)`
+                    }}
+                  />
+                  <div className="flex justify-between text-xs text-text-secondary">
+                    <span>Curious</span>
+                    <span>Exploring</span>
+                    <span>Experienced</span>
+                    <span>Living it 24/7</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
           <div className="flex gap-4">
             <Button onClick={prevStep} variant="outline" className="flex-1">← Back</Button>
             <Button onClick={nextStep} disabled={!canProceed} className="flex-1">Next →</Button>
