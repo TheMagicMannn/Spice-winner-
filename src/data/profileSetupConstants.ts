@@ -318,12 +318,12 @@ export const PARTY_SIZE_PREFERENCE_OPTIONS = [
 ];
 
 export const GROUP_PLAY_MAX_SIZE_OPTIONS = [
-  { value: 3, label: '3 people' },
-  { value: 4, label: '4 people' },
-  { value: 5, label: '5-7 people' },
-  { value: 8, label: '8-10 people' },
-  { value: 10, label: '10+ people' },
-  { value: 999, label: 'No limit' }
+  { value: '3', label: '3 people' },
+  { value: '4', label: '4 people' },
+  { value: '5', label: '5-7 people' },
+  { value: '8', label: '8-10 people' },
+  { value: '10', label: '10+ people' },
+  { value: '999', label: 'No limit' }
 ];
 
 export const GROUP_PLAY_PREFERENCE_OPTIONS = [
