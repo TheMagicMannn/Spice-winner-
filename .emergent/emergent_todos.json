@@ -1,22 +1,42 @@
 [
   {
-    "content": "Create main ProfileSetup orchestrator for Individual account",
-    "status": "in_progress"
+    "content": "Phase 1: Create test_core.ts script to test profile API with enhanced fields for Individual and Couple accounts + photo upload",
+    "status": "pending"
   },
   {
-    "content": "Wire up all 18 Individual steps",
-    "status": "in_progress"
+    "content": "Phase 1: Run test_core.ts and fix until all tests pass",
+    "status": "pending"
   },
   {
-    "content": "Add photo upload handling",
-    "status": "in_progress"
+    "content": "Phase 2: Update src/types.ts to add all missing fields (personalityTraits, hairLength, fitnessLevel, lifestyleActivities, tryingInterests, referenceWillingness, energyLevel, hasMetamours, etc.)",
+    "status": "pending"
   },
   {
-    "content": "Add profile submission logic",
-    "status": "in_progress"
+    "content": "Phase 2: Fix TypeScript errors in existing step files (Step11_Bio.tsx, Step12_Physical.tsx, Step14_Interests.tsx, Step17_Verification.tsx, etc.)",
+    "status": "pending"
   },
   {
-    "content": "Test Individual workflow end-to-end",
+    "content": "Phase 2: Update ProfileSetup.tsx to implement complete 14-step workflow with dynamic routing",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 2: Verify frontend builds without TypeScript errors (npm run build)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 3: Apply database migrations (PROFILE_SETUP_ENHANCED_SCHEMA.sql + add any missing columns)",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 3: Update /api/profile.ts with camelCase to snake_case transformer and enhanced field handling",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 4: End to End Testing using Testing Agent for both Individual and Couples workflows",
+    "status": "pending"
+  },
+  {
+    "content": "Phase 4: Fix all bugs found by testing agent",
     "status": "pending"
   }
 ]
