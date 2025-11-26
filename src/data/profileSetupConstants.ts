@@ -552,6 +552,14 @@ export const INTENT_OPTIONS = [
   'Unsure/Exploring'
 ];
 
+export const POLY_ROLE_OPTIONS = [
+  'Building a new polycule',
+  'Joining an existing polycule',
+  'Expanding current polycule',
+  'Dating multiple independently',
+  'Other'
+];
+
 // =====================================================
 // STEP 7: WHO YOU WANT TO MEET
 // =====================================================
