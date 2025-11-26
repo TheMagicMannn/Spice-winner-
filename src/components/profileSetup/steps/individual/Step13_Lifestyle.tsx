@@ -8,8 +8,7 @@ import { SectionHeader, CheckboxGrid, RadioGrid, Select } from '../../FormCompon
 import { 
   WORK_SCHEDULE_OPTIONS,
   AVAILABILITY_OPTIONS,
-  CHILDREN_OPTIONS,
-  DISCRETION_OPTIONS
+  CHILDREN_OPTIONS
 } from '../../../../data/profileSetupConstants';
 import { Profile } from '../../../../types_comprehensive';
 
