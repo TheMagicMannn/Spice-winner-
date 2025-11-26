@@ -199,20 +199,35 @@ export const UserProfilePage: React.FC = () => {
     }
   }, [userId]);
   
-  // Load user settings for measurement preference
+  // Load viewer's settings for measurement preference
   useEffect(() => {
-    const loadSettings = async () => {
+    const loadViewerSettings = async () => {
       if (user?.id) {
         try {
           const settings = await settingsService.getUserSettings(user.id);
-          setUserSettings(settings);
+          setViewerSettings(settings);
         } catch (error) {
-          console.error('Error loading user settings:', error);
+          console.error('Error loading viewer settings:', error);
         }
       }
     };
-    loadSettings();
+    loadViewerSettings();
   }, [user]);
+  
+  // Load profile owner's settings (for display preferences)
+  useEffect(() => {
+    const loadOwnerSettings = async () => {
+      if (userId) {
+        try {
+          const settings = await settingsService.getUserSettings(userId);
+          setProfileOwnerSettings(settings);
+        } catch (error) {
+          console.error('Error loading profile owner settings:', error);
+        }
+      }
+    };
+    loadOwnerSettings();
+  }, [userId]);
   
   // Check match status
   useEffect(() => {
