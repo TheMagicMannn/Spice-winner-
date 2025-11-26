@@ -775,6 +775,82 @@ class AdminService {
       throw error;
     }
   }
+
+  /**
+   * Get overall platform statistics (all-time)
+   */
+  async getOverallStats(): Promise<{
+    totalUsers: number;
+    totalMessages: number;
+    totalMatches: number;
+    totalLikes: number;
+    activeUsers: number;
+    vipUsers: number;
+  }> {
+    try {
+      console.log('[AdminService] Fetching overall platform stats');
+
+      // Get total users
+      const { count: totalUsers } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true });
+
+      // Get total messages
+      const { count: totalMessages } = await supabase
+        .from('messages')
+        .select('*', { count: 'exact', head: true });
+
+      // Get total matches
+      const { count: totalMatches } = await supabase
+        .from('matches')
+        .select('*', { count: 'exact', head: true });
+
+      // Get total likes
+      const { count: totalLikes } = await supabase
+        .from('likes')
+        .select('*', { count: 'exact', head: true });
+
+      // Get active users (users with at least one message in last 30 days)
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      const { data: recentMessages } = await supabase
+        .from('messages')
+        .select('sender_id')
+        .gte('created_at', thirtyDaysAgo.toISOString());
+      
+      const uniqueActiveSenders = new Set(recentMessages?.map(m => m.sender_id) || []);
+      const activeUsers = uniqueActiveSenders.size;
+
+      // Get VIP users
+      const { count: vipUsers } = await supabase
+        .from('profiles')
+        .select('*', { count: 'exact', head: true })
+        .eq('membership_tier', 'vip');
+
+      const stats = {
+        totalUsers: totalUsers || 0,
+        totalMessages: totalMessages || 0,
+        totalMatches: totalMatches || 0,
+        totalLikes: totalLikes || 0,
+        activeUsers: activeUsers || 0,
+        vipUsers: vipUsers || 0
+      };
+
+      console.log('[AdminService] Overall stats:', stats);
+      return stats;
+    } catch (error) {
+      console.error('[AdminService] Error fetching overall stats:', error);
+      return {
+        totalUsers: 0,
+        totalMessages: 0,
+        totalMatches: 0,
+        totalLikes: 0,
+        activeUsers: 0,
+        vipUsers: 0
+      };
+    }
+  }
 }
 
 export const adminService = new AdminService();
