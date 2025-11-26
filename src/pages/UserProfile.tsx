@@ -789,6 +789,14 @@ export const UserProfilePage: React.FC = () => {
                   </div>
                 </div>
                 
+                {/* Distance Display */}
+                {getDistance() && (
+                  <div className="flex items-center text-white/70 text-sm mb-1">
+                    <Activity className="h-4 w-4 mr-2 text-purple-400" />
+                    <span className="font-medium">{getDistance()!.value} {getDistance()!.unit} away</span>
+                  </div>
+                )}
+                
                 {profile.location && (
                   <div className="flex items-center text-white/90 mb-2">
                     <MapPin className="h-4 w-4 mr-2 text-pink-400" />
