@@ -95,7 +95,8 @@ const AppContent: React.FC = () => {
     if (!profileComplete) {
       return (
          <Routes>
-          <Route path="/profile-setup" element={<ProfileSetupPage />} />
+          <Route path="/profile-setup" element={<ProfileSetupComprehensive />} />
+          <Route path="/profile-setup-old" element={<ProfileSetupPage />} />
           <Route path="*" element={<Navigate to="/profile-setup" />} />
         </Routes>
       );
