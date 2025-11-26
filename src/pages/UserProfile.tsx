@@ -1383,7 +1383,6 @@ export const UserProfilePage: React.FC = () => {
             <div className="space-y-3">
               {Object.entries(profile.kink_quiz_results)
                 .sort(([, a], [, b]) => (b as number) - (a as number))
-                .slice(0, 10)
                 .map(([role, score], index) => (
                   <div key={index} className="space-y-1">
                     <div className="flex justify-between items-center">
