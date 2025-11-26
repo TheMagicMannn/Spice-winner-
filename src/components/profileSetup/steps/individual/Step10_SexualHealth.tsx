@@ -58,33 +58,12 @@ export const Step10_SexualHealth: React.FC<Props> = ({ formData, onSelect, onInp
         onSelect={(val) => onSelect('testingRequiredBeforePlay', val.startsWith('Yes'))}
       />
       
-      <RadioGrid
-        title="Barrier Methods"
-        options={BARRIER_METHOD_OPTIONS}
-        selected={formData.barrierMethodRequired ? 'Always required' : ''}
-        onSelect={(val) => onSelect('barrierMethodRequired', val === 'Always required')}
-      />
-      
-      <RadioGrid
-        title="Fluid Bonding Status"
-        options={FLUID_BONDING_STATUS_OPTIONS}
-        selected={formData.fluidBondingStatus?.[0] || ''}
-        onSelect={(val) => onSelect('fluidBondingStatus', [val])}
-      />
-      
       <Select
         label="Birth Control (if applicable)"
         value={formData.birthControl || ''}
         onChange={(e) => onSelect('birthControl', e.target.value)}
         options={BIRTH_CONTROL_OPTIONS}
         placeholder="Select birth control method..."
-      />
-      
-      <RadioGrid
-        title="Your Risk Profile"
-        options={RISK_PROFILE_OPTIONS}
-        selected={formData.riskProfile || ''}
-        onSelect={(val) => onSelect('riskProfile', val)}
       />
       
       <div className="flex gap-4">
