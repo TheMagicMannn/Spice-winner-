@@ -1,0 +1,75 @@
+{
+  "expo": {
+    "name": "SPICE",
+    "slug": "spice-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#101010"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.spice.mobile",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "SPICE needs access to your photo library to let you upload profile photos and share images.",
+        "NSCameraUsageDescription": "SPICE needs access to your camera to let you take profile photos and videos.",
+        "NSMicrophoneUsageDescription": "SPICE needs access to your microphone to let you send voice messages and participate in video calls."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#101010"
+      },
+      "package": "com.spice.mobile",
+      "versionCode": 1,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "web"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow SPICE to access your camera for profile photos and video chat."
+        }
+      ],
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow SPICE to access your microphone for voice messages and video calls."
+        }
+      ],
+      "react-native-dotenv"
+    ],
+    "notification": {
+      "icon": "./assets/notification-icon.png",
+      "color": "#ff1493",
+      "sounds": [
+        "./assets/sounds/notification.wav"
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "your-project-id-here"
+      }
+    }
+  }
+}
