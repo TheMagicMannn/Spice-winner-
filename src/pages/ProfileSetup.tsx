@@ -1170,20 +1170,20 @@ export const ProfileSetupPage: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <Label className="mb-0">Distance</Label>
                     <span className="text-brand-secondary font-semibold">
-                      {formData.matchPreferences?.distanceMiles} miles
+                      {formData.matchPreferences?.distance} miles
                     </span>
                   </div>
                   <input
                     type="range"
                     min={0}
                     max={200}
-                    value={formData.matchPreferences?.distanceMiles || 50}
+                    value={formData.matchPreferences?.distance || 50}
                     onChange={(e) =>
                       setFormData(p => ({
                         ...p,
                         matchPreferences: {
                           ...p.matchPreferences!,
-                          distanceMiles: Number(e.target.value)
+                          distance: Number(e.target.value)
                         }
                       }))
                     }
