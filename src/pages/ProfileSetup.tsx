@@ -314,7 +314,7 @@ export const ProfileSetupPage: React.FC = () => {
       formData.relationshipStatus?.includes('polyamorous') ||
       formData.relationshipStatus?.includes('swinger');
 
-    setShowPartnerLinking(shouldShow);
+    setShowPartnerLinking(Boolean(shouldShow));
   }, [formData.accountType, formData.exploringWith, formData.relationshipStatus]);
 
   // Handle input changes
