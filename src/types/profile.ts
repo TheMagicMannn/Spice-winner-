@@ -1,4 +1,5 @@
 // Enhanced Profile Type Definitions for SPICE
+import { MatchPreferences as BaseMatchPreferences } from '../types';
 
 export type AccountType = "individual" | "individual_with_linking" | "shared_couple";
 export type Visibility = "public" | "matches_only" | "private";
