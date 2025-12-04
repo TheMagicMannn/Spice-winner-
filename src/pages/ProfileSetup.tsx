@@ -286,7 +286,7 @@ export const ProfileSetupPage: React.FC = () => {
       genders: [],
       sexualities: [],
       searchingFor: [],
-      distanceMiles: 50,
+      distance: 50,
       vipOnly: false,
       verifiedOnly: true,
       experienceLevels: [],
