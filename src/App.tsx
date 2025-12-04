@@ -150,6 +150,11 @@ const AppContent: React.FC = () => {
 
 
 const App: React.FC = () => {
+  // Initialize mobile app services on mount
+  useEffect(() => {
+    initializeMobileApp();
+  }, []);
+
   return (
     <AuthProvider>
       <QueryClientProvider>
