@@ -42,16 +42,8 @@ export interface Verification {
   partnerVerifiedIds?: string[];
 }
 
-export interface MatchPreferences {
-  ageRange?: [number, number];
-  genders?: string[];
-  sexualities?: string[];
-  searchingFor?: ("individual" | "couple" | "both")[];
-  distanceMiles?: number;
-  vipOnly?: boolean;
-  verifiedOnly?: boolean;
-  experienceLevels?: ("New" | "Beginner" | "Moderate" | "Advanced")[];
-}
+// Use MatchPreferences from base types
+export type MatchPreferences = BaseMatchPreferences;
 
 export interface SpiceProfile {
   id?: string;
