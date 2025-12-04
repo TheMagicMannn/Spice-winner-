@@ -36,6 +36,7 @@ import { ToastContextProvider } from './hooks/use-toast';
 import { Toaster } from './components/Toaster';
 import { QueryClientProvider } from './lib/queryClient';
 import { Profile } from './types';
+import { initializeMobileApp } from './services/capacitor';
 
 /**
  * Check if profile setup is complete
