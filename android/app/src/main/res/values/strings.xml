@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SPICE Dating</string>
+    <string name="title_activity_main">SPICE Dating</string>
+    <string name="package_name">com.spice.dating</string>
+    <string name="custom_url_scheme">com.spice.dating</string>
+</resources>
