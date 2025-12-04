@@ -45,5 +45,38 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	
+	<!-- Camera & Photo Library Permissions -->
+	<key>NSCameraUsageDescription</key>
+	<string>SPICE needs access to your camera to take photos for your profile and share moments.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>SPICE needs access to your photo library to select photos for your profile.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>SPICE needs permission to save photos to your library.</string>
+	
+	<!-- Location Permissions -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>SPICE uses your location to show you matches nearby and verify your location for enhanced profile trust.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>SPICE uses your location to show you matches nearby even when the app is in the background.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>SPICE uses your location to show you matches nearby and improve your experience.</string>
+	
+	<!-- Push Notifications -->
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+	
+	<!-- App Transport Security -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+	</dict>
+	
+	<!-- Face ID Permission (if using biometric auth) -->
+	<key>NSFaceIDUsageDescription</key>
+	<string>SPICE uses Face ID to securely authenticate and protect your privacy.</string>
 </dict>
 </plist>
