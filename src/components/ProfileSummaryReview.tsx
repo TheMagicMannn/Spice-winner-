@@ -157,7 +157,7 @@ export const ProfileSummaryReview: React.FC<ProfileSummaryReviewProps> = ({ prof
           <p>
             Match Preferences: Age {profile.matchPreferences.ageRange?.[0]}-
             {profile.matchPreferences.ageRange?.[1]}, Distance{' '}
-            {profile.matchPreferences.distanceMiles} miles
+            {profile.matchPreferences.distance} miles
           </p>
         )}
       </SectionCard>
