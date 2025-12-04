@@ -1403,14 +1403,14 @@ export const ProfileSetupPage: React.FC = () => {
             >
               SPICE
             </h1>
-            {step > 0 && (
+            {(typeof step === 'number' && step > 0) || step === '2a' && (
               <p className="text-sm text-text-secondary mt-2">
                 Step {typeof step === 'number' ? step : '2a'} of 9: {STEP_LABELS[step]}
               </p>
             )}
           </div>
 
-          {step > 0 && (
+          {((typeof step === 'number' && step > 0) || step === '2a') && (
             <div className="mb-8">
               <div className="w-full bg-base-300 rounded-full h-2.5">
                 <div
