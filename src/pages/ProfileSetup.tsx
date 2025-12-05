@@ -639,7 +639,11 @@ export const ProfileSetupPage: React.FC = () => {
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white mb-2">Individual Account</h3>
                     <p className="text-sm text-gray-400 mb-2">Single user, single login</p>
-                    <p className="text-sm text-gray-300">I'm creating a profile for myself</p>
+                    <p className="text-sm text-gray-300 mb-3">I'm creating a profile for myself</p>
+                    <div className="flex items-center gap-2 text-sm text-brand-secondary">
+                      <span className="text-brand-primary">✓</span>
+                      <span>Invite partners later to link and appear as a couple while keeping full independence</span>
+                    </div>
                   </div>
                 </div>
               </button>
