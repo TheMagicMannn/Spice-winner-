@@ -671,7 +671,7 @@ export const ProfileSetupPage: React.FC = () => {
                 </div>
               </button>
 
-              {/* Couple Shell Account */}
+              {/* Individual with Partner Links */}
               <button
                 onClick={() => setFormData(prev => ({ ...prev, accountType: 'individual_with_linking' }))}
                 className={`w-full p-6 rounded-xl border-2 transition-all text-left ${
@@ -683,17 +683,17 @@ export const ProfileSetupPage: React.FC = () => {
                 <div className="flex items-start gap-4">
                   <div className="text-4xl flex-shrink-0">💑</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-2">Couple Shell Account</h3>
-                    <p className="text-sm text-gray-400 mb-2">Two individual profiles that link together</p>
-                    <p className="text-sm text-gray-300 mb-3">We want our own individual profiles that connect together</p>
+                    <h3 className="text-xl font-bold text-white mb-2">Individual with Partner Links</h3>
+                    <p className="text-sm text-gray-400 mb-2">Setup partner relationships during account creation</p>
+                    <p className="text-sm text-gray-300 mb-3">I want to link my partner(s) right away to appear as a couple</p>
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-sm text-brand-secondary">
                         <span className="text-brand-primary">✓</span>
-                        <span>Each maintains full independence</span>
+                        <span>Pulls data from both profiles to create a discoverable couple view</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-brand-secondary">
                         <span className="text-brand-primary">✓</span>
-                        <span>Creates a combined "couple shell" view</span>
+                        <span>Both maintain separate accounts with read-only linked partner dashboard</span>
                       </div>
                     </div>
                   </div>
