@@ -618,52 +618,94 @@ export const ProfileSetupPage: React.FC = () => {
     switch (step) {
       case 0: // Account Type Selection
         return (
-          <div className="space-y-8 animate-fade-in text-center">
-            <h2 className="text-3xl font-bold text-white">Let's Get You Started!</h2>
-            <p className="text-text-secondary">Choose your account type</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="space-y-6 animate-fade-in">
+            <div className="text-center space-y-2">
+              <h2 className="text-3xl font-bold text-white">How would you like to create your account?</h2>
+              <p className="text-text-secondary">Choose the option that best fits your situation</p>
+            </div>
+            
+            <div className="space-y-4 max-w-3xl mx-auto">
+              {/* Individual Account */}
               <button
                 onClick={() => setFormData(prev => ({ ...prev, accountType: 'individual' }))}
-                className={`p-8 rounded-lg border-2 transition-all ${
+                className={`w-full p-6 rounded-xl border-2 transition-all text-left ${
                   formData.accountType === 'individual'
                     ? 'border-brand-primary bg-brand-primary/10'
-                    : 'border-base-300 hover:border-brand-primary/50'
+                    : 'border-brand-primary/30 hover:border-brand-primary/60 bg-black/30'
                 }`}
               >
-                <span className="text-5xl">🧑</span>
-                <h3 className="text-xl font-bold mt-4">Individual</h3>
-                <p className="text-sm text-text-secondary mt-2">Solo account</p>
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl flex-shrink-0">👤</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">Individual Account</h3>
+                    <p className="text-sm text-gray-400 mb-2">Single user, single login</p>
+                    <p className="text-sm text-gray-300">I'm creating a profile for myself</p>
+                  </div>
+                </div>
               </button>
-              
-              <button
-                onClick={() => setFormData(prev => ({ ...prev, accountType: 'individual_with_linking' }))}
-                className={`p-8 rounded-lg border-2 transition-all ${
-                  formData.accountType === 'individual_with_linking'
-                    ? 'border-brand-primary bg-brand-primary/10'
-                    : 'border-base-300 hover:border-brand-primary/50'
-                }`}
-              >
-                <span className="text-5xl">👥</span>
-                <h3 className="text-xl font-bold mt-4">Individual + Partner Link</h3>
-                <p className="text-sm text-text-secondary mt-2">Link with existing users</p>
-              </button>
-              
+
+              {/* Couple Shared Account */}
               <button
                 onClick={() => setFormData(prev => ({ ...prev, accountType: 'shared_couple' }))}
-                className={`p-8 rounded-lg border-2 transition-all ${
+                className={`w-full p-6 rounded-xl border-2 transition-all text-left ${
                   formData.accountType === 'shared_couple'
                     ? 'border-brand-primary bg-brand-primary/10'
-                    : 'border-base-300 hover:border-brand-primary/50'
+                    : 'border-brand-primary/30 hover:border-brand-primary/60 bg-black/30'
                 }`}
               >
-                <span className="text-5xl">💑</span>
-                <h3 className="text-xl font-bold mt-4">Shared Couple</h3>
-                <p className="text-sm text-text-secondary mt-2">Two logins, one profile</p>
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl flex-shrink-0">👫</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">Couple Shared Account</h3>
+                    <p className="text-sm text-gray-400 mb-2">One profile, two separate login emails</p>
+                    <p className="text-sm text-gray-300 mb-3">We want one shared profile that we both can access</p>
+                    <div className="flex items-center gap-2 text-sm text-brand-secondary">
+                      <span className="text-brand-primary">✓</span>
+                      <span>Both partners can log in with their own email/password</span>
+                    </div>
+                  </div>
+                </div>
+              </button>
+
+              {/* Couple Shell Account */}
+              <button
+                onClick={() => setFormData(prev => ({ ...prev, accountType: 'individual_with_linking' }))}
+                className={`w-full p-6 rounded-xl border-2 transition-all text-left ${
+                  formData.accountType === 'individual_with_linking'
+                    ? 'border-brand-primary bg-brand-primary/10'
+                    : 'border-brand-primary/30 hover:border-brand-primary/60 bg-black/30'
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl flex-shrink-0">💑</div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">Couple Shell Account</h3>
+                    <p className="text-sm text-gray-400 mb-2">Two individual profiles that link together</p>
+                    <p className="text-sm text-gray-300 mb-3">We want our own individual profiles that connect together</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm text-brand-secondary">
+                        <span className="text-brand-primary">✓</span>
+                        <span>Each maintains full independence</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-brand-secondary">
+                        <span className="text-brand-primary">✓</span>
+                        <span>Creates a combined "couple shell" view</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </button>
             </div>
-            <Button onClick={nextStep} disabled={!canProceed}>
-              Continue →
-            </Button>
+
+            <div className="text-center mt-8">
+              <Button 
+                onClick={nextStep} 
+                disabled={!canProceed}
+                className="min-w-[200px]"
+              >
+                Continue →
+              </Button>
+            </div>
           </div>
         );
 
