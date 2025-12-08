@@ -308,7 +308,6 @@ export const ProfileSetupPage: React.FC = () => {
   // Determine if partner linking step should be shown
   useEffect(() => {
     const shouldShow =
-      formData.accountType === 'individual_with_linking' ||
       formData.exploringWith === 'partner' ||
       formData.relationshipStatus?.includes('open_relationship') ||
       formData.relationshipStatus?.includes('polyamorous') ||
