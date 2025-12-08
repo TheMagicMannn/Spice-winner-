@@ -670,35 +670,6 @@ export const ProfileSetupPage: React.FC = () => {
                   </div>
                 </div>
               </button>
-
-              {/* Individual with Partner Links */}
-              <button
-                onClick={() => setFormData(prev => ({ ...prev, accountType: 'individual_with_linking' }))}
-                className={`w-full p-6 rounded-xl border-2 transition-all text-left ${
-                  formData.accountType === 'individual_with_linking'
-                    ? 'border-brand-primary bg-brand-primary/10'
-                    : 'border-brand-primary/30 hover:border-brand-primary/60 bg-black/30'
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="text-4xl flex-shrink-0">💑</div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-2">Individual with Partner Links</h3>
-                    <p className="text-sm text-gray-400 mb-2">Setup partner relationships during account creation</p>
-                    <p className="text-sm text-gray-300 mb-3">I want to link my partner(s) right away to appear as a couple</p>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-sm text-brand-secondary">
-                        <span className="text-brand-primary">✓</span>
-                        <span>Pulls data from both profiles to create a discoverable couple view</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm text-brand-secondary">
-                        <span className="text-brand-primary">✓</span>
-                        <span>Both maintain separate accounts with read-only linked partner dashboard</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </button>
             </div>
 
             <div className="text-center mt-8">
