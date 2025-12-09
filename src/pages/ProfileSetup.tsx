@@ -869,7 +869,6 @@ export const ProfileSetupPage: React.FC = () => {
           // Step 2 fields for individual
           topRoles: formData.topRoles || [],
           seekingPreferences: formData.seekingPreferences || [],
-          kinks: formData.kinks || [],
           kinkQuizResults: formData.kinkQuizResults || {},
           // Step 2 fields for couples
           partner1Role: formData.partner1Role || '',
