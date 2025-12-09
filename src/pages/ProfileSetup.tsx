@@ -1132,12 +1132,12 @@ export const ProfileSetupPage: React.FC = () => {
                   />
                   
                   <CheckboxGrid 
-                    title="Kinks You're Interested In" 
+                    title="Kinks" 
                     options={KINKS_INTERESTED_OPTIONS} 
-                    selected={formData.interestedKinks || []} 
-                    onToggle={(val) => handleToggle('interestedKinks', val, 15)} 
+                    selected={formData.kinks || []} 
+                    onToggle={(val) => handleToggle('kinks', val, 15)} 
                     max={15} 
-                    error={validationErrors.interestedKinks} 
+                    error={validationErrors.kinks} 
                   />
                   
                   <CheckboxGrid 
