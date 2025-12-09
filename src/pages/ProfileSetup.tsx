@@ -289,7 +289,6 @@ export const ProfileSetupPage: React.FC = () => {
     // New Step 2 fields - Individual
     topRoles: [],
     seekingPreferences: [],
-    kinks: [],
     kinkQuizResults: {},
     softLimits: [],
     hardLimits: [],
